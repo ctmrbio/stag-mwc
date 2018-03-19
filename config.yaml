@@ -1,3 +1,35 @@
-# This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
+# vim: syntax=python expandtab
+# mwc global configuration file
+
+
+#########################
+# Run configuration
+#########################
+inputdir: "input"
+input_fn_pattern: "{sample}_R{readpair}.fastq.gz" 
+outdir: "output_dir"
+dbdir: "databases"
+
+#########################
+# Pipeline steps included
+#########################
+qc_reads: True
+taxonomic_profile: True
+
+#########################
+# Read quality assessment
+#########################
+bbduk_minlen: 30
+bbduk_qtrim: "rl"
+bbduk_trimq: 20
+bbduk_ktrim: "r"
+bbduk_k: 30
+bbduk_mink: 11
+bbduk_hdist: 1
+bbduk_trimbyoverlap: "trimbyoverlap"
+bbduk_trimpairsevenly: "trimpairsevenly"
+
+
+#########################
+# Taxonomic profiling
+#########################

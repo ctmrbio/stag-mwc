@@ -20,13 +20,12 @@ metagenomic analysis tools.
 <!--download and extract the [latest release](https://github.com/snakemake-workflows/mwc/releases). -->
 
 If you simply want to use this workflow, clone the repository: `git clone
-git@github.com:boulund/mwc`.  If you intend to modify and further develop this
-workflow, fork this reposity. Please consider providing any generally
-applicable modifications via a pull request.
+git@github.com:boulund/mwc`. If you intend to modify or further develop this
+workflow, you are welcome to fork this reposity. Please consider sharing
+potential improvements via a pull request.
 
 If you use this workflow in a paper, don't forget to give credits to the
-authors by citing the URL of this repository and, if available, its DOI (see
-above).
+authors by citing the URL of this repository and, when available, its DOI.
 
 ### Step 2: Configure workflow
 
@@ -57,7 +56,7 @@ details.
 ## Testing
 
 The ambition is that mwc will contain extensive tests to verify functionality.
-Test cases are in the subfolder `tests`. They should be executed via continuous
+Test cases are in the subfolder `.tests`. They should be executed via continuous
 integration with Travis CI. 
 
 

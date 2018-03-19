@@ -25,3 +25,5 @@ scripts/.snakemake*
 !docs/Makefile
 !docs/source
 !docs/source/*
+!input
+!input/*gz
