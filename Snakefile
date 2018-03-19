@@ -32,6 +32,11 @@ if config["taxonomic_profile"]:
         all_outputs.extend(expand("{dbdir}/{dbfile}", dbdir=kaiju_db_dir, dbfile=kaiju_db_files))
 
 
+if config["mocat2"]:
+    include: "rules/external_workflows/mocat2.smk"
+    mocat2 = expand("{outdir}/mocat2/{sample}.mocat2.txt", outdir=outdir, sample=SAMPLES)
+
+
 rule all:
     input:
         all_outputs

@@ -11,10 +11,11 @@ outdir: "output_dir"
 dbdir: "databases"
 
 #########################
-# Pipeline steps included
+# Steps included
 #########################
 qc_reads: True
 taxonomic_profile: True
+mocat2: False
 
 #########################
 # Read quality assessment
@@ -29,7 +30,14 @@ bbduk_hdist: 1
 bbduk_trimbyoverlap: "trimbyoverlap"
 bbduk_trimpairsevenly: "trimpairsevenly"
 
-
 #########################
 # Taxonomic profiling
 #########################
+
+
+#########################
+# MOCAT 2
+#########################
+mocat2_sample_file: ""
+mocat2_config_file: ""
+mocat2_email: "mwc@mailinator.com"
