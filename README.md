@@ -29,8 +29,10 @@ authors by citing the URL of this repository and, when available, its DOI.
 
 ### Step 2: Configure workflow
 
-Configure the workflow according to your needs via editing the file
-`config.yaml`.
+Configure the workflow according to your needs by editing the file
+`config.yaml`. The most common changes include setting the paths to input and
+output folders, and configuring what steps of the workflow should be included
+when running the workflow.
 
 ### Step 3: Execute workflow
 
@@ -51,7 +53,22 @@ or
     snakemake --drmaa --jobs 100
 
 See the [Snakemake documentation](https://snakemake.readthedocs.io) for further
-details.
+details on how to run Snakemake workflows on cluster resources.
+
+If you are using [conda](https://conda.io), it is easy to get started by using the 
+`--use-conda` flag:
+
+	snakemake --use-conda
+
+This will run the different processes of the workflow in separate conda environments,
+which will automatically take care of installing the required dependencies.
+
+
+### Automatic database download
+The workflow offers steps that can automatically download the required
+reference databases. Note that this step is normally only required once, as
+previously downloaded databases are reused.
+
 
 ## Testing
 
