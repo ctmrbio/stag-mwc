@@ -11,7 +11,6 @@ outdir = config["outdir"]
 all_outputs = []
 
 SAMPLES = glob_wildcards(config["inputdir"]+"/"+config["input_fn_pattern"]).sample
-print(SAMPLES)
 
 if config["qc_reads"]:
     include: "rules/preproc/read_quality.smk"
