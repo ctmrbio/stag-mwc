@@ -16,6 +16,10 @@ scripts/.snakemake*
 !README.md
 !rules
 !rules/*
+!rules/preproc
+!rules/preproc/*
+!rules/taxonomic_profiling
+!rules/taxonomic_profiling/*
 !.gitignore
 !.gitattributes
 !.editorconfig
