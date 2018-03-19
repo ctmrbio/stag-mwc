@@ -21,3 +21,7 @@ scripts/.snakemake*
 !.editorconfig
 !.travis.yml
 !.test
+!docs
+!docs/Makefile
+!docs/source
+!docs/source/*
