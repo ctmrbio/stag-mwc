@@ -19,8 +19,8 @@ rule download_kaiju_databases:
 
 rule kaiju:
     input:
-        read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-        read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        read1=config["outdir"]+"/filtered_human/{sample}_R1.filtered_human.fq.gz",
+        read2=config["outdir"]+"/filtered_human/{sample}_R2.filtered_human.fq.gz",
         nodes=config["dbdir"]+"/kaiju/nodes.dmp",
         db=config["dbdir"]+"/kaiju/kaiju_db.fmi",
     output:
@@ -37,15 +37,15 @@ rule kaiju:
                 -f {input.db} \
                 -i <(gunzip -c {input.read1}) \
                 -j <(gunzip -c {input.read2}) \
-                -o {wildcards.sample}.kaiju
-        else
+                -o {output.kaiju} 
+        else 
             kaiju \
                 -z {threads} \
                 -t {input.nodes} \
                 -f {input.db} \
                 -i {input.read1} \
                 -j {input.read2} \
-                -o {wildcards.sample}.kaiju
+                -o {output.kaiju}
         fi
         """
 
