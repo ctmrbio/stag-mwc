@@ -10,11 +10,14 @@ input_fn_pattern: "{sample}_R{readpair}.fastq.gz"
 outdir: "output_dir"
 dbdir: "databases"
 
+
 #########################
 # Pipeline steps included
 #########################
 qc_reads: True
+remove_human: True
 taxonomic_profile: True
+
 
 #########################
 # Read quality assessment
@@ -28,6 +31,17 @@ bbduk_mink: 11
 bbduk_hdist: 1
 bbduk_trimbyoverlap: "trimbyoverlap"
 bbduk_trimpairsevenly: "trimpairsevenly"
+
+bbmap_removehuman_minid: 0.95
+bbmap_removehuman_maxindel: 3
+bbmap_removehuman_minhits: 2
+bbmap_removehuman_bandwidthratio: 0.16
+bbmap_removehuman_bandwidth: 12
+bbmap_removehuman_qtrim: "rl"
+bbmap_removehuman_trimq: 10
+bbmap_removehuman_quickmatch: "quickmatch"
+bbmap_removehuman_fast: "fast"
+bbmap_removehuman_untrim: "untrim"
 
 
 #########################

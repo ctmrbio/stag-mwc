@@ -12,6 +12,7 @@ rule fastqc:
     wrapper:
         "0.22.0/bio/fastqc"
 
+
 rule trim_adapters_quality:
     input:
         read1="input/{sample}_R1.fastq.gz",
