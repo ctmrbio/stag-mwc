@@ -90,3 +90,5 @@ integration with Travis CI.
 5. Create a pull request (PR) with some motivation behind the work you have
    done and possibly some explanations for tricky bits. 
 
+# Logo attribution
+<a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>
