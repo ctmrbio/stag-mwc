@@ -29,5 +29,7 @@ scripts/.snakemake*
 !docs/Makefile
 !docs/source
 !docs/source/*
+!docs/source/img
+!docs/source/img/*
 !input
 !input/*gz
