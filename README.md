@@ -1,9 +1,10 @@
-# Metagenomic Workflow Collaboration (mwc)
+# StaG Metagenomic Workflow Collaboration (mwc)
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥3.12.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/mwc.svg?branch=master)](https://travis-ci.org/snakemake-workflows/mwc)
+![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
-This repo contains the code for a Snakemake workflow of the Metagenomic
+This repo contains the code for a Snakemake workflow of the StaG Metagenomic
 Workflow Collaboration (mwc). The current focus is a barebones metagenomics
 analysis workflow to produce primary output files from several different
 metagenomic analysis tools. 
