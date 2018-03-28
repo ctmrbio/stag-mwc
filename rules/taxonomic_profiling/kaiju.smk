@@ -55,7 +55,6 @@ rule kaiju_report:
         kaiju=config["outdir"]+"/kaiju/{sample}.kaiju",
         nodes=config["dbdir"]+"/kaiju/nodes.dmp",
         names=config["dbdir"]+"/kaiju/names.dmp",
-        db=config["dbdir"]+"/kaiju/kaiju_db.fmi",
     output:
         krona=config["outdir"]+"/kaiju/{sample}.krona",
         krona_html=config["outdir"]+"/kaiju/{sample}.krona.html",
@@ -68,20 +67,33 @@ rule kaiju_report:
         """
 		kaiju2krona \
 			-t {input.nodes} \
-			-f {input.db} \
+			-n {input.names} \
 			-i {input.kaiju} \
-			-o {output.krona}
+			-o {output.krona} \
+            -u
 		ktImportText \
 			-o {output.krona_html} \
 			{output.krona}
-		for rank in family genus species; do
-			kaijuReport \
-				-t {input.nodes} \
-                -n {input.names} \
-				-f {input.db} \
-				-i {input.kaiju} \
-				-r {{$rank}} \
-				-o {config[outdir]}/kaiju/{wildcards.sample}.kaiju.summary.{{$rank}}
-		done
+        kaijuReport \
+            -t {input.nodes} \
+            -n {input.names} \
+            -i {input.kaiju} \
+            -r species \
+            -p \
+            -o {output.species}
+        kaijuReport \
+            -t {input.nodes} \
+            -n {input.names} \
+            -i {input.kaiju} \
+            -r genus \
+            -p \
+            -o {output.genus}
+        kaijuReport \
+            -t {input.nodes} \
+            -n {input.names} \
+            -i {input.kaiju} \
+            -r family \
+            -p \
+            -o {output.family}
         """
-    
+

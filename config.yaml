@@ -16,7 +16,7 @@ dbdir: "databases"
 #########################
 qc_reads: True
 remove_human: True
-taxonomic_profile: False
+taxonomic_profile: True
 
 
 #########################
