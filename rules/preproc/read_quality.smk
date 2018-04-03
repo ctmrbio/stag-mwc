@@ -20,7 +20,7 @@ rule trim_adapters_quality:
     output:
         read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
         read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
-    conda: "envs/bbmap.yaml"
+    conda: "../../envs/bbmap.yaml"
     shadow: "shallow"
     shell:
         """

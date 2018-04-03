@@ -7,10 +7,10 @@ rule download_hg19:
     output:
         config["dbdir"]+"/hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
     conda:
-        "envs/bbmap.yaml"
+        "../../envs/bbmap.yaml"
     shell:
         """
-        download_from_gdrive.py \
+        scripts/download_from_gdrive.py \
             -o {output}.gz \
             0B3llHR93L14wd0pSSnFULUlhcUk \
         && \
@@ -36,7 +36,7 @@ rule remove_human:
     shadow:
         "shallow"
     conda:
-        "envs/bbmap.yaml"
+        "../../envs/bbmap.yaml"
     threads:
         2
     shell:
