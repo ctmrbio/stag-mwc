@@ -16,7 +16,9 @@ dbdir: "databases"
 #########################
 qc_reads: True
 remove_human: True
-taxonomic_profile: True
+mappers:
+    bowtie2: True
+taxonomic_profile: False
 
 
 #########################
@@ -42,6 +44,13 @@ bbmap_removehuman_trimq: 10
 bbmap_removehuman_quickmatch: "quickmatch"
 bbmap_removehuman_fast: "fast"
 bbmap_removehuman_untrim: "untrim"
+
+#########################
+# Mappers
+#########################
+bowtie2:
+    db_prefix: ""         # Full path to Bowtie2 index (not including file extension)
+    extra: ""             # Extra bowtie2 commandline parameters
 
 
 #########################
