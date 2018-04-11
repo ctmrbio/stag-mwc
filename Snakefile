@@ -29,9 +29,9 @@ if config["remove_human"]:
     hg19_db_dir = config["dbdir"]+"/hg19"
     hg19_db_file = "hg19_main_mask_ribo_animal_allplant_allfungus.fa"
     if not config["remove_human"]["hg19_path"]:
-        raise WorkflowError("No hg19 database for human sequence removal specified!\n"
-                            "Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
-                            "Run 'snakemake index_hg19' to download and prepare an indexed copy in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
+        print("WARNING: No hg19 database for human sequence removal specified!\n"
+              "         Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
+              "         Run 'snakemake index_hg19' to download and prepare an indexed copy in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
 if config["taxonomic_profile"]["kaiju"]:
@@ -41,10 +41,10 @@ if config["taxonomic_profile"]["kaiju"]:
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     if not all([config["kaiju"]["db"], config["kaiju"]["nodes"], config["kaiju"]["names"]]):
-        raise WorkflowError("No Kaiju database specified!\n"
-                            "Specify relevant paths in the kaiju section of config.yaml.\n"
-                            "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) + 
-                            "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml")
+        print("WARNING: No Kaiju database specified!\n"
+              "         Specify relevant paths in the kaiju section of config.yaml.\n"
+              "         Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) + 
+              "         If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml")
 
 
 rule all:
