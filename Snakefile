@@ -5,6 +5,7 @@
 #
 # Running snakemake -n in a clone of this repository should successfully
 # execute a test dry-run of the workflow.
+from snakemake.exceptions import WorkflowError
 
 configfile: "config.yaml"
 outdir = config["outdir"]
@@ -27,8 +28,10 @@ if config["remove_human"]:
     all_outputs.extend(filtered_human)
     hg19_db_dir = config["dbdir"]+"/hg19"
     hg19_db_file = "hg19_main_mask_ribo_animal_allplant_allfungus.fa"
-    if not os.path.exists(os.path.join(hg19_db_dir, hg19_db_file)):
-        all_outputs.extend(expand("{dbdir}/{dbfile}", dbdir=hg19_db_dir, dbfile=hg19_db_file))
+    if not config["remove_human"]["hg19_path"]:
+        raise WorkflowError("No hg19 database for human sequence removal specified!\n"
+                            "Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
+                            "Run 'snakemake index_hg19' to download and prepare an indexed copy in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
 if config["taxonomic_profile"]:
@@ -37,10 +40,10 @@ if config["taxonomic_profile"]:
     kaiju_reports = expand("{outdir}/kaiju/{sample}.kaiju.summary.species", outdir=outdir, sample=SAMPLES)
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
-    kaiju_db_dir = config["dbdir"]+"/kaiju"
-    kaiju_db_files = ["kaiju_db.fmi", "names.dmp", "nodes.dmp"]
-    if not all([os.path.exists(os.path.join(kaiju_db_dir, dbfile)) for dbfile in kaiju_db_files]):
-        all_outputs.extend(expand("{dbdir}/{dbfile}", dbdir=kaiju_db_dir, dbfile=kaiju_db_files))
+    if not all([config["kaiju"]["db"], config["kaiju"]["nodes"], config["kaiju"]["names"]]):
+        raise WorkflowError("No Kaiju database specified!\n"
+                            "Specify relevant paths in the kaiju section of config.yaml.\n"
+                            "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'".format(dbdir=config["dbdir"]))
 
 
 rule all:

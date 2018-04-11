@@ -13,6 +13,7 @@ rule fastqc:
         "0.22.0/bio/fastqc"
 
 
+bbduk_config = config["bbduk"]
 rule trim_adapters_quality:
     input:
         read1="input/{sample}_R1.fastq.gz",
@@ -22,6 +23,8 @@ rule trim_adapters_quality:
         read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
     conda: "../../envs/bbmap.yaml"
     shadow: "shallow"
+    threads:
+        2
     shell:
         """
         bbduk.sh \
@@ -31,13 +34,13 @@ rule trim_adapters_quality:
             out2={output.read2} \
             ref=adapters \
             threads={threads} \
-            minlen={config[bbduk_minlen]} \
-            qtrim={config[bbduk_qtrim]} \
-            trimq={config[bbduk_trimq]} \
-            ktrim={config[bbduk_ktrim]} \
-            k={config[bbduk_k]} \
-            mink={config[bbduk_mink]} \
-            hdist={config[bbduk_hdist]} \
-            {config[bbduk_trimbyoverlap]} \
-            {config[bbduk_trimpairsevenly]} 
+            minlen={bbduk_config[minlen]} \
+            qtrim={bbduk_config[qtrim]} \
+            trimq={bbduk_config[trimq]} \
+            ktrim={bbduk_config[ktrim]} \
+            k={bbduk_config[k]} \
+            mink={bbduk_config[mink]} \
+            hdist={bbduk_config[hdist]} \
+            {bbduk_config[trimbyoverlap]} \
+            {bbduk_config[trimpairsevenly]} 
         """
