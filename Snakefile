@@ -31,7 +31,7 @@ if config["remove_human"]:
     if not config["remove_human"]["hg19_path"]:
         print("WARNING: No hg19 database for human sequence removal specified!\n"
               "         Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
-              "         Run 'snakemake index_hg19' to download and prepare an indexed copy in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
+              "         Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
 if config["taxonomic_profile"]["kaiju"]:
