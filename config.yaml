@@ -16,7 +16,8 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 #########################
 qc_reads: True
 remove_human: True
-taxonomic_profile: True
+taxonomic_profile:
+    kaiju: True
 
 
 #########################

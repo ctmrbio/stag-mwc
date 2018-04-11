@@ -34,7 +34,7 @@ if config["remove_human"]:
                             "Run 'snakemake index_hg19' to download and prepare an indexed copy in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
-if config["taxonomic_profile"]:
+if config["taxonomic_profile"]["kaiju"]:
     include: "rules/taxonomic_profiling/kaiju.smk"
     kaiju = expand("{outdir}/kaiju/{sample}.kaiju", outdir=outdir, sample=SAMPLES)
     kaiju_reports = expand("{outdir}/kaiju/{sample}.kaiju.summary.species", outdir=outdir, sample=SAMPLES)
@@ -43,7 +43,8 @@ if config["taxonomic_profile"]:
     if not all([config["kaiju"]["db"], config["kaiju"]["nodes"], config["kaiju"]["names"]]):
         raise WorkflowError("No Kaiju database specified!\n"
                             "Specify relevant paths in the kaiju section of config.yaml.\n"
-                            "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'".format(dbdir=config["dbdir"]))
+                            "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) + 
+                            "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml")
 
 
 rule all:
