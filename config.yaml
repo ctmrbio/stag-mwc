@@ -8,7 +8,7 @@
 inputdir: "input"
 input_fn_pattern: "{sample}_R{readpair}.fastq.gz" 
 outdir: "output_dir"
-dbdir: "databases"
+dbdir: "databases"       # Databases will be downloaded to this dir, if requested
 
 
 #########################
@@ -22,28 +22,34 @@ taxonomic_profile: True
 #########################
 # Read quality assessment
 #########################
-bbduk_minlen: 30
-bbduk_qtrim: "rl"
-bbduk_trimq: 20
-bbduk_ktrim: "r"
-bbduk_k: 30
-bbduk_mink: 11
-bbduk_hdist: 1
-bbduk_trimbyoverlap: "trimbyoverlap"
-bbduk_trimpairsevenly: "trimpairsevenly"
-
-bbmap_removehuman_minid: 0.95
-bbmap_removehuman_maxindel: 3
-bbmap_removehuman_minhits: 2
-bbmap_removehuman_bandwidthratio: 0.16
-bbmap_removehuman_bandwidth: 12
-bbmap_removehuman_qtrim: "rl"
-bbmap_removehuman_trimq: 10
-bbmap_removehuman_quickmatch: "quickmatch"
-bbmap_removehuman_fast: "fast"
-bbmap_removehuman_untrim: "untrim"
+bbduk:
+    minlen: 30
+    qtrim: "rl"
+    trimq: 20
+    ktrim: "r"
+    k: 30
+    mink: 11
+    hdist: 1
+    trimbyoverlap: "trimbyoverlap"
+    trimpairsevenly: "trimpairsevenly"
+remove_human:
+    hg19_path: ""        # Path to folder containing the BBMap index for hg19
+    minid: 0.95
+    maxindel: 3
+    minhits: 2
+    bandwidthratio: 0.16
+    bandwidth: 12
+    qtrim: "rl"
+    trimq: 10
+    quickmatch: "quickmatch"
+    fast: "fast"
+    untrim: "untrim"
 
 
 #########################
 # Taxonomic profiling
 #########################
+kaiju:
+    db: ""               # Path to Kaiju DB file
+    nodes: ""            # Path to Kaiju taxonomy nodes.dmp
+    names: ""            # Path to Kaiju taxonomy names.dmp
