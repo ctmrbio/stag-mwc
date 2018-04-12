@@ -19,6 +19,7 @@ remove_human: True
 mappers:
     bowtie2: True
 taxonomic_profile:
+    centrifuge: True
     kaiju: True
 
 
@@ -59,6 +60,9 @@ bowtie2:
 #########################
 # Taxonomic profiling
 #########################
+centrifuge:
+    db_prefix: ""        # Path to Centrifuge DB index (i.e. not including file extensions)
+
 kaiju:
     db: ""               # Path to Kaiju DB file
     nodes: ""            # Path to Kaiju taxonomy nodes.dmp
