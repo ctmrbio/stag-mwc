@@ -23,6 +23,8 @@
 !resources/*
 !rules
 !rules/*
+!rules/mappers
+!rules/mappers/*
 !rules/preproc
 !rules/preproc/*
 !rules/taxonomic_profiling

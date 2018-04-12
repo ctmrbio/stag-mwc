@@ -16,6 +16,8 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 #########################
 qc_reads: True
 remove_human: True
+mappers:
+    bowtie2: True
 taxonomic_profile:
     kaiju: True
 
@@ -45,6 +47,13 @@ remove_human:
     quickmatch: "quickmatch"
     fast: "fast"
     untrim: "untrim"
+
+#########################
+# Mappers
+#########################
+bowtie2:
+    db_prefix: ""         # Full path to Bowtie2 index (not including file extension)
+    extra: ""             # Extra bowtie2 commandline parameters
 
 
 #########################
