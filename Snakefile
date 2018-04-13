@@ -87,6 +87,20 @@ if config["taxonomic_profile"]["kaiju"]:
               "         If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml")
 
 
+if config["taxonomic_profile"]["metaphlan2"]:
+    include: "rules/taxonomic_profiling/metaphlan2.smk"
+    mpa_outputs = expand("{outdir}/metaphlan2/{sample}.{output_type}",
+            outdir=outdir,
+            sample=SAMPLES,
+            output_type=("bowtie2.bz2", "metaphlan2.txt"))
+    all_outputs.extend(mpa_outputs)
+    if not any([config["metaphlan2"]["mpa_pkl"], config["metaphlan2"]["bt2_db_prefix"]]):
+        print("WARNING: No MetaPhlAn2 database specified!\n"
+              "         Specify relevant paths in the metaphlan2 section of config.yaml.\n"
+              "         Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}/metaphlan2'\n".format(dbdir=config["dbdir"]) +
+              "         If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml")
+
+
 rule all:
     input:
         all_outputs
