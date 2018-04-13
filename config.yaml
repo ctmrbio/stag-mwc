@@ -17,11 +17,11 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 qc_reads: True
 remove_human: True
 mappers:
-    bowtie2: True
+    bowtie2: False
 taxonomic_profile:
-    centrifuge: True
-    kaiju: True
-    metaphlan2: True
+    centrifuge: False
+    kaiju: False
+    metaphlan2: False
 
 
 #########################
