@@ -17,10 +17,11 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 qc_reads: True
 remove_human: True
 mappers:
-    bowtie2: True
+    bowtie2: False
 taxonomic_profile:
-    centrifuge: True
-    kaiju: True
+    centrifuge: False
+    kaiju: False
+    metaphlan2: False
 
 
 #########################
@@ -67,3 +68,9 @@ kaiju:
     db: ""               # Path to Kaiju DB file
     nodes: ""            # Path to Kaiju taxonomy nodes.dmp
     names: ""            # Path to Kaiju taxonomy names.dmp
+
+metaphlan2:
+    mpa_pkl: ""          # Path to MetaPhlAn2 pickle file: db_v20_m200.pkl
+    bt2_db_prefix: ""    # Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/db_v20_m200 (no file extension)
+    extra: ""            # Extra command line arguments for metaphlan2.py
+
