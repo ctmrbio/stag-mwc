@@ -93,7 +93,10 @@ if config["taxonomic_profile"]["metaphlan2"]:
             outdir=outdir,
             sample=SAMPLES,
             output_type=("bowtie2.bz2", "metaphlan2.txt"))
+    mpa_combined = expand("{outdir}/metaphlan2/all_samples.metaphlan2.txt",
+            outdir=outdir)
     all_outputs.extend(mpa_outputs)
+    all_outputs.extend(mpa_combined)
     if not any([config["metaphlan2"]["mpa_pkl"], config["metaphlan2"]["bt2_db_prefix"]]):
         print("WARNING: No MetaPhlAn2 database specified!\n"
               "         Specify relevant paths in the metaphlan2 section of config.yaml.\n"

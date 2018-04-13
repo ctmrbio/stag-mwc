@@ -89,3 +89,21 @@ rule metaphlan2:
             2> {log.stderr}
         """
 
+
+rule combine_metaphlan2_outputs:
+    """Combine metaphlan2 outputs into a large table."""
+    input:
+        expand(config["outdir"]+"/metaphlan2/{sample}.metaphlan2.txt", sample=SAMPLES)
+    output:
+        config["outdir"]+"/metaphlan2/all_samples.metaphlan2.txt"
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/metaphlan2.yaml"
+    threads:
+        1
+    shell:
+        """
+        merge_metaphlan_tables.py {input} > {output}
+        """
+
