@@ -22,7 +22,7 @@ taxonomic_profile:
     centrifuge: False
     kaiju: False
     metaphlan2: False
-
+antibiotic_resistance: False
 
 #########################
 # Read quality assessment
@@ -74,3 +74,12 @@ metaphlan2:
     bt2_db_prefix: ""    # Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/db_v20_m200 (no file extension)
     extra: ""            # Extra command line arguments for metaphlan2.py
 
+
+#########################
+# Antibiotic Resistance
+#########################
+megares:
+    dbpath: ""           # Path to folder containing MEGARes BBMap index
+    min_id: 0.91
+    max_indel: 1600      # BBMap default is 16000
+    extra: ""            # Extra BBMap commandline parameters
