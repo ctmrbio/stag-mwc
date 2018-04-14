@@ -23,6 +23,8 @@
 !resources/*
 !rules
 !rules/*
+!rules/antibiotic_resistance
+!rules/antibiotic_resistance/*
 !rules/mappers
 !rules/mappers/*
 !rules/preproc
