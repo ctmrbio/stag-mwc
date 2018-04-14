@@ -22,7 +22,7 @@ taxonomic_profile:
     centrifuge: False
     kaiju: False
     metaphlan2: False
-antibiotic_resistance: True
+antibiotic_resistance: False
 
 #########################
 # Read quality assessment
