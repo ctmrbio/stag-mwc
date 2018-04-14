@@ -103,6 +103,20 @@ if config["taxonomic_profile"]["metaphlan2"]:
               "         Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}/metaphlan2'\n".format(dbdir=config["dbdir"]) +
               "         If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml")
 
+if config["antibiotic_resistance"]:
+    include: "rules/antibiotic_resistance/megares.smk"
+    megares_outputs = expand("{outdir}/megares/{sample}.{output_type}",
+            outdir=outdir,
+            sample=SAMPLES,
+            output_type=("sam.gz", "mapped_reads.fq.gz", "mhist.txt", "covstats.txt", "rpkm.txt"))
+    all_outputs.extend(megares_outputs)
+    if not config["megares"]["db_path"]:
+        print("WARNING: No MEGARes database specified!\n"
+              "         Specify the DB path in the megares section of config.yaml.\n"
+              "         Run 'snakemake create_megares_index' to download and build a BBMap index in '{dbdir}/megares'\n".format(dbdir=config["dbdir"]) +
+              "         If you do not want to map reads against MEGARes for antibiotic resistance gene detection, set antibiotic_resistance: False in config.yaml")
+
+
 
 rule all:
     input:
