@@ -45,6 +45,16 @@ if config["remove_human"]:
               "         Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
+if config["mappers"]["bbmap"]:
+    include: "rules/mappers/bbmap.smk"
+    bbmap_alignments = expand("{outdir}/bbmap/{db_name}/{sample}.{output_type}",
+            outdir=outdir,
+            db_name=config["bbmap"]["db_name"],
+            sample=SAMPLES,
+            output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
+    all_outputs.extend(bbmap_alignments)
+
+
 if config["mappers"]["bowtie2"]:
     include: "rules/mappers/bowtie2.smk"
     bowtie2_alignments = expand("{outdir}/bowtie2/{db_name}/{sample}.bam",

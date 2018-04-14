@@ -1,5 +1,12 @@
 # vim: syntax=python expandtab
-# mwc global configuration file
+#
+#     StaG Metagenomic Workflow Collaboration
+#                 configuration file
+#
+# Configuration settings marked with [Required] are only required if the
+# pipeline step for that setting is included. Set which steps to include
+# under the "Pipeline steps included" heading. The default settings are to
+# only run read preprocessing steps.
 
 
 #########################
@@ -17,12 +24,14 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 qc_reads: True
 remove_human: True
 mappers:
+    bbmap: False
     bowtie2: False
 taxonomic_profile:
     centrifuge: False
     kaiju: False
     metaphlan2: False
 antibiotic_resistance: False
+
 
 #########################
 # Read quality assessment
@@ -38,7 +47,7 @@ bbduk:
     trimbyoverlap: "trimbyoverlap"
     trimpairsevenly: "trimpairsevenly"
 remove_human:
-    hg19_path: ""        # Path to folder containing the BBMap index for hg19
+    hg19_path: ""        # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
@@ -53,8 +62,13 @@ remove_human:
 #########################
 # Mappers
 #########################
+bbmap:
+    db_name: ""           # [Required] Custom name for BBMap database
+    db_path: ""           # [Required] Path to BBMap database (folder should contain a 'ref' folder)
+    min_id: 0.76          # Minimum id for read alignment, BBMap default is 0.76
+    extra: ""             # Extra BBMap command line parameters
 bowtie2:
-    db_prefix: ""         # Full path to Bowtie2 index (not including file extension)
+    db_prefix: ""         # [Required] Full path to Bowtie2 index (not including file extension)
     extra: ""             # Extra bowtie2 commandline parameters
 
 
@@ -62,16 +76,16 @@ bowtie2:
 # Taxonomic profiling
 #########################
 centrifuge:
-    db_prefix: ""        # Path to Centrifuge DB index (i.e. not including file extensions)
+    db_prefix: ""        # [Required] Path to Centrifuge DB index (i.e. not including file extensions)
 
 kaiju:
-    db: ""               # Path to Kaiju DB file
-    nodes: ""            # Path to Kaiju taxonomy nodes.dmp
-    names: ""            # Path to Kaiju taxonomy names.dmp
+    db: ""               # [Required] Path to Kaiju DB file
+    nodes: ""            # [Required] Path to Kaiju taxonomy nodes.dmp
+    names: ""            # [Required] Path to Kaiju taxonomy names.dmp
 
 metaphlan2:
-    mpa_pkl: ""          # Path to MetaPhlAn2 pickle file: db_v20_m200.pkl
-    bt2_db_prefix: ""    # Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/db_v20_m200 (no file extension)
+    mpa_pkl: ""          # [Required] Path to MetaPhlAn2 pickle file: db_v20_m200.pkl
+    bt2_db_prefix: ""    # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/db_v20_m200 (no file extension)
     extra: ""            # Extra command line arguments for metaphlan2.py
 
 
@@ -79,7 +93,7 @@ metaphlan2:
 # Antibiotic Resistance
 #########################
 megares:
-    dbpath: ""           # Path to folder containing MEGARes BBMap index
+    dbpath: ""           # [Required] Path to folder containing MEGARes BBMap index
     min_id: 0.91
     max_indel: 1600      # BBMap default is 16000
     extra: ""            # Extra BBMap commandline parameters
