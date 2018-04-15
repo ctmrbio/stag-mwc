@@ -29,6 +29,8 @@
 !rules/mappers/*
 !rules/preproc
 !rules/preproc/*
+!rules/sketch_compare
+!rules/sketch_compare/*
 !rules/taxonomic_profiling
 !rules/taxonomic_profiling/*
 !samples.tsv
