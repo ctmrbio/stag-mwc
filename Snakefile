@@ -45,6 +45,13 @@ if config["remove_human"]:
               "         Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
+if config["sketch_compare"]:
+    include: "rules/sketch_compare/sketch_compare.smk"
+    sample_similarity_plot = expand("{outdir}/sketch_compare/sample_similarity.pdf",
+            outdir=outdir)
+    all_outputs.extend(sample_similarity_plot)
+
+
 if config["mappers"]["bbmap"]:
     include: "rules/mappers/bbmap.smk"
     bbmap_alignments = expand("{outdir}/bbmap/{db_name}/{sample}.{output_type}",
