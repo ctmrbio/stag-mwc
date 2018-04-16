@@ -3,5 +3,6 @@ channels:
     - conda-forge
     - defaults
 dependencies:
+    - matplotlib =2.2.2
     - pandas =0.22.0
     - bbmap =37.90
