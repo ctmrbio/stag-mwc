@@ -70,6 +70,7 @@ rule index_hg19:
 
 rh_config = config["remove_human"]
 rule remove_human:
+    """Filter reads matching hg19. NB: requires about 16GB of memory."""
     input:
         read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
         read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
@@ -79,12 +80,24 @@ rule remove_human:
         human=config["outdir"]+"/filtered_human/{sample}_human.fq.gz",
     log:
         statsfile=config["outdir"]+"/logs/remove_human/{sample}.statsfile.txt",
+        stderr=config["outdir"]+"/logs/remove_human/{sample}.stderr.log",
     shadow:
         "shallow"
     conda:
         "../../envs/bbmap.yaml"
     threads:
-        2
+        4
+    params:
+        minid=rh_config["minid"],
+        maxindel=rh_config["maxindel"],
+        minhits=rh_config["minhits"],
+        bandwidthratio=rh_config["bandwidthratio"],
+        bandwidth=rh_config["bandwidth"],
+        qtrim=rh_config["qtrim"],
+        trimq=rh_config["trimq"],
+        quickmatch=rh_config["quickmatch"],
+        fast=rh_config["fast"],
+        untrim=rh_config["untrim"],
     shell:
         """
         bbmap.sh \
@@ -96,15 +109,16 @@ rule remove_human:
             outu2={output.read2} \
             outm={output.human} \
             statsfile={log.statsfile} \
-            minid={rh_config[minid]} \
-            maxindel={rh_config[maxindel]} \
-            minhits={rh_config[minhits]} \
-            bandwidthratio={rh_config[bandwidthratio]} \
-            bandwidth={rh_config[bandwidth]} \
-            qtrim={rh_config[qtrim]} \
-            trimq={rh_config[trimq]} \
-            {rh_config[quickmatch]} \
-            {rh_config[fast]} \
-            {rh_config[untrim]} \
+            minid={params.minid} \
+            maxindel={params.maxindel} \
+            minhits={params.minhits} \
+            bandwidthratio={params.bandwidthratio} \
+            bandwidth={params.bandwidth} \
+            qtrim={params.qtrim} \
+            trimq={params.trimq} \
+            {params.quickmatch} \
+            {params.fast} \
+            {params.untrim} \
+            2> {log.stderr}
         """
 
