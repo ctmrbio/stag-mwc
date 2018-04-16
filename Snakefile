@@ -1,7 +1,8 @@
 # vim: syntax=python expandtab
 #
-# mwc - Metagenomic Workflow Collaboration
-# Copyright (c) 2018 Authors
+#                   StaG
+#   mwc - Metagenomic Workflow Collaboration
+#         Copyright (c) 2018 Authors
 #
 # Running snakemake -n in a clone of this repository should successfully
 # execute a test dry-run of the workflow.
