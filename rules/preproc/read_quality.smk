@@ -36,10 +36,25 @@ rule trim_adapters_quality:
     output:
         read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
         read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
-    conda: "../../envs/bbmap.yaml"
-    shadow: "shallow"
+    log:
+        stdout=config["outdir"]+"/logs/bbduk/{sample}.stdout.log",
+        stderr=config["outdir"]+"/logs/bbduk/{sample}.stderr.log",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/bbmap.yaml"
     threads:
-        2
+        4
+    params:
+        minlen=bbduk_config["minlen"],
+        qtrim=bbduk_config["qtrim"],
+        trimq=bbduk_config["trimq"],
+        ktrim=bbduk_config["ktrim"],
+        k=bbduk_config["k"],
+        mink=bbduk_config["mink"],
+        hdist=bbduk_config["hdist"],
+        trimbyoverlap=bbduk_config["trimbyoverlap"],
+        trimpairsevenly=bbduk_config["trimpairsevenly"],
     shell:
         """
         bbduk.sh \
@@ -49,13 +64,15 @@ rule trim_adapters_quality:
             out2={output.read2} \
             ref=adapters \
             threads={threads} \
-            minlen={bbduk_config[minlen]} \
-            qtrim={bbduk_config[qtrim]} \
-            trimq={bbduk_config[trimq]} \
-            ktrim={bbduk_config[ktrim]} \
-            k={bbduk_config[k]} \
-            mink={bbduk_config[mink]} \
-            hdist={bbduk_config[hdist]} \
-            {bbduk_config[trimbyoverlap]} \
-            {bbduk_config[trimpairsevenly]} 
+            minlen={params.minlen} \
+            qtrim={params.qtrim} \
+            trimq={params.trimq} \
+            ktrim={params.ktrim} \
+            k={params.k} \
+            mink={params.mink} \
+            hdist={params.hdist} \
+            {params.trimbyoverlap} \
+            {params.trimpairsevenly} \
+            > {log.stdout} \
+            2> {log.stderr}
         """
