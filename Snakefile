@@ -48,16 +48,6 @@ if config["taxonomic_profile"]["centrifuge"]:
 
 if config["taxonomic_profile"]["kaiju"]:
     include: "rules/taxonomic_profiling/kaiju.smk"
-    kaiju = expand("{outdir}/kaiju/{sample}.kaiju", outdir=outdir, sample=SAMPLES)
-    kaiju_reports = expand("{outdir}/kaiju/{sample}.kaiju.summary.species", outdir=outdir, sample=SAMPLES)
-    all_outputs.extend(kaiju)
-    all_outputs.extend(kaiju_reports)
-    if not all([config["kaiju"]["db"], config["kaiju"]["nodes"], config["kaiju"]["names"]]):
-        print("WARNING: No Kaiju database specified!\n"
-              "         Specify relevant paths in the kaiju section of config.yaml.\n"
-              "         Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) + 
-              "         If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml")
-
 
 if config["taxonomic_profile"]["metaphlan2"]:
     include: "rules/taxonomic_profiling/metaphlan2.smk"
