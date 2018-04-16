@@ -10,6 +10,19 @@ if not any([os.path.isfile(config["bowtie2"]["db_prefix"]+ext) for ext in bt2_db
     raise WorkflowError(err_message)
 bt2_db_name = os.path.basename(config["bowtie2"]["db_prefix"])
 
+# Add final output files from this module to 'all_outputs' from the main
+# Snakefile scope. SAMPLES is also from the main Snakefile scope.
+bowtie2_alignments = expand("{outdir}/bowtie2/{db_name}/{sample}.bam",
+        outdir=config["outdir"],
+        sample=SAMPLES,
+        db_name=bt2_db_name)
+bowtie2_stats = expand("{outdir}/bowtie2/{db_name}/{sample}.{stats}.txt",
+        outdir=config["outdir"],
+        sample=SAMPLES,
+        stats=["covstats", "rpkm"],
+        db_name=bt2_db_name)
+all_outputs.extend(bowtie2_alignments)
+all_outputs.extend(bowtie2_stats)
 
 rule bowtie2:
     """Align reads using Bowtie2."""

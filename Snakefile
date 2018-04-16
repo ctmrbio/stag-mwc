@@ -39,18 +39,6 @@ if config["mappers"]["bbmap"]:
 
 if config["mappers"]["bowtie2"]:
     include: "rules/mappers/bowtie2.smk"
-    bowtie2_alignments = expand("{outdir}/bowtie2/{db_name}/{sample}.bam",
-            outdir=outdir,
-            sample=SAMPLES,
-            db_name=bt2_db_name)
-    bowtie2_stats = expand("{outdir}/bowtie2/{db_name}/{sample}.{stats}.txt",
-            outdir=outdir,
-            sample=SAMPLES,
-            stats=["covstats", "rpkm"],
-            db_name=bt2_db_name)
-    all_outputs.extend(bowtie2_alignments)
-    all_outputs.extend(bowtie2_stats)
-
 
 #############################
 # Taxonomic profiling
