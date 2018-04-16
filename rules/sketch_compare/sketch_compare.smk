@@ -68,7 +68,7 @@ rule plot_sample_similarity:
         stdout=config["outdir"]+"/logs/sketch_compare/sample_similarity_plot.stdout.log",
         stderr=config["outdir"]+"/logs/sketch_compare/sample_similarity_plot.stderr.log",
     conda:
-        "../../python.yaml"
+        "../../envs/python.yaml"
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \
