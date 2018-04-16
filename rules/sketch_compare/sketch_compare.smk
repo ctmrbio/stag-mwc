@@ -1,10 +1,19 @@
 # vim: syntax=python expandtab
 # Compare all samples against all samples using MinHash sketches
+import os.path
+
+# Add final output files from this module to 'all_outputs' from the
+# main Snakefile scope.
+sample_similarity_plot = expand("{outdir}/sketch_compare/sample_similarity.pdf",
+        outdir=outdir)
+all_outputs.extend(sample_similarity_plot)
+
 
 rule sketch:
-    """Create MinHash sketches of samples using BBMap's sketch.sh"""
+    """Create MinHash sketches of samples using BBMap's sketch.sh.
+    Uses only the first readpair of each sample."""
     input:
-        "input/{sample}_R1.fastq.gz"
+        os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="1")
     output:
         sketch=config["outdir"]+"/sketch_compare/{sample}.sketch.gz",
     log:
