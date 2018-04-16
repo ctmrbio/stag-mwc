@@ -46,6 +46,8 @@ rule kaiju:
         kaiju=config["outdir"]+"/kaiju/{sample}.kaiju",
     shadow: 
         "shallow"
+    threads:
+        4
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
