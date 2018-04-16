@@ -3,4 +3,5 @@ channels:
     - conda-forge
     - defaults
 dependencies:
+    - pandas =0.22.0
     - bbmap =37.90

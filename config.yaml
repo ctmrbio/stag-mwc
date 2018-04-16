@@ -23,6 +23,7 @@ dbdir: "databases"       # Databases will be downloaded to this dir, if requeste
 #########################
 qc_reads: True
 remove_human: True
+assess_depth: True
 sketch_compare: False
 mappers:
     bbmap: False
@@ -35,7 +36,7 @@ antibiotic_resistance: False
 
 
 #########################
-# Read quality assessment
+# Preprocessing
 #########################
 bbduk:
     minlen: 30
@@ -48,7 +49,7 @@ bbduk:
     trimbyoverlap: "trimbyoverlap"
     trimpairsevenly: "trimpairsevenly"
 remove_human:
-    hg19_path: ""        # [Required] Path to folder containing the BBMap index for hg19
+    hg19_path: ""         # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
@@ -59,6 +60,8 @@ remove_human:
     quickmatch: "quickmatch"
     fast: "fast"
     untrim: "untrim"
+bbcountunique:
+    interval: 5000        # Typically set to 10000, but test data requires <=5035
 
 #########################
 # Mappers
