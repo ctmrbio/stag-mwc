@@ -4,7 +4,7 @@ from snakemake.exceptions import WorkflowError
 import os.path
 
 if not os.path.isdir(os.path.join(config["remove_human"]["hg19_path"], "ref")):
-    err_message = "Cannot find hg19 database for human sequence removal at {}!\n".format(config["remove_human"]["hg19_path"])
+    err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(config["remove_human"]["hg19_path"])
     err_message += "Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
     err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"])
     raise WorkflowError(err_message)

@@ -7,7 +7,7 @@ mpa_config = config["metaphlan2"]
 bt2_db_ext = ".1.bt2"
 if not any([os.path.isfile(mpa_config["mpa_pkl"]),
             os.path.isfile(mpa_config["bt2_db_prefix"]+bt2_db_ext)]):
-    err_message = "No MetaPhlAn2 pickle or database found at: {}, {}!\n".format(mpa_config["mpa_pkl"], mpa_config["bt2_db_prefix"])
+    err_message = "No MetaPhlAn2 pickle or database found at: '{}', '{}'!\n".format(mpa_config["mpa_pkl"], mpa_config["bt2_db_prefix"])
     err_message += "Specify relevant paths in the metaphlan2 section of config.yaml.\n"
     err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}/metaphlan2'\n".format(dbdir=config["dbdir"])
     err_message += "If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml"

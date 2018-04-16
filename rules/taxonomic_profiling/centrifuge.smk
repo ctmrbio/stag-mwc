@@ -5,7 +5,7 @@ import os.path
 
 centrifuge_db_ext = ".1.cf"
 if not os.path.isfile(config["centrifuge"]["db_prefix"]+centrifuge_db_ext):
-    err_message = "No Centrifuge database found at: {}!\n".format(config["centrifuge"]["db_prefix"])
+    err_message = "No Centrifuge database found at: '{}'!\n".format(config["centrifuge"]["db_prefix"])
     err_message += "Specify Centrifuge database prefix in the Centrifuge section of config.yaml.\n"
     err_message += "Run 'snakemake download_centrifuge_database' to download a copy into '{dbdir}/centrifuge'\n".format(dbdir=config["dbdir"])
     err_message += "If you do not want to run Centrifuge for taxonomic profiling, set centrifuge: False in config.yaml"

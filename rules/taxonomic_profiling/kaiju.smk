@@ -7,7 +7,7 @@ kaiju_config = config["kaiju"]
 if not all([os.path.isfile(kaiju_config["db"]), 
             os.path.isfile(kaiju_config["nodes"]),
             os.path.isfile(kaiju_config["names"])]):
-    err_message = "No Kaiju database files at: {}, {}, {}!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
+    err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
     err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
     err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) 
     err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"

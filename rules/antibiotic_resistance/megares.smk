@@ -3,7 +3,7 @@ from snakemake.exceptions import WorkflowError
 import os.path
 
 if not os.path.isdir(os.path.join(config["megares"]["db_path"], "ref")):
-    err_message = "No MEGARes database found at: {}!\n".format(config["megares"]["db_path"])
+    err_message = "No MEGARes database found at: '{}'!\n".format(config["megares"]["db_path"])
     err_message += "Specify the DB path in the megares section of config.yaml.\n"
     err_message += "Run 'snakemake create_megares_index' to download and build a BBMap index in '{dbdir}/megares'\n".format(dbdir=config["dbdir"])
     err_message += "If you do not want to map reads against MEGARes for antibiotic resistance gene detection, set antibiotic_resistance: False in config.yaml"
