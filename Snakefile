@@ -19,17 +19,6 @@ SAMPLES = set(glob_wildcards(config["inputdir"]+"/"+config["input_fn_pattern"]).
 
 if config["qc_reads"]:
     include: "rules/preproc/read_quality.smk"
-    fastqc_input = expand("{outdir}/fastqc/{sample}_R{readpair}.{ext}",
-            outdir=outdir,
-            sample=SAMPLES,
-            readpair=[1,2],
-            ext=["zip", "html"])
-    trimmed_qa = expand("{outdir}/trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz",
-            outdir=outdir,
-            sample=SAMPLES,
-            readpair=[1,2])
-    all_outputs.extend(fastqc_input)
-    all_outputs.extend(trimmed_qa)
 
 
 if config["remove_human"]:
