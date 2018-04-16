@@ -45,17 +45,6 @@ if config["mappers"]["bowtie2"]:
 ############################
 if config["taxonomic_profile"]["centrifuge"]:
     include: "rules/taxonomic_profiling/centrifuge.smk"
-    centrifuge = expand("{outdir}/centrifuge/{sample}.{output_type}.tsv",
-            outdir=outdir,
-            sample=SAMPLES,
-            output_type=("centrifuge", "centrifuge_report"))
-    all_outputs.extend(centrifuge)
-    if not config["centrifuge"]["db_prefix"]:
-        print("WARNING: No Centrifuge database specified!\n"
-              "         Specify Centrifuge database prefix in the Centrifuge section of config.yaml.\n"
-              "         Run 'snakemake download_centrifuge_database' to download a copy into '{dbdir}/centrifuge'\n".format(dbdir=config["dbdir"]) +
-              "         If you do not want to run Centrifuge for taxonomic profiling, set centrifuge: False in config.yaml")
-
 
 if config["taxonomic_profile"]["kaiju"]:
     include: "rules/taxonomic_profiling/kaiju.smk"
