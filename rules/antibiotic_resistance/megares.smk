@@ -1,4 +1,19 @@
 # Generic rules for detection of antibiotic resistance genes using MEGARes
+from snakemake.exceptions import WorkflowError
+import os.path
+
+if not os.path.isdir(os.path.join(config["megares"]["db_path"], "ref")):
+    err_message = "No MEGARes database found at: {}!\n".format(config["megares"]["db_path"])
+    err_message += "Specify the DB path in the megares section of config.yaml.\n"
+    err_message += "Run 'snakemake create_megares_index' to download and build a BBMap index in '{dbdir}/megares'\n".format(dbdir=config["dbdir"])
+    err_message += "If you do not want to map reads against MEGARes for antibiotic resistance gene detection, set antibiotic_resistance: False in config.yaml"
+    raise WorkflowError(err_message)
+
+megares_outputs = expand("{outdir}/megares/{sample}.{output_type}",
+        outdir=outdir,
+        sample=SAMPLES,
+        output_type=("sam.gz", "mapped_reads.fq.gz", "mhist.txt", "covstats.txt", "rpkm.txt"))
+all_outputs.extend(megares_outputs)
 
 rule download_megares:
     """Download MEGARes database."""

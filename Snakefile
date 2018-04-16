@@ -33,7 +33,7 @@ if config["sketch_compare"]:
 
 #############################
 # Mappers
-############################
+#############################
 if config["mappers"]["bbmap"]:
     include: "rules/mappers/bbmap.smk"
 
@@ -42,7 +42,7 @@ if config["mappers"]["bowtie2"]:
 
 #############################
 # Taxonomic profiling
-############################
+#############################
 if config["taxonomic_profile"]["centrifuge"]:
     include: "rules/taxonomic_profiling/centrifuge.smk"
 
@@ -52,19 +52,11 @@ if config["taxonomic_profile"]["kaiju"]:
 if config["taxonomic_profile"]["metaphlan2"]:
     include: "rules/taxonomic_profiling/metaphlan2.smk"
 
+#############################
+# Antibiotic resistance
+#############################
 if config["antibiotic_resistance"]:
     include: "rules/antibiotic_resistance/megares.smk"
-    megares_outputs = expand("{outdir}/megares/{sample}.{output_type}",
-            outdir=outdir,
-            sample=SAMPLES,
-            output_type=("sam.gz", "mapped_reads.fq.gz", "mhist.txt", "covstats.txt", "rpkm.txt"))
-    all_outputs.extend(megares_outputs)
-    if not config["megares"]["db_path"]:
-        print("WARNING: No MEGARes database specified!\n"
-              "         Specify the DB path in the megares section of config.yaml.\n"
-              "         Run 'snakemake create_megares_index' to download and build a BBMap index in '{dbdir}/megares'\n".format(dbdir=config["dbdir"]) +
-              "         If you do not want to map reads against MEGARes for antibiotic resistance gene detection, set antibiotic_resistance: False in config.yaml")
-
 
 
 rule all:
