@@ -23,15 +23,6 @@ if config["qc_reads"]:
 
 if config["remove_human"]:
     include: "rules/preproc/remove_human.smk"
-    filtered_human = expand("{outdir}/filtered_human/{sample}_R{readpair}.filtered_human.fq.gz",
-            outdir=outdir,
-            sample=SAMPLES,
-            readpair=[1,2])
-    all_outputs.extend(filtered_human)
-    if not config["remove_human"]["hg19_path"]:
-        print("WARNING: No hg19 database for human sequence removal specified!\n"
-              "         Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
-              "         Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"]))
 
 
 if config["sketch_compare"]:
