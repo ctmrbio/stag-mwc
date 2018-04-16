@@ -1,8 +1,7 @@
 *
 !config.yaml
-!conf
-!conf/cluster
-!conf/cluster/*
+!cluster_configs
+!cluster_configs/*
 !docs
 !docs/Makefile
 !docs/source
