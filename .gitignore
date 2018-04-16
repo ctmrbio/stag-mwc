@@ -14,8 +14,6 @@
 !envs/*
 !.gitattributes
 !.gitignore
-!input
-!input/*gz
 !LICENSE.md
 !README.md
 !resources
