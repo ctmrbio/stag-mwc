@@ -16,28 +16,26 @@ all_outputs = []
 
 SAMPLES = set(glob_wildcards(config["inputdir"]+"/"+config["input_fn_pattern"]).sample)
 
-
+#############################
+# Pre-processing
+#############################
 if config["qc_reads"]:
     include: "rules/preproc/read_quality.smk"
-
 
 if config["remove_human"]:
     include: "rules/preproc/remove_human.smk"
 
-
+#############################
+# Naive sample comparison
+#############################
 if config["sketch_compare"]:
     include: "rules/sketch_compare/sketch_compare.smk"
 
-
+#############################
+# Mappers
+############################
 if config["mappers"]["bbmap"]:
     include: "rules/mappers/bbmap.smk"
-    bbmap_alignments = expand("{outdir}/bbmap/{db_name}/{sample}.{output_type}",
-            outdir=outdir,
-            db_name=config["bbmap"]["db_name"],
-            sample=SAMPLES,
-            output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-    all_outputs.extend(bbmap_alignments)
-
 
 if config["mappers"]["bowtie2"]:
     include: "rules/mappers/bowtie2.smk"
@@ -54,6 +52,9 @@ if config["mappers"]["bowtie2"]:
     all_outputs.extend(bowtie2_stats)
 
 
+#############################
+# Taxonomic profiling
+############################
 if config["taxonomic_profile"]["centrifuge"]:
     include: "rules/taxonomic_profiling/centrifuge.smk"
     centrifuge = expand("{outdir}/centrifuge/{sample}.{output_type}.tsv",

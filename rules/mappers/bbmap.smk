@@ -2,11 +2,20 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
-if not os.path.isdir(config["bbmap"]["db_path"]):
+if not os.path.isdir(os.path.join(config["bbmap"]["db_path"], "ref")):
     err_message = "BBMap index not found at: '{}'\n".format(config["bbmap"]["db_path"])
     err_message += "Check path in config setting 'bbmap:db_path'.\n"
     err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
     raise WorkflowError(err_message)
+
+# Add final output files from this module to 'all_outputs' from the main
+# Snakefile scope. SAMPLES is also from the main Snakefile scope.
+bbmap_alignments = expand("{outdir}/bbmap/{db_name}/{sample}.{output_type}",
+        outdir=config["outdir"],
+        db_name=config["bbmap"]["db_name"],
+        sample=SAMPLES,
+        output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
+all_outputs.extend(bbmap_alignments)
 
 bbmap_config = config["bbmap"]
 bbmap_output_folder = config["outdir"]+"/bbmap/{db_name}/".format(db_name=bbmap_config["db_name"])
