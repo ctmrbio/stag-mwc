@@ -26,6 +26,9 @@ if config["qc_reads"]:
 if config["remove_human"]:
     include: "rules/preproc/remove_human.smk"
 
+if config["assess_depth"]:
+    include: "rules/preproc/bbcountunique.smk"
+
 #############################
 # Naive sample comparison
 #############################
