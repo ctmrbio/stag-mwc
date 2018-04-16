@@ -1,5 +1,6 @@
 # vim: syntax=python expandtab
 # MWC read pre-processing rules
+import os.path
 
 # Add final output files from this module to 'all_outputs' from
 # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
@@ -17,7 +18,7 @@ all_outputs.extend(trimmed_qa)
 
 rule fastqc:
     input:
-        "input/{sample}_R{readpair}.fastq.gz"
+        os.path.join(config["inputdir"], config["input_fn_pattern"])
     output:
         html=config["outdir"]+"/fastqc/{sample}_R{readpair}.html",
         zip=config["outdir"]+"/fastqc/{sample}_R{readpair}.zip",
@@ -30,8 +31,8 @@ rule fastqc:
 bbduk_config = config["bbduk"]
 rule trim_adapters_quality:
     input:
-        read1="input/{sample}_R1.fastq.gz",
-        read2="input/{sample}_R2.fastq.gz",
+        read1=os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="1"),
+        read2=os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="2")
     output:
         read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
         read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",

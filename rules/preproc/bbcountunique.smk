@@ -25,7 +25,7 @@ rule bbcountunique:
     threads:
         2
     conda:
-        "../../bbmap.yaml",
+        "../../envs/bbmap.yaml",
     params:
         interval=config["bbcountunique"]["interval"]
     shell:
