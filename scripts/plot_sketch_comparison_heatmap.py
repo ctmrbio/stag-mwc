@@ -7,6 +7,8 @@ import argparse
 
 import matplotlib as mpl
 mpl.use("agg")
+mpl.rcParams.update({'figure.autolayout': True})
+
 import pandas as pd
 import seaborn as sns
 
