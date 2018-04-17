@@ -18,10 +18,10 @@ if not any([os.path.isfile(mpa_config["mpa_pkl"]),
 mpa_outputs = expand("{outdir}/metaphlan2/{sample}.{output_type}",
         outdir=config["outdir"],
         sample=SAMPLES,
-        output_type=("bowtie2.bz2", "metaphlan2.txt"))
+        output_type=("bowtie2.bz2", "metaphlan2.txt", "metaphlan2.krona"))
 mpa_combined = expand("{outdir}/metaphlan2/all_samples.metaphlan2.{ext}",
         outdir=config["outdir"],
-        ext=("txt", "pdf"))
+        ext=("txt", "pdf", "krona.html"))
 all_outputs.extend(mpa_outputs)
 all_outputs.extend(mpa_combined)
 
@@ -81,6 +81,7 @@ rule metaphlan2:
     output:
         bt2_out=config["outdir"]+"/metaphlan2/{sample}.bowtie2.bz2",
         mpa_out=config["outdir"]+"/metaphlan2/{sample}.metaphlan2.txt",
+        krona=config["outdir"]+"/metaphlan2/{sample}.metaphlan2.krona",
     log:
         stdout=config["outdir"]+"/logs/metaphlan2/{sample}.metaphlan2.stdout.log",
         stderr=config["outdir"]+"/logs/metaphlan2/{sample}.metaphlan2.stderr.log",
@@ -107,7 +108,11 @@ rule metaphlan2:
             {output.mpa_out} \
             {params.extra} \
             > {log.stdout} \
-            2> {log.stderr}
+            2> {log.stderr} \
+        && \
+        metaphlan2krona.py \
+            --profile {output.mpa_out} \
+            --krona {output.krona}
         """
 
 
@@ -151,3 +156,20 @@ rule combine_metaphlan2_outputs:
             -c {params.c}
         """
 
+rule create_metaphlan2_krona_plots:
+    input:
+        expand(config["outdir"]+"/metaphlan2/{sample}.metaphlan2.krona", sample=SAMPLES)
+    output:
+        html=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.krona.html",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/metaphlan2.yaml"
+    threads:
+        1
+    shell:
+        """
+        ktImportText \
+            -o {output.html} \
+            {input}
+        """
