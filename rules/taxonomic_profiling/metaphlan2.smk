@@ -19,8 +19,9 @@ mpa_outputs = expand("{outdir}/metaphlan2/{sample}.{output_type}",
         outdir=config["outdir"],
         sample=SAMPLES,
         output_type=("bowtie2.bz2", "metaphlan2.txt"))
-mpa_combined = expand("{outdir}/metaphlan2/all_samples.metaphlan2.txt",
-        outdir=config["outdir"])
+mpa_combined = expand("{outdir}/metaphlan2/all_samples.metaphlan2.{ext}",
+        outdir=config["outdir"],
+        ext=("txt", "pdf"))
 all_outputs.extend(mpa_outputs)
 all_outputs.extend(mpa_combined)
 
@@ -111,19 +112,42 @@ rule metaphlan2:
 
 
 rule combine_metaphlan2_outputs:
-    """Combine metaphlan2 outputs into a large table."""
+    """Combine metaphlan2 outputs into a large table and plot heatmap."""
     input:
         expand(config["outdir"]+"/metaphlan2/{sample}.metaphlan2.txt", sample=SAMPLES)
     output:
-        config["outdir"]+"/metaphlan2/all_samples.metaphlan2.txt"
+        txt=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.txt",
+        pdf=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.pdf",
     shadow:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
     threads:
         1
+    params:
+        tax_lev=mpa_config["tax_lev"],
+        minv=mpa_config["minv"],
+        s=mpa_config["s"],
+        top=mpa_config["top"],
+        m=mpa_config["m"],
+        d=mpa_config["d"],
+        f=mpa_config["f"],
+        c=mpa_config["c"],
     shell:
         """
-        merge_metaphlan_tables.py {input} > {output}
+        merge_metaphlan_tables.py {input} \
+            | sed 's/\.metaphlan2//g' > {output.txt} \
+        && \
+        metaphlan_hclust_heatmap.py \
+            --in {output.txt} \
+            --out {output.pdf} \
+            --tax_lev {params.tax_lev} \
+            --minv {params.minv} \
+            -s {params.s} \
+            --top {params.top} \
+            -m {params.m} \
+            -d {params.d} \
+            -f {params.f} \
+            -c {params.c}
         """
 
