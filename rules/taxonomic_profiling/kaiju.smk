@@ -51,7 +51,7 @@ rule kaiju:
     threads:
         4
     conda:
-        "../../kaiju.yaml"
+        "../../envs/kaiju.yaml"
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -92,7 +92,7 @@ rule kaiju_report:
         nodes=kaiju_config["nodes"],
         names=kaiju_config["names"],
     conda:
-        "../../kaiju.yaml"
+        "../../envs/kaiju.yaml"
     shell:
         """
 		kaiju2krona \
