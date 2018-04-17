@@ -17,8 +17,10 @@ if not all([os.path.isfile(kaiju_config["db"]),
 # SAMPLES is also from the main Snakefile scope.
 kaiju = expand("{outdir}/kaiju/{sample}.kaiju", outdir=outdir, sample=SAMPLES)
 kaiju_reports = expand("{outdir}/kaiju/{sample}.kaiju.summary.species", outdir=outdir, sample=SAMPLES)
+kaiju_krona = expand("{outdir}/kaiju/all_samples.kaiju.krona.html", outdir=outdir)
 all_outputs.extend(kaiju)
 all_outputs.extend(kaiju_reports)
+all_outputs.extend(kaiju_krona)
 
 rule download_kaiju_database:
     output:
@@ -48,6 +50,8 @@ rule kaiju:
         "shallow"
     threads:
         4
+    conda:
+        "../../kaiju.yaml"
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -79,7 +83,6 @@ rule kaiju_report:
         kaiju=config["outdir"]+"/kaiju/{sample}.kaiju",
     output:
         krona=config["outdir"]+"/kaiju/{sample}.krona",
-        krona_html=config["outdir"]+"/kaiju/{sample}.krona.html",
         family=config["outdir"]+"/kaiju/{sample}.summary.family",
         genus=config["outdir"]+"/kaiju/{sample}.kaiju.summary.genus",
         species=config["outdir"]+"/kaiju/{sample}.kaiju.summary.species",
@@ -88,6 +91,8 @@ rule kaiju_report:
     params:
         nodes=kaiju_config["nodes"],
         names=kaiju_config["names"],
+    conda:
+        "../../kaiju.yaml"
     shell:
         """
 		kaiju2krona \
@@ -96,9 +101,6 @@ rule kaiju_report:
 			-i {input.kaiju} \
 			-o {output.krona} \
             -u
-		ktImportText \
-			-o {output.krona_html} \
-			{output.krona}
         kaijuReport \
             -t {params.nodes} \
             -n {params.names} \
@@ -122,3 +124,18 @@ rule kaiju_report:
             -o {output.family}
         """
 
+rule create_kaiju_krona_plot:
+    input:
+        expand(config["outdir"]+"/kaiju/{sample}.krona", sample=SAMPLES)
+    output:
+        krona_html=config["outdir"]+"/kaiju/all_samples.kaiju.krona.html",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/kaiju.yaml"
+    shell:
+        """
+		ktImportText \
+			-o {output.krona_html} \
+			{input}
+        """
