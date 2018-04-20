@@ -61,5 +61,5 @@ rule bowtie2_mapping_stats:
             in={input.bam} \
             out={output.covstats} \
             rpkm={output.rpkm} \
-            > {log}
+            2> {log}
         """
