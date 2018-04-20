@@ -1,3 +1,4 @@
+name: stag-mwc-metaphlan2
 channels:
     - bioconda
     - conda-forge

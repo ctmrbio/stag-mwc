@@ -51,7 +51,7 @@ rule kaiju:
     threads:
         4
     conda:
-        "../../envs/kaiju.yaml"
+        "../../envs/stag-mwc.yaml"
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -92,7 +92,7 @@ rule kaiju_report:
         nodes=kaiju_config["nodes"],
         names=kaiju_config["names"],
     conda:
-        "../../envs/kaiju.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
 		kaiju2krona \
@@ -132,7 +132,7 @@ rule create_kaiju_krona_plot:
     shadow:
         "shallow"
     conda:
-        "../../envs/kaiju.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
 		ktImportText \

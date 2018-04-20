@@ -1,5 +1,0 @@
-channels:
-    - defaults
-dependencies:
-    - pandas =0.22.0
-    - seaborn =0.8.1

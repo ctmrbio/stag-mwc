@@ -52,7 +52,7 @@ rule create_megares_index:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     params:
         dbdir=config["dbdir"]+"/megares"
     shell:
@@ -79,7 +79,7 @@ rule bbmap_to_megares:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     threads:
         8
     params:

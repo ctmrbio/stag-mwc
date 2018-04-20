@@ -50,7 +50,7 @@ rule centrifuge:
     shadow: 
         "shallow"
     conda:
-        "../../envs/centrifuge.yaml"
+        "../../envs/stag-mwc.yaml"
     params:
         db_prefix=cf_config["db_prefix"],
     shell:

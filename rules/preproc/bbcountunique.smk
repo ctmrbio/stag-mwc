@@ -25,7 +25,7 @@ rule bbcountunique:
     threads:
         2
     conda:
-        "../../envs/bbmap.yaml",
+        "../../envs/stag-mwc.yaml",
     params:
         interval=config["bbcountunique"]["interval"]
     shell:

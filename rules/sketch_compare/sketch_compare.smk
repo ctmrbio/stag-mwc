@@ -21,7 +21,7 @@ rule sketch:
     shadow: 
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     threads:
         2
     shell:
@@ -46,7 +46,7 @@ rule compare_sketches:
     shadow: 
         "shallow"
     conda: 
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
         comparesketch.sh \
@@ -68,7 +68,7 @@ rule plot_sample_similarity:
         stdout=config["outdir"]+"/logs/sketch_compare/sample_similarity_plot.stdout.log",
         stderr=config["outdir"]+"/logs/sketch_compare/sample_similarity_plot.stderr.log",
     conda:
-        "../../envs/python.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \

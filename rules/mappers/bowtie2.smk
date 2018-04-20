@@ -54,7 +54,7 @@ rule bowtie2_mapping_stats:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
         pileup.sh \
