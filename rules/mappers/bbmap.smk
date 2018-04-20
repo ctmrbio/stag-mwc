@@ -34,7 +34,7 @@ rule bbmap:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     threads:
         8
     params:

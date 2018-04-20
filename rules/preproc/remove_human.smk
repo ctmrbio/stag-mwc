@@ -24,7 +24,7 @@ rule download_hg19:
     output:
         config["dbdir"]+"/hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     params:
         dbdir=config["dbdir"]+"/hg19/"
     shell:
@@ -57,7 +57,7 @@ rule index_hg19:
         config["dbdir"]+"/hg19/ref/index/1/chr4-7_index_k13_c2_b1.block",
         config["dbdir"]+"/hg19/ref/index/1/chr4-7_index_k13_c2_b1.block2.gz",
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     params:
         dbdir=config["dbdir"]+"/hg19/"
     shell:
@@ -84,7 +84,7 @@ rule remove_human:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     threads:
         4
     params:

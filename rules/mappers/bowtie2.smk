@@ -54,12 +54,12 @@ rule bowtie2_mapping_stats:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     shell:
         """
         pileup.sh \
             in={input.bam} \
             out={output.covstats} \
             rpkm={output.rpkm} \
-            > {log}
+            2> {log}
         """

@@ -42,7 +42,7 @@ rule trim_adapters_quality:
     shadow:
         "shallow"
     conda:
-        "../../envs/bbmap.yaml"
+        "../../envs/stag-mwc.yaml"
     threads:
         4
     params:
