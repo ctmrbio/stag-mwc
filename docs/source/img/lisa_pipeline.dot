@@ -1,0 +1,60 @@
+// Draft of processing workflow
+// by Fredrik Boulund 2018-01-31, 
+// based on drawing by Lisa Olsson 2018-01-12.
+digraph {
+	subgraph cluster_qc {
+		label = "Quality control";
+		input_reads -> fastqc
+		input_reads -> qc_trim
+		qc_trim -> remove_human
+		remove_human -> clean_reads
+		clean_reads -> fastqc_2
+	}
+	subgraph cluster_taxonomy {
+		label = "Taxonomic profiling";
+		clean_reads -> medusa
+		clean_reads -> mocat_motu
+		clean_reads -> metaphlan2
+	}
+	subgraph cluster_generef {
+		label = "Gene reference";
+		clean_reads -> igc
+		clean_reads -> medusa_gene
+		igc -> functional_annotation
+		medusa_gene -> cag_cluster
+		cag_cluster -> cag_cluster_annotation
+		medusa_gene -> medusa_gene_annotation
+		medusa_gene_annotation -> medusa_gene_subclass_annotation
+	}
+	subgraph cluster_assembly {
+		label = "Assembly";
+		clean_reads -> assemble
+		assemble -> gene_prediction 
+		gene_prediction -> assembly_annotation
+		gene_prediction -> map_to_predicted_genes
+	}
+
+	input_reads [shape=polygon, sides=4, skew=0.4, label="Input FASTQ"];
+	fastqc [label="Quality control:\nFastQC"];
+	fastqc_2 [label="Quality control of cleaned reads:\nFastQC"];
+	qc_trim [label="Trim quality/adapters:\nBBDuk"];
+	remove_human [label="Remove human reads:\nBBMap RemoveHuman"];
+	clean_reads [shape=polygon, sides=4, skew=0.4, label="Clean reads"];
+
+	medusa [label="Medusa"];
+	mocat_motu [label="MOCAT/mOTU"];
+	metaphlan2 [label="MetaPhlAn2"];
+
+	igc [label="IGC"];
+	medusa_gene [label="MedusaGene"];
+	functional_annotation [label="Functional annotation"];
+	cag_cluster [label="Co-abundance gene clustering (CAG)"];
+	cag_cluster_annotation [label="Annotate CAG clusters"];
+	medusa_gene_annotation [label="Annotate MedusaGene matches"];
+	medusa_gene_subclass_annotation [label="Subclass annotation (HirBin?)"];
+
+	assemble [label="Assemble:\nMegaHit"];
+	gene_prediction [label="Gene/ORF prediction:\nProdigal, MetaGeneMark?"];
+	assembly_annotation [label="Annotate identified ORFs"];
+	map_to_predicted_genes [label="Compute abundance of identified ORFs:\nBBmap"];
+}
