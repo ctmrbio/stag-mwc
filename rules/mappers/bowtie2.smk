@@ -21,6 +21,10 @@ bowtie2_stats = expand("{outdir}/bowtie2/{db_name}/{sample}.{stats}.txt",
         sample=SAMPLES,
         stats=["covstats", "rpkm"],
         db_name=bt2_db_name)
+counts_table = expand("{outdir}/bowtie2/{db_name}/all_samples.counts_table.tab",
+        outdir=config["outdir"],
+        db_name=bt2_db_name,
+        sample=SAMPLES)
 featureCounts = expand("{outdir}/bowtie2/{db_name}/all_samples.featureCounts{output_type}",
         outdir=config["outdir"],
         db_name=bt2_db_name,
@@ -28,6 +32,13 @@ featureCounts = expand("{outdir}/bowtie2/{db_name}/all_samples.featureCounts{out
         output_type=["", ".summary", ".table.tsv"])
 all_outputs.extend(bowtie2_alignments)
 all_outputs.extend(bowtie2_stats)
+if config["bowtie2"]["counts_table"]["annotations"]:
+    if not os.path.isfile(config["bowtie2"]["counts_table"]["annotations"]):
+        err_message = "Bowtie2 counts_table annotations not found at: '{}'\n".format(config["bowtie2"]["counts_table"]["annotations"])
+        err_message += "Check path in config setting 'bowtie2:counts_table:annotations'.\n"
+        err_message += "If you want to skip the counts table summary for Bowtie2, set bowtie2:counts_table:annotations to '' in config.yaml."
+        raise WorkflowError(err_message)
+    all_outputs.extend(counts_table)
 if config["bowtie2"]["featureCounts"]["annotations"]:
     if not os.path.isfile(config["bowtie2"]["featureCounts"]["annotations"]):
         err_message = "Bowtie2 featureCounts annotations not found at: '{}'\n".format(config["bowtie2"]["featureCounts"]["annotations"])
@@ -75,6 +86,33 @@ rule bowtie2_mapping_stats:
             rpkm={output.rpkm} \
             2> {log}
         """
+
+rule bowtie2_counts_table:
+    input:
+        rpkms=expand(config["outdir"]+"/bowtie2/{dbname}/{sample}.rpkm.txt",
+                dbname=bt2_db_name,
+                sample=SAMPLES)
+    output:
+        counts=config["outdir"]+"/bowtie2/{dbname}/all_samples.counts_table.tab".format(dbname=bt2_db_name),
+    log:
+        config["outdir"]+"/logs/bowtie2/{dbname}/all_samples.counts_table.log".format(dbname=bt2_db_name)
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    threads:
+        1
+    params:
+        annotations=config["bowtie2"]["counts_table"]["annotations"]
+    shell:
+        """
+        scripts/make_count_table.py \
+            --annotations {params.annotations} \
+            {input} \
+            > {output} \
+            2> {log}
+        """
+
 
 fc_config = config["bowtie2"]["featureCounts"]
 rule bowtie2_featureCounts:
