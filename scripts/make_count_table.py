@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-"""Make count table of all samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
+"""Make count table of multiple samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
 __author__ = "Fredrik Boulund"
 __date__ = "2018-04-24"
-__version__ = "1.2.0"
+__version__ = "2.0.0"
 
 from sys import argv, exit, stderr
 from collections import defaultdict
 import os.path
 import argparse
 
+import numpy as np
+
+NP_DTYPE = np.uint16
+
 
 def parse_args():
-    parser = argparse.ArgumentParser(description=__doc__)
+    desc = "{} Version v{}. Copyright (c) {}.".format(__doc__, __version__, __author__, __date__[:4])
+    parser = argparse.ArgumentParser(description=desc)
     
     parser.add_argument("RPKM", nargs="+",
             help="RPKM file(s) from BBMap pileup.sh.")
@@ -39,9 +44,7 @@ def parse_rpkm(rpkm_file):
             except ValueError:
                 print("ERROR: Could not parse RPKM file line {}:\n{}".format(line_no, rpkm_file),
                         file=stderr)
-            if int(reads) != 0:
-                read_counts[ref] = int(reads)
-    return read_counts
+            yield ref, NP_DTYPE(reads)
 
 
 def parse_annotations(annotation_file):
@@ -58,17 +61,20 @@ def parse_annotations(annotation_file):
 
 
 def merge_counts(annotations, rpkms):
-    output_table = {"Unknown": [0 for n in range(len(rpkms))]}
+    output_table = {"Unknown": np.zeros(len(rpkms), dtype=NP_DTYPE)}
     for annotation in set(annotations.values()):
-        output_table[annotation] = [0 for n in range(len(rpkms))]
-    for idx, rpkm in enumerate(rpkms):
-        for ref, count in rpkm.items():
-            try:
-                output_table[annotations[ref]][idx] += count
-            except KeyError:
-                print("WARNING: Found no annotation for '{}', assigning to 'Unknown'".format(ref),
-                        file=stderr)
-                output_table["Unknown"][idx] += count
+        output_table[annotation] = np.zeros(len(rpkms), dtype=NP_DTYPE)
+    for idx, rpkm_generators in enumerate(zip(*rpkms)):
+        refs, counts = zip(*rpkm_generators)
+        if not len(set(refs)) == 1:
+            print("ERROR: RPKM files not in the same order, error on line {}:\n{}".format(idx, refs),
+                    file=stderr)
+        try:
+            output_table[annotations[refs[0]]] += counts
+        except KeyError:
+            print("WARNING: Found no annotation for '{}', assigning to 'Unknown'".format(ref),
+                    file=stderr)
+            output_table["Unknown"][idx] += counts
     return output_table
 
 
