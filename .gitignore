@@ -39,3 +39,5 @@ scripts/.snakemake*
 !Snakefile
 !.test
 !.travis.yml
+!utils
+!utils/*
