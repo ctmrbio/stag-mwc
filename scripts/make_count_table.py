@@ -2,7 +2,7 @@
 """Make count table of all samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
 __author__ = "Fredrik Boulund"
 __date__ = "2018-04-24"
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 from sys import argv, exit, stderr
 from collections import defaultdict
@@ -11,7 +11,8 @@ import argparse
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description=__doc__)
+    desc = "{} Version v{}. Copyright (c) {}.".format(__doc__, __version__, __author__, __date__[:4])
+    parser = argparse.ArgumentParser(description=desc)
     
     parser.add_argument("RPKM", nargs="+",
             help="RPKM file(s) from BBMap pileup.sh.")
