@@ -93,6 +93,7 @@ rule bbmap_featureCounts:
         feature_type=lambda _: fc_config["feature_type"] if fc_config["feature_type"] else "gene",
         attribute_type=lambda _: fc_config["attribute_type"] if fc_config["attribute_type"] else "gene_id",
         extra=fc_config["extra"],
+        dbname=bbmap_config["db_name"],
     shell:
         """
         featureCounts \
@@ -110,6 +111,6 @@ rule bbmap_featureCounts:
             -f1,7- \
             {output.counts}  \
             | sed '1d' \
-            | sed 's|\t\w\+/bbmap/\w\+/|\t|g' \
+            | sed 's|\t\w\+/bbmap/{params.dbname}/|\t|g' \
             > {output.counts_table}
         """

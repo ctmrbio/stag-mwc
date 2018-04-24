@@ -98,6 +98,7 @@ rule bowtie2_featureCounts:
         feature_type=lambda x: fc_config["feature_type"] if fc_config["feature_type"] else "gene",
         attribute_type=lambda x: fc_config["attribute_type"] if fc_config["attribute_type"] else "gene_id",
         extra=fc_config["extra"],
+        dbname=bt2_db_name,
     shell:
         """
         featureCounts \
@@ -115,6 +116,6 @@ rule bowtie2_featureCounts:
             -f1,7- \
             {output.counts}  \
             | sed '1d' \
-            | sed 's|\t\w\+/bowtie2/\w\+/|\t|g' \
+            | sed 's|\t\w\+/bowtie2/{params.dbname}/|\t|g' \
             > {output.counts_table}
         """
