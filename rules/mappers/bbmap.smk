@@ -7,12 +7,6 @@ if not os.path.isdir(os.path.join(config["bbmap"]["db_path"], "ref")):
     err_message += "Check path in config setting 'bbmap:db_path'.\n"
     err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
     raise WorkflowError(err_message)
-if not os.path.isfile(config["bbmap"]["featureCounts"]["annotations"]):
-    err_message = "BBMap featureCounts annotations not found at: '{}'\n".format(config["bbmap"]["featureCounts"]["annotations"])
-    err_message += "Check path in config setting 'bbmap:featureCounts:annotations'.\n"
-    err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
-    raise WorkflowError(err_message)
-
 
 # Add final output files from this module to 'all_outputs' from the main
 # Snakefile scope. SAMPLES is also from the main Snakefile scope.
@@ -27,7 +21,13 @@ featureCounts = expand("{outdir}/bbmap/{db_name}/all_samples.featureCounts{outpu
         sample=SAMPLES,
         output_type=["", ".summary", ".table.tsv"])
 all_outputs.extend(bbmap_alignments)
-all_outputs.extend(featureCounts)
+if config["bbmap"]["featureCounts"]["annotations"]:
+    if not os.path.isfile(config["bbmap"]["featureCounts"]["annotations"]):
+        err_message = "BBMap featureCounts annotations not found at: '{}'\n".format(config["bbmap"]["featureCounts"]["annotations"])
+        err_message += "Check path in config setting 'bbmap:featureCounts:annotations'.\n"
+        err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
+        raise WorkflowError(err_message)
+    all_outputs.extend(featureCounts)
 
 bbmap_config = config["bbmap"]
 bbmap_output_folder = config["outdir"]+"/bbmap/{db_name}/".format(db_name=bbmap_config["db_name"])
