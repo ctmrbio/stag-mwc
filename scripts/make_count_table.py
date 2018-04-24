@@ -2,7 +2,7 @@
 """Make count table of all samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
 __author__ = "Fredrik Boulund"
 __date__ = "2018-04-24"
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 from sys import argv, exit, stderr
 from collections import defaultdict
@@ -39,7 +39,8 @@ def parse_rpkm(rpkm_file):
             except ValueError:
                 print("ERROR: Could not parse RPKM file line {}:\n{}".format(line_no, rpkm_file),
                         file=stderr)
-            read_counts[ref] = int(reads)
+            if int(reads) != 0:
+                read_counts[ref] = int(reads)
     return read_counts
 
 
