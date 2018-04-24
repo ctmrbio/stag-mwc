@@ -21,8 +21,14 @@ bowtie2_stats = expand("{outdir}/bowtie2/{db_name}/{sample}.{stats}.txt",
         sample=SAMPLES,
         stats=["covstats", "rpkm"],
         db_name=bt2_db_name)
+featureCounts = expand("{outdir}/bowtie2/{db_name}/all_samples.featureCounts{output_type}",
+        outdir=config["outdir"],
+        db_name=bt2_db_name,
+        sample=SAMPLES,
+        output_type=["", ".summary", ".table.tsv"])
 all_outputs.extend(bowtie2_alignments)
 all_outputs.extend(bowtie2_stats)
+all_outputs.extend(featureCounts)
 
 rule bowtie2:
     """Align reads using Bowtie2."""
@@ -62,4 +68,45 @@ rule bowtie2_mapping_stats:
             out={output.covstats} \
             rpkm={output.rpkm} \
             2> {log}
+        """
+
+fc_config = config["bowtie2"]["featureCounts"]
+rule bowtie2_featureCounts:
+    input:
+        bams=expand(config["outdir"]+"/bowtie2/{dbname}/{sample}.bam",
+                dbname=bt2_db_name,
+                sample=SAMPLES)
+    output:
+        counts=config["outdir"]+"/bowtie2/{dbname}/all_samples.featureCounts".format(dbname=bt2_db_name),
+        counts_table=config["outdir"]+"/bowtie2/{dbname}/all_samples.featureCounts.table.tsv".format(dbname=bt2_db_name),
+        summary=config["outdir"]+"/bowtie2/{dbname}/all_samples.featureCounts.summary".format(dbname=bt2_db_name),
+    log:
+        config["outdir"]+"/logs/bowtie2/{dbname}/all_samples.featureCounts.log".format(dbname=bt2_db_name)
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        annotations=fc_config["annotations"],
+        feature_type=lambda x: fc_config["feature_type"] if fc_config["feature_type"] else "gene",
+        attribute_type=lambda x: fc_config["attribute_type"] if fc_config["attribute_type"] else "gene_id",
+        extra=fc_config["extra"],
+    shell:
+        """
+        featureCounts \
+            -a {params.annotations} \
+            -o {output.counts} \
+            -t {params.feature_type} \
+            -g {params.attribute_type} \
+            {params.extra} \
+            {input.bams} \
+            > {log} \
+            2>> {log} \
+        && \
+        cut \
+            -f1,7- \
+            {output.counts}  \
+            | sed '1d' \
+            | sed 's|\t\w\+/bowtie2/\w\+/|\t|g' \
+            > {output.counts_table}
         """

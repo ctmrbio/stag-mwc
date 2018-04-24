@@ -15,7 +15,7 @@
 inputdir: "input"
 input_fn_pattern: "{sample}_R{readpair}.fastq.gz" 
 outdir: "output_dir"
-dbdir: "databases"       # Databases will be downloaded to this dir, if requested
+dbdir: "databases"           # Databases will be downloaded to this dir, if requested
 
 
 #########################
@@ -49,7 +49,7 @@ bbduk:
     trimbyoverlap: "trimbyoverlap"
     trimpairsevenly: "trimpairsevenly"
 remove_human:
-    hg19_path: ""         # [Required] Path to folder containing the BBMap index for hg19
+    hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
@@ -61,51 +61,56 @@ remove_human:
     fast: "fast"
     untrim: "untrim"
 bbcountunique:
-    interval: 5000        # Typically set to 10000, but test data requires <=5035
+    interval: 5000           # Typically set to 10000, but test data requires <=5035
 
 #########################
 # Mappers
 #########################
 bbmap:
-    db_name: ""           # [Required] Custom name for BBMap database
-    db_path: ""           # [Required] Path to BBMap database (folder should contain a 'ref' folder)
-    min_id: 0.76          # Minimum id for read alignment, BBMap default is 0.76
-    extra: ""             # Extra BBMap command line parameters
+    db_name: ""              # [Required] Custom name for BBMap database
+    db_path: ""              # [Required] Path to BBMap database (folder should contain a 'ref' folder)
+    min_id: 0.76             # Minimum id for read alignment, BBMap default is 0.76
+    extra: ""                # Extra BBMap command line parameters
 bowtie2:
-    db_prefix: ""         # [Required] Full path to Bowtie2 index (not including file extension)
-    extra: ""             # Extra bowtie2 commandline parameters
+    db_prefix: ""            # [Required] Full path to Bowtie2 index (not including file extension)
+    extra: ""                # Extra bowtie2 commandline parameters
+    featureCounts:
+        annotations: ""      # [Required] Full path to GTF format annotations for database sequences
+        feature_type: ""     # Feature type to produce counts for, default is "gene"
+        attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
+        extra: ""            # Extra featureCount command line parameters
 
 
 #########################
 # Taxonomic profiling
 #########################
 centrifuge:
-    db_prefix: ""        # [Required] Path to Centrifuge DB index (not including file extension)
+    db_prefix: ""            # [Required] Path to Centrifuge DB index (not including file extension)
 
 kaiju:
-    db: ""               # [Required] Path to Kaiju DB file
-    nodes: ""            # [Required] Path to Kaiju taxonomy nodes.dmp
-    names: ""            # [Required] Path to Kaiju taxonomy names.dmp
+    db: ""                   # [Required] Path to Kaiju DB file
+    nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
+    names: ""                # [Required] Path to Kaiju taxonomy names.dmp
 
 metaphlan2:
-    mpa_pkl: ""          # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
-    bt2_db_prefix: ""    # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
-    extra: ""            # Extra command line arguments for metaphlan2.py
-    tax_lev: "s"         # Heatmap: Taxononomic level, choose from a, k, p, c, f, g, s
-    minv: "0"            # Heatmap: Minimum value to display.
-    s: "log"             # Heatmap: Scale, default is "norm"
-    top: "50"            # Heatmap: Top most abundant taxa to display
-    m: "average"         # Heatmap: Hierarchical clustering method.
-    d: "braycurtis"      # Heatmap: Distance function for samples.
-    f: "correlation"     # Heatmap: Distance function for microbes.
-    c: "jet"             # Heatmap: Colormap, default is "jet"
+    mpa_pkl: ""              # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
+    bt2_db_prefix: ""        # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
+    extra: ""                # Extra command line arguments for metaphlan2.py
+    tax_lev: "s"             # Heatmap: Taxononomic level, choose from a, k, p, c, f, g, s
+    minv: "0"                # Heatmap: Minimum value to display.
+    s: "log"                 # Heatmap: Scale, default is "norm"
+    top: "50"                # Heatmap: Top most abundant taxa to display
+    m: "average"             # Heatmap: Hierarchical clustering method.
+    d: "braycurtis"          # Heatmap: Distance function for samples.
+    f: "correlation"         # Heatmap: Distance function for microbes.
+    c: "jet"                 # Heatmap: Colormap, default is "jet"
 
 
 #########################
 # Antibiotic Resistance
 #########################
 megares:
-    db_path: ""          # [Required] Path to folder containing MEGARes BBMap index
+    db_path: ""              # [Required] Path to folder containing MEGARes BBMap index
     min_id: 0.91
-    max_indel: 1600      # BBMap default is 16000
-    extra: ""            # Extra BBMap commandline parameters
+    max_indel: 1600          # BBMap default is 16000
+    extra: ""                # Extra BBMap commandline parameters
