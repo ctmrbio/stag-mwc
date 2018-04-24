@@ -91,6 +91,8 @@ rule bowtie2_featureCounts:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    threads:
+        4
     params:
         annotations=fc_config["annotations"],
         feature_type=lambda x: fc_config["feature_type"] if fc_config["feature_type"] else "gene",
@@ -103,6 +105,7 @@ rule bowtie2_featureCounts:
             -o {output.counts} \
             -t {params.feature_type} \
             -g {params.attribute_type} \
+            -T {threads} \
             {params.extra} \
             {input.bams} \
             > {log} \
