@@ -2,7 +2,7 @@
 """Make count table of multiple samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
 __author__ = "Fredrik Boulund"
 __date__ = "2018-04-24"
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 from sys import argv, exit, stderr
 from collections import defaultdict
@@ -61,28 +61,30 @@ def parse_annotations(annotation_file):
 
 
 def merge_counts(annotations, rpkms):
-    output_table = {"Unknown": np.zeros(len(rpkms), dtype=NP_DTYPE)}
-    for annotation in set(annotations.values()):
-        output_table[annotation] = np.zeros(len(rpkms), dtype=NP_DTYPE)
+    order = {annotation: idx for idx, annotation in enumerate(list(set(annotations.values())), start=1)}
+    order["Unknown"] = 0
+    output_table = np.zeros((len(order), len(rpkms)), dtype=NP_DTYPE)
     for idx, rpkm_generators in enumerate(zip(*rpkms)):
         refs, counts = zip(*rpkm_generators)
         if not len(set(refs)) == 1:
             print("ERROR: RPKM files not in the same order, error on line {}:\n{}".format(idx, refs),
                     file=stderr)
+        current_ref = refs[0]
         try:
-            output_table[annotations[refs[0]]] += counts
+            output_table[order[annotations[current_ref]], :] += counts
         except KeyError:
             print("WARNING: Found no annotation for '{}', assigning to 'Unknown'".format(ref),
                     file=stderr)
-            output_table["Unknown"][idx] += counts
-    return output_table
+            output_table[order["Unknown"], :] += counts
+    return output_table, order
 
 
-def print_table(table_data, sample_names):
+def print_table(table_data, order, sample_names):
     header = "\t".join(["Annotation"] + [sample_name for sample_name in sample_names])
     print(header)
-    for ref, counts in table_data.items():
-        print("{}\t{}".format(ref, "\t".join(str(count) for count in counts)))
+    sorted_annotations = [annotation for annotation, pos in sorted(order.items(), key=lambda kv: kv[1])]
+    for annotation, counts in zip(sorted_annotations, table_data):
+        print("{}\t{}".format(annotation, "\t".join(str(count) for count in counts)))
 
 
 if __name__ == "__main__":
@@ -93,8 +95,8 @@ if __name__ == "__main__":
         rpkms.append(parse_rpkm(rpkm_file))
 
     annotations = parse_annotations(args.annotations)
-    table_data = merge_counts(annotations, rpkms)
+    table_data, order = merge_counts(annotations, rpkms)
     sample_names = [os.path.basename(fn).split(".")[0] for fn in args.RPKM]
-    print_table(table_data, sample_names)
+    print_table(table_data, order, sample_names)
 
 
