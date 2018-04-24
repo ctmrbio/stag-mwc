@@ -8,6 +8,11 @@ if not any([os.path.isfile(config["bowtie2"]["db_prefix"]+ext) for ext in bt2_db
     err_message += "Check path in config setting 'bowtie2:db_prefix'.\n"
     err_message += "If you want to skip mapping with bowtie2, set mappers:bowtie2:False in config.yaml."
     raise WorkflowError(err_message)
+if not os.path.isfile(config["bowtie2"]["featureCounts"]["annotations"]):
+    err_message = "Bowtie2 featureCounts annotations not found at: '{}'\n".format(config["bowtie2"]["featureCounts"]["annotations"])
+    err_message += "Check path in config setting 'bowtie2:featureCounts:annotations'.\n"
+    err_message += "If you want to skip mapping with Bowtie2, set mappers:bowtie2:False in config.yaml."
+    raise WorkflowError(err_message)
 bt2_db_name = os.path.basename(config["bowtie2"]["db_prefix"])
 
 # Add final output files from this module to 'all_outputs' from the main
