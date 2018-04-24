@@ -15,12 +15,23 @@ bbmap_alignments = expand("{outdir}/bbmap/{db_name}/{sample}.{output_type}",
         db_name=config["bbmap"]["db_name"],
         sample=SAMPLES,
         output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
+counts_table = expand("{outdir}/bbmap/{db_name}/all_samples.counts_table.tab",
+        outdir=config["outdir"],
+        db_name=config["bbmap"]["db_name"],
+        sample=SAMPLES)
 featureCounts = expand("{outdir}/bbmap/{db_name}/all_samples.featureCounts{output_type}",
         outdir=config["outdir"],
         db_name=config["bbmap"]["db_name"],
         sample=SAMPLES,
         output_type=["", ".summary", ".table.tsv"])
 all_outputs.extend(bbmap_alignments)
+if config["bbmap"]["counts_table"]["annotations"]:
+    if not os.path.isfile(config["bbmap"]["counts_table"]["annotations"]):
+        err_message = "BBMap counts table annotations not found at: '{}'\n".format(config["bbmap"]["counts_table"]["annotations"])
+        err_message += "Check path in config setting 'bbmap:counts_table:annotations'.\n"
+        err_message += "If you want to skip read counts summary for BBMap, set bbmap:counts_table:annotations to '' in config.yaml."
+        raise WorkflowError(err_message)
+    all_outputs.extend(counts_table)
 if config["bbmap"]["featureCounts"]["annotations"]:
     if not os.path.isfile(config["bbmap"]["featureCounts"]["annotations"]):
         err_message = "BBMap featureCounts annotations not found at: '{}'\n".format(config["bbmap"]["featureCounts"]["annotations"])
@@ -67,6 +78,33 @@ rule bbmap:
             {params.extra} \
             > {log.stdout} \
             2> {log.stderr}
+        """
+
+
+rule bbmap_counts_table:
+    input:
+        rpkms=expand(config["outdir"]+"/bbmap/{dbname}/{sample}.rpkm.txt",
+                dbname=bbmap_config["db_name"],
+                sample=SAMPLES)
+    output:
+        counts=config["outdir"]+"/bbmap/{dbname}/all_samples.counts_table.tab".format(dbname=bbmap_config["db_name"]),
+    log:
+        config["outdir"]+"/logs/bbmap/{dbname}/all_samples.counts_table.log".format(dbname=bbmap_config["db_name"])
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    threads:
+        1
+    params:
+        annotations=config["bbmap"]["counts_table"]["annotations"]
+    shell:
+        """
+        scripts/make_count_table.py \
+            --annotations {params.annotations} \
+            {input} \
+            > {output} \
+            2> {log}
         """
 
 

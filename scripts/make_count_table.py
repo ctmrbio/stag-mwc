@@ -2,7 +2,7 @@
 """Make count table of all samples from BBMap pileup.sh rpkm tables, and two-column annotation file."""
 __author__ = "Fredrik Boulund"
 __date__ = "2018-04-24"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 from sys import argv, exit, stderr
 from collections import defaultdict
@@ -57,12 +57,17 @@ def parse_annotations(annotation_file):
 
 
 def merge_counts(annotations, rpkms):
-    output_table = {}
+    output_table = {"Unknown": [0 for n in range(len(rpkms))]}
     for annotation in set(annotations.values()):
         output_table[annotation] = [0 for n in range(len(rpkms))]
     for idx, rpkm in enumerate(rpkms):
         for ref, count in rpkm.items():
-            output_table[annotations[ref]][idx] += count
+            try:
+                output_table[annotations[ref]][idx] += count
+            except KeyError:
+                print("WARNING: Found no annotation for '{}', assigning to 'Unknown'".format(ref),
+                        file=stderr)
+                output_table["Unknown"][idx] += count
     return output_table
 
 
