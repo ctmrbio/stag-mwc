@@ -17,6 +17,14 @@ metagenomic analysis tools.
 
 ## Usage
 
+### Step 0: Install conda and Snakemake
+[Conda](https://conda.io/docs/) and
+[Snakemake](https://snakemake.readthedocs.io) are required to be able to use
+StaG-mwc. Most people would probably want to install
+[Miniconda](https://conda.io/miniconda.html) and install Snakemake into their
+base environment. Conda will automatically install the required versions of 
+all tools required to run StaG-mwc.
+
 ### Step 1: Install workflow
 <!--download and extract the [latest release](https://github.com/snakemake-workflows/mwc/releases). -->
 
@@ -25,8 +33,9 @@ git@github.com:boulund/mwc`. If you intend to modify or further develop this
 workflow, you are welcome to fork this reposity. Please consider sharing
 potential improvements via a pull request.
 
-If you use this workflow in a paper, don't forget to give credits to the
-authors by citing the URL of this repository and, when available, its DOI.
+If you use this workflow in a publication, please credit the authors by citing
+the URL of this repository and, when available, its DOI. Also, don't forget to
+cite the actual tools used in your workflow.
 
 ### Step 2: Configure workflow
 
@@ -39,56 +48,37 @@ when running the workflow.
 
 Test your configuration by performing a dry-run via
 
-    snakemake -n
+    snakemake --use-conda -n
 
 Execute the workflow locally via
 
-    snakemake --cores $N
+    snakemake --use-conda --cores N
 
-using `$N` cores or run it in a cluster environment via
+This will run the workflow locally using `N` cores. It is also possible to run
+it in a Slurm-managed cluster environment using e.g. 
 
-    snakemake --cluster qsub --jobs 100
-
-or
-
-    snakemake --drmaa --jobs 100
+    snakemake --use-conda --jobs 999 --cluster-config cluster_configs/rackham.json --cluster "sbatch -A {cluster.account} -p {cluster.partition} -n {cluster.n} -t {cluster.time}"
 
 See the [Snakemake documentation](https://snakemake.readthedocs.io) for further
-details on how to run Snakemake workflows on cluster resources.
-
-If you are using [conda](https://conda.io), it is easy to get started by using the 
-`--use-conda` flag:
-
-	snakemake --use-conda
-
-This will run the different processes of the workflow in separate conda environments,
-which will automatically take care of installing the required dependencies.
+details on how to run Snakemake workflows on other types of cluster resources.
 
 
 ### Automatic database download
 The workflow offers steps that can automatically download the required
 reference databases. Note that this step is normally only required once, as
-previously downloaded databases are reused.
+previously downloaded databases are reused. See the 
+[official documentation](https://stag-mwc.readthedocs.org) for more information.
 
 
 ## Testing
-
-The ambition is that mwc will contain extensive tests to verify functionality.
-Test cases are in the subfolder `.tests`. They should be executed via continuous
+Tests are currently not implemented. The ambition is that mwc will contain
+extensive tests to verify functionality. They should be executed via continuous
 integration with Travis CI. 
 
 
 ## Contributing
-
-1. Fork or clone the repository.
-2. Create a branch with a descriptive name based on your intended changes using
-   dashes to separate words, e.g. `branch-to-add-megahit-assembly-step`
-3. Insert your code into the respective folders, i.e. `scripts`, `rules` and
-   `envs`. Define the entry point of the workflow in the `Snakefile` and the
-   main configuration in the `config.yaml` file.
-4. Commit changes to your local fork/clone.
-5. Create a pull request (PR) with some motivation behind the work you have
-   done and possibly some explanations for tricky bits. 
+Refer to the contributing guidelines in `CONTRIBUTING.md` for instructions on how to
+contribute to StaG-mwc.
 
 # Logo attribution
 <a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>
