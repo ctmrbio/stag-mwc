@@ -5,9 +5,9 @@
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
 This repo contains the code for a Snakemake workflow of the StaG Metagenomic
-Workflow Collaboration (mwc). The current focus is a barebones metagenomics
-analysis workflow to produce primary output files from several different
-metagenomic analysis tools. 
+Workflow Collaboration (mwc). Currently, the project focus is a barebones
+metagenomics analysis workflow to produce primary output files from several
+different metagenomic analysis tools. 
 
 ## Authors
 
@@ -33,19 +33,17 @@ git@github.com:boulund/mwc`. If you intend to modify or further develop this
 workflow, you are welcome to fork this reposity. Please consider sharing
 potential improvements via a pull request.
 
-If you use this workflow in a publication, please credit the authors by citing
+If you use StaG-mwc in a publication, please credit the authors by citing
 the URL of this repository and, when available, its DOI. Also, don't forget to
-cite the actual tools used in your workflow.
+cite the publications of the other tools used in your workflow.
 
 ### Step 2: Configure workflow
-
 Configure the workflow according to your needs by editing the file
 `config.yaml`. The most common changes include setting the paths to input and
 output folders, and configuring what steps of the workflow should be included
 when running the workflow.
 
 ### Step 3: Execute workflow
-
 Test your configuration by performing a dry-run via
 
     snakemake --use-conda -n

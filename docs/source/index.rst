@@ -20,6 +20,7 @@ Gothenburg.
    
    installation
    running
+   modules
 
 
 About
