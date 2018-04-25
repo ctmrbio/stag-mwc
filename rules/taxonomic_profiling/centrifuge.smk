@@ -54,6 +54,8 @@ rule centrifuge:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    threads:
+        4
     params:
         db_prefix=cf_config["db_prefix"],
     shell:
@@ -64,6 +66,7 @@ rule centrifuge:
             -2 {input.read2} \
             -S {output.classifications} \
             --report-file {output.report} \
+            --threads {threads} \
             2> {log}
         """
 

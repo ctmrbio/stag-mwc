@@ -5,6 +5,7 @@ import os.path
 
 localrules:
     download_kaiju_database
+    create_kaiju_krona_plot
 
 kaiju_config = config["kaiju"]
 if not all([os.path.isfile(kaiju_config["db"]), 
