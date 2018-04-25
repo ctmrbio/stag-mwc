@@ -2,6 +2,10 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
+localrules:
+    bbmap_counts_table
+    bbmap_featureCounts
+
 if not os.path.isdir(os.path.join(config["bbmap"]["db_path"], "ref")):
     err_message = "BBMap index not found at: '{}'\n".format(config["bbmap"]["db_path"])
     err_message += "Check path in config setting 'bbmap:db_path'.\n"

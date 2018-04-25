@@ -3,6 +3,9 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
+localrules:
+    download_kaiju_database
+
 kaiju_config = config["kaiju"]
 if not all([os.path.isfile(kaiju_config["db"]), 
             os.path.isfile(kaiju_config["nodes"]),

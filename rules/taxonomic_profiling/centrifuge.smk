@@ -3,6 +3,9 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
+localrules:
+    download_centrifuge_database
+
 centrifuge_db_ext = ".1.cf"
 if not os.path.isfile(config["centrifuge"]["db_prefix"]+centrifuge_db_ext):
     err_message = "No Centrifuge database found at: '{}'!\n".format(config["centrifuge"]["db_prefix"])
