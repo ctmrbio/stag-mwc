@@ -46,8 +46,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
+full_name = 'StaG-mwc'
 project = 'mwc'
-copyright = '2018, Fredrik Boulund, Lisa Olsson'
+copyright = '2018 (c) Fredrik Boulund, Lisa Olsson'
 author = 'Fredrik Boulund, Lisa Olsson'
 
 # The version info for the project you're documenting, acts as replacement for
