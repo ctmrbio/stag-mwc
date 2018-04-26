@@ -17,7 +17,7 @@ fastqc:
     n: 1
     time: "00:15:00"
 trim_adapters_quality:
-    n: 4
+    n: 5
     time: "00:30:00"
 index_hg19:
     n: 3

@@ -8,4 +8,4 @@ __default__:
     jobname: "StaG-mwc: dev {rule} [{wildcards.sample}]"
 remove_human:
     time: "00:30:00"
-    n: 4
+    n: 5

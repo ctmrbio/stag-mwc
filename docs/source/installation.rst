@@ -1,14 +1,14 @@
 Installing |full_name|
 =======================
-|full_name| depends on a number of individual tools, most prominently it requires
-`Snakemake`_, which is used to manage the overall analysis workflow. In addition, 
-another important component for the |full_name| framework is `conda`_, which is used
-to manage additional dependencies. This documentation assumes you already have `git`_ 
-installed. 
+|full_name| depends on a number of individual tools, most prominently it
+requires `Snakemake`_, which is used to manage the overall analysis workflow.
+In addition, another important component for the |full_name| framework is
+`Conda`_, which is used to manage additional dependencies. This documentation
+assumes you already have `git`_ installed. 
 
 .. _Snakemake: https://snakemake.readthedocs.io
-.. _conda: https://conda.io/docs/
-.. _minconda3: https://conda.io/miniconda.html
+.. _Conda: https://conda.io/docs/
+.. _miniconda3: https://conda.io/miniconda.html
 .. _git: https://git-scm.com/
 
 
@@ -16,15 +16,15 @@ Install conda and Snakemake
 ***************************
 The first two things you need to install are:
 
-1. `conda`_
+1. `Conda`_
 2. `Snakemake`_
 
 The recommended way to get started using |full_name| is to download and install
-`conda`_. A good starting point is a clean `miniconda3`_ installation.
+`Conda`_. A good starting point is a clean `miniconda3`_ installation.
 Miniconda3 is quick to install and does not require administrator permissions.
 
-After installing `conda`_ and activating the base environment, install snakemake
-into your base environment::
+After installing `Conda`_ and activating the base environment, install
+snakemake into your base environment::
 
     (base)$ conda install snakemake
 
