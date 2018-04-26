@@ -2,10 +2,12 @@
 __default__:
     account: "snic2017-7-245"
     partition: "core"
-    log: "slurm_logs/%x-%j-%u.log"
     extra: ""
     time: "00:15:00"
     n: 2
+    stderr: "{rule}.{wildcards.sample}.stderr"
+    stdout: "{rule}.{wildcards.sample}.stdout"
+    jobname: "StaG-mwc: {rule} [{wildcards.sample}]"
 
 
 #############################

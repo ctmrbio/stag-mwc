@@ -2,6 +2,7 @@
 !config.yaml
 !cluster_configs
 !cluster_configs/*
+!cluster_configs/*/*
 !docs
 !docs/Makefile
 !docs/source

@@ -1,0 +1,11 @@
+__default__:
+    account: "snic2017-7-245"
+    time: "00:10:00"
+    n: 2
+    partition: "devcore"
+    stderr: "{rule}.{wildcards.sample}.stderr"
+    stdout: "{rule}.{wildcards.sample}.stdout"
+    jobname: "StaG-mwc: dev {rule} [{wildcards.sample}]"
+remove_human:
+    time: "00:30:00"
+    n: 4

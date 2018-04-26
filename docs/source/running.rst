@@ -84,27 +84,25 @@ steps to this limit.
 Running on cluster resources
 ****************************
 In order to run |full_name| on a cluster, you need a special cluster
-configuration file.  |full_name| ships with a pre-made configuration file for
-use on UPPMAX's Rackham cluster.  Find all available cluster configuration
-files in the ``cluster_configs`` directory in the repository. The cluster
-configuration files specify the cluster scheduler account to use (e.g. Slurm
-project account), as well as the processor, time, and memory requirements of
-each individual step. Snakemake uses this information when submitting jobs to
-the cluster scheduler.
+configuration file.  |full_name| ships with a pre-made configuration profile
+for use on UPPMAX's Rackham cluster.  Find all available cluster configuration
+profiles in the ``cluster_configs`` directory in the repository. The cluster
+configuration profiles specify which cluster scheduler account to use (e.g.
+Slurm project account), as well as the number of CPUs, time, and memory
+requirements for each individual step. Snakemake uses this information when
+submitting jobs to the cluster scheduler.
 
-To run |full_name| on e.g. Rackham, run the following command when standing in
-the workflow repository directory::
+To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
+inside the workflow repository directory::
 
-    snakemake --use-conda --jobs 999 --cluster-config cluster_configs/rackham.json --cluster "sbatch -A {cluster.account} -p {cluster.partition} -n {cluster.n} -t {cluster.time}"
+    snakemake --use-conda --profile cluster_configs/rackham 
 
 This will make Snakemake submit each workflow step as a separate cluster job
-using the processor and time requirements specified in ``rackham.json``. The
-``--jobs 999`` argument is to tell Snakemake to submit up to 999 jobs to the
-cluster scheduler at once. In most situations, this will never happen as it is
-unlikely that the workflow you are running will ever have 999 independent steps
-ready to run at the same time. The above command of course assumes you are
-using the default ``config.yaml`` configuration file. If you are using a custom
-configuration file, just add ``--configfile <name_of_your_config_file>`` to
-the command line.
+using the CPU and time requirements specified in ``rackham.yaml`` inside the
+Rackham profile folder. The above command assumes you are using the default
+``config.yaml`` configuration file. If you are using a custom configuration
+file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 
-
+Some very lightweight rules will run on the submitting node (typically directly
+on the login node), but the number of concurrent local jobs is limited to 1 in
+the default profiles.
