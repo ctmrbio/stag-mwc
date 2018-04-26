@@ -3,6 +3,9 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
+localrules:
+    download_centrifuge_database
+
 centrifuge_db_ext = ".1.cf"
 if not os.path.isfile(config["centrifuge"]["db_prefix"]+centrifuge_db_ext):
     err_message = "No Centrifuge database found at: '{}'!\n".format(config["centrifuge"]["db_prefix"])
@@ -51,6 +54,8 @@ rule centrifuge:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    threads:
+        4
     params:
         db_prefix=cf_config["db_prefix"],
     shell:
@@ -61,6 +66,7 @@ rule centrifuge:
             -2 {input.read2} \
             -S {output.classifications} \
             --report-file {output.report} \
+            --threads {threads} \
             2> {log}
         """
 

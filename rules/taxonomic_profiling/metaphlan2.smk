@@ -3,6 +3,10 @@
 from snakemake.exceptions import WorkflowError
 import os.path
 
+localrules:
+    download_metaphlan2_database
+    create_metaphlan2_krona_plots
+
 mpa_config = config["metaphlan2"]
 bt2_db_ext = ".1.bt2"
 if not any([os.path.isfile(mpa_config["mpa_pkl"]),

@@ -2,6 +2,11 @@
 # Compare all samples against all samples using MinHash sketches
 import os.path
 
+localrules:
+    compare_sketches
+    plot_sample_similarity
+
+
 # Add final output files from this module to 'all_outputs' from the
 # main Snakefile scope.
 sample_similarity_plot = expand("{outdir}/sketch_compare/sample_similarity.pdf",

@@ -1,0 +1,4 @@
+cluster-config: "cluster_configs/rackham/rackham.yaml"
+cluster: "sbatch -A {cluster.account} -p {cluster.partition} -n {cluster.n} -t {cluster.time} -e {cluster.stderr} -o {cluster.stdout} -J '{cluster.jobname}'"
+jobs: 999
+local-cores: 1
