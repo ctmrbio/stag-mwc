@@ -9,10 +9,13 @@
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
+from snakemake.utils import min_version
+min_version("4.8.1") # Don't know what version expand will be fixed in
 
 configfile: "config.yaml"
 inputdir = Path(config["inputdir"])
 outdir = Path(config["outdir"])
+logdir = Path(config["logdir"])
 all_outputs = []
 
 SAMPLES = set(glob_wildcards(inputdir/config["input_fn_pattern"]).sample)
