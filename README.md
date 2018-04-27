@@ -53,12 +53,14 @@ Execute the workflow locally via
     snakemake --use-conda --cores N
 
 This will run the workflow locally using `N` cores. It is also possible to run
-it in a Slurm-managed cluster environment using e.g. 
+it in a Slurm-managed cluster environment, e.g. on UPPMAX Rackham:
 
-    snakemake --use-conda --jobs 999 --cluster-config cluster_configs/rackham.json --cluster "sbatch -A {cluster.account} -p {cluster.partition} -n {cluster.n} -t {cluster.time}"
+    snakemake --use-conda --profile cluster_configs/rackham
 
-See the [Snakemake documentation](https://snakemake.readthedocs.io) for further
-details on how to run Snakemake workflows on other types of cluster resources.
+Make sure you edit the Slurm project account in
+`cluster_configs/rackham/rackham.yaml`. Refer to the official [Snakemake
+documentation](https://snakemake.readthedocs.io) for further details on how to
+run Snakemake workflows on other types of cluster resources.
 
 
 ### Automatic database download
