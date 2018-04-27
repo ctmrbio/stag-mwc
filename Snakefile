@@ -6,16 +6,16 @@
 #
 # Running snakemake -n in a clone of this repository should successfully
 # execute a test dry-run of the workflow.
+from pathlib import Path
+
 from snakemake.exceptions import WorkflowError
 
-from sys import exit
-import os.path
-
 configfile: "config.yaml"
-outdir = config["outdir"]
+inputdir = Path(config["inputdir"])
+outdir = Path(config["outdir"])
 all_outputs = []
 
-SAMPLES = set(glob_wildcards(config["inputdir"]+"/"+config["input_fn_pattern"]).sample)
+SAMPLES = set(glob_wildcards(inputdir/config["input_fn_pattern"]).sample)
 
 #############################
 # Pre-processing
