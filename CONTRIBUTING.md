@@ -46,7 +46,7 @@ The documentation for the project is built automatically by
 [readthedocs](www.readthedocs.org) upon every commit. The HTML documentation is
 available at https://stag-mwc.readthedocs.org. Feel free to improve the
 documentation, but avoid committing anything but source documents to the repo.
-The documentation is written using Sphix, so all documentation sources are
+The documentation is written using Sphinx, so all documentation sources are
 written in [reStructuredText](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html).
 
 ### envs
@@ -61,7 +61,8 @@ conda-forge, etc.).
 All workflow rules are organized in the `rules` folder. It contains a directory
 hierarchy organized by overall function in the workflow, e.g., the subfolder
 `taxonomic_profiling` contains rules for all taxonomic profiling tools. It is
-recommended to keep one file per logical unit or tool. 
+recommended to keep one file per logical unit or tool, so they can be easily
+toggled by a simple if-statement in the main Snakefile.
 
 The overall concept of StaG-mwc is that analyses are performed on trimmed/cleaned
 reads that have had human sequences removed, so rules should generally start
