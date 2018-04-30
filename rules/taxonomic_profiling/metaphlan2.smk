@@ -6,8 +6,8 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_metaphlan2_database
-    create_metaphlan2_krona_plots
+    download_metaphlan2_database,
+    create_metaphlan2_krona_plots,
 
 mpa_config = config["metaphlan2"]
 bt2_db_ext = ".1.bt2"

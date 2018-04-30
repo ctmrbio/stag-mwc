@@ -5,8 +5,8 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    bbmap_counts_table
-    bbmap_featureCounts
+    bbmap_counts_table,
+    bbmap_featureCounts,
 
 db_path = Path(config["bbmap"]["db_path"])
 if not Path(db_path/"ref").exists():

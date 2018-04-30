@@ -5,8 +5,8 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    bowtie2_counts_table
-    bowtie2_featureCounts
+    bowtie2_counts_table,
+    bowtie2_featureCounts,
 
 bt2_db_extensions = (".1.bt2", ".1.bt2l")
 if not any([Path(config["bowtie2"]["db_prefix"]).with_suffix(ext) for ext in bt2_db_extensions]):
