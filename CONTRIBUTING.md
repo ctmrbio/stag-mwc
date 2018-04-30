@@ -76,7 +76,12 @@ designed to allow some inclusion logic in the main Snakefile, so components can
 be turned on or off without too much trouble. Output should typically be in a
 subfolder inside the overall `outdir` folder. `outdir` is available as a string
 in all rule files, as it is defined in the main Snakefile based on the value
-set in `config.yaml`. 
+set in `config.yaml`.
+
+Declare paths to input, output and log files using the pathlib Path objects
+INPUTDIR, OUTDIR, and LOGDIR. Note that Snakemake is not yet fully pathlib
+compatible so convert Path objects to strings inside `expand` statements and
+log file declarations.
 
 Tools that require databases or other reference material to work can be
 confusing or annyoing to users of the workflow. To minimize the amount of
