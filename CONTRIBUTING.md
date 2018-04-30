@@ -5,18 +5,41 @@ We use the issue tracker in Github. Submit issues for things such as
 bug reports, feature requests, or general improvement discussion topics.
 
 ## Submitting changes
-The typical procedure to develop new features or fix bugs in StaG-mwc looks
-something like this:
+The main branch of StaG-mwc should always be stable and reliable. All
+development should be based on the develop branch. Please create new feature
+branches from the develop branch. The develop branch is then merged into the
+master branch when enough improvements have accrued. The typical procedure to
+develop new features or fix bugs in StaG-mwc looks something like this:
 
 1. Fork or clone the repository.
-2. Create a branch with a descriptive name based on your intended changes using
-   dashes to separate words, e.g. `branch-to-add-megahit-assembly-step`.
-3. Insert your code into the respective folders, i.e. scripts, rules and envs.
-   Define the entry point of the workflow in the Snakefile and the main
-   configuration in the config.yaml file.
+2. Checkout the develop branch and create a new feature branch from there.
+   Use a descriptive name and use dashes to separate words:
+   ```
+   git checkout develop
+   git checkout -b add-megahit-assembly-step
+   ```
+3. Write or modify code in the scripts, rules and envs folders. Define the
+   entry point of the workflow in the Snakefile and the main configuration in the
+   config.yaml file.
+4. If a new feature has been added, document it in the Sphinx documentation.
 4. Commit changes to your fork/clone.
-5. Create a pull request (PR) with some motivation behind the work you have
-   done and possibly some explanations for tricky bits.
+5. Create a pull request (PR) with some descriptions of the work you have
+   done and possibly some explanations for potentially tricky bits.
+6. When the feature is considered complete, we bump the version number and
+   merge the PR back to the develop branch.
+
+### Releases
+New releases are made whenever enough new features have accrued on the develop
+branch. Before creating a new release, ensure the following things have been
+taken care of:
+
+* All pending features that should be included in the upcoming release are
+  merged into the develop branch.
+* Double check that documentation is up-to-date for implemented features.
+* Check that the version number in the documentation matches the Snakefile.
+
+Then, merge the develop branch into master, squashing all commits, and tag
+the new release.
 
 
 ## Code organization
