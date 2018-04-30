@@ -1,11 +1,10 @@
 # vim: syntax=python expandtab
 # Assess sequencing depth of sample using BBCountUnique from the BBMap suite.
-import os.path
+# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
 # Add final output files from this module to 'all_outputs' from
 # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-bcu_output = expand("{outdir}/bbcountunique/{sample}.{output_type}",
-        outdir=config["outdir"],
+bcu_output = expand(str(OUTDIR/"bbcountunique/{sample}.{output_type}"),
         sample=SAMPLES,
         output_type=["bbcountunique.txt", "bbcountunique.pdf"])
 all_outputs.extend(bcu_output)
@@ -13,13 +12,13 @@ all_outputs.extend(bcu_output)
 rule bbcountunique:
     """Assess sequencing depth using BBCountUnique."""
     input:
-        os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="1")
+        INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
     output:
-        txt=config["outdir"]+"/bbcountunique/{sample}.bbcountunique.txt",
-        pdf=config["outdir"]+"/bbcountunique/{sample}.bbcountunique.pdf",
+        txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
+        pdf=OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
     log:
-        stdout=config["outdir"]+"/logs/bbcountunique/{sample}.bbcountunique.stdout.log",
-        stderr=config["outdir"]+"/logs/bbcountunique/{sample}.bbcountunique.stderr.log",
+        stdout=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stdout.log"),
+        stderr=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log"),
     shadow: 
         "shallow"
     threads:

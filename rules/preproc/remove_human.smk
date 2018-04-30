@@ -1,21 +1,23 @@
 # vim: syntax=python expandtab
 # Rules to filter human sequences from metagenomic reads
+# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
+from pathlib import Path 
+
 from snakemake.exceptions import WorkflowError
-import os.path
 
 localrules:
     download_hg19
 
-if not os.path.isdir(os.path.join(config["remove_human"]["hg19_path"], "ref")):
-    err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(config["remove_human"]["hg19_path"])
+hg19_path = Path(config["remove_human"]["hg19_path"])
+if not Path(hg19_path/"ref").exists():
+    err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(hg19_path)
     err_message += "Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
-    err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}/hg19'".format(dbdir=config["dbdir"])
+    err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}'".format(dbdir=dbdir/"hg19")
     raise WorkflowError(err_message)
 
 # Add final output files from this module to 'all_outputs' from the main
 # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-filtered_human = expand("{outdir}/filtered_human/{sample}_R{readpair}.filtered_human.fq.gz",
-        outdir=config["outdir"],
+filtered_human = expand(str(OUTDIR/"filtered_human/{sample}_R{readpair}.filtered_human.fq.gz"),
         sample=SAMPLES,
         readpair=[1,2])
 all_outputs.extend(filtered_human)
@@ -25,11 +27,11 @@ rule download_hg19:
     """Download masked hg19 from: 
     https://drive.google.com/file/d/0B3llHR93L14wd0pSSnFULUlhcUk"""
     output:
-        config["dbdir"]+"/hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
+        OUTDIR/"hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
     conda:
         "../../envs/stag-mwc.yaml"
     params:
-        dbdir=config["dbdir"]+"/hg19/"
+        dbdir=DBDIR/"hg19"
     shell:
         """
         scripts/download_from_gdrive.py \
@@ -43,26 +45,26 @@ rule download_hg19:
 rule index_hg19:
     """Create BBMap index of hg19 fasta file."""
     input:
-        config["dbdir"]+"/hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
+        DBDIR/"hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
     output:
-        config["dbdir"]+"/hg19/ref/genome/1/chr1.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr2.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr3.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr4.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr5.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr6.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/chr7.chrom.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/info.txt",
-        config["dbdir"]+"/hg19/ref/genome/1/scaffolds.txt.gz",
-        config["dbdir"]+"/hg19/ref/genome/1/summary.txt",
-        config["dbdir"]+"/hg19/ref/index/1/chr1-3_index_k13_c2_b1.block",
-        config["dbdir"]+"/hg19/ref/index/1/chr1-3_index_k13_c2_b1.block2.gz",
-        config["dbdir"]+"/hg19/ref/index/1/chr4-7_index_k13_c2_b1.block",
-        config["dbdir"]+"/hg19/ref/index/1/chr4-7_index_k13_c2_b1.block2.gz",
+        DBDIR/"hg19/ref/genome/1/chr1.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr2.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr3.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr4.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr5.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr6.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/chr7.chrom.gz",
+        DBDIR/"hg19/ref/genome/1/info.txt",
+        DBDIR/"hg19/ref/genome/1/scaffolds.txt.gz",
+        DBDIR/"hg19/ref/genome/1/summary.txt",
+        DBDIR/"hg19/ref/index/1/chr1-3_index_k13_c2_b1.block",
+        DBDIR/"hg19/ref/index/1/chr1-3_index_k13_c2_b1.block2.gz",
+        DBDIR/"hg19/ref/index/1/chr4-7_index_k13_c2_b1.block",
+        DBDIR/"hg19/ref/index/1/chr4-7_index_k13_c2_b1.block2.gz",
     conda:
         "../../envs/stag-mwc.yaml"
     params:
-        dbdir=config["dbdir"]+"/hg19/"
+        dbdir=DBDIR/"hg19"
     shell:
         """
         bbmap.sh \
@@ -75,15 +77,15 @@ rh_config = config["remove_human"]
 rule remove_human:
     """Filter reads matching hg19. NB: requires about 16GB of memory."""
     input:
-        read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-        read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+        read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
     output:
-        read1=config["outdir"]+"/filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=config["outdir"]+"/filtered_human/{sample}_R2.filtered_human.fq.gz",
-        human=config["outdir"]+"/filtered_human/{sample}_human.fq.gz",
+        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        human=OUTDIR/"filtered_human/{sample}_human.fq.gz",
     log:
-        statsfile=config["outdir"]+"/logs/remove_human/{sample}.statsfile.txt",
-        stderr=config["outdir"]+"/logs/remove_human/{sample}.stderr.log",
+        statsfile=str(OUTDIR/"logs/remove_human/{sample}.statsfile.txt"),
+        stderr=str(OUTDIR/"logs/remove_human/{sample}.stderr.log"),
     shadow:
         "shallow"
     conda:

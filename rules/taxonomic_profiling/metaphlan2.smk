@@ -1,7 +1,9 @@
 # vim: syntax=python expandtab
 # Taxonomic classification of metagenomic reads using MetaPhlAn2
+# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
+from pathlib import Path
+
 from snakemake.exceptions import WorkflowError
-import os.path
 
 localrules:
     download_metaphlan2_database
@@ -9,22 +11,20 @@ localrules:
 
 mpa_config = config["metaphlan2"]
 bt2_db_ext = ".1.bt2"
-if not any([os.path.isfile(mpa_config["mpa_pkl"]),
-            os.path.isfile(mpa_config["bt2_db_prefix"]+bt2_db_ext)]):
+if not any([Path(mpa_config["mpa_pkl"]).exists(),
+            Path(mpa_config["bt2_db_prefix"]).with_suffix(bt2_db_ext).exists()]):
     err_message = "No MetaPhlAn2 pickle or database found at: '{}', '{}'!\n".format(mpa_config["mpa_pkl"], mpa_config["bt2_db_prefix"])
     err_message += "Specify relevant paths in the metaphlan2 section of config.yaml.\n"
-    err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}/metaphlan2'\n".format(dbdir=config["dbdir"])
+    err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}'\n".format(dbdir=DBDIR/"metaphlan2")
     err_message += "If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml"
     raise WorkflowError(err_message)
 
 # Add MetaPhlAn2 output files to 'all_outputs' from the main Snakefile scope.
 # SAMPLES is also from the main Snakefile scope.
-mpa_outputs = expand("{outdir}/metaphlan2/{sample}.{output_type}",
-        outdir=config["outdir"],
+mpa_outputs = expand(str(OUTDIR/"metaphlan2/{sample}.{output_type}"),
         sample=SAMPLES,
         output_type=("bowtie2.bz2", "metaphlan2.txt", "metaphlan2.krona"))
-mpa_combined = expand("{outdir}/metaphlan2/all_samples.metaphlan2.{ext}",
-        outdir=config["outdir"],
+mpa_combined = expand(str(OUTDIR/"metaphlan2/all_samples.metaphlan2.{ext}"),
         ext=("txt", "pdf", "krona.html"))
 all_outputs.extend(mpa_outputs)
 all_outputs.extend(mpa_combined)
@@ -32,8 +32,10 @@ all_outputs.extend(mpa_combined)
 rule download_metaphlan2_database:
     """Download MetaPhlAn2 db_v20_m200"""
     output:
-        config["dbdir"]+"/metaphlan2/mpa_v20_m200.fna",
-        config["dbdir"]+"/metaphlan2/mpa_v20_m200.pkl",
+        DBDIR/"metaphlan2/mpa_v20_m200.fna",
+        DBDIR/"metaphlan2/mpa_v20_m200.pkl",
+    log:
+        str(LOGDIR/"metaphlan2/mpa_v20_m200.download.log")
     shadow:
         "shallow"
     conda:
@@ -44,22 +46,27 @@ rule download_metaphlan2_database:
         """
         cd {params.dbdir}
         wget https://bitbucket.org/biobakery/metaphlan2/downloads/mpa_v20_m200.tar \
+            > {log} \
         && \
         tar -xf mpa_v20_m200.tar \
+            >> {log} \
         && \
         bunzip2 mpa_v20_m200.fna.bz2 \
+            >> {log} \
         && \
-        rm -v mpa_v20_m200.tar
+        rm -v mpa_v20_m200.tar \
+            >> {log}
         """
 
 rule build_metaphlan2_index:
     """Build MetaPhlAn2 bowtie2 index."""
     input:
-        config["dbdir"]+"/metaphlan2/mpa_v20_m200.fna"
+        DBDIR/"metaphlan2/mpa_v20_m200.fna"
     output:
-        [config["dbdir"]+"/metaphlan2/mpa_v20_m200.{n}.bt2".format(n=num) for num in (1,2,3,4)],
-        [config["dbdir"]+"/metaphlan2/mpa_v20_m200.rev.{n}.bt2".format(n=num) for num in (1,2)],
+        [DBDIR/"metaphlan2/mpa_v20_m200.{n}.bt2".format(n=num) for num in (1,2,3,4)],
+        [DBDIR/"metaphlan2/mpa_v20_m200.rev.{n}.bt2".format(n=num) for num in (1,2)],
     log:
+        str(LOGDIR/"metaphlan2/mpa_v20_m200.build.log")
     shadow:
         "shallow"
     conda:
@@ -74,21 +81,22 @@ rule build_metaphlan2_index:
         bowtie2-build \
             mpa_v20_m200.fna \
             mpa_v20_m200 \
-            --threads {threads}
+            --threads {threads} \
+            > {log}
         """
 
 rule metaphlan2:
     """Taxonomic profiling using MetaPhlAn2."""
     input:
-        read1=config["outdir"]+"/filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=config["outdir"]+"/filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
     output:
-        bt2_out=config["outdir"]+"/metaphlan2/{sample}.bowtie2.bz2",
-        mpa_out=config["outdir"]+"/metaphlan2/{sample}.metaphlan2.txt",
-        krona=config["outdir"]+"/metaphlan2/{sample}.metaphlan2.krona",
+        bt2_out=OUTDIR/"metaphlan2/{sample}.bowtie2.bz2",
+        mpa_out=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
+        krona=OUTDIR/"metaphlan2/{sample}.metaphlan2.krona",
     log:
-        stdout=config["outdir"]+"/logs/metaphlan2/{sample}.metaphlan2.stdout.log",
-        stderr=config["outdir"]+"/logs/metaphlan2/{sample}.metaphlan2.stderr.log",
+        stdout=str(LOGDIR/"metaphlan2/{sample}.metaphlan2.stdout.log"),
+        stderr=str(LOGDIR/"metaphlan2/{sample}.metaphlan2.stderr.log"),
     shadow:
         "shallow"
     conda:
@@ -123,10 +131,10 @@ rule metaphlan2:
 rule combine_metaphlan2_outputs:
     """Combine metaphlan2 outputs into a large table and plot heatmap."""
     input:
-        expand(config["outdir"]+"/metaphlan2/{sample}.metaphlan2.txt", sample=SAMPLES)
+        expand(str(OUTDIR/"metaphlan2/{sample}.metaphlan2.txt"), sample=SAMPLES)
     output:
-        txt=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.txt",
-        pdf=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.pdf",
+        txt=OUTDIR/"metaphlan2/all_samples.metaphlan2.txt",
+        pdf=OUTDIR/"metaphlan2/all_samples.metaphlan2.pdf",
     shadow:
         "shallow"
     conda:
@@ -162,9 +170,9 @@ rule combine_metaphlan2_outputs:
 
 rule create_metaphlan2_krona_plots:
     input:
-        expand(config["outdir"]+"/metaphlan2/{sample}.metaphlan2.krona", sample=SAMPLES)
+        expand(str(OUTDIR/"metaphlan2/{sample}.metaphlan2.krona"), sample=SAMPLES)
     output:
-        html=config["outdir"]+"/metaphlan2/all_samples.metaphlan2.krona.html",
+        html=OUTDIR/"metaphlan2/all_samples.metaphlan2.krona.html",
     shadow:
         "shallow"
     conda:
