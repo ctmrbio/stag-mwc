@@ -1,27 +1,28 @@
 # vim: syntax=python expandtab
 # MWC read pre-processing rules
-import os.path
+#TODO: Remove superfluous str conversions of paths in expand and log statements
+#      when Snakemake is pathlib compatible.
 
 # Add final output files from this module to 'all_outputs' from
 # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-fastqc_output = expand("{outdir}/fastqc/{sample}_R{readpair}_fastqc.{ext}",
-        outdir=config["outdir"],
+fastqc_output = expand(str(OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.{ext}"),
         sample=SAMPLES,
-        readpair=[1,2],
+        readpair=[1, 2],
         ext=["zip", "html"])
-trimmed_qa = expand("{outdir}/trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz",
-        outdir=config["outdir"],
+trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
         sample=SAMPLES,
-        readpair=[1,2])
+        readpair=[1, 2])
 all_outputs.extend(fastqc_output)
 all_outputs.extend(trimmed_qa)
 
 rule fastqc:
     input:
-        os.path.join(config["inputdir"], config["input_fn_pattern"])
+        INPUTDIR/config["input_fn_pattern"]
     output:
-        html=config["outdir"]+"/fastqc/{sample}_R{readpair}_fastqc.html",
-        zip=config["outdir"]+"/fastqc/{sample}_R{readpair}_fastqc.zip",
+        html=OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.html",
+        zip=OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.zip",
+    log:
+        str(LOGDIR/"fastqc/{sample}_R{readpair}_fastq.log")
     shadow: 
         "shallow"
     wrapper:
@@ -31,14 +32,14 @@ rule fastqc:
 bbduk_config = config["bbduk"]
 rule trim_adapters_quality:
     input:
-        read1=os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="1"),
-        read2=os.path.join(config["inputdir"], config["input_fn_pattern"]).format(sample="{sample}", readpair="2")
+        read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
+        read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
     output:
-        read1=config["outdir"]+"/trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-        read2=config["outdir"]+"/trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+        read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
     log:
-        stdout=config["outdir"]+"/logs/bbduk/{sample}.stdout.log",
-        stderr=config["outdir"]+"/logs/bbduk/{sample}.stderr.log",
+        stdout=str(LOGDIR/"bbduk/{sample}.stdout.log"),
+        stderr=str(LOGDIR/"bbduk/{sample}.stderr.log"),
     shadow:
         "shallow"
     conda:

@@ -1,40 +1,42 @@
 # vim: syntax=python expandtab
 # Taxonomic classification of metagenomic reads using Kaiju
+# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
+from pathlib import Path
+
 from snakemake.exceptions import WorkflowError
-import os.path
 
 localrules:
     download_kaiju_database
     create_kaiju_krona_plot
 
 kaiju_config = config["kaiju"]
-if not all([os.path.isfile(kaiju_config["db"]), 
-            os.path.isfile(kaiju_config["nodes"]),
-            os.path.isfile(kaiju_config["names"])]):
+if not all([Path(kaiju_config["db"]).exists(), 
+            Path(kaiju_config["nodes"]).exists(),
+            Path(kaiju_config["names"]).exists()]):
     err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
     err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
-    err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}/kaiju'\n".format(dbdir=config["dbdir"]) 
+    err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
     err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
     raise WorkflowError(err_message)
 
 # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
 # SAMPLES is also from the main Snakefile scope.
-kaiju = expand("{outdir}/kaiju/{sample}.kaiju", outdir=outdir, sample=SAMPLES)
-kaiju_reports = expand("{outdir}/kaiju/{sample}.kaiju.summary.species", outdir=outdir, sample=SAMPLES)
-kaiju_krona = expand("{outdir}/kaiju/all_samples.kaiju.krona.html", outdir=outdir)
+kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
+kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
+kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
 all_outputs.extend(kaiju)
 all_outputs.extend(kaiju_reports)
-all_outputs.extend(kaiju_krona)
+all_outputs.append(kaiju_krona)
 
 rule download_kaiju_database:
     output:
-        db=config["dbdir"]+"/kaiju/kaiju_db.fmi",
-        names=config["dbdir"]+"/kaiju/names.dmp",
-        nodes=config["dbdir"]+"/kaiju/nodes.dmp"
+        db=DBDIR/"kaiju/kaiju_db.fmi",
+        names=DBDIR/"kaiju/names.dmp",
+        nodes=DBDIR/"kaiju/nodes.dmp"
     shadow:
         "shallow"
     params:
-        dbdir=config["dbdir"]+"/kaiju"
+        dbdir=DBDIR/"kaiju"
     shell:
         """
         wget http://kaiju.binf.ku.dk/database/kaiju_index_pg.tgz \
@@ -46,10 +48,12 @@ rule download_kaiju_database:
 
 rule kaiju:
     input:
-        read1=config["outdir"]+"/filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=config["outdir"]+"/filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
     output:
-        kaiju=config["outdir"]+"/kaiju/{sample}.kaiju",
+        kaiju=OUTDIR/"kaiju/{sample}.kaiju",
+    log:
+        str(LOGDIR/"kaiju/{sample}.kaiju.log")
     shadow: 
         "shallow"
     threads:
@@ -69,7 +73,7 @@ rule kaiju:
                 -f {params.db} \
                 -i <(gunzip -c {input.read1}) \
                 -j <(gunzip -c {input.read2}) \
-                -o {output.kaiju} 
+                -o {output.kaiju} > {log}
         else 
             kaiju \
                 -z {threads} \
@@ -77,19 +81,19 @@ rule kaiju:
                 -f {params.db} \
                 -i {input.read1} \
                 -j {input.read2} \
-                -o {output.kaiju}
+                -o {output.kaiju} > {log}
         fi
         """
 
 
 rule kaiju_report:
     input:
-        kaiju=config["outdir"]+"/kaiju/{sample}.kaiju",
+        kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     output:
-        krona=config["outdir"]+"/kaiju/{sample}.krona",
-        family=config["outdir"]+"/kaiju/{sample}.summary.family",
-        genus=config["outdir"]+"/kaiju/{sample}.kaiju.summary.genus",
-        species=config["outdir"]+"/kaiju/{sample}.kaiju.summary.species",
+        krona=OUTDIR/"kaiju/{sample}.krona",
+        family=OUTDIR/"kaiju/{sample}.summary.family",
+        genus=OUTDIR/"kaiju/{sample}.kaiju.summary.genus",
+        species=OUTDIR/"kaiju/{sample}.kaiju.summary.species",
     shadow: 
         "shallow"
     params:
@@ -130,9 +134,9 @@ rule kaiju_report:
 
 rule create_kaiju_krona_plot:
     input:
-        expand(config["outdir"]+"/kaiju/{sample}.krona", sample=SAMPLES)
+        expand(str(OUTDIR/"kaiju/{sample}.krona"), sample=SAMPLES)
     output:
-        krona_html=config["outdir"]+"/kaiju/all_samples.kaiju.krona.html",
+        krona_html=OUTDIR/"kaiju/all_samples.kaiju.krona.html",
     shadow:
         "shallow"
     conda:

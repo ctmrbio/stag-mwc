@@ -1,21 +1,32 @@
 # vim: syntax=python expandtab
 #
-#                   StaG
-#   mwc - Metagenomic Workflow Collaboration
+#    StaG Metagenomic Workflow Collaboration
+#                 StaG-mwc
 #         Copyright (c) 2018 Authors
 #
-# Running snakemake -n in a clone of this repository should successfully
-# execute a test dry-run of the workflow.
-from snakemake.exceptions import WorkflowError
+# Running snakemake --use-conda -n in a clone of this repository should
+# successfully execute a test dry run of the workflow.
+from pathlib import Path
 
-from sys import exit
-import os.path
+from snakemake.exceptions import WorkflowError
+from snakemake.utils import min_version
+min_version("4.8.1")  # TODO: Bump version when Snakemake is pathlib compatible
+
+stag_version = "0.1.1-dev"
+print("="*60)
+print("StaG Metagenomic Workflow Collaboration".center(60))
+print("StaG-mwc".center(60))
+print(stag_version.center(60))
+print("="*60)
 
 configfile: "config.yaml"
-outdir = config["outdir"]
+INPUTDIR = Path(config["inputdir"])
+OUTDIR = Path(config["outdir"])
+LOGDIR = Path(config["logdir"])
+DBDIR = Path(config["dbdir"])
 all_outputs = []
 
-SAMPLES = set(glob_wildcards(config["inputdir"]+"/"+config["input_fn_pattern"]).sample)
+SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 
 #############################
 # Pre-processing
