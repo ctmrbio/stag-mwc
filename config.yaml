@@ -68,17 +68,17 @@ bbcountunique:
 # Mappers
 #########################
 bbmap:
-    db_name: ""              # [Required] Custom name for BBMap database
-    db_path: ""              # [Required] Path to BBMap database (folder should contain a 'ref' folder)
-    min_id: 0.76             # Minimum id for read alignment, BBMap default is 0.76
-    extra: ""                # Extra BBMap command line parameters
-    counts_table:
-        annotations: ""
-    featureCounts:
-        annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
-        feature_type: ""     # Feature type to produce counts for, default is "gene"
-        attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
-        extra: ""            # Extra featureCount command line parameters
+    - db_name: ""              # [Required] Custom name for BBMap database
+      db_path: ""              # [Required] Path to BBMap database (folder should contain a 'ref' folder)
+      min_id: 0.76             # Minimum id for read alignment, BBMap default is 0.76
+      extra: ""                # Extra BBMap command line parameters
+      counts_table:
+          annotations: ""
+      featureCounts:
+          annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
+          feature_type: ""     # Feature type to produce counts for, default is "gene"
+          attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
+          extra: ""            # Extra featureCount command line parameters
 bowtie2:
     db_prefix: ""            # [Required] Full path to Bowtie2 index (not including file extension)
     extra: ""                # Extra bowtie2 commandline parameters
