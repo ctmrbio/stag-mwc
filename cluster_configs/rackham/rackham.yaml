@@ -5,8 +5,8 @@ __default__:
     extra: ""
     time: "00:15:00"
     n: 2
-    stderr: "{rule}.{wildcards.sample}.stderr"
-    stdout: "{rule}.{wildcards.sample}.stdout"
+    stderr: "slurm-{rule}.{wildcards.sample}.stderr"
+    stdout: "slurm-{rule}.{wildcards.sample}.stdout"
     jobname: "StaG-mwc: {rule} [{wildcards.sample}]"
 
 
