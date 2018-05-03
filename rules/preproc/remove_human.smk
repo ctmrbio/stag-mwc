@@ -12,7 +12,7 @@ hg19_path = Path(config["remove_human"]["hg19_path"])
 if not Path(hg19_path/"ref").exists():
     err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(hg19_path)
     err_message += "Specify path to folder containing BBMap index of hg19 files in config.yaml.\n"
-    err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}'".format(dbdir=dbdir/"hg19")
+    err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}'".format(dbdir=DBDIR/"hg19")
     raise WorkflowError(err_message)
 
 # Add final output files from this module to 'all_outputs' from the main
