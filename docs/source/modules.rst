@@ -76,18 +76,20 @@ overall similarity of all samples.
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
-controlled reads to any reference database. All mappers can optionally
-summarize read counts per annotated feature via one of two options: 1)
-supplying a two-column tab-separated annotation file with one annotation per
-reference sequence, or 2) supplying a GTF or SAF format annotation file for
-features on the reference sequences. Option number 1 uses a custom Python
-script (``make_count_table.py``) to merge read counts per annotation which
-works well for annotations as large as your memory allows, and option number 2
-uses `featureCounts`_ to summarize read counts per annotated feature. Option
-number 2 is more flexible and normally faster for typical annotation scenarios,
-but might not work when the number of unique features is much lower than the
-number of reference sequences. Read more about these alternatives in
-:ref:`Summarizing read counts` below.
+controlled reads to any reference database. All mappers can be used to map
+reads against several different databases (see :ref:`Mapping to multiple
+databases` below). In addition, all mappers can optionally summarize read
+counts per annotated feature via one of two options: 1) supplying a two-column
+tab-separated annotation file with one annotation per reference sequence, or 2)
+supplying a GTF or SAF format annotation file for features on the reference
+sequences. Option number 1 uses a custom Python script
+(``make_count_table.py``) to merge read counts per annotation which works well
+for annotations as large as your memory allows, and option number 2 uses
+`featureCounts`_ to summarize read counts per annotated feature. Option number
+2 is more flexible and normally faster for typical annotation scenarios, but
+might not work when the number of unique features is much lower than the number
+of reference sequences. Read more about these alternatives in :ref:`Summarizing
+read counts` below.
 
 BBMap
 -----
@@ -110,6 +112,56 @@ is possible to configure the mapping settings almost entirely according to
 preference, with the exception of changing the output format from BAM.
 Use the configuration parameter ``bowtie2:extra`` to add any standard Bowtie2
 commandline parameter you want.
+
+Mapping to multiple databases
+-----------------------------
+Note that the configuration settings of all mapper modules are slightly
+different from the configuration settings from most other modules. They are
+defined as lists in ``config.yaml``, e.g. (note the leading ``-`` that
+signifies a list)::
+
+    bbmap:
+        - db_name: ""
+          db_path: ""
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: ""
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
+
+This makes it possible to map the reads against several databases, each with
+their own mapping options and/or custom annotations. To map against more than
+one database, just create another list item underneath, containing all the same
+configuration options, but with different settings. For example, to map against
+``db1`` and ``db2`` with different annotation files for each::
+
+    bbmap:
+        - db_name: "db1"
+          db_path: "/path/to/db1"
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: ""
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
+        - db_name: "db2"
+          db_path: "/path/to/db2"
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: "/path/to/db2/annotations.txt"
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
 
 
 Summarizing read counts
