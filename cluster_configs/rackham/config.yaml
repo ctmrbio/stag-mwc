@@ -1,4 +1,8 @@
+jobscript: "cluster_configs/rackham/slurm-jobscript.sh"
+cluster: "cluster_configs/rackham/slurm-submit.py --account {cluster.account} --partition {cluster.partition} --ntasks {cluster.n} --time {cluster.time} --error {cluster.stderr} --output {cluster.stdout} --job-name '{cluster.jobname}'"
+cluster-status: "cluster_configs/rackham/slurm-status.py"
 cluster-config: "cluster_configs/rackham/rackham.yaml"
-cluster: "sbatch -A {cluster.account} -p {cluster.partition} -n {cluster.n} -t {cluster.time} -e {cluster.stderr} -o {cluster.stdout} -J '{cluster.jobname}'"
-jobs: 999
+max-jobs-per-second: 10
+max-status-checks-per-second: 10
 local-cores: 1
+jobs: 999
