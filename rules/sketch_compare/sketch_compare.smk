@@ -3,8 +3,8 @@
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
 localrules:
-    compare_sketches
-    plot_sample_similarity
+    compare_sketches,
+    plot_sample_similarity,
 
 
 # Add final output files from this module to 'all_outputs' from the

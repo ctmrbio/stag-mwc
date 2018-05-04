@@ -6,8 +6,8 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_kaiju_database
-    create_kaiju_krona_plot
+    download_kaiju_database,
+    create_kaiju_krona_plot,
 
 kaiju_config = config["kaiju"]
 if not all([Path(kaiju_config["db"]).exists(), 

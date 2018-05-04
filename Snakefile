@@ -73,6 +73,7 @@ if config["taxonomic_profile"]["metaphlan2"]:
 if config["antibiotic_resistance"]:
     include: "rules/antibiotic_resistance/megares.smk"
 
+localrules: all
 
 rule all:
     input:
