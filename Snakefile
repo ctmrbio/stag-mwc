@@ -12,7 +12,7 @@ from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
 min_version("4.8.1")  # TODO: Bump version when Snakemake is pathlib compatible
 
-stag_version = "0.1.1-dev"
+stag_version = "0.1.2-dev"
 print("="*60)
 print("StaG Metagenomic Workflow Collaboration".center(60))
 print("StaG-mwc".center(60))

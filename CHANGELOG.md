@@ -22,6 +22,7 @@ situations.
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
   log handling.
+- A few low-impact rules that can be run locally are now declared as localrules.
 
 ### Fixed
 - Fixed error handling if hg19 database is missing for the remove human step.
