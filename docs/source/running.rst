@@ -8,7 +8,8 @@ Open ``config.yaml`` in your favorite editor and change the settings under the
 ``Run configuration`` heading: the input directory, the input filename pattern,
 and the output directory, are the most important ones. They can be declared
 using absolute or relative filenames (relative to the |full_name| repository
-directory).
+directory). Input and output directories can be located anywhere, i.e. their
+locations are not restricted to the repository folder.
 
 Next, configure the settings under the ``Pipeline steps included`` heading.
 This is where you define what steps should be included in your workflow. Simply
@@ -80,6 +81,15 @@ where ``N`` is the maximum number of cores you want to allow for the workflow.
 Snakemake will automatically reduce the number of cores available to individual
 steps to this limit.
 
+.. note::
+
+    If several people are running StaG-mwc on a shared server or on a shared
+    file system, it can be useful to use the ``--conda-prefix`` parameter to
+    use a common folder to store the conda environments created by StaG-mwc,
+    so they can be re-used between different people or analyses. This reduces
+    the risk of producing several copies of the same conda environment in
+    different folders.
+
 
 Running on cluster resources
 ****************************
@@ -102,6 +112,11 @@ using the CPU and time requirements specified in ``rackham.yaml`` inside the
 Rackham profile folder. The above command assumes you are using the default
 ``config.yaml`` configuration file. If you are using a custom configuration
 file, just add ``--configfile <name_of_your_config_file>`` to the command line.
+
+.. note::
+
+    Make sure you edit ``cluster_configs/rackham/rackham.yaml`` to specify
+    the Slurm project name to use for Slurm job submissions.
 
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
