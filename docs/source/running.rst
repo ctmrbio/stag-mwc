@@ -51,11 +51,12 @@ not recommended to do this on a laptop.
 |full_name| can download several databases by typing ``snakemake <rule_name>``
 using any of the following rules::
 
-    index_hg19  (already shown above) 
-    download_centrifuge_database
-    download_kaiju_database
     build_metaphlan2_index
     create_megares_index
+    download_centrifuge_database
+    download_humann2_databases
+    download_kaiju_database
+    index_hg19  (already shown above) 
 
 Make sure you update your ``config.yaml`` to reflect the location of the database
 you want to use after downloading them.
