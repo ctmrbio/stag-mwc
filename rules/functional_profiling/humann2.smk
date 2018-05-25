@@ -58,24 +58,16 @@ rule download_humann2_databases:
         humann2_databases --download uniref uniref90_diamond {params.dbdir} >> {log}
         """
 
-
-def existing_mpa_output(wildcards, mpa_outdir=OUTDIR/"metaphlan2"):
-    """Return humann2 argument string for including MetaPhlAn2 profile if such
-    a profile already exists for the sample.
-    """
-    mpa_profile = mpa_outdir/"{sample}.metaphlan2.txt".format(sample=wildcards.sample)
-    if mpa_profile.exists():
-        return "--taxonomic-profile " + str(mpa_profile)
-    else:
-        return ""
-    return sample_mpa_output.exists()
-
+# Ensure MPA output exists before running HUMAnN2
+if not config["taxonomic_profile"]["metaphlan2"]:
+    include: "../taxonomic_profiling/metaphlan2.smk"
 
 rule humann2:
     """Functional profiling using HUMAnN2."""
     input:
         read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
         read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        taxonomic_profile=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
     output:
         OUTDIR/"humann2/{sample}_genefamilies.tsv",
         OUTDIR/"humann2/{sample}_pathcoverage.tsv",
@@ -93,7 +85,6 @@ rule humann2:
         outdir=OUTDIR/"humann2",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
-        taxonomic_profile=existing_mpa_output,
         mpa_pkl=h_config["mpa_pkl"],
         mpa_db=h_config["mpa_bt2_db_prefix"],
     shell:
@@ -107,8 +98,7 @@ rule humann2:
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
             --threads {threads} \
-            {params.taxonomic_profile} \
-            --metaphlan-options="-t rel_ab --mpa_pkl {params.mpa_pkl} --bowtie2db {params.mpa_db}" \
+            --taxonomic-profile {input.taxonomic_profile} \
             > {log.stdout} \
             2> {log.stderr}
         """
