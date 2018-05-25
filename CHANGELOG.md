@@ -18,8 +18,8 @@ situations.
 - Added CHANGELOG.md
 - New functionality to run mappers several times against different databases,
   based on a list of reference databases to map against in the config file.
-- Functional profiling using HUMAnN2. Can use pre-existing output from the
-  MetaPhlAn2 steps, if available in the output dir structure from a previous run.
+- Functional profiling using HUMAnN2. Will automatically run all
+  MetaPhlAn2-associated rules to produce taxonomic profiles for use in HUMAnN2.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
