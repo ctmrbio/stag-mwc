@@ -291,6 +291,10 @@ Outputs three files per sample, plus three summaries for all samples::
     all_samples.humann2_pathcoverage.tsv
     all_samples.humann2_pathabundances.tsv
 
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
+MetaPhlAn2-associated steps are run regardless of whether it is actually
+enabled in ``config.yaml`` or not.
+
 
 Antibiotic resistance
 *********************
