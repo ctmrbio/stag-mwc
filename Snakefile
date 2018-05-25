@@ -10,9 +10,9 @@ from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
-min_version("4.8.1")  # TODO: Bump version when Snakemake is pathlib compatible
+min_version("4.8.1")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
-stag_version = "0.1.2-dev"
+stag_version = "0.2.0-dev"
 print("="*60)
 print("StaG Metagenomic Workflow Collaboration".center(60))
 print("StaG-mwc".center(60))
@@ -66,6 +66,12 @@ if config["taxonomic_profile"]["kaiju"]:
 
 if config["taxonomic_profile"]["metaphlan2"]:
     include: "rules/taxonomic_profiling/metaphlan2.smk"
+
+#############################
+# Functional profiling
+#############################
+if config["functional_profile"]["humann2"]:
+    include: "rules/functional_profiling/humann2.smk"
 
 #############################
 # Antibiotic resistance

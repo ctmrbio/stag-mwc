@@ -39,7 +39,7 @@ rule download_metaphlan2_database:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan2.yaml"
+        "../../envs/biobakery.yaml"
     params:
         dbdir=config["dbdir"]+"/metaphlan2"
     shell:
@@ -70,7 +70,7 @@ rule build_metaphlan2_index:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan2.yaml"
+        "../../envs/biobakery.yaml"
     threads:
         4
     params:
@@ -100,7 +100,7 @@ rule metaphlan2:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan2.yaml"
+        "../../envs/biobakery.yaml"
     threads:
         4
     params:
@@ -138,7 +138,7 @@ rule combine_metaphlan2_outputs:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan2.yaml"
+        "../../envs/biobakery.yaml"
     threads:
         1
     params:
@@ -176,7 +176,7 @@ rule create_metaphlan2_krona_plots:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan2.yaml"
+        "../../envs/biobakery.yaml"
     threads:
         1
     shell:

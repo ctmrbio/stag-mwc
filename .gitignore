@@ -1,8 +1,8 @@
 *
-!config.yaml
 !cluster_configs
 !cluster_configs/*
 !cluster_configs/*/*
+!config.yaml
 !docs
 !docs/Makefile
 !docs/source
@@ -23,6 +23,8 @@
 !rules/*
 !rules/antibiotic_resistance
 !rules/antibiotic_resistance/*
+!rules/functional_profiling
+!rules/functional_profiling/*
 !rules/mappers
 !rules/mappers/*
 !rules/preproc

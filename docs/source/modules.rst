@@ -7,6 +7,7 @@
 .. _MEGARes: http://megares.meglab.org/
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
+.. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
 
 Modules
 =======
@@ -269,6 +270,30 @@ Outputs three files per sample, plus three summaries for all samples::
 
 The file called ``all_samples.metaphlan2.pdf`` contains a standard MetaPhlAn2
 clustered heatmap plot containing all samples.
+
+
+Functional profiling
+**************
+
+HUMAnN2
+----------
+:Tool: `HUMAnN2`_
+:Output folder: ``humann2``
+
+Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
+Outputs three files per sample, plus three summaries for all samples::
+
+    <sample>.genefamilies.tsv
+    <sample>.pathcoverage.tsv
+    <sample>.pathabundances.tsv
+    
+    all_samples.humann2_genefamilies.tsv
+    all_samples.humann2_pathcoverage.tsv
+    all_samples.humann2_pathabundances.tsv
+
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
+MetaPhlAn2-associated steps are run regardless of whether it is actually
+enabled in ``config.yaml`` or not.
 
 
 Antibiotic resistance
