@@ -18,6 +18,8 @@ situations.
 - Added CHANGELOG.md
 - New functionality to run mappers several times against different databases,
   based on a list of reference databases to map against in the config file.
+- Functional profiling using HUMAnN2. Can use pre-existing output from the
+  MetaPhlAn2 steps, if available in the output dir structure from a previous run.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
@@ -37,7 +39,7 @@ situations.
 - Started using Python's pathlib module for Snakefile rule input, output, and
   log file declarations. Some unsightly explicit string conversions still remain,
   due to Snakemake not being fully compatible with pathlib (yet).
-- Add details about branchin structure/strategy to CONTRIBUTING.md
+- Add details about branching structure/strategy to CONTRIBUTING.md
 
 ### Removed
 
