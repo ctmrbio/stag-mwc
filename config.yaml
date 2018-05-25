@@ -33,6 +33,8 @@ taxonomic_profile:
     centrifuge: False
     kaiju: False
     metaphlan2: False
+functional_profile:
+    humann2: False
 antibiotic_resistance: False
 
 
@@ -114,6 +116,18 @@ metaphlan2:
     d: "braycurtis"          # Heatmap: Distance function for samples.
     f: "correlation"         # Heatmap: Distance function for microbes.
     c: "jet"                 # Heatmap: Colormap, default is "jet"
+
+
+#########################
+# Functional profiling
+#########################
+humann2:
+    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory
+    protein_db: ""           # [Required] Path to protein database (typically UniRef90)
+    mpa_pkl: ""              # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
+    mpa_bt2_db_prefix: ""    # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
+    norm_method: "relab"     # Normalization method (HUMAnN2 default is "cpm")
+    norm_mode: "community"   # Normalization mode, "community" or "levelwise"
 
 
 #########################
