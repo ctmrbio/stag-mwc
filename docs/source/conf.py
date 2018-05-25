@@ -56,9 +56,9 @@ author = 'Fredrik Boulund, Lisa Olsson'
 # built documents.
 #
 # The short X.Y version.
-version = '0.1.2'
+version = '0.2.0'
 # The full version, including alpha/beta/rc tags.
-release = '0.1.2-dev'
+release = '0.2.0-dev'
 
 # reStructuredText prolog contains a string of reStructuredText that will be
 # included at the beginning of every source file that is read.
