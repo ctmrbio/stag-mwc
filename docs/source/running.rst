@@ -58,8 +58,10 @@ using any of the following rules::
     download_kaiju_database
     index_hg19  (already shown above) 
 
-Make sure you update your ``config.yaml`` to reflect the location of the database
-you want to use after downloading them.
+.. note::
+
+    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
+    you have downloaded.
 
 
 Running
