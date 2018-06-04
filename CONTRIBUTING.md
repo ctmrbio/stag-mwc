@@ -8,8 +8,8 @@ bug reports, feature requests, or general improvement discussion topics.
 The main branch of StaG-mwc should always be stable and reliable. All
 development should be based on the develop branch. Please create new feature
 branches from the develop branch. The develop branch is then merged into the
-master branch when enough improvements have accrued. The typical procedure to
-develop new features or fix bugs in StaG-mwc looks something like this:
+master branch when enough improvements have accumulated. The typical procedure
+to develop new features or fix bugs in StaG-mwc looks something like this:
 
 1. Fork or clone the repository.
 2. Checkout the develop branch and create a new feature branch from there.
@@ -23,15 +23,16 @@ develop new features or fix bugs in StaG-mwc looks something like this:
    config.yaml file.
 4. If a new feature has been added, document it in the Sphinx documentation.
 4. Commit changes to your fork/clone.
-5. Create a pull request (PR) with some descriptions of the work you have
-   done and possibly some explanations for potentially tricky bits.
-6. When the feature is considered complete, we bump the version number and
-   merge the PR back to the develop branch.
+5. Create a pull request (PR) to the develop branch  with some descriptions of
+   the work you have done and possibly some explanations for potentially tricky
+   bits.
+6. When the feature is considered complete, we bump the version number depending
+   on the size and impact of the PR before merging the PR to the develop branch.
 
 ### Releases
-New releases are made whenever enough new features have accrued on the develop
-branch. Before creating a new release, ensure the following things have been
-taken care of:
+New releases are made whenever enough new features have accumulated on the
+develop branch. Before creating a new release, ensure the following things have
+been taken care of:
 
 * All pending features that should be included in the upcoming release are
   merged into the develop branch.
