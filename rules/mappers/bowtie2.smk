@@ -91,7 +91,7 @@ for bt2_config in config["bowtie2"]:
             """
 
     rule:
-        """Create count table for MetaPhlAn2 mappings."""
+        """Create count table for Bowtie2 mappings."""
         input:
             rpkms=expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.rpkm.txt"),
                     db_name=bt2_db_name,
