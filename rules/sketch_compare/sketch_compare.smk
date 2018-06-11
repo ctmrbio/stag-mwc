@@ -27,7 +27,7 @@ rule sketch:
     conda:
         "../../envs/stag-mwc.yaml"
     threads:
-        2
+        4
     shell:
         """
         sketch.sh \
