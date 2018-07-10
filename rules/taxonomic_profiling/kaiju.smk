@@ -114,21 +114,21 @@ rule kaiju_report:
             -n {params.names} \
             -i {input.kaiju} \
             -r species \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.species}
         kaijuReport \
             -t {params.nodes} \
             -n {params.names} \
             -i {input.kaiju} \
             -r genus \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.genus}
         kaijuReport \
             -t {params.nodes} \
             -n {params.names} \
             -i {input.kaiju} \
             -r family \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.family}
         """
 
