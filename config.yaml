@@ -133,8 +133,6 @@ humann2:
 #########################
 # Antibiotic Resistance
 #########################
-megares:
-    db_path: ""              # [Required] Path to folder containing MEGARes BBMap index
-    min_id: 0.91
-    max_indel: 1600          # BBMap default is 16000
-    extra: ""                # Extra BBMap commandline parameters
+groot:
+    db: "arg-annot"          # Used when downloading and indexing DB with "create_groot_index" rule
+    index: ""                # [Required] Path to groot index
