@@ -64,7 +64,8 @@ rule groot_align:
         graphs=directory(OUTDIR/"groot/{sample}/groot-plots"),
         plots=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
-        str(LOGDIR/"groot/{sample}.groot_align.log"),
+        align=str(LOGDIR/"groot/{sample}.groot_align.log"),
+        report=str(LOGDIR/"groot/{sample}.groot_report.log"),
     shadow:
         "shallow"
     conda:
@@ -77,16 +78,17 @@ rule groot_align:
         """
         groot align \
             --fastq {input.read1},{input.read2} \
-            --graphDir {wildcards.sample}/groot-graphs \
+            --graphDir {output.graphs} \
             --indexDir {params.index} \
             --processors {threads} \
-            --logFile {log} \
+            --logFile {log.align} \
             > {output.bam}
         groot report \
             --bamFile {output.bam} \
             --lowCov \
             --plotCov \
             --processors {threads} \
+            --logFile {log.report} \
             > {output.report}
-        mv groot-plots {wildcards.sample}/groot-plots
+        mv groot-plots {output.plots}
         """
