@@ -61,8 +61,8 @@ rule groot_align:
     output:
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
         report=OUTDIR/"groot/{sample}/{sample}.groot_report.tsv",
-        graphs=directory(OUTDIR/"groot/{sample}/groot-plots"),
-        plots=directory(OUTDIR/"groot/{sample}/groot-graphs"),
+        plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
+        graphs=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
         align=str(LOGDIR/"groot/{sample}.groot_align.log"),
         report=str(LOGDIR/"groot/{sample}.groot_report.log"),
