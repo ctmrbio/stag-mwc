@@ -4,15 +4,15 @@
 #                 StaG-mwc
 #         Copyright (c) 2018 Authors
 #
-# Running snakemake --use-conda -n in a clone of this repository should
+# Running `snakemake --use-conda --dryrun` in a clone of this repository should
 # successfully execute a test dry run of the workflow.
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
-min_version("4.8.1")  # TODO: Bump version requirement when Snakemake is pathlib compatible
+min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
-stag_version = "0.2.0-dev"
+stag_version = "0.3.0-dev"
 print("="*60)
 print("StaG Metagenomic Workflow Collaboration".center(60))
 print("StaG-mwc".center(60))
@@ -77,7 +77,8 @@ if config["functional_profile"]["humann2"]:
 # Antibiotic resistance
 #############################
 if config["antibiotic_resistance"]:
-    include: "rules/antibiotic_resistance/megares.smk"
+    include: "rules/antibiotic_resistance/groot.smk"
+
 
 localrules: all
 

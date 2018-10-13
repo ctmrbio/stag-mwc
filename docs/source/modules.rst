@@ -4,7 +4,7 @@
 .. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
-.. _MEGARes: http://megares.meglab.org/
+.. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 .. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
@@ -299,19 +299,22 @@ enabled in ``config.yaml`` or not.
 Antibiotic resistance
 *********************
 
-MEGARes
+Groot
 -------
-:Tool: `BBMap`_
-:Output folder: ``megares``
+:Tool: `groot`_
+:Output folder: ``groot``
 
-Map reads against `MEGARes`_ antibiotic resistance gene database to detect AR genes.
-Outputs four files per sample::
+Run `groot`_ to align reads to an antibiotic resistance gene database to
+produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
+containing two files and two subfolders::
 
-    <sample>.covstats.txt
-    <sample>.mapped_reads.fq.gz
-    <sample>.rpkm.txt
-    <sample>.sam.gz
+    <sample>/<sample>.groot_aligned.bam
+    <sample>/<sample>.groot_report.tsv
+    <sample>/<sample>/groot-graphs
+    <sample>/<sample>/groot-plots
 
-The ``covstats`` file contains coverage per reference sequence, and the
-``rpkm`` file contains the number of mapped reads per reference sequence (as
-well as RPKM/FPKM values).
+The ``<sample>.groot.bam`` file contains mapping results against all resistance
+gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
+observed antibiotic resistance genes in the sample. The two subfolders contain 
+all mapped graphs and coverage plots of all detected antibiotic resisatance genes.
+
