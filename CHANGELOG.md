@@ -25,6 +25,8 @@ situations.
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
   log handling.
 - A few low-impact rules that can be run locally are now declared as localrules.
+- Replaced MEGARes antibiotic resistance gene mapping with Groot resistance gene
+  profiling using gene variation graphs.
 
 ### Fixed
 - Fixed error handling if hg19 database is missing for the remove human step.
