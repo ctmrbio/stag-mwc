@@ -91,7 +91,7 @@ rule remove_human:
     conda:
         "../../envs/stag-mwc.yaml"
     threads:
-        4
+        8
     params:
         minid=rh_config["minid"],
         maxindel=rh_config["maxindel"],
