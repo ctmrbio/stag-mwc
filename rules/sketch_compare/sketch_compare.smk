@@ -67,16 +67,19 @@ rule plot_sample_similarity:
     input:
         OUTDIR/"sketch_compare/alltoall.txt"
     output:
-        OUTDIR/"sketch_compare/sample_similarity.pdf"
+        OUTDIR/"sketch_compare/sample_similarity.pdf",
+        OUTDIR/"sketch_compare/sample_similarity.clustered.pdf",
     log:
         stdout=str(LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log"),
         stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
     conda:
         "../../envs/stag-mwc.yaml"
+    params:
+        outfile=OUTDIR/"sketch_compare/sample_similarity"
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \
-            --outfile {output} \
+            --outfile {params.outfile} \
             {input} \
             > {log.stdout} \
             2> {log.stderr}
