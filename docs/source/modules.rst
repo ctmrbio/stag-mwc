@@ -70,8 +70,8 @@ sketch_compare
 The ``sketch_compare`` module uses the very fast MinHash implementation in
 `BBMap`_ to compute MinHash sketches of all samples to do an all-vs-all
 comparison of all samples based on their kmer content. The module outputs
-gzip-compressed sketches for each sample, as well as a heatmap plot showing the
-overall similarity of all samples.
+gzip-compressed sketches for each sample, as well as two heatmap plots showing
+the overall similarity of all samples (one with hierarchical clustering).
 
 
 Mappers

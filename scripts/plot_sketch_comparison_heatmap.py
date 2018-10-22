@@ -3,6 +3,7 @@
 # Fredrik Boulund 2018
 
 from sys import argv, exit
+from pathlib import Path
 import argparse
 
 import matplotlib as mpl
@@ -17,10 +18,10 @@ def parse_args():
     desc = "Plot heatmap of sketch comparisons."
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("alltoall", metavar="alltoall",
-            help="Output table from comparesketch.sh in format=3.")
+            help="Output table from BBMap's comparesketch.sh in format=3.")
     parser.add_argument("-o", "--outfile", dest="outfile", metavar="FILE",
-            default="all_vs_all.pdf",
-            help="Write heatmap plot to FILE [%(default)s].")
+            default="all_vs_all",
+            help="Filename stem of plot files, will write FILE.pdf and FILE.clustered.pdf [%(default)s].")
     if len(argv) < 2:
         parser.print_help()
         exit(1)
@@ -43,10 +44,16 @@ if __name__ == "__main__":
     similarity_matrix = df.pivot(index="Query", 
             columns="Ref", values="ANI").fillna(100)
 
+
+    outfile = Path(options.outfile)
+
     g = sns.heatmap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.set_title("Sample similarity")
     g.set_yticklabels(g.get_yticklabels(), rotation=0)
     g.set_ylabel("")
     g.set_xlabel("")
+    g.figure.savefig(outfile)
 
-    g.get_figure().savefig(options.outfile)
+    g = sns.clustermap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
+    g.fig.suptitle("Sample similarity (clustered)")
+    g.savefig(Path(outfile.stem).with_suffix(".clustered.pdf"))
