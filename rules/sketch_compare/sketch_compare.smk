@@ -7,10 +7,11 @@ localrules:
     plot_sample_similarity,
 
 
-# Add final output files from this module to 'all_outputs' from the
-# main Snakefile scope.
-sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
-all_outputs.append(sample_similarity_plot)
+if config["sketch_compare"]:
+    # Add final output files from this module to 'all_outputs' from the
+    # main Snakefile scope.
+    sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
+    all_outputs.append(sample_similarity_plot)
 
 
 rule sketch:
@@ -67,19 +68,18 @@ rule plot_sample_similarity:
     input:
         OUTDIR/"sketch_compare/alltoall.txt"
     output:
-        OUTDIR/"sketch_compare/sample_similarity.pdf",
-        OUTDIR/"sketch_compare/sample_similarity.clustered.pdf",
+        heatmap=OUTDIR/"sketch_compare/sample_similarity.pdf",
+        clustered=OUTDIR/"sketch_compare/sample_similarity.clustered.pdf",
     log:
         stdout=str(LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log"),
         stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
     conda:
         "../../envs/stag-mwc.yaml"
-    params:
-        outfile=OUTDIR/"sketch_compare/sample_similarity"
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \
-            --outfile {params.outfile} \
+            --outfile {output.heatmap} \
+            --clustered {output.clustered} \
             {input} \
             > {log.stdout} \
             2> {log.stderr}
