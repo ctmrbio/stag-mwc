@@ -56,6 +56,7 @@ using any of the following rules::
     download_centrifuge_database
     download_humann2_databases
     download_kaiju_database
+    download_minikraken2
     index_hg19  (already shown above) 
 
 .. note::
