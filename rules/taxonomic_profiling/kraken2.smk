@@ -72,11 +72,12 @@ rule kraken2:
             --confidence {params.confidence} \
             --threads {threads} \
             --output {output.kraken} \
-            --report {output.report} \
+            --report {output.kreport} \
             --use-names \
             --paired \
             {input.read1} {input.read2} \
-            {params.extra}
+            {params.extra} \
+            2> {log}
         """
 
 
