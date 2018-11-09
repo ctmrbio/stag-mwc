@@ -20,8 +20,11 @@ def parse_args():
     parser.add_argument("alltoall", metavar="alltoall",
             help="Output table from BBMap's comparesketch.sh in format=3.")
     parser.add_argument("-o", "--outfile", dest="outfile", metavar="FILE",
-            default="all_vs_all",
-            help="Filename stem of plot files, will write FILE.pdf and FILE.clustered.pdf [%(default)s].")
+            default="all_vs_all.pdf",
+            help="Filename of heatmap plot [%(default)s].")
+    parser.add_argument("-c", "--clustered", dest="clustered", metavar="FILE",
+            default="all_vs_all.clustered.pdf",
+            help="Filename of clustered heatmap plot [%(default)s].")
     if len(argv) < 2:
         parser.print_help()
         exit(1)
@@ -44,16 +47,13 @@ if __name__ == "__main__":
     similarity_matrix = df.pivot(index="Query", 
             columns="Ref", values="ANI").fillna(100)
 
-
-    outfile = Path(options.outfile)
-
     g = sns.heatmap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.set_title("Sample similarity")
     g.set_yticklabels(g.get_yticklabels(), rotation=0)
     g.set_ylabel("")
     g.set_xlabel("")
-    g.figure.savefig(outfile)
+    g.figure.savefig(str(Path(options.outfile)))
 
     g = sns.clustermap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.fig.suptitle("Sample similarity (clustered)")
-    g.savefig(Path(outfile.stem).with_suffix(".clustered.pdf"))
+    g.savefig(str(Path(options.clustered)))

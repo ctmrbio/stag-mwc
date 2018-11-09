@@ -11,32 +11,26 @@ localrules:
     join_humann2_tables,
 
 h_config = config["humann2"]
-if not any([Path(h_config["nucleotide_db"]).exists(),
-            Path(h_config["protein_db"]).exists()]):
-    err_message = "Could not find HUMAnN2 nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
-    err_message += "Specify relevant paths in the humann2 section of config.yaml.\n"
-    err_message += "Run 'snakemake download_humann2_databases' to download and build the default ChocoPhlAn and UniRef90 databases in '{dbdir}'\n".format(dbdir=DBDIR/"humann2")
-    err_message += "If you do not want to run HUMAnN2 for functional profiling, set functional_profile:humann2: False in config.yaml"
-    raise WorkflowError(err_message)
-bt2_db_ext = ".1.bt2"
-if not any([Path(h_config["mpa_pkl"]).exists(),
-            Path(h_config["mpa_bt2_db_prefix"]).with_suffix(bt2_db_ext).exists()]):
-    err_message = "No MetaPhlAn2 pickle or database found at: '{}', '{}'!\n".format(h_config["mpa_pkl"], h_config["mpa_bt2_db_prefix"])
-    err_message += "Specify relevant paths in the humann2 section of config.yaml.\n"
-    err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}'\n".format(dbdir=DBDIR/"metaphlan2")
-    err_message += "If you do not want to run HUMAnN2 for functional profiling, set functional_profile:humann2: False in config.yaml"
-    raise WorkflowError(err_message)
+if config["functional_profile"]["humann2"]:
+    if not any([Path(h_config["nucleotide_db"]).exists(),
+                Path(h_config["protein_db"]).exists()]):
+        err_message = "Could not find HUMAnN2 nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
+        err_message += "Specify relevant paths in the humann2 section of config.yaml.\n"
+        err_message += "Run 'snakemake download_humann2_databases' to download and build the default ChocoPhlAn and UniRef90 databases in '{dbdir}'\n".format(dbdir=DBDIR/"humann2")
+        err_message += "If you do not want to run HUMAnN2 for functional profiling, set functional_profile:humann2: False in config.yaml"
+        raise WorkflowError(err_message)
+    bt2_db_ext = ".1.bt2"
 
-# Add HUMAnN2 output files to 'all_outputs' from the main Snakefile scope.
-# SAMPLES is also from the main Snakefile scope.
-humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.tsv"),
-        sample=SAMPLES,
-        output_type=("genefamilies", "pathcoverage", "pathabundance",
-                     "genefamilies_{method}".format(method=h_config["norm_method"])))
-merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.tsv"),
-        output_type=("genefamilies", "pathcoverage", "pathabundance"))
-all_outputs.extend(humann2_outputs)
-all_outputs.extend(merged_humann2_tables)
+    # Add HUMAnN2 output files to 'all_outputs' from the main Snakefile scope.
+    # SAMPLES is also from the main Snakefile scope.
+    humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.tsv"),
+            sample=SAMPLES,
+            output_type=("genefamilies", "pathcoverage", "pathabundance",
+                        "genefamilies_{method}".format(method=h_config["norm_method"])))
+    merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.tsv"),
+            output_type=("genefamilies", "pathcoverage", "pathabundance"))
+    all_outputs.extend(humann2_outputs)
+    all_outputs.extend(merged_humann2_tables)
 
 
 rule download_humann2_databases:
@@ -85,8 +79,6 @@ rule humann2:
         outdir=OUTDIR/"humann2",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
-        mpa_pkl=h_config["mpa_pkl"],
-        mpa_db=h_config["mpa_bt2_db_prefix"],
     shell:
         """
         cat {input.read1} {input.read2} > concat_input_reads.fq.gz \

@@ -105,8 +105,8 @@ kaiju:
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
 
 metaphlan2:
-    mpa_pkl: ""              # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
-    bt2_db_prefix: ""        # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
+    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
+    bt2_index: "v20_m200"    # [Required] Name of MetaPhlAn2 database index (without "mpl_" prefix)
     extra: ""                # Extra command line arguments for metaphlan2.py
     tax_lev: "s"             # Heatmap: Taxononomic level, choose from a, k, p, c, f, g, s
     minv: "0"                # Heatmap: Minimum value to display.
@@ -124,8 +124,6 @@ metaphlan2:
 humann2:
     nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory
     protein_db: ""           # [Required] Path to protein database (typically UniRef90)
-    mpa_pkl: ""              # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
-    mpa_bt2_db_prefix: ""    # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
     norm_method: "relab"     # Normalization method (HUMAnN2 default is "cpm")
     norm_mode: "community"   # Normalization mode, "community" or "levelwise"
 

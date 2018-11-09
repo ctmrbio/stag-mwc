@@ -31,53 +31,41 @@ SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 #############################
 # Pre-processing
 #############################
-if config["qc_reads"]:
-    include: "rules/preproc/read_quality.smk"
-
-if config["remove_human"]:
-    include: "rules/preproc/remove_human.smk"
-
-if config["assess_depth"]:
-    include: "rules/preproc/bbcountunique.smk"
+include: "rules/preproc/read_quality.smk"
+include: "rules/preproc/remove_human.smk"
+include: "rules/preproc/bbcountunique.smk"
 
 #############################
 # Naive sample comparison
 #############################
-if config["sketch_compare"]:
-    include: "rules/sketch_compare/sketch_compare.smk"
+include: "rules/sketch_compare/sketch_compare.smk"
 
 #############################
 # Mappers
 #############################
-if config["mappers"]["bbmap"]:
-    include: "rules/mappers/bbmap.smk"
-
-if config["mappers"]["bowtie2"]:
-    include: "rules/mappers/bowtie2.smk"
+include: "rules/mappers/bbmap.smk"
+include: "rules/mappers/bowtie2.smk"
 
 #############################
 # Taxonomic profiling
 #############################
-if config["taxonomic_profile"]["centrifuge"]:
-    include: "rules/taxonomic_profiling/centrifuge.smk"
+include: "rules/taxonomic_profiling/centrifuge.smk"
+include: "rules/taxonomic_profiling/kaiju.smk"
+include: "rules/taxonomic_profiling/metaphlan2.smk"
 
-if config["taxonomic_profile"]["kaiju"]:
-    include: "rules/taxonomic_profiling/kaiju.smk"
-
-if config["taxonomic_profile"]["metaphlan2"]:
-    include: "rules/taxonomic_profiling/metaphlan2.smk"
+#############################
+# Assembly
+#############################
 
 #############################
 # Functional profiling
 #############################
-if config["functional_profile"]["humann2"]:
-    include: "rules/functional_profiling/humann2.smk"
+include: "rules/functional_profiling/humann2.smk"
 
 #############################
 # Antibiotic resistance
 #############################
-if config["antibiotic_resistance"]:
-    include: "rules/antibiotic_resistance/groot.smk"
+include: "rules/antibiotic_resistance/groot.smk"
 
 
 localrules: all
