@@ -8,6 +8,7 @@ dependencies:
     - bbmap =37.99
     - centrifuge =1.0.3
     - kaiju =1.6.2
+    - kraken2 =2.0.7_beta
     - krona =2.7
     - matplotlib =2.2.2
     - pandas =0.22.0

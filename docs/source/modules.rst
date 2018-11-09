@@ -4,6 +4,7 @@
 .. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
+.. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
@@ -251,6 +252,17 @@ output files are::
     <sample>.kaiju.summary.genus
     <sample>.kaiju.summary.species
     <sample>.krona
+
+Kraken2
+-------
+:Tool: `Kraken2`_
+:Output folder: ``kraken2``
+
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs two files per sample::
+
+    <sample>.kraken
+    <sample>.kreport
 
 MetaPhlAn2
 ----------
