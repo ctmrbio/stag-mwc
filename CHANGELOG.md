@@ -20,19 +20,25 @@ situations.
   based on a list of reference databases to map against in the config file.
 - Functional profiling using HUMAnN2. Will automatically run all
   MetaPhlAn2-associated rules to produce taxonomic profiles for use in HUMAnN2.
+- Added Overview page to documentation that includes a draft of a simplified
+  graph overview of the workflow (including some unfinished parts).
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
   log handling.
 - A few low-impact rules that can be run locally are now declared as localrules.
-- Replaced MEGARes antibiotic resistance gene mapping with Groot resistance gene
-  profiling using gene variation graphs.
+- Replaced MEGARes antibiotic resistance gene mapping with GROOT resistance
+  gene profiling using gene variation graphs, using a default database based on
+  arg-annot.
 - Added clustered sketch comparison output heatmap.
+- Updated MetaPhlAn2 to version 2.7.8, with corresponding changes to config file.
 
 ### Fixed
 - Fixed error handling if hg19 database is missing for the remove human step.
 
 ### Removed
+- Removed duplicated MetaPhlAn2 configuration parameters from HUMAnN2 config
+  section.
 
 
 ## [0.1.1-dev] - 2018-04-30
