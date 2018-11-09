@@ -22,6 +22,7 @@ situations.
   MetaPhlAn2-associated rules to produce taxonomic profiles for use in HUMAnN2.
 - Added Overview page to documentation that includes a draft of a simplified
   graph overview of the workflow (including some unfinished parts).
+- Added rules to run Kraken2.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm

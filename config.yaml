@@ -32,6 +32,7 @@ mappers:
 taxonomic_profile:
     centrifuge: False
     kaiju: False
+    kraken2: False
     metaphlan2: False
 functional_profile:
     humann2: False
@@ -103,6 +104,11 @@ kaiju:
     db: ""                   # [Required] Path to Kaiju DB file
     nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
+
+kraken2:
+    db: ""                   # [Required] Path to Kraken2 DB folder
+    confidence: 0.0          # Kraken2 confidence score, float in [0,1]
+    extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
 
 metaphlan2:
     bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
