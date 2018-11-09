@@ -7,17 +7,18 @@ localrules:
     create_groot_index
 
 groot_db_path = Path(config["groot"]["index"])
-if not Path(groot_db_path).exists():
-    err_message = "No groot database found at: '{}'!\n".format(groot_db_path)
-    err_message += "Specify the DB path in the groot section of config.yaml.\n"
-    err_message += "Run 'snakemake create_groot_index' to download and build a groot index in '{dbdir}'\n".format(dbdir=DBDIR/"groot")
-    err_message += "If you do not want to run groot to create antibiotic resistance profiles, set antibiotic_resistance: False in config.yaml"
-    raise WorkflowError(err_message)
+if config["antibiotic_resistance"]:
+    if not Path(groot_db_path).exists():
+        err_message = "No groot database found at: '{}'!\n".format(groot_db_path)
+        err_message += "Specify the DB path in the groot section of config.yaml.\n"
+        err_message += "Run 'snakemake create_groot_index' to download and build a groot index in '{dbdir}'\n".format(dbdir=DBDIR/"groot")
+        err_message += "If you do not want to run groot to create antibiotic resistance profiles, set antibiotic_resistance: False in config.yaml"
+        raise WorkflowError(err_message)
 
-groot_outputs = expand(str(OUTDIR/"groot/{sample}/{sample}.{output_type}"),
-        sample=SAMPLES,
-        output_type=("groot_aligned.bam", "groot_report.tsv"))
-all_outputs.extend(groot_outputs)
+    groot_outputs = expand(str(OUTDIR/"groot/{sample}/{sample}.{output_type}"),
+            sample=SAMPLES,
+            output_type=("groot_aligned.bam", "groot_report.tsv"))
+    all_outputs.extend(groot_outputs)
 
 groot_config = config["groot"]
 rule create_groot_index:

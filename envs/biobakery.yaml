@@ -4,5 +4,6 @@ channels:
     - conda-forge
     - defaults
 dependencies:
+    - metaphlan2 =2.7.8
     - humann2 =0.11.1
     - krona =2.7

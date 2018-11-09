@@ -47,7 +47,6 @@ if __name__ == "__main__":
     similarity_matrix = df.pivot(index="Query", 
             columns="Ref", values="ANI").fillna(100)
 
-
     g = sns.heatmap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.set_title("Sample similarity")
     g.set_yticklabels(g.get_yticklabels(), rotation=0)

@@ -11,23 +11,23 @@ localrules:
 
 mpa_config = config["metaphlan2"]
 bt2_db_ext = ".1.bt2"
-if not any([Path(mpa_config["mpa_pkl"]).exists(),
-            Path(mpa_config["bt2_db_prefix"]).with_suffix(bt2_db_ext).exists()]):
-    err_message = "No MetaPhlAn2 pickle or database found at: '{}', '{}'!\n".format(mpa_config["mpa_pkl"], mpa_config["bt2_db_prefix"])
-    err_message += "Specify relevant paths in the metaphlan2 section of config.yaml.\n"
-    err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}'\n".format(dbdir=DBDIR/"metaphlan2")
-    err_message += "If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml"
-    raise WorkflowError(err_message)
+if config["taxonomic_profile"]["metaphlan2"]:
+    if not Path(mpa_config["bt2_db_dir"]).exists():
+        err_message = "No MetaPhlAn2 database dir found at: '{}'!\n".format(mpa_config["bt2_db_dir"])
+        err_message += "Specify relevant paths in the metaphlan2 section of config.yaml.\n"
+        err_message += "Run 'snakemake build_metaphlan2_index' to download and build the default mpa_v20_m200 database in '{dbdir}'\n".format(dbdir=DBDIR/"metaphlan2")
+        err_message += "If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml"
+        raise WorkflowError(err_message)
 
-# Add MetaPhlAn2 output files to 'all_outputs' from the main Snakefile scope.
-# SAMPLES is also from the main Snakefile scope.
-mpa_outputs = expand(str(OUTDIR/"metaphlan2/{sample}.{output_type}"),
-        sample=SAMPLES,
-        output_type=("bowtie2.bz2", "metaphlan2.txt", "metaphlan2.krona"))
-mpa_combined = expand(str(OUTDIR/"metaphlan2/all_samples.metaphlan2.{ext}"),
-        ext=("txt", "pdf", "krona.html"))
-all_outputs.extend(mpa_outputs)
-all_outputs.extend(mpa_combined)
+    # Add MetaPhlAn2 output files to 'all_outputs' from the main Snakefile scope.
+    # SAMPLES is also from the main Snakefile scope.
+    mpa_outputs = expand(str(OUTDIR/"metaphlan2/{sample}.{output_type}"),
+            sample=SAMPLES,
+            output_type=("bowtie2.bz2", "metaphlan2.txt", "metaphlan2.krona"))
+    mpa_combined = expand(str(OUTDIR/"metaphlan2/all_samples.metaphlan2.{ext}"),
+            ext=("txt", "pdf", "krona.html"))
+    all_outputs.extend(mpa_outputs)
+    all_outputs.extend(mpa_combined)
 
 rule download_metaphlan2_database:
     """Download MetaPhlAn2 db_v20_m200"""
@@ -104,8 +104,8 @@ rule metaphlan2:
     threads:
         4
     params:
-        mpa_pkl=mpa_config["mpa_pkl"],
-        bt2_db_prefix=mpa_config["bt2_db_prefix"],
+        bt2_db_dir=mpa_config["bt2_db_dir"],
+        bt2_index=mpa_config["bt2_index"],
         extra=mpa_config["extra"],
     shell:
         """
@@ -114,8 +114,8 @@ rule metaphlan2:
             --nproc {threads} \
             --sample_id {wildcards.sample} \
             --bowtie2out {output.bt2_out} \
-            --mpa_pkl {params.mpa_pkl} \
-            --bowtie2db {params.bt2_db_prefix} \
+            --bowtie2db {params.bt2_db_dir} \
+            --index {params.bt2_index} \
             {input.read1},{input.read2} \
             {output.mpa_out} \
             {params.extra} \

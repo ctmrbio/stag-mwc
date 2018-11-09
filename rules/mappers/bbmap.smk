@@ -9,40 +9,42 @@ for bbmap_config in config["bbmap"]:
     bbmap_logdir = LOGDIR/"bbmap/{db_name}".format(db_name=bbmap_config["db_name"])
 
     db_path = Path(bbmap_config["db_path"])
-    if not Path(db_path/"ref").exists():
-        err_message = "BBMap index not found at: '{}'\n".format(db_path)
-        err_message += "Check path in config setting 'bbmap:db_path'.\n"
-        err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
-        raise WorkflowError(err_message)
-
-    # Add final output files from this module to 'all_outputs' from the main
-    # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-    bbmap_alignments = expand(str(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}"),
-            db_name=bbmap_config["db_name"],
-            sample=SAMPLES,
-            output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-    counts_table = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.counts_table.tab"),
-            db_name=bbmap_config["db_name"],
-            sample=SAMPLES)
-    featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
-            db_name=bbmap_config["db_name"],
-            sample=SAMPLES,
-            output_type=["", ".summary", ".table.tsv"])
-    all_outputs.extend(bbmap_alignments)
-    if bbmap_config["counts_table"]["annotations"]:
-        if not Path(bbmap_config["counts_table"]["annotations"]).exists():
-            err_message = "BBMap counts table annotations not found at: '{}'\n".format(bbmap_config["counts_table"]["annotations"])
-            err_message += "Check path in config setting 'bbmap:counts_table:annotations'.\n"
-            err_message += "If you want to skip read counts summary for BBMap, set bbmap:counts_table:annotations to '' in config.yaml."
-            raise WorkflowError(err_message)
-        all_outputs.extend(counts_table)
-    if bbmap_config["featureCounts"]["annotations"]:
-        if not Path(bbmap_config["featureCounts"]["annotations"]).exists():
-            err_message = "BBMap featureCounts annotations not found at: '{}'\n".format(bbmap_config["featureCounts"]["annotations"])
-            err_message += "Check path in config setting 'bbmap:featureCounts:annotations'.\n"
+    if config["mappers"]["bbmap"]:
+        if not Path(db_path/"ref").exists():
+            err_message = "BBMap index not found at: '{}'\n".format(db_path)
+            err_message += "Check path in config setting 'bbmap:db_path'.\n"
             err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
             raise WorkflowError(err_message)
-        all_outputs.extend(featureCounts)
+
+        # Add final output files from this module to 'all_outputs' from the main
+        # Snakefile scope. SAMPLES is also from the main Snakefile scope.
+        bbmap_alignments = expand(str(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}"),
+                db_name=bbmap_config["db_name"],
+                sample=SAMPLES,
+                output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
+        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.counts_table.tab"),
+                db_name=bbmap_config["db_name"],
+                sample=SAMPLES)
+        featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
+                db_name=bbmap_config["db_name"],
+                sample=SAMPLES,
+                output_type=["", ".summary", ".table.tsv"])
+        all_outputs.extend(bbmap_alignments)
+
+        if bbmap_config["counts_table"]["annotations"]:
+            if not Path(bbmap_config["counts_table"]["annotations"]).exists():
+                err_message = "BBMap counts table annotations not found at: '{}'\n".format(bbmap_config["counts_table"]["annotations"])
+                err_message += "Check path in config setting 'bbmap:counts_table:annotations'.\n"
+                err_message += "If you want to skip read counts summary for BBMap, set bbmap:counts_table:annotations to '' in config.yaml."
+                raise WorkflowError(err_message)
+            all_outputs.extend(counts_table)
+        if bbmap_config["featureCounts"]["annotations"]:
+            if not Path(bbmap_config["featureCounts"]["annotations"]).exists():
+                err_message = "BBMap featureCounts annotations not found at: '{}'\n".format(bbmap_config["featureCounts"]["annotations"])
+                err_message += "Check path in config setting 'bbmap:featureCounts:annotations'.\n"
+                err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
+                raise WorkflowError(err_message)
+            all_outputs.extend(featureCounts)
 
     rule:
         """BBMap to {db_name}"""

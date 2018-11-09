@@ -3,17 +3,18 @@
 #TODO: Remove superfluous str conversions of paths in expand and log statements
 #      when Snakemake is pathlib compatible.
 
-# Add final output files from this module to 'all_outputs' from
-# the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-fastqc_output = expand(str(OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.{ext}"),
-        sample=SAMPLES,
-        readpair=[1, 2],
-        ext=["zip", "html"])
-trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
-        sample=SAMPLES,
-        readpair=[1, 2])
-all_outputs.extend(fastqc_output)
-all_outputs.extend(trimmed_qa)
+if config["qc_reads"]:
+    # Add final output files from this module to 'all_outputs' from
+    # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
+    fastqc_output = expand(str(OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.{ext}"),
+            sample=SAMPLES,
+            readpair=[1, 2],
+            ext=["zip", "html"])
+    trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
+            sample=SAMPLES,
+            readpair=[1, 2])
+    all_outputs.extend(fastqc_output)
+    all_outputs.extend(trimmed_qa)
 
 rule fastqc:
     input:
