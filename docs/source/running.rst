@@ -134,3 +134,12 @@ file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
 the default profiles.
+
+
+Execution report
+****************
+Snakemake provides facilites to produce an HTML report of the execution of the
+workflow. Run `snakemake --report stag.html` to generate a report summarizing 
+the complete workflow execution. Remember to include `--configfile` or any other
+execution parameters used to execute the workflow, so Snakemake has all the 
+information it needs to produce the report.
