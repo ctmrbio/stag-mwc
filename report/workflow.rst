@@ -1,4 +1,7 @@
-.. StaG-mwc_: https://stag-mwc.readthedocs.org
+StaG mwc
+========
+
+.. _StaG-mwc: https://stag-mwc.readthedocs.org
 
 .. image:: docs/source/img/stag_head_text.png
     :alt: StaG mwc
