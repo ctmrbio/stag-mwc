@@ -16,7 +16,9 @@ rule bbcountunique:
         INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
     output:
         txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
-        pdf=OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
+        pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
+                   caption="../../report/bbcountunique.rst",
+                   category="Sequencing depth")
     log:
         stdout=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stdout.log"),
         stderr=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log"),

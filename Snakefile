@@ -30,6 +30,8 @@ SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
     raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
 
+report: "report/workflow.rst"
+
 #############################
 # Pre-processing
 #############################

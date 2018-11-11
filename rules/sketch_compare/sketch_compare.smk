@@ -69,7 +69,9 @@ rule plot_sample_similarity:
         OUTDIR/"sketch_compare/alltoall.txt"
     output:
         heatmap=OUTDIR/"sketch_compare/sample_similarity.pdf",
-        clustered=OUTDIR/"sketch_compare/sample_similarity.clustered.pdf",
+        clustered=report(OUTDIR/"sketch_compare/sample_similarity.clustered.pdf", 
+                         category="Sketch comparison", 
+                         caption="../../report/sketch_compare.rst")
     log:
         stdout=str(LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log"),
         stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
