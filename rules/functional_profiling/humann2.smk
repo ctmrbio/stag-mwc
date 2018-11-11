@@ -52,10 +52,6 @@ rule download_humann2_databases:
         humann2_databases --download uniref uniref90_diamond {params.dbdir} >> {log}
         """
 
-# Ensure MPA output exists before running HUMAnN2
-if not config["taxonomic_profile"]["metaphlan2"]:
-    include: "../taxonomic_profiling/metaphlan2.smk"
-
 rule humann2:
     """Functional profiling using HUMAnN2."""
     input:
