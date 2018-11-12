@@ -24,6 +24,8 @@ situations.
   graph overview of the workflow (including some unfinished parts).
 - Added rules to run Kraken2.
 - Added onstart, onerror, and onsuccess messages.
+- Added `email` functionality. The workflow can now automatically send an email
+  after a successful or failed run.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
