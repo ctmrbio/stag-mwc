@@ -13,11 +13,16 @@ from snakemake.utils import min_version
 min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
 stag_version = "0.3.0-dev"
-print("="*60)
-print("StaG Metagenomic Workflow Collaboration".center(60))
-print("StaG-mwc".center(60))
-print(stag_version.center(60))
-print("="*60)
+
+onstart:
+    print("\n".join([
+        "="*60, 
+        "StaG Metagenomic Workflow Collaboration".center(60),
+        "StaG-mwc".center(60),
+        stag_version.center(60),
+        "="*60,
+        ])
+    )
 
 configfile: "config.yaml"
 INPUTDIR = Path(config["inputdir"])
@@ -78,3 +83,50 @@ localrules: all
 rule all:
     input:
         all_outputs
+ 
+
+onerror:
+    print("\n".join([
+        "="*60, 
+        "StaG Metagenomic Workflow Collaboration".center(60),
+        "StaG-mwc".center(60),
+        stag_version.center(60),
+        "",
+        "There was an error executing the workflow!".center(60),
+        "Check log output to see error, then rerun workflow.".center(60),
+        "="*60,
+        ])
+    )
+
+    if config["email"]:
+        shell("""mail -s "StaG-mwc run failed!" {config[email]} < {log}""")
+
+
+onsuccess:
+    print("\n".join([
+        "="*60, 
+        "StaG Metagenomic Workflow Collaboration".center(60),
+        "StaG-mwc".center(60),
+        stag_version.center(60),
+        "",
+        "Workflow completed successfully".center(60),
+        "="*60,
+        ])
+    )
+
+    if config["email"]:
+        shell("""mail -s "StaG-mwc run completed" {config[email]} < {log}""")
+
+    if config["report"]:
+        from sys import argv
+        from datetime import datetime
+        report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
+        snakemake_call = " ".join(argv)
+        shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
+        shell("{snakemake_call} --report {report}-{datetime}.html".format(
+            snakemake_call=snakemake_call,
+            report=config["report"],
+            datetime=report_datetime,
+            )
+        )
+

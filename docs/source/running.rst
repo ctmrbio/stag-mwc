@@ -17,6 +17,9 @@ assign ``True`` or ``False`` to the steps you want to include. Note that the
 default configuration file already includes ``qc_reads`` and ``remove_human``.
 These two steps are the primary read processing steps and most other steps
 depends on human filtered reads (i.e. the output of the ``remove_human`` step).
+Note that these two steps will pretty much always run, regardless of their
+setting in the config file, because they produce output files that almost all
+other workflow steps depend on. 
 
 .. note:: 
 
@@ -31,6 +34,12 @@ you already have it downloaded somewhere, point |full_name| to the location
 using the ``hg19_path`` parameter under the ``bbduk`` part of ``config.yaml``.
 |full_name| can download and index the database for you, see `Downloading
 databases` below. 
+
+The config file contains a parameter called ``email``. This can be used to have
+the workflow send an email after a successful or failed run. Note that this 
+requires that the Linux system your workflow is running on has a working email
+configuration. It is also quite common that most email clients will mark email sent
+from unknown random computers as spam, so don't forget to check your spam folder.
 
 
 Downloading databases

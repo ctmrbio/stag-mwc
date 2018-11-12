@@ -23,9 +23,10 @@ situations.
 - Added Overview page to documentation that includes a draft of a simplified
   graph overview of the workflow (including some unfinished parts).
 - Added rules to run Kraken2.
-- Added report. Run `snakemake --report stag.html` to get an HTML report of the
-  execution of StaG. Remember to include `--configfile` or any other custom 
-  snakemake execution settings you used to run your workflow.
+- Added onstart, onerror, and onsuccess messages.
+- Added `email` functionality. The workflow can now automatically send an email
+  after a successful or failed run.
+- Added automatic report generation upon successful workflow completion.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
