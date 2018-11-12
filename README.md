@@ -1,7 +1,7 @@
 # StaG Metagenomic Workflow Collaboration (mwc)
 
-[![Snakemake](https://img.shields.io/badge/snakemake-≥3.12.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/mwc.svg?branch=master)](https://travis-ci.org/snakemake-workflows/mwc)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+<!--[![Build Status](https://travis-ci.org/snakemake-workflows/mwc.svg?branch=master)](https://travis-ci.org/snakemake-workflows/mwc) -->
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
 This repo contains the code for a Snakemake workflow of the StaG Metagenomic
@@ -26,12 +26,8 @@ base environment. Conda will automatically install the required versions of
 all tools required to run StaG-mwc.
 
 ### Step 1: Install workflow
-<!--download and extract the [latest release](https://github.com/snakemake-workflows/mwc/releases). -->
-
-If you simply want to use this workflow, clone the repository: `git clone
-git@github.com:boulund/mwc`. If you intend to modify or further develop this
-workflow, you are welcome to fork this reposity. Please consider sharing
-potential improvements via a pull request.
+To use StaG-mwc, you need a local copy of the workflow repository. Start by
+making a clone of the repository: `git clone git@github.com:boulund/stag-mwc`. 
 
 If you use StaG-mwc in a publication, please credit the authors by citing
 the URL of this repository and, when available, its DOI. Also, don't forget to
@@ -72,13 +68,17 @@ previously downloaded databases are reused. See the
 
 ## Testing
 Tests are currently not implemented. The ambition is that mwc will contain
-extensive tests to verify functionality. They should be executed via continuous
-integration with Travis CI. 
+extensive tests to verify functionality. We plan to implement automated linting
+and testing on a small test data set via continuous integration.
 
 
 ## Contributing
-Refer to the contributing guidelines in `CONTRIBUTING.md` for instructions on how to
-contribute to StaG-mwc.
+Refer to the contributing guidelines in `CONTRIBUTING.md` for instructions on
+how to contribute to StaG-mwc.
+
+If you intend to modify or further develop this workflow, you are welcome to
+fork this reposity. Please consider sharing potential improvements via a pull
+request.
 
 # Logo attribution
 <a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>

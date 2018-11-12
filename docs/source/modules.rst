@@ -4,9 +4,11 @@
 .. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
-.. _MEGARes: http://megares.meglab.org/
+.. _Kraken2: https://ccb.jhu.edu/software/kraken2/
+.. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
+.. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
 
 Modules
 =======
@@ -69,25 +71,27 @@ sketch_compare
 The ``sketch_compare`` module uses the very fast MinHash implementation in
 `BBMap`_ to compute MinHash sketches of all samples to do an all-vs-all
 comparison of all samples based on their kmer content. The module outputs
-gzip-compressed sketches for each sample, as well as a heatmap plot showing the
-overall similarity of all samples.
+gzip-compressed sketches for each sample, as well as two heatmap plots showing
+the overall similarity of all samples (one with hierarchical clustering).
 
 
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
-controlled reads to any reference database. All mappers can optionally
-summarize read counts per annotated feature via one of two options: 1)
-supplying a two-column tab-separated annotation file with one annotation per
-reference sequence, or 2) supplying a GTF or SAF format annotation file for
-features on the reference sequences. Option number 1 uses a custom Python
-script (``make_count_table.py``) to merge read counts per annotation which
-works well for annotations as large as your memory allows, and option number 2
-uses `featureCounts`_ to summarize read counts per annotated feature. Option
-number 2 is more flexible and normally faster for typical annotation scenarios,
-but might not work when the number of unique features is much lower than the
-number of reference sequences. Read more about these alternatives in
-:ref:`Summarizing read counts` below.
+controlled reads to any reference database. All mappers can be used to map
+reads against several different databases (see :ref:`Mapping to multiple
+databases` below). In addition, all mappers can optionally summarize read
+counts per annotated feature via one of two options: 1) supplying a two-column
+tab-separated annotation file with one annotation per reference sequence, or 2)
+supplying a GTF or SAF format annotation file for features on the reference
+sequences. Option number 1 uses a custom Python script
+(``make_count_table.py``) to merge read counts per annotation which works well
+for annotations as large as your memory allows, and option number 2 uses
+`featureCounts`_ to summarize read counts per annotated feature. Option number
+2 is more flexible and normally faster for typical annotation scenarios, but
+might not work when the number of unique features is much lower than the number
+of reference sequences. Read more about these alternatives in :ref:`Summarizing
+read counts` below.
 
 BBMap
 -----
@@ -110,6 +114,56 @@ is possible to configure the mapping settings almost entirely according to
 preference, with the exception of changing the output format from BAM.
 Use the configuration parameter ``bowtie2:extra`` to add any standard Bowtie2
 commandline parameter you want.
+
+Mapping to multiple databases
+-----------------------------
+Note that the configuration settings of all mapper modules are slightly
+different from the configuration settings from most other modules. They are
+defined as lists in ``config.yaml``, e.g. (note the leading ``-`` that
+signifies a list)::
+
+    bbmap:
+        - db_name: ""
+          db_path: ""
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: ""
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
+
+This makes it possible to map the reads against several databases, each with
+their own mapping options and/or custom annotations. To map against more than
+one database, just create another list item underneath, containing all the same
+configuration options, but with different settings. For example, to map against
+``db1`` and ``db2`` with different annotation files for each::
+
+    bbmap:
+        - db_name: "db1"
+          db_path: "/path/to/db1"
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: ""
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
+        - db_name: "db2"
+          db_path: "/path/to/db2"
+          min_id: 0.76
+          extra: ""
+          counts_table:
+              annotations: "/path/to/db2/annotations.txt"
+          featureCounts:
+              annotations: ""
+              feature_type: ""
+              attribute_type: ""
+              extra: ""
 
 
 Summarizing read counts
@@ -199,6 +253,17 @@ output files are::
     <sample>.kaiju.summary.species
     <sample>.krona
 
+Kraken2
+-------
+:Tool: `Kraken2`_
+:Output folder: ``kraken2``
+
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs two files per sample::
+
+    <sample>.kraken
+    <sample>.kreport
+
 MetaPhlAn2
 ----------
 :Tool: `MetaPhlAn2`_
@@ -219,22 +284,49 @@ The file called ``all_samples.metaphlan2.pdf`` contains a standard MetaPhlAn2
 clustered heatmap plot containing all samples.
 
 
+Functional profiling
+**************
+
+HUMAnN2
+----------
+:Tool: `HUMAnN2`_
+:Output folder: ``humann2``
+
+Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
+Outputs three files per sample, plus three summaries for all samples::
+
+    <sample>.genefamilies.tsv
+    <sample>.pathcoverage.tsv
+    <sample>.pathabundances.tsv
+    
+    all_samples.humann2_genefamilies.tsv
+    all_samples.humann2_pathcoverage.tsv
+    all_samples.humann2_pathabundances.tsv
+
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
+MetaPhlAn2-associated steps are run regardless of whether it is actually
+enabled in ``config.yaml`` or not.
+
+
 Antibiotic resistance
 *********************
 
-MEGARes
+Groot
 -------
-:Tool: `BBMap`_
-:Output folder: ``megares``
+:Tool: `groot`_
+:Output folder: ``groot``
 
-Map reads against `MEGARes`_ antibiotic resistance gene database to detect AR genes.
-Outputs four files per sample::
+Run `groot`_ to align reads to an antibiotic resistance gene database to
+produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
+containing two files and two subfolders::
 
-    <sample>.covstats.txt
-    <sample>.mapped_reads.fq.gz
-    <sample>.rpkm.txt
-    <sample>.sam.gz
+    <sample>/<sample>.groot_aligned.bam
+    <sample>/<sample>.groot_report.tsv
+    <sample>/<sample>/groot-graphs
+    <sample>/<sample>/groot-plots
 
-The ``covstats`` file contains coverage per reference sequence, and the
-``rpkm`` file contains the number of mapped reads per reference sequence (as
-well as RPKM/FPKM values).
+The ``<sample>.groot.bam`` file contains mapping results against all resistance
+gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
+observed antibiotic resistance genes in the sample. The two subfolders contain 
+all mapped graphs and coverage plots of all detected antibiotic resisatance genes.
+

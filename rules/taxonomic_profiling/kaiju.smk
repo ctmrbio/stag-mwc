@@ -6,27 +6,28 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_kaiju_database
-    create_kaiju_krona_plot
+    download_kaiju_database,
+    create_kaiju_krona_plot,
 
 kaiju_config = config["kaiju"]
-if not all([Path(kaiju_config["db"]).exists(), 
-            Path(kaiju_config["nodes"]).exists(),
-            Path(kaiju_config["names"]).exists()]):
-    err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
-    err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
-    err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
-    err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
-    raise WorkflowError(err_message)
+if config["taxonomic_profile"]["kaiju"]:
+    if not all([Path(kaiju_config["db"]).exists(), 
+                Path(kaiju_config["nodes"]).exists(),
+                Path(kaiju_config["names"]).exists()]):
+        err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
+        err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
+        err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
+        err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
+        raise WorkflowError(err_message)
 
-# Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
-# SAMPLES is also from the main Snakefile scope.
-kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
-kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
-kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
-all_outputs.extend(kaiju)
-all_outputs.extend(kaiju_reports)
-all_outputs.append(kaiju_krona)
+    # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
+    # SAMPLES is also from the main Snakefile scope.
+    kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
+    kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
+    all_outputs.extend(kaiju)
+    all_outputs.extend(kaiju_reports)
+    all_outputs.append(kaiju_krona)
 
 rule download_kaiju_database:
     output:
@@ -114,21 +115,21 @@ rule kaiju_report:
             -n {params.names} \
             -i {input.kaiju} \
             -r species \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.species}
         kaijuReport \
             -t {params.nodes} \
             -n {params.names} \
             -i {input.kaiju} \
             -r genus \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.genus}
         kaijuReport \
             -t {params.nodes} \
             -n {params.names} \
             -i {input.kaiju} \
             -r family \
-            -p \
+            -l superkingdom,phylum,class,order,family,genus,species \
             -o {output.family}
         """
 

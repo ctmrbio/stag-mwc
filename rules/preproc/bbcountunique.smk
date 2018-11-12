@@ -2,12 +2,13 @@
 # Assess sequencing depth of sample using BBCountUnique from the BBMap suite.
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
-# Add final output files from this module to 'all_outputs' from
-# the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-bcu_output = expand(str(OUTDIR/"bbcountunique/{sample}.{output_type}"),
-        sample=SAMPLES,
-        output_type=["bbcountunique.txt", "bbcountunique.pdf"])
-all_outputs.extend(bcu_output)
+if config["assess_depth"]:
+    # Add final output files from this module to 'all_outputs' from
+    # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
+    bcu_output = expand(str(OUTDIR/"bbcountunique/{sample}.{output_type}"),
+            sample=SAMPLES,
+            output_type=["bbcountunique.txt", "bbcountunique.pdf"])
+    all_outputs.extend(bcu_output)
 
 rule bbcountunique:
     """Assess sequencing depth using BBCountUnique."""
@@ -15,7 +16,9 @@ rule bbcountunique:
         INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
     output:
         txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
-        pdf=OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
+        pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
+                   caption="../../report/bbcountunique.rst",
+                   category="Sequencing depth")
     log:
         stdout=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stdout.log"),
         stderr=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log"),

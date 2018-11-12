@@ -8,7 +8,8 @@ Open ``config.yaml`` in your favorite editor and change the settings under the
 ``Run configuration`` heading: the input directory, the input filename pattern,
 and the output directory, are the most important ones. They can be declared
 using absolute or relative filenames (relative to the |full_name| repository
-directory).
+directory). Input and output directories can be located anywhere, i.e. their
+locations are not restricted to the repository folder.
 
 Next, configure the settings under the ``Pipeline steps included`` heading.
 This is where you define what steps should be included in your workflow. Simply
@@ -16,6 +17,9 @@ assign ``True`` or ``False`` to the steps you want to include. Note that the
 default configuration file already includes ``qc_reads`` and ``remove_human``.
 These two steps are the primary read processing steps and most other steps
 depends on human filtered reads (i.e. the output of the ``remove_human`` step).
+Note that these two steps will pretty much always run, regardless of their
+setting in the config file, because they produce output files that almost all
+other workflow steps depend on. 
 
 .. note:: 
 
@@ -30,6 +34,12 @@ you already have it downloaded somewhere, point |full_name| to the location
 using the ``hg19_path`` parameter under the ``bbduk`` part of ``config.yaml``.
 |full_name| can download and index the database for you, see `Downloading
 databases` below. 
+
+The config file contains a parameter called ``email``. This can be used to have
+the workflow send an email after a successful or failed run. Note that this 
+requires that the Linux system your workflow is running on has a working email
+configuration. It is also quite common that most email clients will mark email sent
+from unknown random computers as spam, so don't forget to check your spam folder.
 
 
 Downloading databases
@@ -50,14 +60,18 @@ not recommended to do this on a laptop.
 |full_name| can download several databases by typing ``snakemake <rule_name>``
 using any of the following rules::
 
-    index_hg19  (already shown above) 
-    download_centrifuge_database
-    download_kaiju_database
     build_metaphlan2_index
     create_megares_index
+    download_centrifuge_database
+    download_humann2_databases
+    download_kaiju_database
+    download_minikraken2
+    index_hg19  (already shown above) 
 
-Make sure you update your ``config.yaml`` to reflect the location of the database
-you want to use after downloading them.
+.. note::
+
+    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
+    you have downloaded.
 
 
 Running
@@ -79,6 +93,24 @@ is::
 where ``N`` is the maximum number of cores you want to allow for the workflow.
 Snakemake will automatically reduce the number of cores available to individual
 steps to this limit.
+
+.. note::
+
+    If several people are running StaG-mwc on a shared server or on a shared
+    file system, it can be useful to use the ``--conda-prefix`` parameter to
+    use a common folder to store the conda environments created by StaG-mwc,
+    so they can be re-used between different people or analyses. This reduces
+    the risk of producing several copies of the same conda environment in
+    different folders.
+
+If you want to keep your customized ``config.yaml`` in a separate file, let's 
+say ``my_config.yaml``, then you can run snakemake using that custom configuration 
+file with the ``--configfile my_config.yaml`` command line argument.
+
+Another useful command line argument to snakemake is ``--keep-going``. This will 
+instruct snakemake to keep going even if a job should fail, e.g. maybe the
+taxonomic profiling step will fail for a sample if the sample contains no assignable
+reads after quality filtering (extreme example).
 
 
 Running on cluster resources
@@ -103,6 +135,20 @@ Rackham profile folder. The above command assumes you are using the default
 ``config.yaml`` configuration file. If you are using a custom configuration
 file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 
+.. note::
+
+    Make sure you edit ``cluster_configs/rackham/rackham.yaml`` to specify
+    the Slurm project name to use for Slurm job submissions.
+
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
 the default profiles.
+
+
+Execution report
+****************
+Snakemake provides facilites to produce an HTML report of the execution of the
+workflow. Run ``snakemake --report report.html`` to generate a report summarizing 
+the complete workflow execution. Remember to include ``--configfile`` or any other
+execution parameters used to execute the workflow, so Snakemake has all the 
+information it needs to produce the report.

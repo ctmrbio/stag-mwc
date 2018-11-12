@@ -17,6 +17,8 @@ input_fn_pattern: "{sample}_R{readpair}.fastq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
+report: "stag_report"        # Filename prefix for report file ("-{datetime}.html" automatically appended)
+email: ""                    # Email to send status message after completed/failed run.
 
 
 #########################
@@ -32,7 +34,10 @@ mappers:
 taxonomic_profile:
     centrifuge: False
     kaiju: False
+    kraken2: False
     metaphlan2: False
+functional_profile:
+    humann2: False
 antibiotic_resistance: False
 
 
@@ -68,27 +73,27 @@ bbcountunique:
 # Mappers
 #########################
 bbmap:
-    db_name: ""              # [Required] Custom name for BBMap database
-    db_path: ""              # [Required] Path to BBMap database (folder should contain a 'ref' folder)
-    min_id: 0.76             # Minimum id for read alignment, BBMap default is 0.76
-    extra: ""                # Extra BBMap command line parameters
-    counts_table:
-        annotations: ""
-    featureCounts:
-        annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
-        feature_type: ""     # Feature type to produce counts for, default is "gene"
-        attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
-        extra: ""            # Extra featureCount command line parameters
+    - db_name: ""              # [Required] Custom name for BBMap database
+      db_path: ""              # [Required] Path to BBMap database (folder should contain a 'ref' folder)
+      min_id: 0.76             # Minimum id for read alignment, BBMap default is 0.76
+      extra: ""                # Extra BBMap command line parameters
+      counts_table:
+          annotations: ""
+      featureCounts:
+          annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
+          feature_type: ""     # Feature type to produce counts for, default is "gene"
+          attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
+          extra: ""            # Extra featureCount command line parameters
 bowtie2:
-    db_prefix: ""            # [Required] Full path to Bowtie2 index (not including file extension)
-    extra: ""                # Extra bowtie2 commandline parameters
-    counts_table:
-        annotations: ""
-    featureCounts:
-        annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
-        feature_type: ""     # Feature type to produce counts for, default is "gene"
-        attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
-        extra: ""            # Extra featureCount command line parameters
+    - db_prefix: ""            # [Required] Full path to Bowtie2 index (not including file extension)
+      extra: ""                # Extra bowtie2 commandline parameters
+      counts_table:
+          annotations: ""
+      featureCounts:
+          annotations: ""      # [Required] Full path to GTF format annotations for database sequences. If not set, featureCounts summary will be skipped.
+          feature_type: ""     # Feature type to produce counts for, default is "gene"
+          attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
+          extra: ""            # Extra featureCount command line parameters
 
 
 #########################
@@ -102,9 +107,14 @@ kaiju:
     nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
 
+kraken2:
+    db: ""                   # [Required] Path to Kraken2 DB folder
+    confidence: 0.0          # Kraken2 confidence score, float in [0,1]
+    extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
+
 metaphlan2:
-    mpa_pkl: ""              # [Required] Path to MetaPhlAn2 pickle file: mpa_v20_m200.pkl
-    bt2_db_prefix: ""        # [Required] Path to MetaPhlAn2 Bowtie2 index prefix: /path/to/mpa_v20_m200 (no file extension)
+    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
+    bt2_index: "v20_m200"    # [Required] Name of MetaPhlAn2 database index (without "mpl_" prefix)
     extra: ""                # Extra command line arguments for metaphlan2.py
     tax_lev: "s"             # Heatmap: Taxononomic level, choose from a, k, p, c, f, g, s
     minv: "0"                # Heatmap: Minimum value to display.
@@ -117,10 +127,18 @@ metaphlan2:
 
 
 #########################
+# Functional profiling
+#########################
+humann2:
+    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory
+    protein_db: ""           # [Required] Path to protein database (typically UniRef90)
+    norm_method: "relab"     # Normalization method (HUMAnN2 default is "cpm")
+    norm_mode: "community"   # Normalization mode, "community" or "levelwise"
+
+
+#########################
 # Antibiotic Resistance
 #########################
-megares:
-    db_path: ""              # [Required] Path to folder containing MEGARes BBMap index
-    min_id: 0.91
-    max_indel: 1600          # BBMap default is 16000
-    extra: ""                # Extra BBMap commandline parameters
+groot:
+    db: "arg-annot"          # Used when downloading and indexing DB with "create_groot_index" rule
+    index: ""                # [Required] Path to groot index

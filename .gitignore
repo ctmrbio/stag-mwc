@@ -1,8 +1,8 @@
 *
-!config.yaml
 !cluster_configs
 !cluster_configs/*
 !cluster_configs/*/*
+!config.yaml
 !docs
 !docs/Makefile
 !docs/source
@@ -17,12 +17,16 @@
 !.gitignore
 !LICENSE.md
 !README.md
+!report
+!report/*
 !resources
 !resources/*
 !rules
 !rules/*
 !rules/antibiotic_resistance
 !rules/antibiotic_resistance/*
+!rules/functional_profiling
+!rules/functional_profiling/*
 !rules/mappers
 !rules/mappers/*
 !rules/preproc
