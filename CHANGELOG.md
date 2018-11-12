@@ -42,8 +42,6 @@ situations.
 - Fixed error handling if hg19 database is missing for the remove human step.
 
 ### Removed
-- Removed duplicated MetaPhlAn2 configuration parameters from HUMAnN2 config
-  section.
 
 
 ## [0.1.1-dev] - 2018-04-30
