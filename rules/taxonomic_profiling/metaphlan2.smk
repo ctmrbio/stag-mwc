@@ -134,7 +134,9 @@ rule combine_metaphlan2_outputs:
         expand(str(OUTDIR/"metaphlan2/{sample}.metaphlan2.txt"), sample=SAMPLES)
     output:
         txt=OUTDIR/"metaphlan2/all_samples.metaphlan2.txt",
-        pdf=OUTDIR/"metaphlan2/all_samples.metaphlan2.pdf",
+        pdf=report(OUTDIR/"metaphlan2/all_samples.metaphlan2.pdf",
+                   caption="../../report/metaphlan2.rst",
+                   category="Taxonomic profiling")
     shadow:
         "shallow"
     conda:
