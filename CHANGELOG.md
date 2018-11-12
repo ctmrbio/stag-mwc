@@ -23,6 +23,7 @@ situations.
 - Added Overview page to documentation that includes a draft of a simplified
   graph overview of the workflow (including some unfinished parts).
 - Added rules to run Kraken2.
+- Added onstart, onerror, and onsuccess messages.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
