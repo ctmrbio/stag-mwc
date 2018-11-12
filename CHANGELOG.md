@@ -26,6 +26,7 @@ situations.
 - Added onstart, onerror, and onsuccess messages.
 - Added `email` functionality. The workflow can now automatically send an email
   after a successful or failed run.
+- Added automatic report generation upon successful workflow completion.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm

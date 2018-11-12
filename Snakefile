@@ -95,6 +95,7 @@ onerror:
         "="*60,
         ])
     )
+
     if config["email"]:
         shell("""mail -s "StaG-mwc run failed!" {config[email]} < {log}""")
 
@@ -110,6 +111,20 @@ onsuccess:
         "="*60,
         ])
     )
+
     if config["email"]:
         shell("""mail -s "StaG-mwc run completed" {config[email]} < {log}""")
+
+    if config["report"]:
+        from sys import argv
+        from datetime import datetime
+        report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
+        snakemake_call = " ".join(argv)
+        shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
+        shell("{snakemake_call} --report {report}-{datetime}.html".format(
+            snakemake_call=snakemake_call,
+            report=config["report"],
+            datetime=report_datetime,
+            )
+        )
 

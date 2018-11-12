@@ -17,6 +17,7 @@ input_fn_pattern: "{sample}_R{readpair}.fastq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
+report: "stag_report"        # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
 
 

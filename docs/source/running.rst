@@ -17,6 +17,9 @@ assign ``True`` or ``False`` to the steps you want to include. Note that the
 default configuration file already includes ``qc_reads`` and ``remove_human``.
 These two steps are the primary read processing steps and most other steps
 depends on human filtered reads (i.e. the output of the ``remove_human`` step).
+Note that these two steps will pretty much always run, regardless of their
+setting in the config file, because they produce output files that almost all
+other workflow steps depend on. 
 
 .. note:: 
 
