@@ -13,7 +13,11 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [Unreleased]
+## [0.3.1]
+### Changed
+- Fixed MinHash sketch sample similarity plots.
+
+## [0.3.0]
 ### Added
 - Added CHANGELOG.md
 - New functionality to run mappers several times against different databases,
