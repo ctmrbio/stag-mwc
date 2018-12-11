@@ -47,13 +47,15 @@ if __name__ == "__main__":
     similarity_matrix = df.pivot(index="Query", 
             columns="Ref", values="ANI").fillna(100)
 
-    g = sns.heatmap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
+    corr = similarity_matrix.corr()
+    g = sns.heatmap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.set_title("Sample similarity")
     g.set_yticklabels(g.get_yticklabels(), rotation=0)
     g.set_ylabel("")
     g.set_xlabel("")
     g.figure.savefig(str(Path(options.outfile)))
 
-    g = sns.clustermap(similarity_matrix, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
+    g = sns.clustermap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
     g.fig.suptitle("Sample similarity (clustered)")
     g.savefig(str(Path(options.clustered)))
+
