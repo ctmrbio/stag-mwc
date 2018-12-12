@@ -28,10 +28,12 @@ all tools required to run StaG-mwc.
 
 ### Step 1: Install workflow
 To use StaG-mwc, you need a local copy of the workflow repository. Start by
-making a clone of the repository: `git clone git@github.com:ctmrbio/stag-mwc`. 
+making a clone of the repository: 
+
+    git clone git@github.com:ctmrbio/stag-mwc
 
 If you use StaG-mwc in a publication, please credit the authors by citing
-the URL of this repository and, when available, its DOI. Also, don't forget to
+either the URL of this repository or the project's DOI. Also, don't forget to
 cite the publications of the other tools used in your workflow.
 
 ### Step 2: Configure workflow
