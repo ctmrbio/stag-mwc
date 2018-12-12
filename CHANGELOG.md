@@ -13,9 +13,18 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
+## [0.3.2]
+### Added
+- Added Zenodo DOI reference. https://zenodo.org/badge/latestdoi/125840716
+
+### Changed
+- Updated docs regarding HTML execution report generation.
+
+
 ## [0.3.1]
 ### Changed
 - Fixed MinHash sketch sample similarity plots.
+
 
 ## [0.3.0]
 ### Added
