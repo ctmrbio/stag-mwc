@@ -37,7 +37,7 @@ Download the workflow code
 **************************
 Clone the |full_name| repository using git to get a copy of the workflow::
 
-    (base)$ git clone https://www.github.com/boulund/stag-mwc
+    (base)$ git clone https://www.github.com/ctmrbio/stag-mwc
 
 This will clone the repo into a folder called ``stag-mwc`` inside your current
 working directory. You will manage all workflow-related business from inside this
