@@ -7,12 +7,14 @@
 # Running `snakemake --use-conda --dryrun` in a clone of this repository should
 # successfully execute a test dry run of the workflow.
 from pathlib import Path
+import textwrap
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
 min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
-stag_version = "0.3.1-dev"
+
+stag_version = "0.3.2-dev"
 
 onstart:
     print("\n".join([
@@ -30,6 +32,16 @@ OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
+citations = {(
+    "Boulund et al. (2018).",
+    "StaG-mwc: metagenomic workflow collaboration.",
+    "DOI:10.5281/zenodo.1483891",
+)}
+citations.add((
+    "Köster, Johannes and Rahmann, Sven (2012)",
+    "Snakemake - A scalable bioinformatics workflow engine.",
+    "Bioinformatics",
+))
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
@@ -110,6 +122,21 @@ onsuccess:
         stag_version.center(60),
         "",
         "Workflow completed successfully".center(60),
+        ])
+    )
+
+    print("\n".join([
+        "",
+        "If you use the output from StaG-mwc in your research,",
+        "please cite the following publications:",
+        ])
+    )
+
+    for citation in sorted(set(citations)):
+        print(textwrap.indent("\n".join(["", *citation]), " "*4))
+
+    print("\n".join([
+        "",
         "="*60,
         ])
     )

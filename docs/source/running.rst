@@ -148,7 +148,5 @@ the default profiles.
 Execution report
 ****************
 Snakemake provides facilites to produce an HTML report of the execution of the
-workflow. Run ``snakemake --report report.html`` to generate a report summarizing 
-the complete workflow execution. Remember to include ``--configfile`` or any other
-execution parameters used to execute the workflow, so Snakemake has all the 
-information it needs to produce the report.
+workflow. An HTML report is automatically created when the workflow finishes.
+It is currently very simple, but will be expanded in the future.

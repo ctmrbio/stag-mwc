@@ -1,5 +1,6 @@
 # StaG Metagenomic Workflow Collaboration (mwc)
 
+[![DOI](https://zenodo.org/badge/125840716.svg)](https://zenodo.org/badge/latestdoi/125840716)
 [![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
 <!--[![Build Status](https://travis-ci.org/snakemake-workflows/mwc.svg?branch=master)](https://travis-ci.org/snakemake-workflows/mwc) -->
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
@@ -27,10 +28,12 @@ all tools required to run StaG-mwc.
 
 ### Step 1: Install workflow
 To use StaG-mwc, you need a local copy of the workflow repository. Start by
-making a clone of the repository: `git clone git@github.com:boulund/stag-mwc`. 
+making a clone of the repository: 
+
+    git clone git@github.com:ctmrbio/stag-mwc
 
 If you use StaG-mwc in a publication, please credit the authors by citing
-the URL of this repository and, when available, its DOI. Also, don't forget to
+either the URL of this repository or the project's DOI. Also, don't forget to
 cite the publications of the other tools used in your workflow.
 
 ### Step 2: Configure workflow
@@ -67,7 +70,7 @@ previously downloaded databases are reused. See the
 
 
 ## Testing
-Tests are currently not implemented. The ambition is that mwc will contain
+Tests are currently not implemented. The ambition is that StaG-mwc will contain
 extensive tests to verify functionality. We plan to implement automated linting
 and testing on a small test data set via continuous integration.
 
