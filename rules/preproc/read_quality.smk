@@ -16,6 +16,19 @@ if config["qc_reads"]:
     all_outputs.extend(fastqc_output)
     all_outputs.extend(trimmed_qa)
 
+    citations.add((
+        "Andrews S. (2010).",
+        "FastQC: a quality control tool for high throughput sequence data.",
+        "Available online at: http://www.bioinformatics.babraham.ac.uk/projects/fastqc",
+    ))
+    citations.add((
+        "Bushnell, B. (2016).",
+        "BBMap short read aligner.",
+        "University of California, Berkeley, California.",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
+    ))
+    
+
 rule fastqc:
     input:
         INPUTDIR/config["input_fn_pattern"]

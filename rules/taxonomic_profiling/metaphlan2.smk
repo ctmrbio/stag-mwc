@@ -29,6 +29,17 @@ if config["taxonomic_profile"]["metaphlan2"]:
     all_outputs.extend(mpa_outputs)
     all_outputs.extend(mpa_combined)
 
+    citations.append((
+        "Truong, D. T., et al. (2015).",
+        "MetaPhlAn2 for enhanced metagenomic taxonomic profiling.",
+        "Nature methods, 12(10), 902.",
+    ))
+    citations.append((
+        "Ondov BD, Bergman NH, and Phillippy AM.",
+        "Interactive metagenomic visualization in a Web browser.",
+        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+    ))
+
 rule download_metaphlan2_database:
     """Download MetaPhlAn2 db_v20_m200"""
     output:

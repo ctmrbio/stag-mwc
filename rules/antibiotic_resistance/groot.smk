@@ -1,3 +1,4 @@
+# vim: syntax=python expandtab
 # Rules for antibiotic resistance profile groot
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
@@ -19,6 +20,12 @@ if config["antibiotic_resistance"]:
             sample=SAMPLES,
             output_type=("groot_aligned.bam", "groot_report.tsv"))
     all_outputs.extend(groot_outputs)
+
+	citations.append((
+		"Rowe WPM, Winn MD (2018).",
+		"Indexed variation graphs for efficient and accurate resistome profiling.",
+		"Bioinformatics. 2018. doi: bty387",
+	))
 
 groot_config = config["groot"]
 rule create_groot_index:

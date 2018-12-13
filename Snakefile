@@ -30,6 +30,16 @@ OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
+citations = {(
+    "Boulund et al. (2018).",
+    "StaG-mwc: metagenomic workflow collaboration.",
+    "DOI:10.5281/zenodo.1483891",
+)}
+citations.add((
+    "Köster, Johannes and Rahmann, Sven (2012)",
+    "Snakemake - A scalable bioinformatics workflow engine.",
+    "Bioinformatics",
+))
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
@@ -129,4 +139,8 @@ onsuccess:
             datetime=report_datetime,
             )
         )
+
+    print("If you use the output from StaG-mwc in your research, please cite the following publications:")
+    for citation in set(citations):
+        print("\n".join(["", *citation, ""]))
 

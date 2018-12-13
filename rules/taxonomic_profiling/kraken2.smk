@@ -26,6 +26,17 @@ if config["taxonomic_profile"]["kraken2"]:
     all_outputs.extend(krakens)
     all_outputs.extend(kreports)
     #all_outputs.append(kraken_krona) # TODO: add krona output
+    
+    citations.append((
+        "Wood DE, Salzberg SL (2014).",
+        "Kraken: ultrafast metagenomic sequence classification using exact alignments.",
+        "Genome Biology 2014, 15:R46.",
+    ))
+    citations.append((
+        "Ondov BD, Bergman NH, and Phillippy AM.",
+        "Interactive metagenomic visualization in a Web browser.",
+        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+    ))
 
 
 rule download_minikraken2:

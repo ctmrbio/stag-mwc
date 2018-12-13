@@ -48,6 +48,12 @@ for bt2_config in config["bowtie2"]:
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
 
+		citations.append((
+			"Langmead B, Salzberg S (2012).",
+			"Fast gapped-read alignment with Bowtie 2.",
+			"Nature Methods. 2012, 9:357-359.",
+		))
+
     rule:
         """Align reads using Bowtie2."""
         input:
