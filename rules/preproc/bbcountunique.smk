@@ -10,6 +10,13 @@ if config["assess_depth"]:
             output_type=["bbcountunique.txt", "bbcountunique.pdf"])
     all_outputs.extend(bcu_output)
 
+    citations.add((
+        "Bushnell, B. (2016).",
+        "BBMap short read aligner.",
+        "University of California, Berkeley, California.",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
+    ))
+
 rule bbcountunique:
     """Assess sequencing depth using BBCountUnique."""
     input:

@@ -46,6 +46,13 @@ for bbmap_config in config["bbmap"]:
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
 
+        citations.add((
+            "Bushnell, B. (2016).",
+            "BBMap short read aligner.",
+            "University of California, Berkeley, California.",
+            "Available online at: http://sourceforge.net/projects/bbmap.",
+        ))
+
     rule:
         """BBMap to {db_name}"""
         input:

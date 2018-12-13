@@ -24,6 +24,12 @@ if config["taxonomic_profile"]["centrifuge"]:
             output_type=("centrifuge", "centrifuge_report"))
     all_outputs.extend(centrifuge)
 
+    citations.append((
+        "Kim, D., et al. (2016).",
+        "Centrifuge: rapid and sensitive classification of metagenomic sequences.",
+        "Genome research."
+    ))
+
 
 rule download_centrifuge_database:
     output:

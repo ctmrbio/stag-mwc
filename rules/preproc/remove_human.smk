@@ -23,6 +23,13 @@ if config["remove_human"]:
             readpair=[1,2])
     all_outputs.extend(filtered_human)
 
+    citations.add((
+        "Bushnell, B. (2016).",
+        "BBMap short read aligner.",
+        "University of California, Berkeley, California.",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
+    ))
+
 
 rule download_hg19:
     """Download masked hg19 from: 
