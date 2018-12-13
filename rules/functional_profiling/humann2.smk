@@ -32,7 +32,7 @@ if config["functional_profile"]["humann2"]:
     all_outputs.extend(humann2_outputs)
     all_outputs.extend(merged_humann2_tables)
 
-    citations.append((
+    citations.add((
         "Franzosa EA*, McIver LJ*, et al. (2018).",
         "Species-level functional profiling of metagenomes and metatranscriptomes.",
         "Nat Methods 15: 962-968.",

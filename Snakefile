@@ -7,6 +7,7 @@
 # Running `snakemake --use-conda --dryrun` in a clone of this repository should
 # successfully execute a test dry run of the workflow.
 from pathlib import Path
+import textwrap
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
@@ -120,6 +121,21 @@ onsuccess:
         stag_version.center(60),
         "",
         "Workflow completed successfully".center(60),
+        ])
+    )
+
+    print("\n".join([
+        "",
+        "If you use the output from StaG-mwc in your research,",
+        "please cite the following publications:",
+        ])
+    )
+
+    for citation in sorted(set(citations)):
+        print(textwrap.indent("\n".join(["", *citation]), " "*4))
+
+    print("\n".join([
+        "",
         "="*60,
         ])
     )
@@ -139,8 +155,4 @@ onsuccess:
             datetime=report_datetime,
             )
         )
-
-    print("If you use the output from StaG-mwc in your research, please cite the following publications:")
-    for citation in set(citations):
-        print("\n".join(["", *citation, ""]))
 

@@ -13,11 +13,11 @@ if config["sketch_compare"]:
     sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
     all_outputs.append(sample_similarity_plot)
 
-    citations.append((
+    citations.add((
         "Bushnell, B. (2016).",
         "BBMap short read aligner.",
         "University of California, Berkeley, California.",
-        "Available online at: http://sourceforge.net/projects/bbmap",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
     ))
 
 
