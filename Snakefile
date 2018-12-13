@@ -13,7 +13,7 @@ from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
 min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
-stag_version = "0.3.1-dev"
+stag_version = "0.3.2-dev"
 
 onstart:
     print("\n".join([
