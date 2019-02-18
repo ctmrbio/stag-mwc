@@ -21,6 +21,7 @@ situations.
 
 ### Changed
 - Updated docs regarding HTML execution report generation.
+- Updated GROOT to 0.8.3
 
 
 ## [0.3.1]
