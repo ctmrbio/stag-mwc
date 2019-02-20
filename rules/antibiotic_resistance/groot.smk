@@ -93,12 +93,13 @@ rule groot_align:
             in1={input.read1} \
             in2={input.read2} \
             out1={output.read1} \
-            out2={output.read2}
+            out2={output.read2} \
             minlength={params.minlength} \
             maxlength={params.maxlength} \
-            > {log.reformat}
+            tossbrokenreads \
+            2> {log.reformat}
         groot align \
-            --fastq {input.read1},{input.read2} \
+            --fastq {output.read1},{output.read2} \
             --graphDir {output.graphs} \
             --indexDir {params.index} \
             --processors {threads} \
