@@ -13,6 +13,10 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
+## [0.3.3] Unreleased
+### Changed
+- Added read length window filter before groot alignment step.
+
 
 ## [0.3.2-dev]
 ### Added

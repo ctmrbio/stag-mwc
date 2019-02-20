@@ -67,11 +67,14 @@ rule groot_align:
         read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
         read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
     output:
+        read1=temp(OUTDIR/"groot/{sample}/{sample}_R1.size_window.fq.gz"),
+        read2=temp(OUTDIR/"groot/{sample}/{sample}_R2.size_window.fq.gz"),
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
         report=OUTDIR/"groot/{sample}/{sample}.groot_report.tsv",
         plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
         graphs=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
+        reformat=str(LOGDIR/"groot/{sample}.reformat.log"),
         align=str(LOGDIR/"groot/{sample}.groot_align.log"),
         report=str(LOGDIR/"groot/{sample}.groot_report.log"),
     shadow:
@@ -81,11 +84,22 @@ rule groot_align:
     threads:
         8
     params:
-        index=groot_config["index"]
+        index=groot_config["index"],
+        minlength=groot_config["minlength"],
+        maxlength=groot_config["maxlength"],
     shell:
         """
+        reformat.sh \
+            in1={input.read1} \
+            in2={input.read2} \
+            out1={output.read1} \
+            out2={output.read2} \
+            minlength={params.minlength} \
+            maxlength={params.maxlength} \
+            tossbrokenreads \
+            2> {log.reformat}
         groot align \
-            --fastq {input.read1},{input.read2} \
+            --fastq {output.read1},{output.read2} \
             --graphDir {output.graphs} \
             --indexDir {params.index} \
             --processors {threads} \
