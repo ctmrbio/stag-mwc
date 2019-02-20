@@ -328,5 +328,8 @@ containing two files and two subfolders::
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
 gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
 observed antibiotic resistance genes in the sample. The two subfolders contain 
-all mapped graphs and coverage plots of all detected antibiotic resisatance genes.
+all mapped graphs and coverage plots of all detected antibiotic resistance genes.
 
+The read lengths input to `groot`_ must conform to the settings used during
+`groot`_ database construction. The length window can be configured in the
+config file.
