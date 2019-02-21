@@ -16,6 +16,8 @@ situations.
 ## [0.3.3] Unreleased
 ### Changed
 - Added read length window filter before groot alignment step.
+- Change logdir of remove_human rule to LOGDIR/remove_human instead of
+  OUTDIR/logs/remove_human.
 
 
 ## [0.3.2-dev]

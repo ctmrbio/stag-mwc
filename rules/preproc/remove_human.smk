@@ -92,8 +92,8 @@ rule remove_human:
         read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
         human=OUTDIR/"filtered_human/{sample}_human.fq.gz",
     log:
-        statsfile=str(OUTDIR/"logs/remove_human/{sample}.statsfile.txt"),
-        stderr=str(OUTDIR/"logs/remove_human/{sample}.stderr.log"),
+        statsfile=str(LOGDIR/"remove_human/{sample}.statsfile.txt"),
+        stderr=str(LOGDIR/"remove_human/{sample}.stderr.log"),
     shadow:
         "shallow"
     conda:
