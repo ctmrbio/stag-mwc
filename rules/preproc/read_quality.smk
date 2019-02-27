@@ -3,17 +3,31 @@
 #TODO: Remove superfluous str conversions of paths in expand and log statements
 #      when Snakemake is pathlib compatible.
 
-# Add final output files from this module to 'all_outputs' from
-# the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-fastqc_output = expand(str(OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.{ext}"),
-        sample=SAMPLES,
-        readpair=[1, 2],
-        ext=["zip", "html"])
-trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
-        sample=SAMPLES,
-        readpair=[1, 2])
-all_outputs.extend(fastqc_output)
-all_outputs.extend(trimmed_qa)
+if config["qc_reads"]:
+    # Add final output files from this module to 'all_outputs' from
+    # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
+    fastqc_output = expand(str(OUTDIR/"fastqc/{sample}_R{readpair}_fastqc.{ext}"),
+            sample=SAMPLES,
+            readpair=[1, 2],
+            ext=["zip", "html"])
+    trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
+            sample=SAMPLES,
+            readpair=[1, 2])
+    all_outputs.extend(fastqc_output)
+    all_outputs.extend(trimmed_qa)
+
+    citations.add((
+        "Andrews S. (2010).",
+        "FastQC: a quality control tool for high throughput sequence data.",
+        "Available online at: http://www.bioinformatics.babraham.ac.uk/projects/fastqc",
+    ))
+    citations.add((
+        "Bushnell, B. (2016).",
+        "BBMap short read aligner.",
+        "University of California, Berkeley, California.",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
+    ))
+    
 
 rule fastqc:
     input:

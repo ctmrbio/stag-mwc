@@ -18,6 +18,7 @@ Gothenburg.
    :maxdepth: 2
    :caption: Contents:
    
+   overview
    installation
    running
    modules
@@ -36,7 +37,7 @@ The documentation is available online at https://stag-mwc.readthedocs.org.
 to download, use, and help improve the project by contributing code modifications
 as pull requests back to the project's `Github repository`_.
 
-.. _Github repository: https://github.com/boulund/stag-mwc
+.. _Github repository: https://github.com/ctmrbio/stag-mwc
 
 
 Contributing
@@ -51,8 +52,9 @@ Citing |full_name|
 If you find |full_name| useful and publish something using |full_name|, please cite:
 
 | Fredrik Boulund, Lisa Olsson (2018).
-| StaG-mwc: Stockholm and Gothenburg metagenomics workflow collaboration.
-| https://github.com/boulund/stag-mwc
+| StaG-mwc: StaG metagenomics workflow collaboration.
+| https://github.com/ctmrbio/stag-mwc
+| https://doi.org/10.5281/zenodo.1483891
 
 Also consider citing all of the tools that were run as components in specific
 the |full_name| workflow used in your analysis.

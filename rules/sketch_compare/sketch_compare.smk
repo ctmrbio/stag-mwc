@@ -7,10 +7,18 @@ localrules:
     plot_sample_similarity,
 
 
-# Add final output files from this module to 'all_outputs' from the
-# main Snakefile scope.
-sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
-all_outputs.append(sample_similarity_plot)
+if config["sketch_compare"]:
+    # Add final output files from this module to 'all_outputs' from the
+    # main Snakefile scope.
+    sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
+    all_outputs.append(sample_similarity_plot)
+
+    citations.add((
+        "Bushnell, B. (2016).",
+        "BBMap short read aligner.",
+        "University of California, Berkeley, California.",
+        "Available online at: http://sourceforge.net/projects/bbmap.",
+    ))
 
 
 rule sketch:
@@ -67,7 +75,10 @@ rule plot_sample_similarity:
     input:
         OUTDIR/"sketch_compare/alltoall.txt"
     output:
-        OUTDIR/"sketch_compare/sample_similarity.pdf"
+        heatmap=OUTDIR/"sketch_compare/sample_similarity.pdf",
+        clustered=report(OUTDIR/"sketch_compare/sample_similarity.clustered.pdf", 
+                         category="Sketch comparison", 
+                         caption="../../report/sketch_compare.rst")
     log:
         stdout=str(LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log"),
         stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
@@ -76,7 +87,8 @@ rule plot_sample_similarity:
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \
-            --outfile {output} \
+            --outfile {output.heatmap} \
+            --clustered {output.clustered} \
             {input} \
             > {log.stdout} \
             2> {log.stderr}

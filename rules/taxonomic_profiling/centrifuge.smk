@@ -9,19 +9,27 @@ localrules:
     download_centrifuge_database
 
 centrifuge_db_ext = ".1.cf"
-if not Path(config["centrifuge"]["db_prefix"]).with_suffix(centrifuge_db_ext).exists():
-    err_message = "No Centrifuge database found at: '{}'!\n".format(config["centrifuge"]["db_prefix"])
-    err_message += "Specify Centrifuge database prefix in the Centrifuge section of config.yaml.\n"
-    err_message += "Run 'snakemake download_centrifuge_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"centrifuge")
-    err_message += "If you do not want to run Centrifuge for taxonomic profiling, set centrifuge: False in config.yaml"
-    raise WorkflowError(err_message)
+if config["taxonomic_profile"]["centrifuge"]:
+    if not Path(config["centrifuge"]["db_prefix"]).with_suffix(centrifuge_db_ext).exists():
+        err_message = "No Centrifuge database found at: '{}'!\n".format(config["centrifuge"]["db_prefix"])
+        err_message += "Specify Centrifuge database prefix in the Centrifuge section of config.yaml.\n"
+        err_message += "Run 'snakemake download_centrifuge_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"centrifuge")
+        err_message += "If you do not want to run Centrifuge for taxonomic profiling, set centrifuge: False in config.yaml"
+        raise WorkflowError(err_message)
 
-# Add final output files from this module to 'all_outputs' from the main
-# Snakefile scope. SAMPLES is also from the main Snakefile scope.
-centrifuge = expand(str(OUTDIR/"centrifuge/{sample}.{output_type}.tsv"),
-        sample=SAMPLES,
-        output_type=("centrifuge", "centrifuge_report"))
-all_outputs.extend(centrifuge)
+    # Add final output files from this module to 'all_outputs' from the main
+    # Snakefile scope. SAMPLES is also from the main Snakefile scope.
+    centrifuge = expand(str(OUTDIR/"centrifuge/{sample}.{output_type}.tsv"),
+            sample=SAMPLES,
+            output_type=("centrifuge", "centrifuge_report"))
+    all_outputs.extend(centrifuge)
+
+    citations.append((
+        "Kim, D., et al. (2016).",
+        "Centrifuge: rapid and sensitive classification of metagenomic sequences.",
+        "Genome research."
+    ))
+
 
 rule download_centrifuge_database:
     output:

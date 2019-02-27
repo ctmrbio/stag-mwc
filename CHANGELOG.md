@@ -13,13 +13,42 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [Unreleased]
+## [0.3.3] Unreleased
+### Changed
+- Added read length window filter before groot alignment step.
+- Change logdir of remove_human rule to LOGDIR/remove_human instead of
+  OUTDIR/logs/remove_human.
+
+
+## [0.3.2-dev]
+### Added
+- Added Zenodo DOI reference. https://zenodo.org/badge/latestdoi/125840716
+- Add printout of citations of used tools after successful workflow completion.
+
+### Changed
+- Updated docs regarding HTML execution report generation.
+- Updated GROOT to 0.8.3
+
+
+## [0.3.1]
+### Changed
+- Fixed MinHash sketch sample similarity plots.
+
+
+## [0.3.0]
 ### Added
 - Added CHANGELOG.md
 - New functionality to run mappers several times against different databases,
   based on a list of reference databases to map against in the config file.
 - Functional profiling using HUMAnN2. Will automatically run all
   MetaPhlAn2-associated rules to produce taxonomic profiles for use in HUMAnN2.
+- Added Overview page to documentation that includes a draft of a simplified
+  graph overview of the workflow (including some unfinished parts).
+- Added rules to run Kraken2.
+- Added onstart, onerror, and onsuccess messages.
+- Added `email` functionality. The workflow can now automatically send an email
+  after a successful or failed run.
+- Added automatic report generation upon successful workflow completion.
 
 ### Changed
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
@@ -28,6 +57,8 @@ situations.
 - Replaced MEGARes antibiotic resistance gene mapping with Groot resistance gene
   profiling using gene variation graphs.
 - Increased resource requirements for remove_human step in Rackham cluster profile.
+- Added clustered sketch comparison output heatmap.
+- Updated MetaPhlAn2 to version 2.7.8, with corresponding changes to config file.
 
 ### Fixed
 - Fixed error handling if hg19 database is missing for the remove human step.

@@ -10,23 +10,37 @@ localrules:
     create_kaiju_krona_plot,
 
 kaiju_config = config["kaiju"]
-if not all([Path(kaiju_config["db"]).exists(), 
-            Path(kaiju_config["nodes"]).exists(),
-            Path(kaiju_config["names"]).exists()]):
-    err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
-    err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
-    err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
-    err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
-    raise WorkflowError(err_message)
+if config["taxonomic_profile"]["kaiju"]:
+    if not all([Path(kaiju_config["db"]).exists(), 
+                Path(kaiju_config["nodes"]).exists(),
+                Path(kaiju_config["names"]).exists()]):
+        err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
+        err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
+        err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
+        err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
+        raise WorkflowError(err_message)
 
-# Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
-# SAMPLES is also from the main Snakefile scope.
-kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
-kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
-kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
-all_outputs.extend(kaiju)
-all_outputs.extend(kaiju_reports)
-all_outputs.append(kaiju_krona)
+    # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
+    # SAMPLES is also from the main Snakefile scope.
+    kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
+    kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
+    all_outputs.extend(kaiju)
+    all_outputs.extend(kaiju_reports)
+    all_outputs.append(kaiju_krona)
+
+    citations.append((
+        "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
+        "Fast and sensitive taxonomic classification for metagenomics with Kaiju.",
+        "Nature communications, 7, 11257.",
+        "Available online at: https://github.com/bioinformatics-centre/kaiju",
+    ))
+    citations.append((
+        "Ondov BD, Bergman NH, and Phillippy AM.",
+        "Interactive metagenomic visualization in a Web browser.",
+        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+    ))
+
 
 rule download_kaiju_database:
     output:

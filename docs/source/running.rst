@@ -17,6 +17,9 @@ assign ``True`` or ``False`` to the steps you want to include. Note that the
 default configuration file already includes ``qc_reads`` and ``remove_human``.
 These two steps are the primary read processing steps and most other steps
 depends on human filtered reads (i.e. the output of the ``remove_human`` step).
+Note that these two steps will pretty much always run, regardless of their
+setting in the config file, because they produce output files that almost all
+other workflow steps depend on. 
 
 .. note:: 
 
@@ -31,6 +34,12 @@ you already have it downloaded somewhere, point |full_name| to the location
 using the ``hg19_path`` parameter under the ``bbduk`` part of ``config.yaml``.
 |full_name| can download and index the database for you, see `Downloading
 databases` below. 
+
+The config file contains a parameter called ``email``. This can be used to have
+the workflow send an email after a successful or failed run. Note that this 
+requires that the Linux system your workflow is running on has a working email
+configuration. It is also quite common that most email clients will mark email sent
+from unknown random computers as spam, so don't forget to check your spam folder.
 
 
 Downloading databases
@@ -56,6 +65,7 @@ using any of the following rules::
     download_centrifuge_database
     download_humann2_databases
     download_kaiju_database
+    download_minikraken2
     index_hg19  (already shown above) 
 
 .. note::
@@ -93,6 +103,15 @@ steps to this limit.
     the risk of producing several copies of the same conda environment in
     different folders.
 
+If you want to keep your customized ``config.yaml`` in a separate file, let's 
+say ``my_config.yaml``, then you can run snakemake using that custom configuration 
+file with the ``--configfile my_config.yaml`` command line argument.
+
+Another useful command line argument to snakemake is ``--keep-going``. This will 
+instruct snakemake to keep going even if a job should fail, e.g. maybe the
+taxonomic profiling step will fail for a sample if the sample contains no assignable
+reads after quality filtering (extreme example).
+
 
 Running on cluster resources
 ****************************
@@ -124,3 +143,10 @@ file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
 the default profiles.
+
+
+Execution report
+****************
+Snakemake provides facilites to produce an HTML report of the execution of the
+workflow. An HTML report is automatically created when the workflow finishes.
+It is currently very simple, but will be expanded in the future.

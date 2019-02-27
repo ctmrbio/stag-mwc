@@ -4,6 +4,7 @@
 .. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
+.. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
@@ -70,8 +71,8 @@ sketch_compare
 The ``sketch_compare`` module uses the very fast MinHash implementation in
 `BBMap`_ to compute MinHash sketches of all samples to do an all-vs-all
 comparison of all samples based on their kmer content. The module outputs
-gzip-compressed sketches for each sample, as well as a heatmap plot showing the
-overall similarity of all samples.
+gzip-compressed sketches for each sample, as well as two heatmap plots showing
+the overall similarity of all samples (one with hierarchical clustering).
 
 
 Mappers
@@ -252,6 +253,17 @@ output files are::
     <sample>.kaiju.summary.species
     <sample>.krona
 
+Kraken2
+-------
+:Tool: `Kraken2`_
+:Output folder: ``kraken2``
+
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs two files per sample::
+
+    <sample>.kraken
+    <sample>.kreport
+
 MetaPhlAn2
 ----------
 :Tool: `MetaPhlAn2`_
@@ -316,5 +328,8 @@ containing two files and two subfolders::
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
 gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
 observed antibiotic resistance genes in the sample. The two subfolders contain 
-all mapped graphs and coverage plots of all detected antibiotic resisatance genes.
+all mapped graphs and coverage plots of all detected antibiotic resistance genes.
 
+The read lengths input to `groot`_ must conform to the settings used during
+`groot`_ database construction. The length window can be configured in the
+config file.
