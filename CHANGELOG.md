@@ -58,9 +58,9 @@ situations.
 - Substantial improvements to Rackham Slurm profile, focusing on better Slurm
   log handling.
 - A few low-impact rules that can be run locally are now declared as localrules.
-- Replaced MEGARes antibiotic resistance gene mapping with GROOT resistance
-  gene profiling using gene variation graphs, using a default database based on
-  arg-annot.
+- Replaced MEGARes antibiotic resistance gene mapping with Groot resistance gene
+  profiling using gene variation graphs.
+- Increased resource requirements for remove_human step in Rackham cluster profile.
 - Added clustered sketch comparison output heatmap.
 - Updated MetaPhlAn2 to version 2.7.8, with corresponding changes to config file.
 
