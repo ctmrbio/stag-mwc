@@ -307,6 +307,10 @@ Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
 MetaPhlAn2-associated steps are run regardless of whether it is actually
 enabled in ``config.yaml`` or not.
 
+HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
+Limit the number of concurrent HUMANn2 processes by using e.g. `--resources
+humann2=3` to tell Snakemake to not run more than three instances in parallel.
+
 
 Antibiotic resistance
 *********************
