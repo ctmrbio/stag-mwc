@@ -293,23 +293,26 @@ HUMAnN2
 :Output folder: ``humann2``
 
 Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
-Outputs three files per sample, plus three summaries for all samples::
+Outputs five files per sample, plus three summaries for all samples::
 
+    <sample>.genefamilies_relab.tsv
     <sample>.genefamilies.tsv
+    <sample>.pathabundance_relab.tsv
+    <sample>.pathabundance.tsv
     <sample>.pathcoverage.tsv
-    <sample>.pathabundances.tsv
     
     all_samples.humann2_genefamilies.tsv
     all_samples.humann2_pathcoverage.tsv
     all_samples.humann2_pathabundances.tsv
 
-Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
-MetaPhlAn2-associated steps are run regardless of whether it is actually
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
+so all MetaPhlAn2-associated steps are run regardless of whether it is actually
 enabled in ``config.yaml`` or not.
 
 HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
-Limit the number of concurrent HUMANn2 processes by using e.g. `--resources
-humann2=3` to tell Snakemake to not run more than three instances in parallel.
+It is possible to limit the number of concurrent HUMANn2 processes by using
+e.g. `--resources humann2=3` to tell Snakemake to not run more than three
+instances in parallel.
 
 
 Antibiotic resistance
