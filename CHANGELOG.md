@@ -14,6 +14,10 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 ## [0.3.3] Unreleased
+### Added
+- Added resource limiter for HUMAnN2 due to its intense use of huge temporary
+  files in the output folder. Activated with --resources humann2=X, where X is
+  the max number of parallel instances of humann2 to run.
 ### Changed
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of

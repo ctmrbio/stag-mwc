@@ -77,6 +77,8 @@ rule humann2:
         "../../envs/biobakery.yaml"
     threads:
         8
+    resources:
+        humann2=1
     params:
         outdir=OUTDIR/"humann2",
         nucleotide_db=h_config["nucleotide_db"],

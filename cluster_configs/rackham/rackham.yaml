@@ -3,7 +3,7 @@ __default__:
     account: "snic2017-7-245"
     partition: "core"
     extra: ""
-    time: "00:15:00"
+    time: "03:00:00"
     n: 2
     stderr: "slurm_logs/slurm-{rule}-{wildcards}.stderr"
     stdout: "slurm_logs/slurm-{rule}-{wildcards}.stdout"
@@ -67,7 +67,7 @@ metaphlan2:
 #############################
 humann2:
     n: 8
-    time: "03:00:00"
+    time: "12:00:00"
 
 #############################
 # Antibiotic resistance
