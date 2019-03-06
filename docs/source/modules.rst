@@ -9,6 +9,8 @@
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 .. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
+.. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
+.. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 
 Modules
 =======
