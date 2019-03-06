@@ -9,6 +9,8 @@
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 .. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
+.. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
+.. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 
 Modules
 =======
@@ -333,10 +335,11 @@ containing two files and two subfolders::
     <sample>/<sample>/groot-plots
 
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
+gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of all
 observed antibiotic resistance genes in the sample. The two subfolders contain 
 all mapped graphs and coverage plots of all detected antibiotic resistance genes.
 
 The read lengths input to `groot`_ must conform to the settings used during
 `groot`_ database construction. The length window can be configured in the
 config file.
+
