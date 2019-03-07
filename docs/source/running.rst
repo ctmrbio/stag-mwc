@@ -101,7 +101,9 @@ steps to this limit.
     use a common folder to store the conda environments created by StaG-mwc,
     so they can be re-used between different people or analyses. This reduces
     the risk of producing several copies of the same conda environment in
-    different folders.
+    different folders. This is also necessary when running on a cluster where
+    paths are usually very deep. Then for example create a folder in your home
+    directory and use that with the  ``--conda-prefix`` option.
 
 If you want to keep your customized ``config.yaml`` in a separate file, let's 
 say ``my_config.yaml``, then you can run snakemake using that custom configuration 
@@ -144,6 +146,11 @@ Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
 the default profiles.
 
+If pipeline ends with error or if session is locked after being unexpected disconnected
+and the pipeline needs to be restarted remove slurm metadadata files before restarting
+pipeline using::
+
+    (base)$ rm -rfv .snakemake/metadata
 
 Execution report
 ****************
