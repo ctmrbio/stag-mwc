@@ -24,9 +24,9 @@ for bt2_config in config["bowtie2"]:
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.{column}.counts.tsv"),
+        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
                 db_name=bt2_db_name,
-                column=map(str.split, bt2_config["counts_table"]["columns"].split(",")))
+                column=map(str.strip, bt2_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bt2_db_name,
                 sample=SAMPLES,
@@ -109,13 +109,12 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            [OUTDIR/"bowtie2/{db_name}/all_samples.{{column}}.counts.tsv".format(
-                    db_name=bt2_db_name).format(
-                        column=column.strip())
-                        for column 
-                        in bt2_config["counts_table"]["columns"].split(",")]
+            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
+                    db_name=bt2_db_name,
+                    column=map(str.strip, bt2_config["counts_table"]["columns"].split(","))
+            )
         log:
-            str(LOGDIR/"bowtie2/{db_name}/all_samples.counts.log".format(db_name=bt2_db_name))
+            str(LOGDIR/"bowtie2/{db_name}/counts.log".format(db_name=bt2_db_name))
         message:
             "Creating count table for mappings to {db_name}".format(db_name=bt2_db_name)
         shadow:

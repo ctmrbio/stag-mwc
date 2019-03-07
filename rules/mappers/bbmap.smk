@@ -23,7 +23,7 @@ for bbmap_config in config["bbmap"]:
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
                 output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.{column}.counts.tsv"),
+        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                 db_name=bbmap_config["db_name"],
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
@@ -105,11 +105,12 @@ for bbmap_config in config["bbmap"]:
                     db_name=bbmap_config["db_name"],
                     sample=SAMPLES)
         output:
-            expand(OUTDIR/"bbmap/{db_name}/all_samples.{{column}}.counts.tsv",
-                db_name=bbmap_config["db_name"],
-                column=map(str.strip, bbmap_config["counts_table"][["columns"].split(",")))
+            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+                    db_name=bbmap_config["db_name"],
+                    column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
+            )
         log:
-            str(bbmap_logdir/"all_samples.counts.log")
+            str(bbmap_logdir/"counts.log")
         message:
             "Summarizing read counts for {db_name}".format(db_name=bbmap_config["db_name"])
         shadow:
