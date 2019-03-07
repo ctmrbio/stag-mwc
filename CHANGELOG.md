@@ -22,6 +22,8 @@ situations.
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of
   OUTDIR/logs/remove_human.
+- Improved make_count_table.py so it can use TSV annotation files with multiple
+  columns. Added config setting for which columns to include.
 
 
 ## [0.3.2-dev]
