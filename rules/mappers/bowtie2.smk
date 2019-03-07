@@ -105,9 +105,9 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            counts=OUTDIR/"bowtie2/{db_name}/all_samples.counts_table.tab".format(db_name=bt2_db_name),
+            dynamic(OUTDIR/"bowtie2/{db_name}/all_samples.{{column}}.counts.tsv".format(db_name=bt2_db_name))
         log:
-            str(LOGDIR/"bowtie2/{db_name}/all_samples.counts_table.log".format(db_name=bt2_db_name))
+            str(LOGDIR/"bowtie2/{db_name}/all_samples.counts.log".format(db_name=bt2_db_name))
         message:
             "Creating count table for mappings to {db_name}".format(db_name=bt2_db_name)
         shadow:
@@ -118,12 +118,15 @@ for bt2_config in config["bowtie2"]:
             1
         params:
             annotations=bt2_config["counts_table"]["annotations"]
+            columns=bt2_config["counts_table"]["columns"],
+            outdir=OUTDIR/"bowtie2/{db_name}/".format(db_name=bt2_db_name),
         shell:
             """
             scripts/make_count_table.py \
-                --annotations {params.annotations} \
+                --annotation-file {params.annotations} \
+                --columns {params.columns} \
+                --outdir {params.outdir} \
                 {input} \
-                > {output} \
                 2> {log}
             """
 

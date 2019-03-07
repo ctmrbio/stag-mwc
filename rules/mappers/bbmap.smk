@@ -101,9 +101,9 @@ for bbmap_config in config["bbmap"]:
                     db_name=bbmap_config["db_name"],
                     sample=SAMPLES)
         output:
-            counts=OUTDIR/"bbmap/{db_name}/all_samples.counts_table.tab".format(db_name=bbmap_config["db_name"]),
+            dynamic(OUTDIR/"bbmap/{db_name}/all_samples.{{column}}.counts.tsv".format(db_name=bbmap_config["db_name"]))
         log:
-            str(bbmap_logdir/"all_samples.counts_table.log")
+            str(bbmap_logdir/"all_samples.counts.log")
         message:
             "Summarizing read counts for {db_name}".format(db_name=bbmap_config["db_name"])
         shadow:
@@ -113,13 +113,16 @@ for bbmap_config in config["bbmap"]:
         threads:
             1
         params:
-            annotations=bbmap_config["counts_table"]["annotations"]
+            annotations=bbmap_config["counts_table"]["annotations"],
+            columns=bbmap_config["counts_table"]["columns"],
+            outdir=OUTDIR/"bbmap/{db_name}/".format(db_name=bbmap_config["db_name"]),
         shell:
             """
             scripts/make_count_table.py \
-                --annotations {params.annotations} \
+                --annotation-file {params.annotations} \
+                --columns {params.columns} \
+                --outdir {params.outdir} \
                 {input} \
-                > {output} \
                 2> {log}
             """
 
