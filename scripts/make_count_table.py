@@ -83,7 +83,7 @@ def merge_counts(annotations, rpkms):
 
 
 def write_table(table_data, sample_names, outfile):
-    with open(outfile, "w") as outf:
+    with open(str(outfile), "w") as outf:
         header = "\t".join(["Annotation"] + [sample_name for sample_name in sample_names]) + "\n"
         outf.write(header)
         for ref, counts in table_data.items():
