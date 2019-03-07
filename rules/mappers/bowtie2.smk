@@ -1,3 +1,4 @@
+# vim: syntax=python expandtab
 # Generic rules for alignment of reads to a reference database using Bowtie2
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
@@ -23,9 +24,9 @@ for bt2_config in config["bowtie2"]:
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.counts_table.tab"),
+        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.{column}.counts.tsv"),
                 db_name=bt2_db_name,
-                sample=SAMPLES)
+                column=map(str.split, bt2_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bt2_db_name,
                 sample=SAMPLES,
@@ -98,6 +99,9 @@ for bt2_config in config["bowtie2"]:
                 2> {log}
             """
 
+
+
+
     rule:
         """Create count table for Bowtie2 mappings."""
         input:
@@ -105,7 +109,11 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            dynamic(OUTDIR/"bowtie2/{db_name}/all_samples.{{column}}.counts.tsv".format(db_name=bt2_db_name))
+            [OUTDIR/"bowtie2/{db_name}/all_samples.{{column}}.counts.tsv".format(
+                    db_name=bt2_db_name).format(
+                        column=column.strip())
+                        for column 
+                        in bt2_config["counts_table"]["columns"].split(",")]
         log:
             str(LOGDIR/"bowtie2/{db_name}/all_samples.counts.log".format(db_name=bt2_db_name))
         message:
@@ -117,7 +125,7 @@ for bt2_config in config["bowtie2"]:
         threads:
             1
         params:
-            annotations=bt2_config["counts_table"]["annotations"]
+            annotations=bt2_config["counts_table"]["annotations"],
             columns=bt2_config["counts_table"]["columns"],
             outdir=OUTDIR/"bowtie2/{db_name}/".format(db_name=bt2_db_name),
         shell:
