@@ -52,7 +52,9 @@ def parse_rpkm(rpkm_file):
                 ref, length, bases, coverage, reads, RPKM, frags, FPKM = line.strip().split("\t")
             except ValueError:
                 logging.error("Could not parse RPKM file line %s: %s", line_no, rpkm_file)
+                continue
             if int(reads) != 0:
+                ref = ref.split()[0]  # Truncate reference header on first space
                 read_counts[ref] = int(reads)
     return read_counts
 
@@ -62,7 +64,7 @@ def parse_annotations(annotation_file):
     with open(annotation_file) as f:
         csv_reader = csv.DictReader(f, delimiter="\t")
         for line in csv_reader:
-            ref = list(line.values())[0]
+            ref = list(line.values())[0].split()[0]  # Truncate reference header on first space
             for colname, value in list(line.items())[1:]:
                 annotations[colname][ref] = value
     return annotations
