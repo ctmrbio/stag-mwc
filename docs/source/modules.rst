@@ -87,10 +87,10 @@ counts per annotated feature via one of two options: 1) supplying a two-column
 tab-separated annotation file with one annotation per reference sequence, or 2)
 supplying a GTF or SAF format annotation file for features on the reference
 sequences. Option number 1 uses a custom Python script
-(``make_count_table.py``) to merge read counts per annotation which works well
-for annotations as large as your memory allows, and option number 2 uses
-`featureCounts`_ to summarize read counts per annotated feature. Option number
-2 is more flexible and normally faster for typical annotation scenarios, but
+(``scripts/make_count_table.py``) to merge read counts per annotation, which
+works well for annotations as large as your memory allows, and option number 2
+uses `featureCounts`_ to summarize read counts per annotated feature. Option
+number 2 is more flexible and fairly fast for typical annotation scenarios, but
 might not work when the number of unique features is much lower than the number
 of reference sequences. Read more about these alternatives in :ref:`Summarizing
 read counts` below.
@@ -150,6 +150,7 @@ configuration options, but with different settings. For example, to map against
           extra: ""
           counts_table:
               annotations: ""
+              columns: ""
           featureCounts:
               annotations: ""
               feature_type: ""
@@ -161,6 +162,7 @@ configuration options, but with different settings. For example, to map against
           extra: ""
           counts_table:
               annotations: "/path/to/db2/annotations.txt"
+              columns: "Genus,Phylum"
           featureCounts:
               annotations: ""
               feature_type: ""
@@ -176,20 +178,43 @@ make_count_table.py
 :Tool: ``make_count_table.py``
 :Output folder: ``<mapper>/<database_name>``
 
-A custom Python script produces a tab-separated count table with one row per
+A custom Python script produces tab-separated count tables with one row per
 annotation, and one column per sample. The input is an annotation file that
-consists of two tab-separated columns (no header)::
+consists of at least two tab-separated columns. The first line is a header line
+with column names (must not contain spaces and avoid strange characters). Here 
+is an example of column names:: 
 
-    Reference sequence
-    Annotation
+    Reference
+    Annotation1
+    Annotation2
+    ...
+    AnnotationN
 
-The script sums counts for each annotation for each sample. The output filename
-is ``all_samples.counts_table.tab``. To produce the output table, enter an
-annotation filename in the configuration file, e.g.::
+The column names doesn't matter, but the names defined in the annotation file
+can be used to select a subset of columns to summarize read counts for (see
+more below). The first column should contain the FASTA header for each
+reference sequence in the reference database used in the mapping. The count
+table script truncates the header string at the first space (because Bowtie2
+does this automatically it's easier to just always do it). In practice, since
+the script performs truncation of headers, it doesn't matter which mapper was
+used or if the annotation file contains entire headers or only the truncated
+headers, as long as the bit up until the first space in each reference header
+is unique. The script sums counts for each annotation for each sample. 
+
+One parameter for the count summarization is which columns in the annoation
+file to summarize on. The column names need to be assigned as a string of
+comma-separated column names. They must match exactly to the column names
+defined in the annotation file. This is configured in ``config.yaml``. The
+script outputs one file per column, with output filename matching
+``counts.<column_name>.tsv``. The count table feature is activated by entering
+an annotation filename in the relevant section of the configuration file,
+e.g.::
 
     bbmap:
         counts_table:
             annotations: "path/to/annotations.tab"
+            columns: "Species,Genus,taxid"
+
 
 featureCounts
 .............
