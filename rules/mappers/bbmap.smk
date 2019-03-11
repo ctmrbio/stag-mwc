@@ -1,3 +1,4 @@
+# vim: syntax=python expandtab
 # Rules for generic read mapping using BBMap
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
@@ -22,9 +23,9 @@ for bbmap_config in config["bbmap"]:
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
                 output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.counts_table.tab"),
+        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                 db_name=bbmap_config["db_name"],
-                sample=SAMPLES)
+                column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
@@ -94,6 +95,9 @@ for bbmap_config in config["bbmap"]:
             """
 
 
+    if not bbmap_config["counts_table"]["columns"]:
+        raise WorkflowError("Must define annotation column(s) for count table production!")
+
     rule:
         """Summarize read counts for {db_name}"""
         input:
@@ -101,9 +105,12 @@ for bbmap_config in config["bbmap"]:
                     db_name=bbmap_config["db_name"],
                     sample=SAMPLES)
         output:
-            counts=OUTDIR/"bbmap/{db_name}/all_samples.counts_table.tab".format(db_name=bbmap_config["db_name"]),
+            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+                    db_name=bbmap_config["db_name"],
+                    column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
+            )
         log:
-            str(bbmap_logdir/"all_samples.counts_table.log")
+            str(bbmap_logdir/"counts.log")
         message:
             "Summarizing read counts for {db_name}".format(db_name=bbmap_config["db_name"])
         shadow:
@@ -113,13 +120,16 @@ for bbmap_config in config["bbmap"]:
         threads:
             1
         params:
-            annotations=bbmap_config["counts_table"]["annotations"]
+            annotations=bbmap_config["counts_table"]["annotations"],
+            columns=bbmap_config["counts_table"]["columns"],
+            outdir=OUTDIR/"bbmap/{db_name}/".format(db_name=bbmap_config["db_name"]),
         shell:
             """
             scripts/make_count_table.py \
-                --annotations {params.annotations} \
+                --annotation-file {params.annotations} \
+                --columns {params.columns} \
+                --outdir {params.outdir} \
                 {input} \
-                > {output} \
                 2> {log}
             """
 
