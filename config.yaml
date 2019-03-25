@@ -54,6 +54,7 @@ bbduk:
     hdist: 1
     trimbyoverlap: "trimbyoverlap"
     trimpairsevenly: "trimpairsevenly"
+    extra: ""
 remove_human:
     hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95

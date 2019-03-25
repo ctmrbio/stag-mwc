@@ -70,6 +70,7 @@ rule trim_adapters_quality:
         hdist=bbduk_config["hdist"],
         trimbyoverlap=bbduk_config["trimbyoverlap"],
         trimpairsevenly=bbduk_config["trimpairsevenly"],
+        extra=bbduk_config["extra"],
     shell:
         """
         bbduk.sh \
@@ -88,6 +89,7 @@ rule trim_adapters_quality:
             hdist={params.hdist} \
             {params.trimbyoverlap} \
             {params.trimpairsevenly} \
+            {params.extra} \
             > {log.stdout} \
             2> {log.stderr}
         """
