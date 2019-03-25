@@ -100,6 +100,8 @@ for bt2_config in config["bowtie2"]:
             """
 
 
+    if bt2_config["counts_table"]["annotations"] and not bt2_config["counts_table"]["columns"]:
+        raise WorkflowError("Must define annotation column(s) for count table production!")
 
 
     rule:

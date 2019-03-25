@@ -95,7 +95,7 @@ for bbmap_config in config["bbmap"]:
             """
 
 
-    if not bbmap_config["counts_table"]["columns"]:
+    if bbmap_config["counts_table"]["annotations"] and not bbmap_config["counts_table"]["columns"]:
         raise WorkflowError("Must define annotation column(s) for count table production!")
 
     rule:
