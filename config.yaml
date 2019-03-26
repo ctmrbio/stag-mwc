@@ -147,3 +147,5 @@ groot:
     index: ""                # [Required] Path to groot index
     minlength: 110           # Minlength for groot index
     maxlength: 125           # Maxlength for groot index
+    covcutoff: 0.97          # Coverage cutoff for groot report
+    lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
