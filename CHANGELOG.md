@@ -19,6 +19,7 @@ situations.
   files in the output folder. Activated with --resources humann2=X, where X is
   the max number of parallel instances of humann2 to run.
 - Added extra argument to BBDuk for additional quality control flexibility.
+- Added groot report parameters `covcutoff` and `lowcov` to config file.
 
 ### Changed
 - Added read length window filter before groot alignment step.
