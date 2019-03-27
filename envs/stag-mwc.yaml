@@ -16,4 +16,4 @@ dependencies:
     - subread =1.6.0
     - sambamba =0.6.8
     - samtools =1.9
-    - groot =0.8.3
+    - groot =0.8.4

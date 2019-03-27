@@ -27,6 +27,7 @@ situations.
   OUTDIR/logs/remove_human.
 - Improved make_count_table.py so it can use TSV annotation files with multiple
   columns. Added config setting for which columns to include.
+- Updated GROOT to v0.8.4.
 
 
 ## [0.3.2-dev]
