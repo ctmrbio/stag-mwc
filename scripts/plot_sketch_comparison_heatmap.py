@@ -35,16 +35,12 @@ def parse_args():
 if __name__ == "__main__":
     options = parse_args()
     
-    colnames = ["Query", "Ref", "ANI", "QSize", "RefSize", "QBases"]
-    df = pd.read_csv(
+    df = pd.read_table(
             options.alltoall, 
-            sep="\t", 
-            index_col=False, 
-            skiprows=1,
-            names=colnames)
+            index_col=False)
     print("Loaded data for {} sample comparisons.".format(df.shape[0]))
 
-    similarity_matrix = df.pivot(index="Query", 
+    similarity_matrix = df.pivot(index="#Query", 
             columns="Ref", values="ANI").fillna(100)
 
     corr = similarity_matrix.corr()
