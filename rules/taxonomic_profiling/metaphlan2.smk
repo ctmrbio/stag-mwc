@@ -56,17 +56,10 @@ rule download_metaphlan2_database:
     shell:
         """
         cd {params.dbdir}
-        wget https://bitbucket.org/biobakery/metaphlan2/downloads/mpa_v20_m200.tar \
-            > {log} \
-        && \
-        tar -xf mpa_v20_m200.tar \
-            >> {log} \
-        && \
-        bunzip2 mpa_v20_m200.fna.bz2 \
-            >> {log} \
-        && \
-        rm -v mpa_v20_m200.tar \
-            >> {log}
+        wget https://bitbucket.org/biobakery/metaphlan2/downloads/mpa_v20_m200.tar > {log}
+        tar -xf mpa_v20_m200.tar >> {log}
+        bunzip2 mpa_v20_m200.fna.bz2 >> {log}
+        rm -v mpa_v20_m200.tar >> {log}
         """
 
 rule build_metaphlan2_index:
@@ -165,10 +158,9 @@ rule combine_metaphlan2_outputs:
         c=mpa_config["c"],
     shell:
         """
-        merge_metaphlan_tables.py {input} \
-            | sed 's/\.metaphlan2//g' > {output.txt} \
-        && \
-        metaphlan_hclust_heatmap.py \
+        merge_metaphlan_tables.py {input} {output.txt}
+        sed --in-place 's/\.metaphlan2//g' {output.txt} 
+        scripts/metaphlan_hclust_heatmap.py \
             --in {output.txt} \
             --out {output.pdf} \
             --tax_lev {params.tax_lev} \
