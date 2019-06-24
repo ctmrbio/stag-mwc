@@ -30,6 +30,10 @@ situations.
 - Updated GROOT to v0.8.4.
 - Cleaned up sketch comparison cluster heatmap plotting script, making it more 
   robust to variations in output from different BBTools versions.
+- Updated MetaPhlAn2 to 2.9.12 from conda. This required adding a local version
+  of metaphlan_hclust_heatmap.py as that has disappeared in recent conda version. 
+  Also required changing the call of merge_metaphlan_tables.py due to undocumented
+  CLI change in conda version.
 
 
 ## [0.3.2-dev]
