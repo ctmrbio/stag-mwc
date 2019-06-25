@@ -146,9 +146,9 @@ Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
 the default profiles.
 
-If pipeline ends with error or if session is locked after being unexpected disconnected
-and the pipeline needs to be restarted remove slurm metadadata files before restarting
-pipeline using::
+If pipeline ends with error or if session is locked after being unexpectedly 
+disconnected and the pipeline needs to be restarted, remove slurm metadadata 
+files before restarting pipeline using::
 
     (base)$ rm -rfv .snakemake/metadata
 
