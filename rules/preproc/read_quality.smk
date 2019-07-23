@@ -13,8 +13,13 @@ if config["qc_reads"]:
     trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
             sample=SAMPLES,
             readpair=[1, 2])
+    fastqc_trimmed_output = expand(str(OUTDIR/"fastqc_trimmed/{sample}_R{readpair}_trimmed_fastqc.{ext}"),
+            sample=SAMPLES,
+            readpair=[1, 2],
+            ext=["zip", "html"])
     all_outputs.extend(fastqc_output)
     all_outputs.extend(trimmed_qa)
+    all_outputs.extend(fastqc_trimmed_output)
 
     citations.add((
         "Andrews S. (2010).",
@@ -93,3 +98,18 @@ rule trim_adapters_quality:
             > {log.stdout} \
             2> {log.stderr}
         """
+
+
+rule fastqc_trimmed:
+    input:
+        read1=OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz",
+        read2=OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz",
+    output:
+        html=OUTDIR/"fastqc_trimmed/{sample}_R{readpair}_trimmed_fastqc.html",
+        zip=OUTDIR/"fastqc_trimmed/{sample}_R{readpair}_trimmed_fastqc.zip",
+    log:
+        str(LOGDIR/"fastqc_trimmed/{sample}_R{readpair}_fastq.log")
+    shadow:
+        "shallow"
+    wrapper:
+        "0.22.0/bio/fastqc"
