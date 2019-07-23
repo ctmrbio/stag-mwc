@@ -47,7 +47,10 @@ remove_human
 The ``remove_human`` module uses `BBMap`_ to map reads against a specially
 filtered and masked version of the human genome to remove reads matching to the
 human genome. The output is a pair of paired-end FASTQ files, plus a single
-interleaved FASTQ file with all reads that matched the human reference.
+interleaved FASTQ file with all reads that matched the human reference. In 
+addition, a PDF file with a basic histogram plot of the proportion of human 
+reads detected in each sample is also provided, along with a TSV table with the 
+raw proportion data.
 
 
 assess_depth

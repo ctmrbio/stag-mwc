@@ -21,6 +21,7 @@ situations.
 - Added extra argument to BBDuk for additional quality control flexibility.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
 - Added second FastQC run after quality trimming.
+- Added automatic plot of proportion human reads.
 
 ### Changed
 - Added read length window filter before groot alignment step.

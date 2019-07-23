@@ -67,6 +67,7 @@ remove_human:
     quickmatch: "quickmatch"
     fast: "fast"
     untrim: "untrim"
+    plot_unambigous: False
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
 

@@ -21,7 +21,9 @@ if config["remove_human"]:
     filtered_human = expand(str(OUTDIR/"filtered_human/{sample}_R{readpair}.filtered_human.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
+    proportion_human = str(OUTDIR/"filtered_human/proportion_human.pdf")
     all_outputs.extend(filtered_human)
+    all_outputs.append(proportion_human)
 
     citations.add((
         "Bushnell, B. (2016).",
@@ -135,3 +137,29 @@ rule remove_human:
             2> {log.stderr}
         """
 
+
+rule plot_proportion_human:
+    """Plot proportion of reads that matched hg19."""
+    input:
+        expand(str(LOGDIR/"remove_human/{sample}.statsfile.txt"), sample=SAMPLES)
+    output:
+        pdf=OUTDIR/"filtered_human/proportion_human.pdf",
+        tsv=OUTDIR/"filtered_human/proportion_human.tsv",
+    log:
+        str(LOGDIR/"remove_human/proportion_human.log")
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    threads:
+        1
+    params:
+        unambigous=lambda _: "--unambigous" if rh_config["plot_unambigous"] else ""
+    shell:
+        """
+        scripts/plot_proportion_human.py \
+            {input} \
+            {params.unambigous} \
+            --outfile {output.pdf} \
+            --table {output.tsv}
+        """
