@@ -88,6 +88,11 @@ include: "rules/functional_profiling/humann2.smk"
 #############################
 include: "rules/antibiotic_resistance/groot.smk"
 
+#############################
+# Assembly
+#############################
+include: "rules/assembly/megahit.smk"
+
 
 localrules: all
 
