@@ -22,6 +22,7 @@ situations.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
 - Added second FastQC run after quality trimming.
 - Added automatic plot of proportion human reads.
+- Added MEGAHIT assembly step.
 
 ### Changed
 - Added read length window filter before groot alignment step.

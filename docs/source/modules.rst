@@ -11,6 +11,7 @@
 .. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
+.. _MEGAHIT: https://github.com/voutcn/megahit
 
 Modules
 =======
@@ -371,3 +372,18 @@ The read lengths input to `groot`_ must conform to the settings used during
 `groot`_ database construction. The length window can be configured in the
 config file.
 
+
+Assembly
+********
+
+MEGAHIT
+-------
+:Tool: `MEGAHIT`_
+:Output folder: ``assembly/megahit``
+
+Run MEGAHIT to assembly each sample. Outputs one subfolder per sample, containing
+contigs and several log and intermediate files::
+
+    assembly/megahit/<sample>/<sample>.contigs.fa
+
+Assembly is the primary step required before binning the assembled contigs.
