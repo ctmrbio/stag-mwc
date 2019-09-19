@@ -39,6 +39,8 @@ taxonomic_profile:
 functional_profile:
     humann2: False
 antibiotic_resistance: False
+assembly:
+    megahit: False
 
 
 #########################
@@ -150,3 +152,11 @@ groot:
     maxlength: 125           # Maxlength for groot index
     covcutoff: 0.97          # Coverage cutoff for groot report
     lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
+
+
+#########################
+# Assembly
+#########################
+megahit:
+    presets: "meta-sensitive"  # Available presets: "meta-sensitive", "meta-large"
+    extra: ""                  # Additional arguments to megahit

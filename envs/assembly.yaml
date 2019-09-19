@@ -1,0 +1,8 @@
+name: stag-mwc-assembly
+channels:
+    - bioconda
+    - conda-forge
+    - defaults
+dependencies:
+    - bbmap =38.67
+    - megahit =1.2.8
