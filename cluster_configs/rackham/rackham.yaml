@@ -78,3 +78,10 @@ create_megares_index:
 groot_align:
     n: 6
     time: "01:00:00"
+
+#############################
+# Assembly
+#############################
+megahit:
+    n: 20
+    time: "05:00:00"
