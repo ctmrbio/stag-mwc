@@ -24,6 +24,9 @@ situations.
 - Added automatic plot of proportion human reads.
 - Added MEGAHIT assembly step.
 
+### Fixed
+- Fixed bug in Slurm profile handling of cancelled/failed jobs.
+
 ### Changed
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of
