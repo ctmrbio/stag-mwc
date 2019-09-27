@@ -5,6 +5,7 @@ channels:
     - defaults
 dependencies:
     - python =3.5
+    - fastp =0.20.0
     - bbmap =37.99
     - centrifuge =1.0.3
     - kaiju =1.6.2

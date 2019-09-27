@@ -22,7 +22,7 @@ situations.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
 - Added second FastQC run after quality trimming.
 - Added automatic plot of proportion human reads.
-- Added MEGAHIT assembly step.
+- Added assembly and binning using MetaWRAP.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
@@ -33,13 +33,14 @@ situations.
   OUTDIR/logs/remove_human.
 - Improved make_count_table.py so it can use TSV annotation files with multiple
   columns. Added config setting for which columns to include.
-- Updated GROOT to v0.8.4.
+- Updated GROOT to v0.8.5.
 - Cleaned up sketch comparison cluster heatmap plotting script, making it more 
   robust to variations in output from different BBTools versions.
 - Updated MetaPhlAn2 to 2.9.12 from conda. This required adding a local version
   of metaphlan_hclust_heatmap.py as that has disappeared in recent conda version. 
   Also required changing the call of merge_metaphlan_tables.py due to undocumented
   CLI change in conda version.
+- Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
 
 
 ## [0.3.2-dev]
