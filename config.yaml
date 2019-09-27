@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_R{readpair}.fastq.gz" 
+input_fn_pattern: "{sample}_R{readpair}.fq.gz" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
@@ -26,7 +26,7 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 qc_reads: True
 remove_human: True
-assess_depth: True
+assess_depth: False
 sketch_compare: False
 mappers:
     bbmap: False
@@ -39,26 +39,17 @@ taxonomic_profile:
 functional_profile:
     humann2: False
 antibiotic_resistance: False
-assembly:
-    megahit: False
+assembly: False
+binning: False
 
 
 #########################
 # Preprocessing
 #########################
-bbduk:
-    minlen: 30
-    qtrim: "rl"
-    trimq: 20
-    ktrim: "r"
-    k: 30
-    mink: 11
-    hdist: 1
-    trimbyoverlap: "trimbyoverlap"
-    trimpairsevenly: "trimpairsevenly"
+fastp:
     extra: ""
 remove_human:
-    hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
+    hg19_path: "/db/hg19"            # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
@@ -157,6 +148,8 @@ groot:
 #########################
 # Assembly
 #########################
-megahit:
-    presets: "meta-sensitive"  # Available presets: "meta-sensitive", "meta-large"
-    extra: ""                  # Additional arguments to megahit
+metawrap:
+    universal: "--universal"  # Use universal marker genes
+    minimum_completion: 70
+    maximum_contamination: 10
+
