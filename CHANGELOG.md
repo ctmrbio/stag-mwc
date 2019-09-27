@@ -43,6 +43,10 @@ situations.
   Also required changing the call of merge_metaphlan_tables.py due to undocumented
   CLI change in conda version.
 - Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
+- Updated Kaiju to 1.7.2
+- Updated BBMap to 38.68
+- Updated sambamba to 0.7.0
+- Updated Kraken2 to 2.0.8_beta
 
 
 ## [0.3.2-dev]

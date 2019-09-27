@@ -6,15 +6,15 @@ channels:
 dependencies:
     - python =3.5
     - fastp =0.20.0
-    - bbmap =37.99
+    - bbmap =38.68
     - centrifuge =1.0.3
-    - kaiju =1.6.2
-    - kraken2 =2.0.7_beta
+    - kaiju =1.7.2
+    - kraken2 =2.0.8_beta
     - krona =2.7
     - matplotlib =2.2.2
     - pandas =0.22.0
     - seaborn =0.8.1
     - subread =1.6.0
-    - sambamba =0.6.8
+    - sambamba =0.7.0
     - samtools =1.9
     - groot =0.8.4
