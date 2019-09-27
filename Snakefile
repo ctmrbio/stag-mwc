@@ -91,7 +91,7 @@ include: "rules/antibiotic_resistance/groot.smk"
 #############################
 # Assembly
 #############################
-include: "rules/assembly/megahit.smk"
+include: "rules/assembly/metawrap.smk"
 
 
 localrules: all
