@@ -114,7 +114,6 @@ instruct snakemake to keep going even if a job should fail, e.g. maybe the
 taxonomic profiling step will fail for a sample if the sample contains no assignable
 reads after quality filtering (extreme example).
 
-
 Running on cluster resources
 ****************************
 In order to run |full_name| on a cluster, you need a special cluster
@@ -151,6 +150,13 @@ disconnected and the pipeline needs to be restarted, remove slurm metadadata
 files before restarting pipeline using::
 
     (base)$ rm -rfv .snakemake/metadata
+
+.. note:: 
+
+    When running on a cluster it can speed up node initialization if you run
+    using Singularity containers and conda combined. This is done by running
+    snakemake with both the `--use-conda` and `--use-singularity` arguments.
+
 
 Execution report
 ****************

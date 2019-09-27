@@ -23,6 +23,8 @@ situations.
 - Added second FastQC run after quality trimming.
 - Added automatic plot of proportion human reads.
 - Added assembly and binning using MetaWRAP.
+- Added the possibility to run in Singularity with conda using 
+  `--use-singularity --use-conda`.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
