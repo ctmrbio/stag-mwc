@@ -14,6 +14,7 @@ from snakemake.utils import min_version
 min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
 stag_version = "0.3.3-dev"
+singularity: "docker://continuumio/miniconda3:4.7.10"
 
 onstart:
     print("\n".join([
