@@ -143,8 +143,12 @@ rule plot_proportion_human:
     input:
         expand(str(LOGDIR/"remove_human/{sample}.statsfile.txt"), sample=SAMPLES)
     output:
-        pdf=OUTDIR/"filtered_human/proportion_human.pdf",
-        tsv=OUTDIR/"filtered_human/proportion_human.tsv",
+        pdf=report(OUTDIR/"filtered_human/proportion_human.pdf",
+                   category="Proportion human reads",
+                   caption="../../report/proportion_human_reads.rst"),
+        tsv=report(OUTDIR/"filtered_human/proportion_human.tsv",
+                   category="Proportion human reads",
+                   caption="../../report/tsv_proportion_human_reads.rst"),
     log:
         str(LOGDIR/"remove_human/proportion_human.log")
     shadow:
