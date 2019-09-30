@@ -1,6 +1,8 @@
-#!/usr/bin/env python
-# Plot heatmap of MinHash sketch comparisons by BBTool's sketch.sh/comparesketch.sh.
-# Fredrik Boulund 2018
+#!/usr/bin/env python3
+"""Plot heatmap of MinHash sketch comparisons by BBTool's sketch.sh/comparesketch.sh."""
+__author__ = "Fredrik Boulund"
+__date__ = "2018"
+__version__ = "0.2.0"
 
 from sys import argv, exit
 from pathlib import Path
@@ -15,7 +17,7 @@ import seaborn as sns
 
 
 def parse_args():
-    desc = "Plot heatmap of sketch comparisons."
+    desc = f"{__doc__} Version {__version__}. Copyright (c) {__author__} {__date__}."
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("alltoall", metavar="alltoall",
             help="Output table from BBMap's comparesketch.sh in format=3.")
@@ -43,15 +45,16 @@ if __name__ == "__main__":
     similarity_matrix = df.pivot(index="#Query", 
             columns="Ref", values="ANI").fillna(100)
 
-    corr = similarity_matrix.corr()
-    g = sns.heatmap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
+    corr = similarity_matrix.corr().fillna(0)
+    g = sns.heatmap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 2})
     g.set_title("Sample similarity")
-    g.set_yticklabels(g.get_yticklabels(), rotation=0)
+    #g.set_xticklabels(g.get_xticklabels(), fontsize=4)  #WIP
+    #g.set_yticklabels(g.get_yticklabels(), rotation=0, fontsize=4) #WIP
     g.set_ylabel("")
     g.set_xlabel("")
     g.figure.savefig(str(Path(options.outfile)))
 
-    g = sns.clustermap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 5})
+    g = sns.clustermap(corr, annot=True, fmt="2.1f", annot_kws={"fontsize": 2})
     g.fig.suptitle("Sample similarity (clustered)")
     g.savefig(str(Path(options.clustered)))
 
