@@ -18,10 +18,10 @@ situations.
 - Added resource limiter for HUMAnN2 due to its intense use of huge temporary
   files in the output folder. Activated with --resources humann2=X, where X is
   the max number of parallel instances of humann2 to run.
-- Added extra argument to BBDuk for additional quality control flexibility.
+- Added "extra" argument to BBDuk for additional quality control flexibility.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
 - Added second FastQC run after quality trimming.
-- Added automatic plot of proportion human reads.
+- Added automatic plot of proportion human reads. Included in run report.
 - Added assembly and binning using MetaWRAP.
 - Added the possibility to run in Singularity with conda using 
   `--use-singularity --use-conda`.
@@ -47,6 +47,7 @@ situations.
 - Updated BBMap to 38.68
 - Updated sambamba to 0.7.0
 - Updated Kraken2 to 2.0.8_beta
+- Updated seaborn to 0.8.1, added fastcluster to StaG conda env, installed via pip.
 
 
 ## [0.3.2-dev]
