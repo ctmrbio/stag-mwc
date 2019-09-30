@@ -26,6 +26,8 @@ situations.
 - Added the possibility to run in Singularity with conda using 
   `--use-singularity --use-conda`.
 - Added more MetaPhlAn2 data in output report.
+- Added rule to automatically download KrakenTools by Jennifer Lu.
+- Added combined table and Krona plot for Kraken2 to output report.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.

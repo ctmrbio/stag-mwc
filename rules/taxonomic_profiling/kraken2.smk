@@ -22,10 +22,12 @@ if config["taxonomic_profile"]["kraken2"]:
     # SAMPLES is also from the main Snakefile scope.
     krakens = expand(str(OUTDIR/"kraken2/{sample}.kraken"), sample=SAMPLES)
     kreports = expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES)
-    kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken.krona.html")
+    combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.tsv")
+    kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
     all_outputs.extend(krakens)
     all_outputs.extend(kreports)
-    #all_outputs.append(kraken_krona) # TODO: add krona output
+    all_outputs.append(combined_kreport)
+    all_outputs.append(kraken_krona)
     
     citations.add((
         "Wood DE, Salzberg SL (2014).",
@@ -56,6 +58,22 @@ rule download_minikraken2:
         tar -vxf minikraken2_v1_8GB.tgz  >> {log}
         mv -v *k2d {params.dbdir} >> {log}
         """
+
+
+rule download_KrakenTools:
+    """Download kreport2krona.py from Jennifer Lu's github."""
+    output:
+        "scripts/KrakenTools/kreport2krona.py"
+    log:
+        str(LOGDIR/"kraken2/KrakenTools.log")
+    shell:
+        """
+        git clone \
+            https://github.com/jenniferlu717/KrakenTools/tree/4db3e990db4e949b58b17a4d8bb133504818bc93 \
+            scripts/KrakenTools \
+            2> {log}
+        """
+
 
 rule kraken2:
     input:
@@ -90,13 +108,62 @@ rule kraken2:
             {params.extra} \
             2> {log}
         """
+        
+
+rule combine_kreports:
+    input:
+        kreports=expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES),
+        combine="scripts/KrakenTools/combine_kreports.py",
+    output:
+        report(OUTDIR/"kraken2/all_samples.kraken2.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/kraken2_table.rst"),
+    log:
+        str(LOGDIR/"kraken2/combined_kreport.log")
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        {input.combine} \
+            --output {output} \
+            --report-files {input.kreports} \
+            2>> {log} \
+            >> {log}
+        """
+
+
+rule kreport2krona:
+    input:
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
+        kreport2krona="scripts/KrakenTools/kreport2krona.py",
+    output:
+        OUTDIR/"kraken2/{sample}.krona"
+    log:
+        str(LOGDIR/"kraken2/{sample}.kreport2krona.log")
+    shadow: 
+        "shallow"
+    threads:
+        1
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        {input.kreport2krona} \
+            --report-file {input.kreport} \
+            --output {output} \
+            2> {log}
+        """
 
 
 rule create_kraken2_krona_plot:
     input:
-        expand(str(OUTDIR/"kraken2/{sample}.krona"), sample=SAMPLES)
+        expand(str(OUTDIR/"kraken2/{sample}.krona"), sample=SAMPLES),
     output:
-        krona_html=OUTDIR/"kraken2/all_samples.kraken2.krona.html",
+        krona_html=report(OUTDIR/"kraken2/all_samples.kraken2.krona.html",
+                          category="Taxonomic profiling",
+                          caption="../../report/kraken2_krona.rst"),
     shadow:
         "shallow"
     conda:

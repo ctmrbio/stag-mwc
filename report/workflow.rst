@@ -7,6 +7,6 @@ StaG mwc
     :alt: StaG mwc
     :align: center
 
-This is a report from an execution of `StaG-mwc`_, created by Snakemake. Each
-subsection in the Results section contains brief descriptions of the output
-from workflow steps, and links to some of the output files.
+This is an automatic report from an execution of `StaG-mwc`_, created by
+Snakemake. Each subsection in the Results section contains brief descriptions
+of the output from workflow steps, and links to some of the output files.
