@@ -25,6 +25,7 @@ situations.
 - Added assembly and binning using MetaWRAP.
 - Added the possibility to run in Singularity with conda using 
   `--use-singularity --use-conda`.
+- Added more MetaPhlAn2 data in output report.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.

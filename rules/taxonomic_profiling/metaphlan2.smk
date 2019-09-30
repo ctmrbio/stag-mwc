@@ -137,10 +137,12 @@ rule combine_metaphlan2_outputs:
     input:
         expand(str(OUTDIR/"metaphlan2/{sample}.metaphlan2.txt"), sample=SAMPLES)
     output:
-        txt=OUTDIR/"metaphlan2/all_samples.metaphlan2.txt",
+        txt=report(OUTDIR/"metaphlan2/all_samples.metaphlan2.txt",
+                   category="Taxonomic profiling",
+                   caption="../../report/metaphlan2_table.rst"),
         pdf=report(OUTDIR/"metaphlan2/all_samples.metaphlan2.pdf",
-                   caption="../../report/metaphlan2.rst",
-                   category="Taxonomic profiling")
+                   category="Taxonomic profiling",
+                   caption="../../report/metaphlan2.rst"),
     shadow:
         "shallow"
     conda:
@@ -177,7 +179,9 @@ rule create_metaphlan2_krona_plots:
     input:
         expand(str(OUTDIR/"metaphlan2/{sample}.metaphlan2.krona"), sample=SAMPLES)
     output:
-        html=OUTDIR/"metaphlan2/all_samples.metaphlan2.krona.html",
+        html=report(OUTDIR/"metaphlan2/all_samples.metaphlan2.krona.html",
+                    category="Taxonomic profiling",
+                    caption="../../report/metaphlan2_krona.rst"),
     shadow:
         "shallow"
     conda:
