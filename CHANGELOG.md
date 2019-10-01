@@ -51,6 +51,7 @@ situations.
 - Updated sambamba to 0.7.0
 - Updated Kraken2 to 2.0.8_beta
 - Updated seaborn to 0.8.1, added fastcluster to StaG conda env, installed via pip.
+- Defined some low-impact summary and plotting rules as localrules.
 
 
 ## [0.3.2-dev]

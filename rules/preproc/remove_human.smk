@@ -6,7 +6,8 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_hg19
+    download_hg19,
+    plot_proportion_human
 
 if config["remove_human"]:
     hg19_path = Path(config["remove_human"]["hg19_path"])

@@ -7,6 +7,7 @@ from snakemake.exceptions import WorkflowError
 
 localrules:
     download_metaphlan2_database,
+    combine_metaphlan2_outputs, 
     create_metaphlan2_krona_plots,
 
 mpa_config = config["metaphlan2"]
