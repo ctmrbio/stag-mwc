@@ -15,7 +15,7 @@ jobs:
                   conda config --add channels bioconda
                   conda create -q -y -n snakemake python=3.7 snakemake=5.6.0
             - save_cache:
-                key: v1-snakemake-5.6.0
+                key: v1-snakemake-5.6.0-{{ .Environment.CIRCLE_SHA1 }}
                 paths: 
                     - /opt/conda
     bundle_dependencies:
@@ -56,23 +56,15 @@ jobs:
         working_directory: ~/stag-mwc
         steps:
             - restore_cache:
-                keys:   
-                    - v1-snakemake-5.6.0
-                paths: 
-                    - /opt/conda
+                key: v1-snakemake-5.6.0-{{ .Environment.CIRCLE_SHA1 }}
             - restore_cache:
-                keys:   
-                    - v1-stag-mwc_test_data-{{ .Environment.CIRCLE_SHA1 }}
-                paths: 
-                    - ~/stag-mwc
+                key: v1-stag-mwc_test_data-{{ .Environment.CIRCLE_SHA1 }}
             - restore_cache:
-                keys:   
-                    - v1-stag-mwc_with_dbs-{{ .Revision }}
-                paths: 
-                    - ~/stag-mwc
+                key: v1-stag-mwc_with_dbs-{{ .Revision }}
             - run:
                 name: Validate syntax and DAG
                 command: |
+                    which conda
                     sed -i 's/assess_depth: False/assess_depth: True/' config.yaml
                     sed -i 's/sketch_compare: False/sketch_compare: True/' config.yaml
                     sed -i 's/kaiju: False/kaiju: True/' config.yaml
