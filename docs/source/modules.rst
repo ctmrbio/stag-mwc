@@ -1,7 +1,6 @@
 .. _BBCountUnique: https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/calcuniqueness-guide/
 .. _BBDuk:  https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/
 .. _BBMap: https://sourceforge.net/projects/bbmap/
-.. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
@@ -259,15 +258,6 @@ featureCounts ``extra`` configuration setting, e.g.::
 Taxonomic profiling
 *******************
 
-Centrifuge
----------
-:Tool: `Centrifuge`_
-:Output folder: ``centrifuge``
-
-Run `Centrifuge`_ on the trimmed and filtered reads to produce a taxonomic
-profile.  Outputs two files per sample: ``<sample>.centrifuge_report.tsv`` and
-``<sample>.centrifuge.tsv``.
-
 Kaiju
 -----
 :Tool: `Kaiju`_
@@ -308,11 +298,12 @@ Outputs three files per sample, plus three summaries for all samples::
     <sample>.metaphlan2.txt
     
     all_samples.metaphlan2.krona.html
-    all_samples.metaphlan2.pdf
+    all_samples.Species_top50.pdf
     all_samples.metaphlan2.txt
 
-The file called ``all_samples.metaphlan2.pdf`` contains a standard MetaPhlAn2
-clustered heatmap plot containing all samples.
+The file called ``all_samples.Species_top50.pdf`` contains a clustered heatmap
+plot showing abundances of the top 50 species across all samples. The taxonomic
+level and the top ``N`` can be adjusted in the config.
 
 
 Functional profiling
