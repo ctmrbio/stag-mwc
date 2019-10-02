@@ -58,7 +58,15 @@ jobs:
             - restore_cache:
                 keys:   
                     - v1-snakemake-5.6.0
+                paths: 
+                    - ~/stag-mwc
+            - restore_cache:
+                keys:   
                     - v1-stag-mwc_test_data-{{ checksum "input/test1_1.fq.gz" }}
+                paths: 
+                    - ~/stag-mwc
+            - restore_cache:
+                keys:   
                     - v1-stag-mwc_with_dbs-{{ .Revision }}
                 paths: 
                     - ~/stag-mwc
