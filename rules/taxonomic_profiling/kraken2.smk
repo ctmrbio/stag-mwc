@@ -66,7 +66,8 @@ rule download_minikraken2:
 rule download_KrakenTools:
     """Download kreport2krona.py from Jennifer Lu's github."""
     output:
-        "scripts/KrakenTools/kreport2krona.py"
+        "scripts/KrakenTools/kreport2krona.py",
+        "scripts/KrakenTools/combine_kreports.py",
     log:
         str(LOGDIR/"kraken2/KrakenTools.log")
     shell:
