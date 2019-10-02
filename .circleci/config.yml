@@ -13,11 +13,11 @@ jobs:
                   conda config --add channels defaults
                   conda config --add channels conda-forge
                   conda config --add channels bioconda
-                  conda create -q -n snakemake python=3.7 snakemake=5.6.0
+                  conda create -q -y -n snakemake python=3.7 snakemake=5.6.0
             - save_cache:
                 key: v1-snakemake-5.6.0
                 paths: 
-                    - ~/stag-mwc
+                    - /opt/conda
     bundle_dependencies:
         docker:
             - image: continuumio/miniconda3:4.7.10
@@ -31,7 +31,7 @@ jobs:
                     touch input/test1_1.fq.gz input/test1_2.fq.gz
                     touch input/test2_1.fq.gz input/test2_2.fq.gz
             - save_cache:
-                key: v1-stag-mwc_test_data-{{ checksum "input/test1_1.fq.gz" }}
+                key: v1-stag-mwc_test_data-{{ .Environment.CIRCLE_SHA1 }}
                 paths:
                     - ~/stag-mwc
     checkout_code:
@@ -59,10 +59,10 @@ jobs:
                 keys:   
                     - v1-snakemake-5.6.0
                 paths: 
-                    - ~/stag-mwc
+                    - /opt/conda
             - restore_cache:
                 keys:   
-                    - v1-stag-mwc_test_data-{{ checksum "input/test1_1.fq.gz" }}
+                    - v1-stag-mwc_test_data-{{ .Environment.CIRCLE_SHA1 }}
                 paths: 
                     - ~/stag-mwc
             - restore_cache:
