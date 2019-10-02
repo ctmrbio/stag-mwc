@@ -13,7 +13,7 @@ from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
 min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
 
-stag_version = "0.3.3-dev"
+stag_version = "0.4.0-dev"
 singularity: "docker://continuumio/miniconda3:4.7.10"
 
 onstart:

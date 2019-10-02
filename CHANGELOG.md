@@ -13,7 +13,7 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [0.3.3] Unreleased
+## [0.4.0] Unreleased
 ### Added
 - Added resource limiter for HUMAnN2 due to its intense use of huge temporary
   files in the output folder. Activated with --resources humann2=X, where X is
@@ -28,6 +28,8 @@ situations.
 - Added more MetaPhlAn2 data in output report.
 - Added rule to automatically download KrakenTools by Jennifer Lu.
 - Added combined table and Krona plot for Kraken2 to output report.
+- Added metagenomic assembly, binning and "blobology", using MEGAHIT, CONCOCT, MetaBat,
+  implemented via MetaWrap.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
