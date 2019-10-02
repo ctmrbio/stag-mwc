@@ -49,7 +49,7 @@ rule download_humann2_databases:
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     params:
         dbdir=config["dbdir"]+"/humann2"
     shell:
@@ -74,7 +74,7 @@ rule humann2:
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads:
         8
     resources:
@@ -114,7 +114,7 @@ rule normalize_humann2_tables:
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads: 
         1
     params:
@@ -157,7 +157,7 @@ rule join_humann2_tables:
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads: 
         1
     params:

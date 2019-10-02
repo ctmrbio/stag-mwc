@@ -33,6 +33,7 @@ situations.
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
 
 ### Changed
+- Updated Python to 3.7 in main stag-mwc conda environment.
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of
   OUTDIR/logs/remove_human.
@@ -41,17 +42,25 @@ situations.
 - Updated GROOT to v0.8.5.
 - Cleaned up sketch comparison cluster heatmap plotting script, making it more 
   robust to variations in output from different BBTools versions.
-- Updated MetaPhlAn2 to 2.9.12 from conda. This required adding a local version
-  of metaphlan_hclust_heatmap.py as that has disappeared in recent conda version. 
-  Also required changing the call of merge_metaphlan_tables.py due to undocumented
-  CLI change in conda version.
-- Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
-- Updated Kaiju to 1.7.2
-- Updated BBMap to 38.68
-- Updated sambamba to 0.7.0
-- Updated Kraken2 to 2.0.8_beta
-- Updated seaborn to 0.8.1, added fastcluster to StaG conda env, installed via pip.
+- Changed the call to merge_metaphlan_tables.py due to undocumented
+  CLI change in latest conda version.
+- Updated Kaiju to 1.7.2.
+- Updated BBMap to 38.68.
+- Updated sambamba to 0.7.0.
+- Updated Kraken2 to 2.0.8_beta.
+- Updated seaborn to 0.8.1, added fastcluster to main stag-mwc conda env, installed via pip.
+- Updated MetaPhlAn2 to 2.9.21.
+- Split biobakery environment into metaphlan2 and humann2 so users only
+  interested in MetaPhlAn2 do not have to download the huge HUMAnN2.
+- Replaced the outdated metaphlan_hclust_heatmap.py with a custom
+  plot_metaphlan2_heatmap.py script. Required splitting merge_metaphlan
 - Defined some low-impact summary and plotting rules as localrules.
+
+### Removed
+- Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,
+  Kraken2, HUMAnN2, and hg19 for RemoveHuman.
+- Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
+- Removed Centrifuge
 
 
 ## [0.3.2-dev]
