@@ -70,7 +70,6 @@ include: "rules/mappers/bowtie2.smk"
 #############################
 # Taxonomic profiling
 #############################
-include: "rules/taxonomic_profiling/centrifuge.smk"
 include: "rules/taxonomic_profiling/kaiju.smk"
 include: "rules/taxonomic_profiling/kraken2.smk"
 include: "rules/taxonomic_profiling/metaphlan2.smk"
