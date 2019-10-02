@@ -32,7 +32,6 @@ mappers:
     bbmap: False
     bowtie2: False
 taxonomic_profile:
-    centrifuge: False
     kaiju: False
     kraken2: False
     metaphlan2: False
