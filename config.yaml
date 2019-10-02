@@ -107,8 +107,8 @@ kraken2:
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
 
 metaphlan2:
-    bt2_db_dir: "/db/metaphlan2/db_v29"           # [Required] Path to MetaPhlAn2 database dir
-    bt2_index: "mpa_v29_CHOCOPhlAn_201901"    # [Required] Name of MetaPhlAn2 database index (without "mpl_" prefix)
+    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
+    bt2_index: ""            # [Required] Name of MetaPhlAn2 database index
     extra: ""                # Extra command line arguments for metaphlan2.py
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
