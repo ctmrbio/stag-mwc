@@ -48,7 +48,7 @@ binning: False
 fastp:
     extra: ""
 remove_human:
-    hg19_path: "/db/hg19"            # [Required] Path to folder containing the BBMap index for hg19
+    hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
