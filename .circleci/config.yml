@@ -64,7 +64,6 @@ jobs:
             - run:
                 name: Validate syntax and DAG
                 command: |
-                    which conda
                     sed -i 's/assess_depth: False/assess_depth: True/' config.yaml
                     sed -i 's/sketch_compare: False/sketch_compare: True/' config.yaml
                     sed -i 's/kaiju: False/kaiju: True/' config.yaml
@@ -80,6 +79,7 @@ jobs:
                     sed -i 's|bt2_index: \"\"|bt2_index: \"test\"|' config.yaml
                     sed -i 's|_db: \"\"|_db: \"db\"|' config.yaml
                     sed -i 's|    index: \"\"|    index: \"db\"|' config.yaml
+                    conda activate snakemake
                     snakemake --use-conda --dryrun
 
 workflows:
