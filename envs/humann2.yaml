@@ -1,0 +1,8 @@
+name: stag-mwc-biobakery
+channels:
+    - bioconda
+    - conda-forge
+    - defaults
+dependencies:
+    - humann2 =0.11.2
+    - krona =2.7.1
