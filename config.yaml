@@ -35,7 +35,7 @@ taxonomic_profile:
     centrifuge: False
     kaiju: False
     kraken2: False
-    metaphlan2: True
+    metaphlan2: False
 functional_profile:
     humann2: False
 antibiotic_resistance: False
