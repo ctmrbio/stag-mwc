@@ -28,8 +28,8 @@ situations.
 - Added more MetaPhlAn2 data in output report.
 - Added rule to automatically download KrakenTools by Jennifer Lu.
 - Added combined table and Krona plot for Kraken2 to output report.
-- Added metagenomic assembly, binning and "blobology", using MEGAHIT, CONCOCT, MetaBat,
-  implemented via MetaWrap.
+- Added metagenomic assembly, binning and "blobology", using MEGAHIT or SPAdes,
+  with binning using CONCOCT and MetaBat, implemented via MetaWrap.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
