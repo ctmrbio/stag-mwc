@@ -7,6 +7,8 @@ from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
 
+mw_config = config["metawrap"]
+
 localrules:
 
 if config["assembly"]:
@@ -25,9 +27,9 @@ if config["assembly"]:
     ))
 
 if config["binning"]:
-    primary_bins = expand(str(OUTDIR/"metawrap/binning/{sample}/concoct_bins"), sample=SAMPLES)
-    consolidated_bins = expand(str(OUTDIR/"metawrap/consolidated_bins/{sample}/metawrap"), sample=SAMPLES)
-    blobology = expand(str(OUTDIR/"metawrap/blobology/{sample}"), sample=SAMPLES)
+    primary_bins = expand(f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins", sample=SAMPLES)
+    consolidated_bins = expand(f"{OUTDIR}/metawrap/consolidated_bins/{mw_config['assembler']}/{{sample}}/metawrap", sample=SAMPLES)
+    blobology = expand(f"{OUTDIR}/metawrap/blobology/{mw_config['assembler']}/{{sample}}", sample=SAMPLES)
     all_outputs.extend(primary_bins)
     all_outputs.extend(consolidated_bins)
     all_outputs.extend(blobology)
@@ -55,17 +57,16 @@ if config["binning"]:
 
 
 
-mw_config = config["metawrap"]
 rule assembly:
-    """Metagenomic assembly using MEGAHIT via MetaWRAP."""
+    """Metagenomic assembly via MetaWRAP."""
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
+        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
     output:
-        contigs=OUTDIR/"metawrap/assembly/{sample}/final_assembly.fasta",
+        contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
     log:
-        stdout=str(LOGDIR/"metawrap/{sample}.assembly.stdout.log"),
-        stderr=str(LOGDIR/"metawrap/{sample}.assembly.stderr.log"),
+        stdout=f"{LOGDIR}/metawrap/{mw_config['assembler']}/{{sample}}.assembly.stdout.log",
+        stderr=f"{LOGDIR}/metawrap/{mw_config['assembler']}/{{sample}}.assembly.stderr.log",
     shadow:
         "shallow"
     conda:
@@ -73,7 +74,9 @@ rule assembly:
     threads:
         20
     params:
-        outdir=lambda w: f"{OUTDIR}/metawrap/assembly/{w.sample}",
+        outdir=lambda w: f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{w.sample}",
+        assembler=mw_config["assembler"],
+        memory=140,
     shell:
         """
         metawrap assembly \
@@ -81,8 +84,8 @@ rule assembly:
             -2 {input.read2} \
             -o {params.outdir} \
             -t {threads} \
-            -m 24 \
-            --megahit \
+            -m {params.memory} \
+            --use-{params.assembler} \
             2> {log.stderr} \
             > {log.stdout}
         """
@@ -91,16 +94,16 @@ rule assembly:
 rule binning:
     """Metagenomic binning using CONCOCT, MaxBin2, MetaBAT via MetaWRAP."""
     input:
-        contigs=OUTDIR/"metawrap/assembly/{sample}/final_assembly.fasta",
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
+        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
+        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
     output:
-        concoct_bins=OUTDIR/"metawrap/binning/{sample}/concoct_bins",
-        #maxbin2_bins=OUTDIR/"metawrap/binning/{sample}/maxbin2_bins",
-        metabat2_bins=OUTDIR/"metawrap/binning/{sample}/metabat2_bins",
+        concoct_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins",
+        #maxbin2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/maxbin2_bins",
+        metabat2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/metabat2_bins",
     log:
-        stdout=str(LOGDIR/"metawrap/{sample}.binning.stdout.log"),
-        stderr=str(LOGDIR/"metawrap/{sample}.binning.stderr.log"),
+        stdout=f"{LOGDIR}/metawrap/{{sample}}.binning.stdout.log",
+        stderr=f"{LOGDIR}/metawrap/{{sample}}.binning.stderr.log",
     shadow:
         "shallow"
     conda:
@@ -108,7 +111,7 @@ rule binning:
     threads:
         20
     params:
-        outdir=lambda w: f"{OUTDIR}/metawrap/binning/{w.sample}",
+        outdir=lambda w: f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{w.sample}",
         universal=mw_config["universal"],
     shell:
         """
@@ -131,15 +134,15 @@ rule binning:
 rule consolidate_bins:
     """Consolidate bins using MetaWRAP."""
     input:
-        concoct_bins=OUTDIR/"metawrap/binning/{sample}/concoct_bins",
-        #maxbin2_bins=OUTDIR/"metawrap/binning/{sample}/maxbin2_bins",
-        metabat2_bins=OUTDIR/"metawrap/binning/{sample}/metabat2_bins",
+        concoct_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins",
+        #maxbin2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/maxbin2_bins",
+        metabat2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/metabat2_bins",
     output:
-        metawrap_bins=OUTDIR/"metawrap/consolidated_bins/{sample}/metawrap",
-        metawrap_stats=OUTDIR/"metawrap/consolidated_bins/{sample}/metawrap.stats",
+        metawrap_bins=f"{OUTDIR}/metawrap/consolidated_bins/{mw_config['assembler']}/{{sample}}/metawrap",
+        metawrap_stats=f"{OUTDIR}/metawrap/consolidated_bins/{mw_config['assembler']}/{{sample}}/metawrap.stats",
     log:
-        stdout=str(LOGDIR/"metawrap/{sample}.consolidate_bins.stdout.log"),
-        stderr=str(LOGDIR/"metawrap/{sample}.consolidate_bins.stderr.log"),
+        stdout=f"{LOGDIR}/metawrap/{{sample}}.consolidate_bins.stdout.log",
+        stderr=f"{LOGDIR}/metawrap/{{sample}}.consolidate_bins.stderr.log",
     shadow:
         "shallow"
     conda:
@@ -167,15 +170,15 @@ rule consolidate_bins:
 rule blobology:
     """Visualize bins using MetaWRAP blobology module"""
     input:
-        contigs=OUTDIR/"metawrap/assembly/{sample}/final_assembly.fasta",
-        metawrap_bins=OUTDIR/"metawrap/consolidated_bins/{sample}/metawrap",
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
+        metawrap_bins=f"{OUTDIR}/metawrap/consolidated_bins/{mw_config['assembler']}/{{sample}}/metawrap",
+        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
+        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
     output:
-        plots=OUTDIR/"metawrap/blobology/{sample}",
+        plots=f"{OUTDIR}/metawrap/blobology/{mw_config['assembler']}/{{sample}}",
     log:
-        stdout=str(LOGDIR/"metawrap/{sample}.blobology.stdout.log"),
-        stderr=str(LOGDIR/"metawrap/{sample}.blobology.stderr.log"),
+        stdout=f"{LOGDIR}/metawrap/{{sample}}.blobology.stdout.log",
+        stderr=f"{LOGDIR}/metawrap/{{sample}}.blobology.stderr.log",
     shadow:
         "shallow"
     conda:
