@@ -12,7 +12,7 @@ mw_config = config["metawrap"]
 localrules:
 
 if config["assembly"]:
-    assemblies = expand(str(OUTDIR/"metawrap/assembly/{sample}/final_assembly.fasta"), sample=SAMPLES)
+    assemblies = expand(f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta", sample=SAMPLES)
     all_outputs.extend(assemblies)
 
     citations.add((
