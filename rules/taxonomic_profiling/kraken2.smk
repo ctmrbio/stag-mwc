@@ -8,7 +8,6 @@ from snakemake.exceptions import WorkflowError
 localrules:
     combine_kreports,
     create_kraken2_krona_plot,
-    download_KrakenTools,
     download_minikraken2,
     kreport2krona,
 
