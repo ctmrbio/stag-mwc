@@ -13,18 +13,12 @@ __default__:
 #############################
 # Pre-processing
 #############################
-fastqc:
+fastp:
     n: 1
-    time: "00:15:00"
-trim_adapters_quality:
-    n: 5
-    time: "00:30:00"
-index_hg19:
-    n: 3
-    time: "00:30:00"
+    time: "01:00:00"
 remove_human:
     n: 8
-    time: "01:30:00"
+    time: "10:00:00"
 bbcountunique:
     n: 2
     time: "00:45:00"
@@ -49,17 +43,14 @@ bowtie2:
 #############################
 # Taxonomic profiling
 #############################
-centrifuge:
-    n: 4
-    time: "02:00:00"
 kaiju:
-    n: 4
-    time: "01:00:00"
-build_metaphlan2_index:
-    n: 4
-    time: "01:00:00"
+    n: 8
+    time: "02:00:00"
+kraken2:
+    n: 8
+    time: "02:00:00"
 metaphlan2:
-    n: 4
+    n: 8
     time: "01:30:00"
 
 #############################
@@ -72,9 +63,6 @@ humann2:
 #############################
 # Antibiotic resistance
 #############################
-create_megares_index:
-    n: 2
-    time: "00:45:00"
 groot_align:
     n: 6
     time: "01:00:00"
