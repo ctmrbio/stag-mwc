@@ -31,6 +31,7 @@ situations.
 - Added metagenomic assembly, binning and "blobology", using MEGAHIT or SPAdes,
   with binning using CONCOCT and MetaBat, implemented via MetaWrap.
 - Added Jennifer Lu's KrakenTools under the MIT license.
+- Added some basic syntax validation tests in CircleCI
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
