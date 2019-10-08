@@ -27,8 +27,8 @@ rule trim_adapters_quality:
     output:
         read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
         read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
-        json=LOGDIR/"fastp/{sample}.json",
-        html=LOGDIR/"fastp/{sample}.html",
+        json=LOGDIR/"fastp/{sample}.fastp.json",
+        html=LOGDIR/"fastp/{sample}.fastp.html",
     log:
         stdout=str(LOGDIR/"fastp/{sample}.stdout.log"),
         stderr=str(LOGDIR/"fastp/{sample}.stderr.log"),
