@@ -63,22 +63,6 @@ rule download_minikraken2:
         """
 
 
-rule download_KrakenTools:
-    """Download kreport2krona.py from Jennifer Lu's github."""
-    output:
-        "scripts/KrakenTools/kreport2krona.py",
-        "scripts/KrakenTools/combine_kreports.py",
-    log:
-        str(LOGDIR/"kraken2/KrakenTools.log")
-    shell:
-        """
-        git clone \
-            https://github.com/jenniferlu717/KrakenTools/tree/4db3e990db4e949b58b17a4d8bb133504818bc93 \
-            scripts/KrakenTools \
-            2> {log}
-        """
-
-
 rule kraken2:
     input:
         read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
@@ -117,7 +101,6 @@ rule kraken2:
 rule combine_kreports:
     input:
         kreports=expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES),
-        combine="scripts/KrakenTools/combine_kreports.py",
     output:
         report(OUTDIR/"kraken2/all_samples.kraken2.tsv",
                category="Taxonomic profiling",
@@ -130,7 +113,7 @@ rule combine_kreports:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-        {input.combine} \
+        scripts/KrakenTools/combine_kreports.py \
             --output {output} \
             --report-files {input.kreports} \
             2>> {log} \
@@ -141,7 +124,6 @@ rule combine_kreports:
 rule kreport2krona:
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport",
-        kreport2krona="scripts/KrakenTools/kreport2krona.py",
     output:
         OUTDIR/"kraken2/{sample}.krona"
     log:
@@ -154,7 +136,7 @@ rule kreport2krona:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-        {input.kreport2krona} \
+        scripts/KrakenTools/kreport2krona.py \
             --report-file {input.kreport} \
             --output {output} \
             2> {log}
