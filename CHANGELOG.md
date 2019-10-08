@@ -30,6 +30,7 @@ situations.
 - Added combined table and Krona plot for Kraken2 to output report.
 - Added metagenomic assembly, binning and "blobology", using MEGAHIT or SPAdes,
   with binning using CONCOCT and MetaBat, implemented via MetaWrap.
+- Added Jennifer Lu's KrakenTools under the MIT license.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
