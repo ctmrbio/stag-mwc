@@ -13,11 +13,11 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_{readpair}.fq.gz" 
+input_fn_pattern: "{sample}__{readpair}.fq.gz" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
-report: "stag_report"        # Filename prefix for report file ("-{datetime}.html" automatically appended)
+report: "stag_report_"        # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
 
 
@@ -25,7 +25,7 @@ email: ""                    # Email to send status message after completed/fail
 # Pipeline steps included
 #########################
 qc_reads: True
-remove_human: True
+host_removal: False
 assess_depth: False
 sketch_compare: False
 mappers:
@@ -33,8 +33,8 @@ mappers:
     bowtie2: False
 taxonomic_profile:
     kaiju: False
-    kraken2: False
-    metaphlan2: False
+    kraken2: True
+    metaphlan2: True
 functional_profile:
     humann2: False
 antibiotic_resistance: False
@@ -48,7 +48,7 @@ binning: False
 fastp:
     extra: ""
 remove_human:
-    hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
+    hg19_path: "/db/hg19"            # [Required] Path to folder containing the BBMap index for hg19
     minid: 0.95
     maxindel: 3
     minhits: 2
@@ -101,13 +101,13 @@ kaiju:
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
 
 kraken2:
-    db: ""                   # [Required] Path to Kraken2 DB folder
+    db: "/db/kraken2/minikraken2_v2_8GB"                   # [Required] Path to Kraken2 DB folder
     confidence: 0.0          # Kraken2 confidence score, float in [0,1]
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
 
 metaphlan2:
-    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
-    bt2_index: ""            # [Required] Name of MetaPhlAn2 database index
+    bt2_db_dir: "/db/metaphlan2/db_v29"           # [Required] Path to MetaPhlAn2 database dir
+    bt2_index: "mpa_v29_CHOCOPhlAn_201901"            # [Required] Name of MetaPhlAn2 database index
     extra: ""                # Extra command line arguments for metaphlan2.py
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain

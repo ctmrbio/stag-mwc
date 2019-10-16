@@ -9,7 +9,7 @@ localrules:
     download_hg19,
     plot_proportion_human
 
-if config["remove_human"]:
+if config["host_removal"]:
     hg19_path = Path(config["remove_human"]["hg19_path"])
     if not Path(hg19_path/"ref").exists():
         err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(hg19_path)
@@ -32,6 +32,12 @@ if config["remove_human"]:
         "University of California, Berkeley, California.",
         "Available online at: http://sourceforge.net/projects/bbmap.",
     ))
+else:
+    filtered_human = expand(str(OUTDIR/"filtered_human/{sample}_R{readpair}.filtered_human.fq.gz"),
+            sample=SAMPLES,
+            readpair=[1,2])
+    all_outputs.extend(filtered_human)
+    
 
 
 rule download_hg19:
@@ -84,87 +90,110 @@ rule index_hg19:
         """
 
 
-rh_config = config["remove_human"]
-rule remove_human:
-    """Filter reads matching hg19. NB: requires about 16GB of memory."""
-    input:
-        read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-        read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
-    output:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
-        human=OUTDIR/"filtered_human/{sample}_human.fq.gz",
-    log:
-        statsfile=str(LOGDIR/"remove_human/{sample}.statsfile.txt"),
-        stderr=str(LOGDIR/"remove_human/{sample}.stderr.log"),
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/stag-mwc.yaml"
-    threads:
-        16
-    params:
-        minid=rh_config["minid"],
-        maxindel=rh_config["maxindel"],
-        minhits=rh_config["minhits"],
-        bandwidthratio=rh_config["bandwidthratio"],
-        bandwidth=rh_config["bandwidth"],
-        qtrim=rh_config["qtrim"],
-        trimq=rh_config["trimq"],
-        quickmatch=rh_config["quickmatch"],
-        fast=rh_config["fast"],
-        untrim=rh_config["untrim"],
-    shell:
-        """
-        bbmap.sh \
-            threads={threads} \
-            in1={input.read1} \
-            in2={input.read2} \
-            path={rh_config[hg19_path]} \
-            outu1={output.read1} \
-            outu2={output.read2} \
-            outm={output.human} \
-            statsfile={log.statsfile} \
-            minid={params.minid} \
-            maxindel={params.maxindel} \
-            minhits={params.minhits} \
-            bandwidthratio={params.bandwidthratio} \
-            bandwidth={params.bandwidth} \
-            qtrim={params.qtrim} \
-            trimq={params.trimq} \
-            {params.quickmatch} \
-            {params.fast} \
-            {params.untrim} \
-            2> {log.stderr}
-        """
+if config["host_removal"]:
+    rh_config = config["remove_human"]
+    rule remove_human:
+        """Filter reads matching hg19. NB: requires about 16GB of memory."""
+        input:
+            read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+            read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        output:
+            read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+            read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+            human=OUTDIR/"filtered_human/{sample}_human.fq.gz",
+        log:
+            statsfile=str(LOGDIR/"remove_human/{sample}.statsfile.txt"),
+            stderr=str(LOGDIR/"remove_human/{sample}.stderr.log"),
+        shadow:
+            "shallow"
+        conda:
+            "../../envs/stag-mwc.yaml"
+        threads:
+            16
+        params:
+            minid=rh_config["minid"],
+            maxindel=rh_config["maxindel"],
+            minhits=rh_config["minhits"],
+            bandwidthratio=rh_config["bandwidthratio"],
+            bandwidth=rh_config["bandwidth"],
+            qtrim=rh_config["qtrim"],
+            trimq=rh_config["trimq"],
+            quickmatch=rh_config["quickmatch"],
+            fast=rh_config["fast"],
+            untrim=rh_config["untrim"],
+        shell:
+            """
+            bbmap.sh \
+                threads={threads} \
+                in1={input.read1} \
+                in2={input.read2} \
+                path={rh_config[hg19_path]} \
+                outu1={output.read1} \
+                outu2={output.read2} \
+                outm={output.human} \
+                statsfile={log.statsfile} \
+                minid={params.minid} \
+                maxindel={params.maxindel} \
+                minhits={params.minhits} \
+                bandwidthratio={params.bandwidthratio} \
+                bandwidth={params.bandwidth} \
+                qtrim={params.qtrim} \
+                trimq={params.trimq} \
+                {params.quickmatch} \
+                {params.fast} \
+                {params.untrim} \
+                2> {log.stderr}
+            """
 
 
-rule plot_proportion_human:
-    """Plot proportion of reads that matched hg19."""
-    input:
-        expand(str(LOGDIR/"remove_human/{sample}.statsfile.txt"), sample=SAMPLES)
-    output:
-        pdf=report(OUTDIR/"filtered_human/proportion_human.pdf",
-                   category="Proportion human reads",
-                   caption="../../report/proportion_human_reads.rst"),
-        tsv=report(OUTDIR/"filtered_human/proportion_human.tsv",
-                   category="Proportion human reads",
-                   caption="../../report/tsv_proportion_human_reads.rst"),
-    log:
-        str(LOGDIR/"remove_human/proportion_human.log")
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/stag-mwc.yaml"
-    threads:
-        1
-    params:
-        unambigous=lambda _: "--unambigous" if rh_config["plot_unambigous"] else ""
-    shell:
-        """
-        scripts/plot_proportion_human.py \
-            {input} \
-            {params.unambigous} \
-            --outfile {output.pdf} \
-            --table {output.tsv}
-        """
+    rule plot_proportion_human:
+        """Plot proportion of reads that matched hg19."""
+        input:
+            expand(str(LOGDIR/"remove_human/{sample}.statsfile.txt"), sample=SAMPLES)
+        output:
+            pdf=report(OUTDIR/"filtered_human/proportion_human.pdf",
+                       category="Proportion human reads",
+                       caption="../../report/proportion_human_reads.rst"),
+            tsv=report(OUTDIR/"filtered_human/proportion_human.tsv",
+                       category="Proportion human reads",
+                       caption="../../report/tsv_proportion_human_reads.rst"),
+        log:
+            str(LOGDIR/"remove_human/proportion_human.log")
+        shadow:
+            "shallow"
+        conda:
+            "../../envs/stag-mwc.yaml"
+        threads:
+            1
+        params:
+            unambigous=lambda _: "--unambigous" if rh_config["plot_unambigous"] else ""
+        shell:
+            """
+            scripts/plot_proportion_human.py \
+                {input} \
+                {params.unambigous} \
+                --outfile {output.pdf} \
+                --table {output.tsv}
+            """
+else:
+    rh_config = config["remove_human"]
+    rule skip_remove_human:
+        """Do not filter human sequences"""
+        input:
+            read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+            read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        output:
+            read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+            read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        log:
+            stderr=str(LOGDIR/"remove_human/{sample}.stderr.log"),
+        conda:
+            "../../envs/stag-mwc.yaml"
+        threads:
+            16
+        params:
+        shell:
+            """
+            ln -sv $(readlink -f {input.read1}) {output.read1} >> {log.stderr}
+            ln -sv $(readlink -f {input.read2}) {output.read2} >> {log.stderr}
+            """
