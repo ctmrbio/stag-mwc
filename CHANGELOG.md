@@ -59,6 +59,11 @@ situations.
 - Replaced the outdated metaphlan_hclust_heatmap.py with a custom
   plot_metaphlan2_heatmap.py script. Required splitting merge_metaphlan
 - Defined some low-impact summary and plotting rules as localrules.
+- Modified preprocessing rule definitions so they are conditionally included based on
+  config settings: this enables arbitrary starting points in the DAG by specifying
+  input dir and input filename pattern according to where the users wants to start the
+  workflow from (e.g. from the output_dir/filtered_human folder, if FASTQ files already
+  have been preprocessed by another workflow). 
 
 ### Removed
 - Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,

@@ -46,6 +46,8 @@ citations.add((
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
     raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
+else:
+    print(f"Found the following samples in inputdir using input filename pattern: {SAMPLES}")
 
 report: "report/workflow.rst"
 
@@ -73,10 +75,6 @@ include: "rules/mappers/bowtie2.smk"
 include: "rules/taxonomic_profiling/kaiju.smk"
 include: "rules/taxonomic_profiling/kraken2.smk"
 include: "rules/taxonomic_profiling/metaphlan2.smk"
-
-#############################
-# Assembly
-#############################
 
 #############################
 # Functional profiling

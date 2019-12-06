@@ -19,38 +19,38 @@ if config["qc_reads"]:
     ))
 
 
-fastp_config = config["fastp"]
-rule trim_adapters_quality:
-    input:
-        read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
-        read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
-    output:
-        read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-        read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
-        json=LOGDIR/"fastp/{sample}.fastp.json",
-        html=LOGDIR/"fastp/{sample}.fastp.html",
-    log:
-        stdout=str(LOGDIR/"fastp/{sample}.stdout.log"),
-        stderr=str(LOGDIR/"fastp/{sample}.stderr.log"),
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/stag-mwc.yaml"
-    threads:
-        4
-    params:
-        extra=fastp_config["extra"],
-    shell:
-        """
-        fastp \
-            --in1 {input.read1} \
-            --in2 {input.read2} \
-            --out1 {output.read1} \
-            --out2 {output.read2} \
-            --json {output.json} \
-            --html {output.html} \
-            --thread {threads} \
-            {params.extra} \
-            > {log.stdout} \
-            2> {log.stderr}
-        """
+    fastp_config = config["fastp"]
+    rule trim_adapters_quality:
+        input:
+            read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
+            read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
+        output:
+            read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+            read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+            json=LOGDIR/"fastp/{sample}.fastp.json",
+            html=LOGDIR/"fastp/{sample}.fastp.html",
+        log:
+            stdout=str(LOGDIR/"fastp/{sample}.stdout.log"),
+            stderr=str(LOGDIR/"fastp/{sample}.stderr.log"),
+        shadow:
+            "shallow"
+        conda:
+            "../../envs/stag-mwc.yaml"
+        threads:
+            4
+        params:
+            extra=fastp_config["extra"],
+        shell:
+            """
+            fastp \
+                --in1 {input.read1} \
+                --in2 {input.read2} \
+                --out1 {output.read1} \
+                --out2 {output.read2} \
+                --json {output.json} \
+                --html {output.html} \
+                --thread {threads} \
+                {params.extra} \
+                > {log.stdout} \
+                2> {log.stderr}
+            """
