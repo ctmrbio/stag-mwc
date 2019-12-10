@@ -5,11 +5,7 @@ from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
 
-localrules:
-    download_hg19,
-    plot_proportion_human
-
-if config["remove_human"]:
+if config["host_removal"]:
     hg19_path = Path(config["remove_human"]["hg19_path"])
     if not Path(hg19_path/"ref").exists():
         err_message = "Cannot find hg19 database for human sequence removal at: '{}'!\n".format(hg19_path)
@@ -33,6 +29,11 @@ if config["remove_human"]:
         "Available online at: http://sourceforge.net/projects/bbmap.",
     ))
 
+    localrules:
+        download_hg19,
+        plot_proportion_human
+
+    
 
     rule download_hg19:
         """Download masked hg19 from: 
@@ -167,4 +168,35 @@ if config["remove_human"]:
                 {params.unambigous} \
                 --outfile {output.pdf} \
                 --table {output.tsv}
+            """
+
+else:
+    filtered_human = expand(str(OUTDIR/"filtered_human/{sample}_R{readpair}.filtered_human.fq.gz"),
+            sample=SAMPLES,
+            readpair=[1,2])
+    all_outputs.extend(filtered_human)
+
+    localrules:
+        skip_remove_human,
+
+    rh_config = config["remove_human"]
+    rule skip_remove_human:
+        """Do not filter human sequences"""
+        input:
+            read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
+            read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+        output:
+            read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
+            read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        log:
+            stderr=str(LOGDIR/"remove_human/{sample}.stderr.log"),
+        conda:
+            "../../envs/stag-mwc.yaml"
+        threads:
+            16
+        params:
+        shell:
+            """
+            ln -sv $(readlink -f {input.read1}) {output.read1} >> {log.stderr}
+            ln -sv $(readlink -f {input.read2}) {output.read2} >> {log.stderr}
             """

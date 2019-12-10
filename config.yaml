@@ -17,7 +17,7 @@ input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
-report: "stag_report"        # Filename prefix for report file ("-{datetime}.html" automatically appended)
+report: "stag_report_"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
 
 
@@ -25,7 +25,7 @@ email: ""                    # Email to send status message after completed/fail
 # Pipeline steps included
 #########################
 qc_reads: True
-remove_human: True
+host_removal: True
 assess_depth: False
 sketch_compare: False
 mappers:
@@ -33,7 +33,7 @@ mappers:
     bowtie2: False
 taxonomic_profile:
     kaiju: False
-    kraken2: False
+    kraken2: True
     metaphlan2: False
 functional_profile:
     humann2: False

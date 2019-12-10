@@ -32,6 +32,9 @@ situations.
   with binning using CONCOCT and MetaBat, implemented via MetaWrap.
 - Added Jennifer Lu's KrakenTools under the MIT license.
 - Added some basic syntax validation tests in CircleCI
+- Added possibility to skip host removal, will symlink QC'd files into the host
+  removal output directory so Snakemake can continue without performing host
+  removal.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
