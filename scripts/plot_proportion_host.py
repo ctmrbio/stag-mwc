@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Plot proportion of reads mapped to hg19 with BBMap.
+# Plot proportion of reads mapped to host DB with BBMap.
 # Fredrik Boulund 2019
 
 from sys import argv, exit
@@ -14,15 +14,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def parse_args():
-    desc = "Plot histogram proportion human reads."
+    desc = "Plot histogram proportion host reads."
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("statsfile", metavar="statsfile", nargs="+",
             help="BBMap statsfile(s).")
     parser.add_argument("-o", "--outfile", dest="outfile", metavar="FILE",
-            default="proportion_human.pdf",
+            default="proportion_host.pdf",
             help="Filename of output histogram plot [%(default)s].")
     parser.add_argument("-t", "--table", dest="table", metavar="FILE",
-            default="proportion_human.tsv",
+            default="proportion_host.tsv",
             help="Filename of histogram data in TSV format [%(default)s].")
     parser.add_argument("-u", "--unambigous", dest="unambigous", action="store_true",
             default=False,
@@ -61,8 +61,8 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots()
     df.plot(kind="hist", ax=ax)
-    ax.set_title("Proportion human reads")
-    ax.set_xlabel("Proportion human reads")
+    ax.set_title("Proportion host reads")
+    ax.set_xlabel("Proportion host reads")
     ax.set_ylabel("Frequency")
     fig.savefig(options.outfile)
 
