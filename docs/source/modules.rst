@@ -1,5 +1,5 @@
 .. _BBCountUnique: https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/calcuniqueness-guide/
-.. _BBDuk:  https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/
+.. _FastP:  https://github.com/OpenGene/fastp
 .. _BBMap: https://sourceforge.net/projects/bbmap/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
@@ -16,7 +16,7 @@ Modules
 =======
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
-sequencing reads (using `FastQC`_), followed by human sequence removal (using
+sequencing reads (using `FastQC`_), followed by host sequence removal (using
 `BBMap`_). This section of the documentation aims to describe useful details
 about the separate tools that are used in |full_name|.
 
@@ -31,26 +31,25 @@ Pre-processing
 
 qc_reads
 --------------
-:Tools: `FastQC`_, `BBDuk`_
-:Output folder: ``fastqc``, ``trimmed_qa``
+:Tools: `FastP`_
+:Output folder: ``fastp``
 
-The quality control module uses `FastQC`_ to produce HTML reports of the
-quality of the input reads. The quality control module also trims adapter
+The quality control module uses `FastP`_ to produce HTML reports of the quality
+of the input and output reads. The quality control module also trims adapter
 sequences and performs quality trimming of the input reads. The quality assured
-reads are output into ``trimmed_qa``.
+reads are output into ``fastp``.
 
-remove_human
+remove_host
 --------------
 :Tool: `BBMap`_
-:Output folder: ``filtered_human``
+:Output folder: ``host_removal``
 
-The ``remove_human`` module uses `BBMap`_ to map reads against a specially
-filtered and masked version of the human genome to remove reads matching to the
-human genome. The output is a pair of paired-end FASTQ files, plus a single
-interleaved FASTQ file with all reads that matched the human reference. In 
-addition, a PDF file with a basic histogram plot of the proportion of human 
-reads detected in each sample is also provided, along with a TSV table with the 
-raw proportion data.
+The ``remove_host`` module uses `BBMap`_ to map reads against a database of
+host sequences to remove reads matching to a non-desired host genome. The
+output is a pair of paired-end FASTQ files, plus a single interleaved FASTQ
+file with all reads that matched the host reference. In addition, a PDF file
+with a basic histogram plot of the proportion of host reads detected in each
+sample is also provided, along with a TSV table with the raw proportion data.
 
 
 assess_depth

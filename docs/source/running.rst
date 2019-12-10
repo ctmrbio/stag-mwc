@@ -46,7 +46,7 @@ Downloading databases
 *********************
 Several of the tools used in |full_name| need special databases to work. Fortunately,
 |full_name| makes it easy to download and prepare the required databases. The first
-database you will need is the ``hg19`` reference database for use in the ``remove_human``
+database you will need is the ``hg19`` reference database for use in the ``remove_host``
 read processing step. If you do not have it available before using |full_name|, run
 the following command to download and index the database for you::
 
@@ -62,7 +62,6 @@ using any of the following rules::
 
     build_metaphlan2_index
     create_megares_index
-    download_centrifuge_database
     download_humann2_databases
     download_kaiju_database
     download_minikraken2
