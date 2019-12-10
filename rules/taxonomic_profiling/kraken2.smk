@@ -64,8 +64,8 @@ rule download_minikraken2:
 
 rule kraken2:
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
     output:
         kraken=OUTDIR/"kraken2/{sample}.kraken",
         kreport=OUTDIR/"kraken2/{sample}.kreport"

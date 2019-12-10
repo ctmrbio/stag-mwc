@@ -6,10 +6,10 @@
 if config["qc_reads"]:
     # Add final output files from this module to 'all_outputs' from
     # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-    trimmed_qa = expand(str(OUTDIR/"trimmed_qa/{sample}_R{readpair}.trimmed_qa.fq.gz"),
+    trimmed_qc = expand(str(OUTDIR/"fastp/{sample}_R{readpair}.qc.fq.gz"),
             sample=SAMPLES,
             readpair=[1, 2])
-    all_outputs.extend(trimmed_qa)
+    all_outputs.extend(trimmed_qc)
 
     citations.add((
         "Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu (2018).",
@@ -25,8 +25,8 @@ if config["qc_reads"]:
             read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
             read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
         output:
-            read1=OUTDIR/"trimmed_qa/{sample}_R1.trimmed_qa.fq.gz",
-            read2=OUTDIR/"trimmed_qa/{sample}_R2.trimmed_qa.fq.gz",
+            read1=OUTDIR/"fastp/{sample}_R1.qc.fq.gz",
+            read2=OUTDIR/"fastp/{sample}_R2.qc.fq.gz",
             json=LOGDIR/"fastp/{sample}.fastp.json",
             html=LOGDIR/"fastp/{sample}.fastp.html",
         log:

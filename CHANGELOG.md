@@ -67,10 +67,13 @@ situations.
   input dir and input filename pattern according to where the users wants to start the
   workflow from (e.g. from the output_dir/filtered_human folder, if FASTQ files already
   have been preprocessed by another workflow). 
+- Reworded all rules relating to human removal to "host removal", and changed output folder
+  structure accordingly.
+- Renamed output folder and file names for quality and adapter trimming.
 
 ### Removed
 - Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,
-  Kraken2, HUMAnN2, and hg19 for RemoveHuman.
+  Kraken2, HUMAnN2.
 - Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
 - Removed Centrifuge
 

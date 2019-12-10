@@ -33,7 +33,7 @@ mappers:
     bowtie2: False
 taxonomic_profile:
     kaiju: False
-    kraken2: True
+    kraken2: False
     metaphlan2: False
 functional_profile:
     humann2: False
@@ -47,8 +47,8 @@ binning: False
 #########################
 fastp:
     extra: ""
-remove_human:
-    hg19_path: ""            # [Required] Path to folder containing the BBMap index for hg19
+remove_host:
+    db_path: "/db/hg19"            # [Required] Path to folder containing the BBMap index for host sequences
     minid: 0.95
     maxindel: 3
     minhits: 2

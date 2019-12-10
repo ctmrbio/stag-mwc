@@ -60,8 +60,8 @@ if config["binning"]:
 rule assembly:
     """Metagenomic assembly via MetaWRAP."""
     input:
-        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
-        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
+        read1=f"{OUTDIR}/host_removal/{{sample}}_R1.host_removal.fq.gz",
+        read2=f"{OUTDIR}/host_removal/{{sample}}_R2.host_removal.fq.gz",
     output:
         contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
     log:
@@ -95,8 +95,8 @@ rule binning:
     """Metagenomic binning using CONCOCT, MaxBin2, MetaBAT via MetaWRAP."""
     input:
         contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
-        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
-        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
+        read1=f"{OUTDIR}/host_removal/{{sample}}_R1.host_removal.fq.gz",
+        read2=f"{OUTDIR}/host_removal/{{sample}}_R2.host_removal.fq.gz",
     output:
         concoct_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins",
         #maxbin2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/maxbin2_bins",
@@ -172,8 +172,8 @@ rule blobology:
     input:
         contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
         metawrap_bins=f"{OUTDIR}/metawrap/consolidated_bins/{mw_config['assembler']}/{{sample}}/metawrap",
-        read1=f"{OUTDIR}/filtered_human/{{sample}}_R1.filtered_human.fq.gz",
-        read2=f"{OUTDIR}/filtered_human/{{sample}}_R2.filtered_human.fq.gz",
+        read1=f"{OUTDIR}/host_removal/{{sample}}_R1.host_removal.fq.gz",
+        read2=f"{OUTDIR}/host_removal/{{sample}}_R2.host_removal.fq.gz",
     output:
         plots=f"{OUTDIR}/metawrap/blobology/{mw_config['assembler']}/{{sample}}",
     log:

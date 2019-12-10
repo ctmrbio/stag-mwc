@@ -67,8 +67,8 @@ rule create_groot_index:
 rule groot_align:
     """Align reads to groot index."""
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
     output:
         read1=temp(OUTDIR/"groot/{sample}/{sample}_R1.size_window.fq.gz"),
         read2=temp(OUTDIR/"groot/{sample}/{sample}_R2.size_window.fq.gz"),

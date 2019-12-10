@@ -55,7 +55,7 @@ report: "report/workflow.rst"
 # Pre-processing
 #############################
 include: "rules/preproc/read_quality.smk"
-include: "rules/preproc/remove_human.smk"
+include: "rules/preproc/remove_host.smk"
 include: "rules/preproc/bbcountunique.smk"
 
 #############################

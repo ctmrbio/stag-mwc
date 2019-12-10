@@ -58,8 +58,8 @@ for bt2_config in config["bowtie2"]:
     rule:
         """Align reads using Bowtie2."""
         input:
-            sample=[OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-                    OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz"]
+            sample=[OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
+                    OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz"]
         output:
             OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)
         log:
