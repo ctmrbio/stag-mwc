@@ -48,7 +48,7 @@ binning: False
 fastp:
     extra: ""
 remove_host:
-    db_path: "/db/hg19"            # [Required] Path to folder containing the BBMap index for host sequences
+    db_path: ""            # [Required] Path to folder containing the BBMap index for host sequences
     minid: 0.95
     maxindel: 3
     minhits: 2
