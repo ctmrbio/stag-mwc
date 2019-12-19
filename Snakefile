@@ -6,12 +6,15 @@
 #
 # Running `snakemake --use-conda --dryrun` in a clone of this repository should
 # successfully execute a test dry run of the workflow.
+# Full documentation available at:
+# https://stag-mwc.readthedocs.org
+
 from pathlib import Path
 import textwrap
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
-min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
+min_version("5.5.4")
 
 stag_version = "0.4.0-dev"
 singularity: "docker://continuumio/miniconda3:4.7.10"
@@ -27,11 +30,13 @@ onstart:
     )
 
 configfile: "config.yaml"
+
 INPUTDIR = Path(config["inputdir"])
 OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
+
 citations = {(
     "Boulund et al. (2018).",
     "StaG-mwc: metagenomic workflow collaboration.",
@@ -90,6 +95,11 @@ include: "rules/antibiotic_resistance/groot.smk"
 # Assembly
 #############################
 include: "rules/assembly/metawrap.smk"
+
+#############################
+# MultiQC
+#############################
+include: "rules/multiqc/multiqc.smk"
 
 
 localrules: all

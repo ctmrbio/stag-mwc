@@ -26,6 +26,7 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 qc_reads: True
 host_removal: True
+multiqc_report: True
 assess_depth: False
 sketch_compare: False
 mappers:
@@ -62,6 +63,8 @@ remove_host:
     plot_unambigous: False
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
+multiqc:
+    extra: ""
 
 #########################
 # Mappers

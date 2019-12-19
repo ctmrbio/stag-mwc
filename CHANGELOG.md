@@ -35,6 +35,7 @@ situations.
 - Added possibility to skip host removal, will symlink QC'd files into the host
   removal output directory so Snakemake can continue without performing host
   removal.
+- Added MultiQC.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
