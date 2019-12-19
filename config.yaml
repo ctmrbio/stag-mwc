@@ -40,6 +40,7 @@ functional_profile:
 antibiotic_resistance: False
 assembly: False
 binning: False
+multiqc_report: True
 
 
 #########################
@@ -62,6 +63,8 @@ remove_host:
     plot_unambigous: False
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
+multiqc:
+    extra: ""
 
 #########################
 # Mappers

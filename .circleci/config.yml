@@ -73,7 +73,7 @@ jobs:
                     sed -i 's/antibiotic_resistance: False/antibiotic_resistance: True/' config.yaml
                     sed -i 's/assembly: False/assembly: True/' config.yaml
                     sed -i 's/binning: False/binning: True/' config.yaml
-                    sed -i 's|hg19_path: \"\"|hg19_path: \"db/hg19\"|' config.yaml
+                    sed -i 's|db_path: \"\"|db_path: \"db/hg19\"|' config.yaml
                     sed -i 's|db: \"\"|db: \"db\"|' config.yaml
                     sed -i 's|bt2_db_dir: \"\"|bt2_db_dir: \"db/metaphlan2\"|' config.yaml
                     sed -i 's|bt2_index: \"\"|bt2_index: \"test\"|' config.yaml
