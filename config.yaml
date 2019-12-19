@@ -26,7 +26,6 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 qc_reads: True
 host_removal: True
-multiqc_report: True
 assess_depth: False
 sketch_compare: False
 mappers:
@@ -41,6 +40,7 @@ functional_profile:
 antibiotic_resistance: False
 assembly: False
 binning: False
+multiqc_report: True
 
 
 #########################
