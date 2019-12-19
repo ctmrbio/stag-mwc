@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_R{readpair}.fq.gz" 
+input_fn_pattern: "{sample}_{readpair}.fq.gz" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
