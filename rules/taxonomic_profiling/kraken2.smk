@@ -1,5 +1,6 @@
 # vim: syntax=python expandtab
-# Taxonomic classification of metagenomic reads using Kraken2
+# Taxonomic classification of metagenomic reads using Kraken2 with abundance
+# estimation using Bracken
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
@@ -13,7 +14,7 @@ localrules:
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
-    if not Path(kaiju_config["db"]).exists():
+    if not Path(kraken2_config["db"]).exists():
         err_message = "No Kraken2 database folder at: '{}'!\n".format(kraken2_config["db"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
         err_message += "Run 'snakemake download_minikraken2' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
@@ -45,20 +46,21 @@ if config["taxonomic_profile"]["kraken2"]:
 
 rule download_minikraken2:
     output:
-        db=DBDIR/"kraken2/minikraken2_v1_8GB/hash.k2d",
-        names=DBDIR/"kraken2/minikraken2_v1_8GB/opts.k2d",
-        nodes=DBDIR/"kraken2/minikraken2_v1_8GB/taxo.k2d"
+        db=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/hash.k2d",
+        names=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/opts.k2d",
+        nodes=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/taxo.k2d",
+        kmer_distrib=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/database150mers.kmer_distrib",
     log:
         str(LOGDIR/"kraken2/download_minikraken2.log")
     shadow:
         "shallow"
     params:
-        dbdir=DBDIR/"kraken2/minikraken2_v1_8GB"
+        dbdir=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE"
     shell:
         """
-        wget https://ccb.jhu.edu/software/kraken2/dl/minikraken2_v1_8GB.tgz > {log}
-        tar -vxf minikraken2_v1_8GB.tgz  >> {log}
-        mv -v *k2d {params.dbdir} >> {log}
+        wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz > {log}
+        tar -vxf minikraken2_v2_8GB_201904_UPDATE.tgz  >> {log}
+        mv -v *k2d *kmer_distrib {params.dbdir} >> {log}
         """
 
 
@@ -68,7 +70,7 @@ rule kraken2:
         read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
     output:
         kraken=OUTDIR/"kraken2/{sample}.kraken",
-        kreport=OUTDIR/"kraken2/{sample}.kreport"
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
     log:
         str(LOGDIR/"kraken2/{sample}.kraken2.log")
     shadow: 
@@ -158,4 +160,131 @@ rule create_kraken2_krona_plot:
 		ktImportText \
 			-o {output.krona_html} \
 			{input}
+        """
+
+
+if kraken2_config["bracken"]["kmer_distrib"]:
+    if not Path(kraken2_config["bracken"]["kmer_distrib"]).exists():
+        err_message = "No Bracken kmer_distrib database file at: '{}'!\n".format(kraken2_config["bracken"]["kmer_distrib"])
+        err_message += "Specify the path in the kraken2 section of config.yaml.\n"
+        err_message += "Run 'snakemake download_minikraken2' to download a copy of the required files into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
+        err_message += "If you do not want to run Bracken for abundance profiling, set 'kmer_distrib: ""' in the bracken section of config.yaml"
+        raise WorkflowError(err_message)
+
+    citations.add((
+        "Lu J, Breitwieser FP, Thielen P, Salzberg SL.",
+        "Bracken: estimating species abundance in metagenomics data.",
+        "PeerJ Computer Science 3:e104, 2017, doi:10.7717/peerj-cs.104.",
+    ))
+
+    brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_outputs.extend(brackens)
+
+if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
+    filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+
+    all_outputs.extend(filtered_brackens)
+    all_outputs.append(all_table)
+    all_outputs.append(all_table_filtered)
+
+
+rule bracken:
+    input:
+        kreport=OUTDIR/"kraken2/{sample}.kreport"
+    output:
+        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+        #bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",  # Snakemake can't handle this filename not containing {level}
+    log:
+        str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
+        thresh=kraken2_config["bracken"]["thresh"],
+    shell:
+        """
+        est_abundance.py \
+            --input {input.kreport} \
+            --kmer_distr {params.kmer_distrib} \
+            --output {output.bracken} \
+            --level {wildcards.level} \
+            --thresh {params.thresh} \
+            2>&1 > {log}
+        """
+
+rule filter_bracken:
+    input:
+        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+    output:
+        filtered=OUTDIR/"kraken2/{sample}.{level}.filtered.bracken",  
+    log:
+        str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
+        include=kraken2_config["filter_bracken"]["include"],
+        exclude=kraken2_config["filter_bracken"]["exclude"],
+    shell:
+        """
+        {params.filter_bracken} \
+            --input-file {input.bracken} \
+            --output {output.filtered} \
+            {params.include} \
+            {params.exclude} \
+            2>&1 > {log}
+        """
+
+rule join_bracken:
+    input:
+        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.bracken"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPOCFGS]}.bracken.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/bracken_table.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        value_column="fraction_total_reads",
+    shell:
+        """
+        scripts/join_bracken_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            {input.bracken} \
+            2>&1 > {log}
+        """
+    
+rule join_bracken_filtered:
+    input:
+        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/bracken_table.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        value_column="fraction_total_reads",
+    shell:
+        """
+        scripts/join_bracken_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            {input.bracken} \
+            2>&1 > {log}
         """
