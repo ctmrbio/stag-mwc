@@ -184,120 +184,107 @@ if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
     all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+
     all_outputs.extend(filtered_brackens)
     all_outputs.append(all_table)
     all_outputs.append(all_table_filtered)
 
 
-for level in kraken2_config["bracken"]["levels"].split():
-    rule:
-        """Anonymous rule to run Bracken on several taxonomic levels"""
-        input:
-            kreport=OUTDIR/"kraken2/{sample}.kreport"
-        output:
-            bracken=OUTDIR/f"kraken2/{{sample}}.{level}.bracken",
-            bracken_kreport=OUTDIR/f"kraken2/{{sample}}_bracken.kreport",
-        log:
-            str(LOGDIR/f"kraken2/{{sample}}.{level}.bracken.log")
-        shadow: 
-            "shallow"
-        threads:
-            2
-        conda:
-            "../../envs/stag-mwc.yaml"
-        params:
-            kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
-            level=level,
-            thresh=kraken2_config["bracken"]["thresh"],
-        shell:
-            """
-            est_abundance.py \
-                --input {input.kreport} \
-                --kmer_distr {params.kmer_distrib} \
-                --output {output.bracken} \
-                --level {params.level} \
-                --thresh {params.thresh} \
-                2>&1 > {log}
-            """
+rule bracken:
+    input:
+        kreport=OUTDIR/"kraken2/{sample}.kreport"
+    output:
+        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+        #bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",  # Snakemake can't handle this filename not containing {level}
+    log:
+        str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
+        thresh=kraken2_config["bracken"]["thresh"],
+    shell:
+        """
+        est_abundance.py \
+            --input {input.kreport} \
+            --kmer_distr {params.kmer_distrib} \
+            --output {output.bracken} \
+            --level {wildcards.level} \
+            --thresh {params.thresh} \
+            2>&1 > {log}
+        """
 
-    rule:
-        """Anonymous rule to run filter_bracken_out.py on several taxonomic levels"""
-        input:
-            bracken=OUTDIR/f"kraken2/{{sample}}.{level}.bracken",
-        output:
-            filtered=OUTDIR/f"kraken2/{{sample}}.{level}.filtered.bracken",  
-        log:
-            str(LOGDIR/f"kraken2/{{sample}}.{level}.filter_bracken.log")
-        shadow: 
-            "shallow"
-        threads:
-            2
-        conda:
-            "../../envs/stag-mwc.yaml"
-        params:
-            filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
-            include=kraken2_config["filter_bracken"]["include"],
-            exclude=kraken2_config["filter_bracken"]["exclude"],
-        shell:
-            """
-            {params.filter_bracken} \
-                --input-file {input.bracken} \
-                --output {output.filtered} \
-                {params.include} \
-                {params.exclude} \
-                2>&1 > {log}
-            """
+rule filter_bracken:
+    input:
+        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+    output:
+        filtered=OUTDIR/"kraken2/{sample}.{level}.filtered.bracken",  
+    log:
+        str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
+        include=kraken2_config["filter_bracken"]["include"],
+        exclude=kraken2_config["filter_bracken"]["exclude"],
+    shell:
+        """
+        {params.filter_bracken} \
+            --input-file {input.bracken} \
+            --output {output.filtered} \
+            {params.include} \
+            {params.exclude} \
+            2>&1 > {log}
+        """
 
-    rule:
-        """Anonymous rule to join Bracken tables for several taxonomic levels"""
-        input:
-            bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.bracken"), sample=SAMPLES),
-        output:
-            table=report(OUTDIR/f"kraken2/all_samples.{level}.bracken.tsv",
-                   category="Taxonomic profiling",
-                   caption="../../report/bracken_table.rst"),
-        log:
-            str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
-        shadow: 
-            "shallow"
-        threads:
-            2
-        conda:
-            "../../envs/stag-mwc.yaml"
-        params:
-            value_column="fraction_total_reads",
-        shell:
-            """
-            scripts/join_bracken_tables.py \
-                --outfile {output.table} \
-                --value-column {params.value_column} \
-                {input.bracken} \
-                2>&1 > {log}
-            """
-        
-    rule:
-        """Anonymous rule to join filtered Bracken tables for several taxonomic levels"""
-        input:
-            bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.filtered.bracken"), sample=SAMPLES),
-        output:
-            table=report(OUTDIR/f"kraken2/all_samples.{level}.filtered.bracken.tsv",
-                   category="Taxonomic profiling",
-                   caption="../../report/bracken_table.rst"),
-        log:
-            str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
-        shadow: 
-            "shallow"
-        threads:
-            2
-        conda:
-            "../../envs/stag-mwc.yaml"
-        params:
-            value_column="fraction_total_reads",
-        shell:
-            """
-            scripts/join_bracken_tables.py \
-                --outfile {output.table} \
-                --value-column {params.value_column} \
-                {input.bracken} \
-                2>&1 > {log}
-            """
+rule join_bracken:
+    input:
+        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.bracken"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPOCFGS]}.bracken.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/bracken_table.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        value_column="fraction_total_reads",
+    shell:
+        """
+        scripts/join_bracken_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            {input.bracken} \
+            2>&1 > {log}
+        """
+    
+rule join_bracken_filtered:
+    input:
+        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/bracken_table.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        value_column="fraction_total_reads",
+    shell:
+        """
+        scripts/join_bracken_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            {input.bracken} \
+            2>&1 > {log}
+        """
