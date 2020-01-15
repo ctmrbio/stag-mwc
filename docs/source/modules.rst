@@ -290,8 +290,8 @@ The optional Bracken adds additional output files for each sample::
 
     <sample>.<taxonomic_level>.bracken
     <sample>.<taxonomic_level>.filtered.bracken
-    all_samples.<taxonomic_level>.bracken
-    all_samples.<taxonomic_level>.filtered.bracken
+    all_samples.<taxonomic_level>.bracken.tsv
+    all_samples.<taxonomic_level>.filtered.bracken.tsv
 
 MetaPhlAn2
 ----------

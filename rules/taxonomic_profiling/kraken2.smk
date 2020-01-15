@@ -168,7 +168,7 @@ if kraken2_config["bracken"]["kmer_distrib"]:
         err_message = "No Bracken kmer_distrib database file at: '{}'!\n".format(kraken2_config["bracken"]["kmer_distrib"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
         err_message += "Run 'snakemake download_minikraken2' to download a copy of the required files into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
-        err_message += "If you do not want to run kraken2 for taxonomic profiling, set 'kraken2: False' at the top of config.yaml"
+        err_message += "If you do not want to run Bracken for abundance profiling, set 'kmer_distrib: ""' in the bracken section of config.yaml"
         raise WorkflowError(err_message)
 
     citations.add((
@@ -182,8 +182,8 @@ if kraken2_config["bracken"]["kmer_distrib"]:
 
 if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken"), level=kraken2_config["bracken"]["levels"].split())
-    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken"), level=kraken2_config["bracken"]["levels"].split())
+    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
     all_outputs.extend(filtered_brackens)
     all_outputs.append(all_table)
     all_outputs.append(all_table_filtered)
@@ -253,7 +253,9 @@ for level in kraken2_config["bracken"]["levels"].split():
         input:
             bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.bracken"), sample=SAMPLES),
         output:
-            table=OUTDIR/f"kraken2/all_samples.{level}.bracken",
+            table=report(OUTDIR/f"kraken2/all_samples.{level}.bracken.tsv",
+                   category="Taxonomic profiling",
+                   caption="../../report/bracken_table.rst"),
         log:
             str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
         shadow: 
@@ -278,7 +280,9 @@ for level in kraken2_config["bracken"]["levels"].split():
         input:
             bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.filtered.bracken"), sample=SAMPLES),
         output:
-            table=OUTDIR/f"kraken2/all_samples.{level}.filtered.bracken",
+            table=report(OUTDIR/f"kraken2/all_samples.{level}.filtered.bracken.tsv",
+                   category="Taxonomic profiling",
+                   caption="../../report/bracken_table.rst"),
         log:
             str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
         shadow: 
