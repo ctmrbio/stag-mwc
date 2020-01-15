@@ -19,8 +19,7 @@ situations.
   files in the output folder. Activated with --resources humann2=X, where X is
   the max number of parallel instances of humann2 to run.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
-- Added second FastQC run after quality trimming.
-- Added automatic plot of proportion human reads. Included in run report.
+- Added automatic plot of proportion human reads. Included in report.
 - Added assembly and binning using MetaWRAP.
 - Added the possibility to run in Singularity with conda using 
   `--use-singularity --use-conda`.

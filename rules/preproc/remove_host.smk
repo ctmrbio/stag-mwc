@@ -72,9 +72,9 @@ if config["host_removal"]:
     filtered_host = expand(str(OUTDIR/"host_removal/{sample}_R{readpair}.host_removal.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
-    proportion_host = str(OUTDIR/"host_removal/proportion_host.pdf")
+    host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
     all_outputs.extend(filtered_host)
-    all_outputs.append(proportion_host)
+    all_outputs.append(host_proportions)
 
     citations.add((
         "Bushnell, B. (2016).",
@@ -146,12 +146,15 @@ if config["host_removal"]:
         input:
             expand(str(LOGDIR/"host_removal/{sample}.statsfile.txt"), sample=SAMPLES)
         output:
-            pdf=report(OUTDIR/"host_removal/proportion_host.pdf",
+            histogram=report(OUTDIR/"host_removal/host_histogram.pdf",
                        category="Proportion host reads",
-                       caption="../../report/proportion_host_reads.rst"),
-            tsv=report(OUTDIR/"host_removal/proportion_host.tsv",
+                       caption="../../report/host_histogram.rst"),
+            barplot=report(OUTDIR/"host_removal/host_barplot.pdf",
                        category="Proportion host reads",
-                       caption="../../report/tsv_proportion_host_reads.rst"),
+                       caption="../../report/host_barplot.rst"),
+            tsv=report(OUTDIR/"host_removal/host_proportions.tsv",
+                       category="Proportion host reads",
+                       caption="../../report/host_proportions.rst"),
         log:
             str(LOGDIR/"host_removal/proportion_host.log")
         shadow:
@@ -167,8 +170,10 @@ if config["host_removal"]:
             scripts/plot_proportion_host.py \
                 {input} \
                 {params.unambigous} \
-                --outfile {output.pdf} \
-                --table {output.tsv}
+                --histogram {output.histogram} \
+                --barplot {output.barplot} \
+                --table {output.tsv} \
+                2>&1 > {log}
             """
 
 else:

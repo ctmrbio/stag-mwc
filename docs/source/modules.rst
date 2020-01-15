@@ -48,10 +48,14 @@ remove_host
 The ``remove_host`` module uses `BBMap`_ to map reads against a database of
 host sequences to remove reads matching to a non-desired host genome. The
 output is a pair of paired-end FASTQ files, plus a single interleaved FASTQ
-file with all reads that matched the host reference. In addition, a PDF file
-with a basic histogram plot of the proportion of host reads detected in each
-sample is also provided, along with a TSV table with the raw proportion data.
+file with all reads that matched the host reference. In addition, two PDF files
+with 1) a basic histogram plot of the proportion of host reads detected in each
+sample, and 2) a barplot of the same. In addition, a TSV table with the raw
+proportion data is also provided::
 
+   host_barplot.pdf
+   host_histogram.pdf
+   host_proportions.tsv
 
 assess_depth
 --------------
