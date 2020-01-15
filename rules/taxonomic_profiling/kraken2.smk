@@ -1,5 +1,6 @@
 # vim: syntax=python expandtab
-# Taxonomic classification of metagenomic reads using Kraken2
+# Taxonomic classification of metagenomic reads using Kraken2 with abundance
+# estimation using Bracken
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
@@ -13,7 +14,7 @@ localrules:
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
-    if not Path(kaiju_config["db"]).exists():
+    if not Path(kraken2_config["db"]).exists():
         err_message = "No Kraken2 database folder at: '{}'!\n".format(kraken2_config["db"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
         err_message += "Run 'snakemake download_minikraken2' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
@@ -45,20 +46,21 @@ if config["taxonomic_profile"]["kraken2"]:
 
 rule download_minikraken2:
     output:
-        db=DBDIR/"kraken2/minikraken2_v1_8GB/hash.k2d",
-        names=DBDIR/"kraken2/minikraken2_v1_8GB/opts.k2d",
-        nodes=DBDIR/"kraken2/minikraken2_v1_8GB/taxo.k2d"
+        db=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/hash.k2d",
+        names=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/opts.k2d",
+        nodes=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/taxo.k2d"
+        kmer_distrib=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/database150mers.kmer_distrib",
     log:
         str(LOGDIR/"kraken2/download_minikraken2.log")
     shadow:
         "shallow"
     params:
-        dbdir=DBDIR/"kraken2/minikraken2_v1_8GB"
+        dbdir=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE"
     shell:
         """
-        wget https://ccb.jhu.edu/software/kraken2/dl/minikraken2_v1_8GB.tgz > {log}
-        tar -vxf minikraken2_v1_8GB.tgz  >> {log}
-        mv -v *k2d {params.dbdir} >> {log}
+        wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz > {log}
+        tar -vxf minikraken2_v2_8GB_201904_UPDATE.tgz  >> {log}
+        mv -v *k2d *kmer_distrib {params.dbdir} >> {log}
         """
 
 
@@ -159,3 +161,53 @@ rule create_kraken2_krona_plot:
 			-o {output.krona_html} \
 			{input}
         """
+
+
+if kraken2_config["bracken"]["kmer_distrib"]:
+    if not Path(kraken2_config["bracken"]["kmer_distrib"]).exists():
+        err_message = "No Bracken kmer_distrib database file at: '{}'!\n".format(kraken2_config["bracken"]["kmer_distrib"])
+        err_message += "Specify the path in the kraken2 section of config.yaml.\n"
+        err_message += "Run 'snakemake download_minikraken2' to download a copy of the required files into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
+        err_message += "If you do not want to run kraken2 for taxonomic profiling, set 'kraken2: False' at the top of config.yaml"
+        raise WorkflowError(err_message)
+
+    citations.add((
+        "Lu J, Breitwieser FP, Thielen P, Salzberg SL.",
+        "Bracken: estimating species abundance in metagenomics data.",
+        "PeerJ Computer Science 3:e104, 2017, doi:10.7717/peerj-cs.104.",
+    ))
+
+    brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+
+
+for level in kraken2_config["bracken"]["levels"].split():
+    rule:
+        """Anonymous rule to run Bracken on several taxonomic levels"""
+        input:
+            kreport=OUTDIR/"kraken2/{sample}.kreport"
+        output:
+            bracken=OUTDIR/f"kraken2/{{sample}}.{level}.bracken",
+        log:
+            str(LOGDIR/"kraken2/{sample}.bracken.log")
+        shadow: 
+            "shallow"
+        threads:
+            2
+        conda:
+            "../../envs/stag-mwc.yaml"
+        params:
+            kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
+            level=level,
+            tresh=kraken2_config["bracken"]["thresh"],
+        shell:
+            """
+            est_abundance.py \
+                --input {input.kreport} \
+                --kmer_distr {params.kmer_distrib} \
+                --output {output.bracken} \
+                --level {params.level} \
+                --thresh {params.thresh} \
+                2> {log}
+            """
+        
+

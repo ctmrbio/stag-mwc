@@ -4,6 +4,7 @@
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
+.. _Bracken: https://ccb.jhu.edu/software/bracken/
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
@@ -278,11 +279,16 @@ Kraken2
 :Tool: `Kraken2`_
 :Output folder: ``kraken2``
 
-Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs two files per sample::
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile. 
+Optionally Bracken can be run to produce abundance profiles for each sample at a
+user-specified taxonomic level. Kraken2 outputs two files per sample::
 
     <sample>.kraken
     <sample>.kreport
+
+Bracken adds additional output files for each sample::
+
+    <sample>.<taxonomic_level>.bracken
 
 MetaPhlAn2
 ----------
