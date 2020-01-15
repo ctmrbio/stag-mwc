@@ -105,7 +105,7 @@ kaiju:
 
 kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder
-    confidence: 0.0          # Kraken2 confidence score, float in [0,1]
+    confidence: 0.1          # Kraken2 confidence score, float in [0,1]
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
 
 metaphlan2:
