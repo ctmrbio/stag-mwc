@@ -182,7 +182,11 @@ if kraken2_config["bracken"]["kmer_distrib"]:
 
 if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken"), level=kraken2_config["bracken"]["levels"].split())
+    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken"), level=kraken2_config["bracken"]["levels"].split())
     all_outputs.extend(filtered_brackens)
+    all_outputs.append(all_table)
+    all_outputs.append(all_table_filtered)
 
 
 for level in kraken2_config["bracken"]["levels"].split():
@@ -243,5 +247,53 @@ for level in kraken2_config["bracken"]["levels"].split():
                 {params.exclude} \
                 2>&1 > {log}
             """
-        
 
+    rule:
+        """Anonymous rule to join Bracken tables for several taxonomic levels"""
+        input:
+            bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.bracken"), sample=SAMPLES),
+        output:
+            table=OUTDIR/f"kraken2/all_samples.{level}.bracken",
+        log:
+            str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
+        shadow: 
+            "shallow"
+        threads:
+            2
+        conda:
+            "../../envs/stag-mwc.yaml"
+        params:
+            value_column="fraction_total_reads",
+        shell:
+            """
+            scripts/join_bracken_tables.py \
+                --outfile {output.table} \
+                --value-column {params.value_column} \
+                {input.bracken} \
+                2>&1 > {log}
+            """
+        
+    rule:
+        """Anonymous rule to join filtered Bracken tables for several taxonomic levels"""
+        input:
+            bracken=expand(str(OUTDIR/f"kraken2/{{sample}}.{level}.filtered.bracken"), sample=SAMPLES),
+        output:
+            table=OUTDIR/f"kraken2/all_samples.{level}.filtered.bracken",
+        log:
+            str(LOGDIR/f"kraken2/join_bracken_tables.{level}.log")
+        shadow: 
+            "shallow"
+        threads:
+            2
+        conda:
+            "../../envs/stag-mwc.yaml"
+        params:
+            value_column="fraction_total_reads",
+        shell:
+            """
+            scripts/join_bracken_tables.py \
+                --outfile {output.table} \
+                --value-column {params.value_column} \
+                {input.bracken} \
+                2>&1 > {log}
+            """
