@@ -79,6 +79,7 @@ jobs:
                     sed -i 's|bt2_index: \"\"|bt2_index: \"test\"|' config.yaml
                     sed -i 's|_db: \"\"|_db: \"db\"|' config.yaml
                     sed -i 's|    index: \"\"|    index: \"db\"|' config.yaml
+                    sed -i 's|kmer_distrib: \"\"|kmer_distrib: \"db\"|' config.yaml
                     cat config.yaml
                     source activate snakemake
                     snakemake --use-conda --dryrun
