@@ -18,7 +18,6 @@ situations.
 - Added resource limiter for HUMAnN2 due to its intense use of huge temporary
   files in the output folder. Activated with --resources humann2=X, where X is
   the max number of parallel instances of humann2 to run.
-- Added "extra" argument to BBDuk for additional quality control flexibility.
 - Added groot report parameters `covcutoff` and `lowcov` to config file.
 - Added second FastQC run after quality trimming.
 - Added automatic plot of proportion human reads. Included in run report.
