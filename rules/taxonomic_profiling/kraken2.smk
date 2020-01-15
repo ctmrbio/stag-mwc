@@ -48,7 +48,7 @@ rule download_minikraken2:
     output:
         db=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/hash.k2d",
         names=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/opts.k2d",
-        nodes=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/taxo.k2d"
+        nodes=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/taxo.k2d",
         kmer_distrib=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/database150mers.kmer_distrib",
     log:
         str(LOGDIR/"kraken2/download_minikraken2.log")
@@ -70,7 +70,7 @@ rule kraken2:
         read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
     output:
         kraken=OUTDIR/"kraken2/{sample}.kraken",
-        kreport=OUTDIR/"kraken2/{sample}.kreport"
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
     log:
         str(LOGDIR/"kraken2/{sample}.kraken2.log")
     shadow: 
@@ -178,6 +178,7 @@ if kraken2_config["bracken"]["kmer_distrib"]:
     ))
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_outputs.extend(brackens)
 
 
 for level in kraken2_config["bracken"]["levels"].split():
@@ -187,8 +188,9 @@ for level in kraken2_config["bracken"]["levels"].split():
             kreport=OUTDIR/"kraken2/{sample}.kreport"
         output:
             bracken=OUTDIR/f"kraken2/{{sample}}.{level}.bracken",
+            bracken_kreport=OUTDIR/f"kraken2/{{sample}}_bracken.kreport",
         log:
-            str(LOGDIR/"kraken2/{sample}.bracken.log")
+            str(LOGDIR/f"kraken2/{{sample}}.{level}.bracken.log")
         shadow: 
             "shallow"
         threads:
@@ -198,7 +200,7 @@ for level in kraken2_config["bracken"]["levels"].split():
         params:
             kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
             level=level,
-            tresh=kraken2_config["bracken"]["thresh"],
+            thresh=kraken2_config["bracken"]["thresh"],
         shell:
             """
             est_abundance.py \
@@ -207,7 +209,7 @@ for level in kraken2_config["bracken"]["levels"].split():
                 --output {output.bracken} \
                 --level {params.level} \
                 --thresh {params.thresh} \
-                2> {log}
+                2>&1 > {log}
             """
         
 
