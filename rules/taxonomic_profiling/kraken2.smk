@@ -180,6 +180,10 @@ if kraken2_config["bracken"]["kmer_distrib"]:
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     all_outputs.extend(brackens)
 
+if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
+    filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_outputs.extend(filtered_brackens)
+
 
 for level in kraken2_config["bracken"]["levels"].split():
     rule:
@@ -209,6 +213,34 @@ for level in kraken2_config["bracken"]["levels"].split():
                 --output {output.bracken} \
                 --level {params.level} \
                 --thresh {params.thresh} \
+                2>&1 > {log}
+            """
+
+    rule:
+        """Anonymous rule to run filter_bracken_out.py on several taxonomic levels"""
+        input:
+            bracken=OUTDIR/f"kraken2/{{sample}}.{level}.bracken",
+        output:
+            filtered=OUTDIR/f"kraken2/{{sample}}.{level}.filtered.bracken",  
+        log:
+            str(LOGDIR/f"kraken2/{{sample}}.{level}.filter_bracken.log")
+        shadow: 
+            "shallow"
+        threads:
+            2
+        conda:
+            "../../envs/stag-mwc.yaml"
+        params:
+            filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
+            include=kraken2_config["filter_bracken"]["include"],
+            exclude=kraken2_config["filter_bracken"]["exclude"],
+        shell:
+            """
+            {params.filter_bracken} \
+                --input-file {input.bracken} \
+                --output {output.filtered} \
+                {params.include} \
+                {params.exclude} \
                 2>&1 > {log}
             """
         

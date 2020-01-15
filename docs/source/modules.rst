@@ -286,9 +286,10 @@ user-specified taxonomic level. Kraken2 outputs two files per sample::
     <sample>.kraken
     <sample>.kreport
 
-Bracken adds additional output files for each sample::
+The optional Bracken adds additional output files for each sample::
 
     <sample>.<taxonomic_level>.bracken
+    <sample>.<taxonomic_level>.filtered.bracken
 
 MetaPhlAn2
 ----------

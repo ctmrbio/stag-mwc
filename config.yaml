@@ -111,6 +111,9 @@ kraken2:
         kmer_distrib: ""     # [Required for Bracken] Path to kmer_distrib file for Kraken2 DB specified above
         levels: "S G"        # Space-separated list of taxonomic levels to produce tables for (e.g. "F G S" for Family, Genus, Species)
         thresh: 10           # Threshold for minimum number of reads from Kraken
+    filter_bracken:          # Arguments to filter_bracken_out.py to include/exclude certain taxa
+        include: ""
+        exclude: "--exclude 9605 9606"  # Taxid 9605 and 9606 are (G) Homo and (S) Homo sapiens
 
 metaphlan2:
     bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir

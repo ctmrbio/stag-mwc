@@ -36,7 +36,8 @@ situations.
   removal.
 - Added MultiQC.
 - Added Bracken abundance estimation on Kraken2 report files; added Bracken to
-  the StaG conda environment.
+  the StaG conda environment. Also added Bracken abundance filtering rules so
+  users can include/exclude certain taxa.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
