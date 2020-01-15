@@ -70,6 +70,7 @@ situations.
 - Reworded all rules relating to human removal to "host removal", and changed output folder
   structure accordingly.
 - Renamed output folder and file names for quality and adapter trimming.
+- Set Kraken2 --confidence to 0.1 by default.
 
 ### Removed
 - Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,
