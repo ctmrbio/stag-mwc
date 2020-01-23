@@ -37,6 +37,9 @@ situations.
 - Added Bracken abundance estimation on Kraken2 report files; added Bracken to
   the StaG conda environment. Also added Bracken abundance filtering rules so
   users can include/exclude certain taxa.
+- Added "all_samples" summary output files in a more common format for all
+  taxonomic profilers, called `mpa_style`. They are not identical, but very
+  similar, with full lineage listings for all detected taxa.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
