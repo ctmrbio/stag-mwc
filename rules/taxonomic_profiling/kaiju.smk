@@ -23,8 +23,8 @@ if config["taxonomic_profile"]["kaiju"]:
     # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
     kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
-    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv"), sample=SAMPLES, level=kaiju_config["levels"])
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
@@ -100,14 +100,12 @@ rule kaiju:
         """
 
 
-rule kaiju_report:
+rule kaiju2krona:
+    """Convert Kaiju output to Krona input"""
     input:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     output:
         krona=OUTDIR/"kaiju/{sample}.krona",
-        family=OUTDIR/"kaiju/{sample}.summary.family",
-        genus=OUTDIR/"kaiju/{sample}.kaiju.summary.genus",
-        species=OUTDIR/"kaiju/{sample}.kaiju.summary.species",
     shadow: 
         "shallow"
     params:
@@ -123,27 +121,6 @@ rule kaiju_report:
             -i {input.kaiju} \
             -o {output.krona} \
             -u
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r species \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.species}
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r genus \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.genus}
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r family \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.family}
         """
 
 rule create_kaiju_krona_plot:
@@ -161,3 +138,31 @@ rule create_kaiju_krona_plot:
             -o {output.krona_html} \
             {input}
         """
+
+rule kaiju_report:
+    input:
+        kaiju=OUTDIR/"kaiju/{sample}.kaiju",
+    output:
+        OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv",
+    log:
+        str(LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log")
+    shadow: 
+        "shallow"
+    params:
+        nodes=kaiju_config["nodes"],
+        names=kaiju_config["names"],
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        kaiju2table \
+            -t {params.nodes} \
+            -n {params.names} \
+            -r {wildcards.level} \
+            -l superkingdom,phylum,class,order,family,genus,species \
+            -o {output} \
+            {input.kaiju} \
+            2>&1 > {log}
+        """
+
+

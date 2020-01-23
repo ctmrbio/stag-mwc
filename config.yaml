@@ -102,6 +102,7 @@ kaiju:
     db: ""                   # [Required] Path to Kaiju DB file
     nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
+    levels: ["species", "genus", "family"]    # Level(s) to summarize Kaiju report to, pick from: superkingdom, phylum, class, order, family, genus, species
 
 kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder

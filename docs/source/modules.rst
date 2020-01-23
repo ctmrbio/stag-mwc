@@ -273,9 +273,7 @@ profiles of all samples (``all_samples.kaiju.krona.html``). The four per-sample
 output files are::
 
     <sample>.kaiju
-    <sample>.kaiju.summary.family
-    <sample>.kaiju.summary.genus
-    <sample>.kaiju.summary.species
+    <sample>.kaiju.<level>.tsv
     <sample>.krona
 
 Kraken2

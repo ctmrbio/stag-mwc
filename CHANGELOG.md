@@ -56,6 +56,7 @@ situations.
 - Changed the call to merge_metaphlan_tables.py due to undocumented
   CLI change in latest conda version.
 - Updated Kaiju to 1.7.2.
+- Changed Kaiju summary report output filenames.
 - Updated BBMap to 38.68.
 - Updated sambamba to 0.7.0.
 - Updated Kraken2 to 2.0.8_beta.
@@ -75,6 +76,7 @@ situations.
   structure accordingly.
 - Renamed output folder and file names for quality and adapter trimming.
 - Set Kraken2 --confidence to 0.1 by default.
+
 
 ### Removed
 - Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,
