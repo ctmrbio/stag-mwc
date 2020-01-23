@@ -103,6 +103,8 @@ kaiju:
     nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
     levels: ["species", "genus", "family"]    # Level(s) to summarize Kaiju report to, pick from: superkingdom, phylum, class, order, family, genus, species
+    feature_column: "taxon_name"    # Feature column to use in all_samples summary
+    value_column: "percent"    # Value column top use in all_samples summary. Options are typically "percent" or "reads"
 
 kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder

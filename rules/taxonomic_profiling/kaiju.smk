@@ -25,9 +25,11 @@ if config["taxonomic_profile"]["kaiju"]:
     kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
     kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv"), sample=SAMPLES, level=kaiju_config["levels"])
+    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv"), level=kaiju_config["levels"])
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
+    all_outputs.append(kaiju_joined_table)
 
     citations.add((
         "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
@@ -166,3 +168,29 @@ rule kaiju_report:
         """
 
 
+rule join_kaiju_reports:
+    input:
+        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.tsv"), sample=SAMPLES),
+    output:
+        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv",
+            category="Taxonomic profiling",
+            caption="../../report/kaiju_table.rst")
+    log:
+        str(LOGDIR/"kaiju/join_kaiju_reports.{level}.log")
+    shadow: 
+        "shallow"
+    params:
+        feature_column=kaiju_config["feature_column"],
+        value_column=kaiju_config["value_column"],
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/join_tables.py \
+            --feature-column {params.feature_column} \
+            --value-column {params.value_column} \
+            --outfile {output} \
+            {input} \
+            2>&1 > {log}
+        """
+    

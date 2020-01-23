@@ -109,11 +109,11 @@ rule plot_metaphlan2_heatmap:
     input:
         f"{OUTDIR}/metaphlan2/all_samples.metaphlan2.txt",
     output:
-        pdf=report(f"{OUTDIR}/metaphlan2/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+        pdf=report(f"{OUTDIR}/metaphlan2/all_samples.{{level}}_top{{topN}}.pdf",
                    category="Taxonomic profiling",
                    caption="../../report/metaphlan2.rst"),
     log:
-        f"{LOGDIR}/metaphlan2/plot_metaphlan2_heatmap.log",
+        f"{LOGDIR}/metaphlan2/plot_metaphlan2_heatmap.{{level}}_top{{topN}}.log",
     shadow:
         "shallow"
     conda:
@@ -122,8 +122,6 @@ rule plot_metaphlan2_heatmap:
         1
     params:
         outfile_prefix=lambda w: f"{OUTDIR}/metaphlan2/all_samples",
-        level=mpa_config["heatmap"]["level"],
-        topN=mpa_config["heatmap"]["topN"],
         pseudocount=mpa_config["heatmap"]["pseudocount"],
         colormap=mpa_config["heatmap"]["colormap"],
         method=mpa_config["heatmap"]["method"],
@@ -133,12 +131,13 @@ rule plot_metaphlan2_heatmap:
         """
         scripts/plot_metaphlan2_heatmap.py \
             --outfile-prefix {params.outfile_prefix} \
-            --level {params.level} \
-            --topN {params.topN} \
+            --level {wildcards.level} \
+            --topN {wildcards.topN} \
             --pseudocount {params.pseudocount} \
             --colormap {params.colormap} \
             --method {params.method} \
             --metric {params.metric} \
+            --force \
             {input} \
             2> {log}
         """

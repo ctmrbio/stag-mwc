@@ -268,13 +268,16 @@ Kaiju
 :Output folder: ``kaiju``
 
 Run `Kaiju`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs four files per sample, plus a summary HTML Krona report with the
-profiles of all samples (``all_samples.kaiju.krona.html``). The four per-sample
-output files are::
+Outputs several files per sample (one per taxonomic level specified in the
+config), plus two files that combine all samples in the run: an HTML Krona
+report with the profiles of all samples and a TSV table per taxonomic level.
+The output files are::
 
     <sample>.kaiju
     <sample>.kaiju.<level>.tsv
     <sample>.krona
+    all_samples.kaiju.krona.html
+    all_samples.kaiju.<level>.tsv
 
 Kraken2
 -------
