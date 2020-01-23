@@ -117,11 +117,11 @@ rule kaiju_report:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-		kaiju2krona \
-			-t {params.nodes} \
-			-n {params.names} \
-			-i {input.kaiju} \
-			-o {output.krona} \
+        kaiju2krona \
+            -t {params.nodes} \
+            -n {params.names} \
+            -i {input.kaiju} \
+            -o {output.krona} \
             -u
         kaijuReport \
             -t {params.nodes} \
@@ -157,7 +157,7 @@ rule create_kaiju_krona_plot:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-		ktImportText \
-			-o {output.krona_html} \
-			{input}
+        ktImportText \
+            -o {output.krona_html} \
+            {input}
         """
