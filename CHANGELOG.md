@@ -40,6 +40,8 @@ situations.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
+- MetaPhlAn2 rule now correctly detect if no database path has been entered in
+  config file.
 
 ### Changed
 - Updated Python to 3.7 in main stag-mwc conda environment.

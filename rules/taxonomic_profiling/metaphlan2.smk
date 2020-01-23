@@ -10,9 +10,8 @@ localrules:
     create_metaphlan2_krona_plots,
 
 mpa_config = config["metaphlan2"]
-bt2_db_ext = ".1.bt2"
 if config["taxonomic_profile"]["metaphlan2"]:
-    if not Path(mpa_config["bt2_db_dir"]).exists():
+    if not mpa_config["bt2_db_dir"] or not Path(mpa_config["bt2_db_dir"]).exists():
         err_message = "No MetaPhlAn2 database dir found at: '{}'!\n".format(mpa_config["bt2_db_dir"])
         err_message += "Specify relevant paths in the metaphlan2 section of config.yaml.\n"
         err_message += "If you do not want to run MetaPhlAn2 for taxonomic profiling, set metaphlan2: False in config.yaml"
@@ -77,8 +76,7 @@ rule metaphlan2:
             {output.mpa_out} \
             {params.extra} \
             > {log.stdout} \
-            2> {log.stderr} \
-        && \
+            2> {log.stderr}
         metaphlan2krona.py \
             --profile {output.mpa_out} \
             --krona {output.krona}
