@@ -8,6 +8,9 @@ from snakemake.exceptions import WorkflowError
 localrules:
     download_kaiju_database,
     create_kaiju_krona_plot,
+    kaiju2krona,
+    kaiju_report,
+    join_kaiju_reports,
 
 kaiju_config = config["kaiju"]
 if config["taxonomic_profile"]["kaiju"]:
