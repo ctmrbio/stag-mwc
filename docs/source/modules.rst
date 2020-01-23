@@ -286,17 +286,26 @@ Kraken2
 
 Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile. 
 Optionally Bracken can be run to produce abundance profiles for each sample at a
-user-specified taxonomic level. Kraken2 outputs two files per sample::
+user-specified taxonomic level. The Kraken2 module produces the following files::
 
     <sample>.kraken
     <sample>.kreport
+    all_samples.kraken2.tsv
+    all_samples.mpa_style.tsv
 
-The optional Bracken adds additional output files for each sample::
+This modules outputs two tables containing the same information in two formats:
+one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
+(``mpa_style``). The optional Bracken further adds additional output files for
+each sample::
 
     <sample>.<taxonomic_level>.bracken
     <sample>.<taxonomic_level>.filtered.bracken
+    <sample>_bracken.kreport
+    <sample>.bracken.mpa_style.tsv
     all_samples.<taxonomic_level>.bracken.tsv
     all_samples.<taxonomic_level>.filtered.bracken.tsv
+    all_samples.bracken.mpa_style.tsv
+    
 
 MetaPhlAn2
 ----------

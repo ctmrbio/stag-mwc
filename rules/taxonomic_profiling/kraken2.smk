@@ -7,10 +7,19 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
+    bracken_mpa_style,
+    bracken_other_levels,
+    bracken_species,
     combine_kreports,
     create_kraken2_krona_plot,
     download_minikraken2,
+    filter_bracken,
+    join_bracken,
+    join_bracken_filtered,
+    join_bracken_mpa,
+    join_kraken2_mpa,
     kreport2krona,
+    
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
@@ -25,10 +34,14 @@ if config["taxonomic_profile"]["kraken2"]:
     # SAMPLES is also from the main Snakefile scope.
     krakens = expand(str(OUTDIR/"kraken2/{sample}.kraken"), sample=SAMPLES)
     kreports = expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES)
+    kreports_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.mpa_style.tsv"), sample=SAMPLES)
+    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.mpa_style.tsv")
     combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.tsv")
     kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
     all_outputs.extend(krakens)
     all_outputs.extend(kreports)
+    all_outputs.extend(kreports_mpa_style)
+    all_outputs.append(joined_kreport_mpa_style)
     all_outputs.append(combined_kreport)
     all_outputs.append(kraken_krona)
     
@@ -98,6 +111,54 @@ rule kraken2:
             2> {log}
         """
         
+
+rule kraken_mpa_style:
+    input:
+        kreport=OUTDIR/"kraken2/{sample}.kreport"
+    output:
+        tsv=OUTDIR/"kraken2/{sample}.mpa_style.tsv",
+    log:
+        str(LOGDIR/"kraken2/{sample}.mpa_style.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        kreport2mpa.py \
+            --report-file {input.kreport} \
+            --output {output.tsv} \
+            --display-header \
+            2>&1 > {log}
+        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.tsv}
+        """
+
+
+rule join_kraken2_mpa:
+    input:
+        tsv=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.tsv"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.mpa_style.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/kraken2_table_mpa.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_kraken2_mpa_tables.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        value_column="reads",
+        feature_column="taxon_name",
+    shell:
+        """
+        scripts/join_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            --feature-column {params.feature_column} \
+            {input.tsv} \
+            2>&1 > {log}
+        """
 
 rule combine_kreports:
     input:
@@ -178,7 +239,12 @@ if kraken2_config["bracken"]["kmer_distrib"]:
     ))
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES)
+    all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.tsv")
+
     all_outputs.extend(brackens)
+    all_outputs.append(brackens_mpa_style)
+    all_outputs.append(all_table_mpa)
 
 if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
@@ -190,14 +256,46 @@ if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken
     all_outputs.append(all_table_filtered)
 
 
-rule bracken:
+rule bracken_species:
+    """Run Bracken summarization for Species level (default and required for mpa-conversion later)."""
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
-        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
-        #bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",  # Snakemake can't handle this filename not containing {level}
+        bracken=OUTDIR/"kraken2/{sample}.S.bracken",
+        bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
+    log:
+        str(LOGDIR/"kraken2/{sample}.S.bracken.log")
+    threads:
+        2
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
+        thresh=kraken2_config["bracken"]["thresh"],
+    shell:
+        """
+        est_abundance.py \
+            --input {input.kreport} \
+            --kmer_distr {params.kmer_distrib} \
+            --output {output.bracken} \
+            --level S \
+            --thresh {params.thresh} \
+            2>&1 > {log}
+        """
+
+
+rule bracken_other_levels:
+    """Run Bracken summarization for all levels except Species (S)."""
+    input:
+        kreport=OUTDIR/"kraken2/{sample}.kreport"
+    output:
+        bracken=OUTDIR/"kraken2/{sample}.{level,DPOCFG}.bracken",
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
+    shadow:
+        "shallow"  # required because est_abundance.py always creates all-level output file with fixed filename
     threads:
         2
     conda:
@@ -216,30 +314,55 @@ rule bracken:
             2>&1 > {log}
         """
 
-rule filter_bracken:
+
+rule bracken_mpa_style:
     input:
-        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+        kreport=OUTDIR/"kraken2/{sample}_bracken.kreport"
     output:
-        filtered=OUTDIR/"kraken2/{sample}.{level}.filtered.bracken",  
+        tsv=OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv",
     log:
-        str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
+        str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        kreport2mpa.py \
+            --report-file {input.kreport} \
+            --output {output.tsv} \
+            --display-header \
+            2>&1 > {log}
+        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.tsv}
+        """
+
+
+rule join_bracken_mpa:
+    input:
+        tsv=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES),
+    output:
+        table=report(OUTDIR/"kraken2/all_samples.bracken.mpa_style.tsv",
+               category="Taxonomic profiling",
+               caption="../../report/bracken_table_mpa.rst"),
+    log:
+        str(LOGDIR/"kraken2/join_bracken_mpa_tables.log")
     threads:
         2
     conda:
         "../../envs/stag-mwc.yaml"
     params:
-        filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
-        include=kraken2_config["filter_bracken"]["include"],
-        exclude=kraken2_config["filter_bracken"]["exclude"],
+        value_column="reads",
+        feature_column="taxon_name",
     shell:
         """
-        {params.filter_bracken} \
-            --input-file {input.bracken} \
-            --output {output.filtered} \
-            {params.include} \
-            {params.exclude} \
+        scripts/join_tables.py \
+            --outfile {output.table} \
+            --value-column {params.value_column} \
+            --feature-column {params.feature_column} \
+            {input.tsv} \
             2>&1 > {log}
         """
+
 
 rule join_bracken:
     input:
@@ -267,6 +390,34 @@ rule join_bracken:
             2>&1 > {log}
         """
     
+
+rule filter_bracken:
+    input:
+        bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
+    output:
+        filtered=OUTDIR/"kraken2/{sample}.{level}.filtered.bracken",  
+    log:
+        str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
+    threads:
+        2
+    conda:
+        "../../envs/stag-mwc.yaml"
+    params:
+        filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
+        include=kraken2_config["filter_bracken"]["include"],
+        exclude=kraken2_config["filter_bracken"]["exclude"],
+    shell:
+        """
+        {params.filter_bracken} \
+            --input-file {input.bracken} \
+            --output {output.filtered} \
+            {params.include} \
+            {params.exclude} \
+            2>&1 > {log}
+        """
+
+
+
 rule join_bracken_filtered:
     input:
         bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken"), sample=SAMPLES),
