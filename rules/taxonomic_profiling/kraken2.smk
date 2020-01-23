@@ -256,11 +256,13 @@ rule join_bracken:
         "../../envs/stag-mwc.yaml"
     params:
         value_column="fraction_total_reads",
+        feature_column="name",
     shell:
         """
-        scripts/join_bracken_tables.py \
+        scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
+            --feature-column {params.feature_column} \
             {input.bracken} \
             2>&1 > {log}
         """
@@ -280,11 +282,13 @@ rule join_bracken_filtered:
         "../../envs/stag-mwc.yaml"
     params:
         value_column="fraction_total_reads",
+        feature_column="name",
     shell:
         """
-        scripts/join_bracken_tables.py \
+        scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
+            --feature-column {params.feature_column} \
             {input.bracken} \
             2>&1 > {log}
         """
