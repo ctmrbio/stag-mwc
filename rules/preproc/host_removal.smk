@@ -69,7 +69,7 @@ if config["host_removal"]:
 
     # Add final output files from this module to 'all_outputs' from the main
     # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_R{readpair}.host_removal.fq.gz"),
+    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
     host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
@@ -90,11 +90,11 @@ if config["host_removal"]:
     rule remove_host:
         """Filter reads matching host database."""
         input:
-            read1=OUTDIR/"fastp/{sample}_R1.qc.fq.gz",
-            read2=OUTDIR/"fastp/{sample}_R2.qc.fq.gz",
+            read1=OUTDIR/"fastp/{sample}_1.fq.gz",
+            read2=OUTDIR/"fastp/{sample}_2.fq.gz",
         output:
-            read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-            read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+            read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+            read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
             host=OUTDIR/"host_removal/{sample}_host.fq.gz",
         log:
             statsfile=str(LOGDIR/"host_removal/{sample}.statsfile.txt"),
@@ -177,7 +177,7 @@ if config["host_removal"]:
             """
 
 else:
-    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_R{readpair}.host_removal.fq.gz"),
+    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
     all_outputs.extend(filtered_host)
@@ -185,15 +185,14 @@ else:
     localrules:
         skip_remove_host,
 
-    rh_config = config["remove_host"]
     rule skip_remove_host:
-        """Do not filter host sequences"""
+        """Do not remove host sequences"""
         input:
-            read1=OUTDIR/"fastp/{sample}_R1.qc.fq.gz",
-            read2=OUTDIR/"fastp/{sample}_R2.qc.fq.gz",
+            read1=OUTDIR/"fastp/{sample}_1.fq.gz",
+            read2=OUTDIR/"fastp/{sample}_2.fq.gz",
         output:
-            read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-            read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+            read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+            read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         log:
             stderr=str(LOGDIR/"host_removal/{sample}.stderr.log"),
         conda:

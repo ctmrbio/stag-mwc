@@ -6,7 +6,7 @@
 if config["qc_reads"]:
     # Add final output files from this module to 'all_outputs' from
     # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
-    trimmed_qc = expand(str(OUTDIR/"fastp/{sample}_R{readpair}.qc.fq.gz"),
+    trimmed_qc = expand(str(OUTDIR/"fastp/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1, 2])
     all_outputs.extend(trimmed_qc)
@@ -25,8 +25,8 @@ if config["qc_reads"]:
             read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
             read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
         output:
-            read1=OUTDIR/"fastp/{sample}_R1.qc.fq.gz",
-            read2=OUTDIR/"fastp/{sample}_R2.qc.fq.gz",
+            read1=OUTDIR/"fastp/{sample}_1.fq.gz",
+            read2=OUTDIR/"fastp/{sample}_2.fq.gz",
             json=LOGDIR/"fastp/{sample}.fastp.json",
             html=LOGDIR/"fastp/{sample}.fastp.html",
         log:

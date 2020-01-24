@@ -57,8 +57,8 @@ for bbmap_config in config["bbmap"]:
     rule:
         """BBMap to {db_name}"""
         input:
-            read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-            read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+            read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+            read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         output:
             sam=bbmap_output_folder/"{sample}.sam.gz",
             covstats=bbmap_output_folder/"{sample}.covstats.txt",

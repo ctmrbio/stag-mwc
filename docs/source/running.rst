@@ -97,10 +97,10 @@ steps to this limit.
 
     If several people are running StaG-mwc on a shared server or on a shared
     file system, it can be useful to use the ``--conda-prefix`` parameter to
-    use a common folder to store the conda environments created by StaG-mwc,
-    so they can be re-used between different people or analyses. This reduces
-    the risk of producing several copies of the same conda environment in
-    different folders. This is also necessary when running on a cluster where
+    use a common folder to store the conda environments created by StaG-mwc, so
+    they can be re-used between different people or analyses. This reduces the
+    risk of producing several copies of the same conda environment in different
+    folders. This is also often necessary when running on cluster systems where
     paths are usually very deep. Then for example create a folder in your home
     directory and use that with the  ``--conda-prefix`` option.
 
@@ -112,6 +112,7 @@ Another useful command line argument to snakemake is ``--keep-going``. This will
 instruct snakemake to keep going even if a job should fail, e.g. maybe the
 taxonomic profiling step will fail for a sample if the sample contains no assignable
 reads after quality filtering (extreme example).
+
 
 Running on cluster resources
 ****************************
