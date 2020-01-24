@@ -39,7 +39,6 @@ if config["assess_depth"]:
             interval=config["bbcountunique"]["interval"]
         shell:
             """
-            bbcountunique.sh in={input} out={output.txt} interval={params.interval} > {log.stdout} 2> {log.stderr} \
-            && \
+            bbcountunique.sh in={input} out={output.txt} interval={params.interval} > {log.stdout} 2> {log.stderr}
             scripts/plot_bbcountunique.py {output.txt} {output.pdf} >> {log.stdout} 2>> {log.stderr}
             """
