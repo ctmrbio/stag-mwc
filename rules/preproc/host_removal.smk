@@ -195,11 +195,6 @@ else:
             read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         log:
             stderr=str(LOGDIR/"host_removal/{sample}.stderr.log"),
-        conda:
-            "../../envs/stag-mwc.yaml"
-        threads:
-            16
-        params:
         shell:
             """
             ln -sv $(readlink -f {input.read1}) {output.read1} >> {log.stderr}

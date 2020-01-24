@@ -8,8 +8,8 @@ from snakemake.exceptions import WorkflowError
 
 localrules:
     bracken_mpa_style,
-    bracken_other_levels,
-    bracken_species,
+    bracken_kreport,
+    bracken_all_levels,
     combine_kreports,
     create_kraken2_krona_plot,
     download_minikraken2,
