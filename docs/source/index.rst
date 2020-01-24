@@ -22,6 +22,7 @@ Gothenburg.
    installation
    running
    modules
+   faq
 
 
 About

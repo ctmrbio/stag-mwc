@@ -79,8 +79,8 @@ rule download_minikraken2:
 
 rule kraken2:
     input:
-        read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-        read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
         kraken=OUTDIR/"kraken2/{sample}.kraken",
         kreport=OUTDIR/"kraken2/{sample}.kreport",
@@ -246,25 +246,16 @@ if kraken2_config["bracken"]["kmer_distrib"]:
     all_outputs.append(brackens_mpa_style)
     all_outputs.append(all_table_mpa)
 
-if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
-    filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
-    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
 
-    all_outputs.extend(filtered_brackens)
-    all_outputs.append(all_table)
-    all_outputs.append(all_table_filtered)
-
-
-rule bracken_species:
-    """Run Bracken summarization for Species level (default and required for mpa-conversion later)."""
+rule bracken_kreport:
+    """Run Bracken summarization for Species level to get total sample
+    bracken.kreport (required for mpa-conversion later)."""
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
-        bracken=OUTDIR/"kraken2/{sample}.S.bracken",
         bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
     log:
-        str(LOGDIR/"kraken2/{sample}.S.bracken.log")
+        str(LOGDIR/"kraken2/{sample}.bracken.log")
     threads:
         2
     shadow:
@@ -279,23 +270,23 @@ rule bracken_species:
         est_abundance.py \
             --input {input.kreport} \
             --kmer_distr {params.kmer_distrib} \
-            --output {output.bracken} \
+            --output {output.bracken_kreport} \
             --level S \
             --thresh {params.thresh} \
             2>&1 > {log}
         """
 
 
-rule bracken_other_levels:
-    """Run Bracken summarization for all levels except Species (S)."""
+rule bracken_all_levels:
+    """Run Bracken summarization for all levels."""
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
-        bracken=OUTDIR/"kraken2/{sample}.{level,DPOCFG}.bracken",
+        bracken=OUTDIR/"kraken2/{sample}.{level,[DPOCFGS]}.bracken",
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
-    shadow:
-        "shallow"  # required because est_abundance.py always creates all-level output file with fixed filename
+    shadow:         # shadow required because est_abundance.py always creates the
+        "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
     threads:
         2
     conda:
@@ -391,11 +382,21 @@ rule join_bracken:
         """
     
 
+if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
+    filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+
+    all_outputs.extend(filtered_brackens)
+    all_outputs.append(all_table)
+    all_outputs.append(all_table_filtered)
+
+
 rule filter_bracken:
     input:
         bracken=OUTDIR/"kraken2/{sample}.{level}.bracken",
     output:
-        filtered=OUTDIR/"kraken2/{sample}.{level}.filtered.bracken",  
+        filtered=OUTDIR/"kraken2/{sample}.{level,[DPOCFGS]}.filtered.bracken",  
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
     threads:
@@ -415,7 +416,6 @@ rule filter_bracken:
             {params.exclude} \
             2>&1 > {log}
         """
-
 
 
 rule join_bracken_filtered:

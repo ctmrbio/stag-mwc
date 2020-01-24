@@ -61,8 +61,8 @@ rule download_humann2_databases:
 rule humann2:
     """Functional profiling using HUMAnN2."""
     input:
-        read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-        read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         taxonomic_profile=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
     output:
         OUTDIR/"humann2/{sample}_genefamilies.tsv",

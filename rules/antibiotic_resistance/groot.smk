@@ -67,11 +67,11 @@ rule create_groot_index:
 rule groot_align:
     """Align reads to groot index."""
     input:
-        read1=OUTDIR/"host_removal/{sample}_R1.host_removal.fq.gz",
-        read2=OUTDIR/"host_removal/{sample}_R2.host_removal.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
-        read1=temp(OUTDIR/"groot/{sample}/{sample}_R1.size_window.fq.gz"),
-        read2=temp(OUTDIR/"groot/{sample}/{sample}_R2.size_window.fq.gz"),
+        read1=temp(OUTDIR/"groot/{sample}/{sample}_1.size_window.fq.gz"),
+        read2=temp(OUTDIR/"groot/{sample}/{sample}_2.size_window.fq.gz"),
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
         graphs=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
