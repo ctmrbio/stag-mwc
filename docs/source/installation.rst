@@ -26,7 +26,7 @@ Miniconda3 is quick to install and does not require administrator permissions.
 After installing `Conda`_ and activating the base environment, install
 snakemake into your base environment::
 
-    (base)$ conda install snakemake
+    (base)$ conda install -c bioconda -c conda-forge snakemake
 
 These are the only external dependencies you need to install manually. The
 correct versions of any remaining dependencies will be automatically downloaded
@@ -40,9 +40,11 @@ installing snakemake, eg::
     conda config --add channels bioconda
 
 You create new environment and activate environment or deactivate environment with::
+
     conda create --name stag-mwc
     source activate stag-mwc
     source deactivate
+
 
 Download the workflow code
 **************************
