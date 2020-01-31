@@ -11,6 +11,8 @@ Workflow Collaboration (mwc). Currently, the project focus is a barebones
 metagenomics analysis workflow to produce primary output files from several
 different metagenomic analysis tools. 
 
+Go to https://stag-mwc.readthedocs.org for the full documentation.
+
 ## Usage
 
 ### Step 0: Install conda and Snakemake
