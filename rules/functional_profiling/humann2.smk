@@ -12,11 +12,10 @@ localrules:
 
 h_config = config["humann2"]
 if config["functional_profile"]["humann2"]:
-    if not any([Path(h_config["nucleotide_db"]).exists(),
-                Path(h_config["protein_db"]).exists()]):
+    if (not all([h_config["nucleotide_db"], h_config["protein_db"]]) 
+        or not any([Path(h_config["nucleotide_db"]).is_dir(), Path(h_config["protein_db"]).is_dir()])):
         err_message = "Could not find HUMAnN2 nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
         err_message += "Specify relevant paths in the humann2 section of config.yaml.\n"
-        err_message += "Run 'snakemake download_humann2_databases' to download and build the default ChocoPhlAn and UniRef90 databases in '{dbdir}'\n".format(dbdir=DBDIR/"humann2")
         err_message += "If you do not want to run HUMAnN2 for functional profiling, set functional_profile:humann2: False in config.yaml"
         raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2"
@@ -76,7 +75,7 @@ rule humann2:
     conda:
         "../../envs/humann2.yaml"
     threads:
-        8
+        20
     resources:
         humann2=1
     params:
@@ -85,8 +84,16 @@ rule humann2:
         protein_db=h_config["protein_db"],
     shell:
         """
-        cat {input.read1} {input.read2} > concat_input_reads.fq.gz \
-        && \
+        # Convert MPA2 v2.96.1 output to something like MPA2 v2.7.7 output 
+        # so it can be used with HUMAnN2, avoids StaG issue #138.
+        # TODO: Remove this once HUMANn2 v2.9 is out.
+        echo "#SampleID\t{wildcards.sample}" > mpa2_table-v2.7.7.txt
+        sed '/#/d' {input.taxonomic_profile} \
+            | cut -f1,3 \
+            >> mpa2_table-v2.7.7.txt
+
+        cat {input.read1} {input.read2} > concat_input_reads.fq.gz
+
         humann2 \
             --input concat_input_reads.fq.gz \
             --output {params.outdir} \
@@ -94,7 +101,7 @@ rule humann2:
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
             --threads {threads} \
-            --taxonomic-profile {input.taxonomic_profile} \
+            --taxonomic-profile mpa2_table-v2.7.7.txt \
             > {log.stdout} \
             2> {log.stderr}
         """
@@ -148,9 +155,15 @@ rule join_humann2_tables:
             sample=SAMPLES),
         pathcoverage=expand(str(OUTDIR/"humann2/{sample}_pathcoverage.tsv"), sample=SAMPLES),
     output:
-        genefamilies=OUTDIR/"humann2/all_samples.humann2_genefamilies.tsv",
-        pathabundance=OUTDIR/"humann2/all_samples.humann2_pathabundance.tsv",
-        pathcoverage=OUTDIR/"humann2/all_samples.humann2_pathcoverage.tsv",
+        genefamilies=report(OUTDIR/"humann2/all_samples.humann2_genefamilies.tsv",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
+        pathabundance=report(OUTDIR/"humann2/all_samples.humann2_pathabundance.tsv",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
+        pathcoverage=report(OUTDIR/"humann2/all_samples.humann2_pathcoverage.tsv",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
     log:
         stdout=str(LOGDIR/"humann2/humann2_join_tables.stdout.log"),
         stderr=str(LOGDIR/"humann2/humann2_join_tables.stderr.log"),

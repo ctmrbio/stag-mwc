@@ -2,7 +2,7 @@
 """Plot MetaPhlAn2 heatmap"""
 __author__ = "Fredrik Boulund"
 __date__ = "2019"
-__version__ = "0.2"
+__version__ = "0.3"
 
 from sys import argv, exit
 from collections import defaultdict
@@ -59,7 +59,7 @@ def parse_args():
                  "see scipy.cluster.hierarchy.linkage docs [%(default)s].")
     parser.add_argument("-m", "--metric",
             default="euclidean",
-            help="Distance metroc to use, "
+            help="Distance metric to use, "
                  "see scipy.spatial.distance.pdist docs [%(default)s].")
     parser.add_argument("-L", "--loglevel", choices=["INFO", "DEBUG"],
             default="INFO",
@@ -81,11 +81,19 @@ def parse_mpa_table(mpa_tsv):
     with open(mpa_tsv) as f:
         firstline = f.readline()
         if firstline.startswith("#mpa"):
-            skiprows = 1
+            second_line = f.readline()
+            third_line = f.readline()
+            if third_line.startswith("#SampleID"):
+                skiprows = 3
+            else:
+                skiprows = 1
             dropcols = ["clade_name", "NCBI_tax_id"]
         elif firstline.startswith("#clade_name"):
             skiprows = 0
             dropcols = ["#clade_name", "NCBI_tax_id"]
+        elif firstline.startswith("clade_name"):
+            skiprows = 0
+            dropcols = ["clade_name", "NCBI_tax_id"]
         elif firstline.startswith("ID"):
             skiprows = 0
             dropcols = ["ID"]
