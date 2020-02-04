@@ -358,6 +358,14 @@ It is possible to limit the number of concurrent HUMANn2 processes by using
 e.g. `--resources humann2=3` to tell Snakemake to not run more than three
 instances in parallel.
 
+.. note::
+
+    Until HUMAnN2 v2.9 has been released it is important to make sure you run
+    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
+    does not support the most recent MPA2 database version (201901).
+
+    
+
 
 Antibiotic resistance
 *********************
