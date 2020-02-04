@@ -24,16 +24,17 @@ situations.
 - Added the possibility to run in Singularity with conda using 
   `--use-singularity --use-conda`.
 - Added more MetaPhlAn2 data in output report.
-- Added rule to automatically download KrakenTools by Jennifer Lu.
+- Added HUMAnN2 summary tables to output report.
 - Added combined table and Krona plot for Kraken2 to output report.
 - Added metagenomic assembly, binning and "blobology", using MEGAHIT or SPAdes,
-  with binning using CONCOCT and MetaBat, implemented via MetaWrap.
-- Added Jennifer Lu's KrakenTools under the MIT license.
-- Added some basic syntax validation tests in CircleCI
-- Added possibility to skip host removal, will symlink QC'd files into the host
-  removal output directory so Snakemake can continue without performing host
-  removal.
-- Added MultiQC.
+  with binning using CONCOCT and MetaBat (MaxBin2 is not working), implemented
+  via MetaWrap.
+- Added KrakenTools from Jennifer Lu under the MIT license.
+- Added basic syntax and DAG validation test in CircleCI
+- Added possibility to skip read QC and/or host removal: will symlink relevant files
+  files into the relevant output directories so Snakemake can continue
+  without performing read QC and/or host removal.
+- Added MultiQC, mainly to summarize fastp logs.
 - Added Bracken abundance estimation on Kraken2 report files; added Bracken to
   the StaG conda environment. Also added Bracken abundance filtering rules so
   users can include/exclude certain taxa.
@@ -44,48 +45,49 @@ situations.
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
 - MetaPhlAn2 rule now correctly detect if no database path has been entered in
-  config file.
+  the config file.
+- HUMAnN2 rule now correctly detects if no database path has been entered in
+  the config file.
 
 ### Changed
 - Updated Python to 3.7 in main stag-mwc conda environment.
+- Updated Kaiju to 1.7.2.
+- Updated BBMap to 38.68.
+- Updated sambamba to 0.7.0.
+- Updated Kraken2 to 2.0.8_beta.
+- Updated seaborn to 0.8.1, added fastcluster to main stag-mwc conda env, installed via pip.
+- Updated MetaPhlAn2 to 2.96.1.
+- Updated HUMAnN2 to 2.8.1.
+- Updated GROOT to v0.8.5.
+- Updated plot_metaphlan2_heatmap.py to 0.3.
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of
   OUTDIR/logs/remove_human.
 - Improved make_count_table.py so it can use TSV annotation files with multiple
   columns. Added config setting for which columns to include.
-- Updated GROOT to v0.8.5.
 - Cleaned up sketch comparison cluster heatmap plotting script, making it more 
   robust to variations in output from different BBTools versions.
 - Changed the call to merge_metaphlan_tables.py due to undocumented
   CLI change in latest conda version.
-- Updated Kaiju to 1.7.2.
 - Changed Kaiju summary report output filenames.
-- Updated BBMap to 38.68.
-- Updated sambamba to 0.7.0.
-- Updated Kraken2 to 2.0.8_beta.
-- Updated seaborn to 0.8.1, added fastcluster to main stag-mwc conda env, installed via pip.
-- Updated MetaPhlAn2 to 2.9.21.
 - Split biobakery environment into metaphlan2 and humann2 so users only
   interested in MetaPhlAn2 do not have to download the huge HUMAnN2.
 - Replaced the outdated metaphlan_hclust_heatmap.py with a custom
-  plot_metaphlan2_heatmap.py script. Required splitting merge_metaphlan
+  plot_metaphlan2_heatmap.py script.
 - Defined some low-impact summary and plotting rules as localrules.
-- Modified preprocessing rule definitions so they are conditionally included based on
-  config settings: this enables arbitrary starting points in the DAG by specifying
-  input dir and input filename pattern according to where the users wants to start the
-  workflow from (e.g. from the output_dir/filtered_human folder, if FASTQ files already
-  have been preprocessed by another workflow). 
 - Reworded all rules relating to human removal to "host removal", and changed output folder
   structure accordingly.
 - Renamed output folder and file names for quality and adapter trimming.
 - Set Kraken2 --confidence to 0.1 by default.
+- Adjusted HUMAnN2 cores to 20 (up from 8).
+- Adjusted MetaPhlAn2 cores to 5 (up from 4).
 
 
 ### Removed
 - Removed outdated database download rules for Centrifuge, MetaPhlAn2, Kaiju,
   Kraken2, HUMAnN2.
 - Replaced FastQC + BBDuk with fastp adapter trimming and quality filtering.
-- Removed Centrifuge
+- Removed support for Centrifuge
 
 
 ## [0.3.2-dev]

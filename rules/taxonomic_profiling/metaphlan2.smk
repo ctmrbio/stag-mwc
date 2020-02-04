@@ -8,6 +8,7 @@ from snakemake.exceptions import WorkflowError
 localrules:
     plot_metaphlan2_heatmap,
     create_metaphlan2_krona_plots,
+    metaphlan2_krona,
 
 mpa_config = config["metaphlan2"]
 if config["taxonomic_profile"]["metaphlan2"]:
@@ -49,7 +50,6 @@ rule metaphlan2:
     output:
         bt2_out=OUTDIR/"metaphlan2/{sample}.bowtie2.bz2",
         mpa_out=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
-        krona=OUTDIR/"metaphlan2/{sample}.metaphlan2.krona",
     log:
         stdout=str(LOGDIR/"metaphlan2/{sample}.metaphlan2.stdout.log"),
         stderr=str(LOGDIR/"metaphlan2/{sample}.metaphlan2.stderr.log"),
@@ -58,7 +58,7 @@ rule metaphlan2:
     conda:
         "../../envs/metaphlan2.yaml"
     threads:
-        4
+        5
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
         bt2_index=mpa_config["bt2_index"],
@@ -77,9 +77,36 @@ rule metaphlan2:
             {params.extra} \
             > {log.stdout} \
             2> {log.stderr}
-        metaphlan2krona.py \
-            --profile {output.mpa_out} \
-            --krona {output.krona}
+        """
+
+
+rule metaphlan2_krona:
+    """Convert MPA2 output to Krona input"""
+    input:
+        mpa_out=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
+    output:
+        krona=OUTDIR/"metaphlan2/{sample}.metaphlan2.krona",
+    log:
+        str(LOGDIR/"metaphlan2/{sample}.metaphlan2_krona.log"),
+    shadow:
+        "shallow"
+    shell:
+        """
+        # This command is broken in MetaPhlAn2 v2.96.1 when running with old DB
+        #metaphlan2krona.py \
+        #    --profile {input.mpa_out} \
+        #    --krona {output.krona} \
+        #    2>&1 > {log}
+       
+        set +o pipefail  # Small samples can produce empty output files failing the pipeline
+        sed '/#/d' {input.mpa_out} \
+            | grep -E "s__|unclassified" \
+            | cut -f1,3 \
+            | awk '{{print $2,"\t",$1}}' \
+            | sed 's/|\w__/\t/g' \
+            | sed 's/k__//' \
+            > {output.krona} \
+            2> {log}
         """
 
 rule combine_metaphlan2_tables:
