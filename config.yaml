@@ -50,17 +50,8 @@ fastp:
     extra: ""
 remove_host:
     db_path: ""            # [Required] Path to folder containing the BBMap index for host sequences
-    minid: 0.95
-    maxindel: 3
-    minhits: 2
-    bandwidthratio: 0.16
-    bandwidth: 12
-    qtrim: "rl"
-    trimq: 10
-    quickmatch: "quickmatch"
-    fast: "fast"
-    untrim: "untrim"
-    plot_unambigous: False
+    confidence: 0.1
+    extra: "--quick"
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
 multiqc:

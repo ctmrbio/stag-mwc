@@ -6,65 +6,14 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_hg19,
 
 
-rule download_hg19:
-    """Download masked hg19 from: 
-    https://drive.google.com/file/d/0B3llHR93L14wd0pSSnFULUlhcUk"""
-    output:
-        OUTDIR/"hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
-    conda:
-        "../../envs/stag-mwc.yaml"
-    params:
-        dbdir=DBDIR/"hg19"
-    shell:
-        """
-        scripts/download_from_gdrive.py \
-            -o {output}.gz \
-            0B3llHR93L14wd0pSSnFULUlhcUk \
-        && \
-        gunzip {output}.gz
-    """
-
-
-rule index_hg19:
-    """Create BBMap index of hg19 fasta file."""
-    input:
-        DBDIR/"hg19/hg19_main_mask_ribo_animal_allplant_allfungus.fa",
-    output:
-        DBDIR/"hg19/ref/genome/1/chr1.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr2.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr3.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr4.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr5.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr6.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/chr7.chrom.gz",
-        DBDIR/"hg19/ref/genome/1/info.txt",
-        DBDIR/"hg19/ref/genome/1/scaffolds.txt.gz",
-        DBDIR/"hg19/ref/genome/1/summary.txt",
-        DBDIR/"hg19/ref/index/1/chr1-3_index_k13_c2_b1.block",
-        DBDIR/"hg19/ref/index/1/chr1-3_index_k13_c2_b1.block2.gz",
-        DBDIR/"hg19/ref/index/1/chr4-7_index_k13_c2_b1.block",
-        DBDIR/"hg19/ref/index/1/chr4-7_index_k13_c2_b1.block2.gz",
-    conda:
-        "../../envs/stag-mwc.yaml"
-    params:
-        dbdir=DBDIR/"hg19"
-    shell:
-        """
-        bbmap.sh \
-            ref={input} \
-            path={params.dbdir}
-        """
-
-
-if config["host_removal"]:
+rh_config = config["remove_host"]
+if rh_config:
     db_path = Path(config["remove_host"]["db_path"])
-    if not Path(db_path/"ref").exists():
+    if not rh_config["db_path"] or not db_path.is_dir():
         err_message = "Cannot find database for host sequence removal at: '{}'!\n".format(db_path)
-        err_message += "Specify path to folder containing BBMap index in config.yaml.\n"
-        err_message += "Run 'snakemake index_hg19' to download and create a BBMap index in '{dbdir}'".format(dbdir=DBDIR/"hg19")
+        err_message += "Specify path to folder containing Kraken2 database for host removal in config.yaml.\n"
         raise WorkflowError(err_message)
 
     # Add final output files from this module to 'all_outputs' from the main
@@ -72,30 +21,30 @@ if config["host_removal"]:
     filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
-    host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
+    #host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
     all_outputs.extend(filtered_host)
     all_outputs.append(host_proportions)
 
     citations.add((
-        "Bushnell, B. (2016).",
-        "BBMap short read aligner.",
-        "University of California, Berkeley, California.",
-        "Available online at: http://sourceforge.net/projects/bbmap.",
+        "Wood, D.E., Lu, J., & Langmead, B. (2019).",
+        "Improved metagenomic analysis with Kraken 2.",
+        "Genome biology, 20(1), 257.",
+        "https://doi.org/10.1186/s13059-019-1891-0"
     ))
 
     localrules:
         plot_proportion_host
 
-    rh_config = config["remove_host"]
     rule remove_host:
-        """Filter reads matching host database."""
+        """Filter reads matching host database using Kraken2."""
         input:
             read1=OUTDIR/"fastp/{sample}_1.fq.gz",
             read2=OUTDIR/"fastp/{sample}_2.fq.gz",
         output:
             read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
             read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
-            host=OUTDIR/"host_removal/{sample}_host.fq.gz",
+            host1=OUTDIR/"host_removal/{sample}_host_1.fq.gz",
+            host2=OUTDIR/"host_removal/{sample}_host_2.fq.gz",
         log:
             statsfile=str(LOGDIR/"host_removal/{sample}.statsfile.txt"),
             stderr=str(LOGDIR/"host_removal/{sample}.stderr.log"),
@@ -104,39 +53,24 @@ if config["host_removal"]:
         conda:
             "../../envs/stag-mwc.yaml"
         threads:
-            16
+            8
         params:
-            minid=rh_config["minid"],
-            maxindel=rh_config["maxindel"],
-            minhits=rh_config["minhits"],
-            bandwidthratio=rh_config["bandwidthratio"],
-            bandwidth=rh_config["bandwidth"],
-            qtrim=rh_config["qtrim"],
-            trimq=rh_config["trimq"],
-            quickmatch=rh_config["quickmatch"],
-            fast=rh_config["fast"],
-            untrim=rh_config["untrim"],
+            db=rh_config["db"],
+            confidence=rh_config["confidence",
+            extra=rh_config["extra"],
+            classified=lambda w: f"{OUTDIR}/host_removal/{w.sample}_#.fq.gz",
+            unclassified=lambda w: f"{OUTDIR}/host_removal/{w.sample}_#.host.fq.gz",
         shell:
             """
-            bbmap.sh \
-                threads={threads} \
-                in1={input.read1} \
-                in2={input.read2} \
-                path={rh_config[db_path]} \
-                outu1={output.read1} \
-                outu2={output.read2} \
-                outm={output.host} \
-                statsfile={log.statsfile} \
-                minid={params.minid} \
-                maxindel={params.maxindel} \
-                minhits={params.minhits} \
-                bandwidthratio={params.bandwidthratio} \
-                bandwidth={params.bandwidth} \
-                qtrim={params.qtrim} \
-                trimq={params.trimq} \
-                {params.quickmatch} \
-                {params.fast} \
-                {params.untrim} \
+            kraken2 \
+                --db {params.db} \
+                --threads {threads} \
+                --output {output.kraken} \
+                --classified-out {params.classified} \
+                --unclassified-out {params.unclassified} \
+                --paired \
+                --confidence {params.confidence} \
+                {params.extra} \
                 2> {log.stderr}
             """
 
