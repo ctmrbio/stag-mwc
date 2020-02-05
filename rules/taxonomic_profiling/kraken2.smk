@@ -225,7 +225,7 @@ rule create_kraken2_krona_plot:
         """
 
 
-if kraken2_config["bracken"]["kmer_distrib"]:
+if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_distrib"]:
     if not Path(kraken2_config["bracken"]["kmer_distrib"]).exists():
         err_message = "No Bracken kmer_distrib database file at: '{}'!\n".format(kraken2_config["bracken"]["kmer_distrib"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
@@ -383,7 +383,7 @@ rule join_bracken:
         """
     
 
-if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
+if config["taxonomic_profile"]["kraken2"] and kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
     all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
