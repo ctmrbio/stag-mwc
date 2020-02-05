@@ -19,6 +19,8 @@ localrules:
     join_bracken_mpa,
     join_kraken2_mpa,
     kreport2krona,
+    bracken2krona,
+    create_bracken_krona_plot,
     
 
 kraken2_config = config["kraken2"]
@@ -55,6 +57,7 @@ if config["taxonomic_profile"]["kraken2"]:
         "Ondov BD, Bergman NH, and Phillippy AM.",
         "Interactive metagenomic visualization in a Web browser.",
         "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+        "https://doi.org/10.1186/1471-2105-12-385",
     ))
 
 
@@ -241,10 +244,12 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES)
+    bracken_krona = str(OUTDIR/"kraken2/all_samples.bracken.krona.html")
     all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.tsv")
 
     all_outputs.extend(brackens)
-    all_outputs.append(brackens_mpa_style)
+    all_outputs.extend(brackens_mpa_style)
+    all_outputs.append(bracken_krona)
     all_outputs.append(all_table_mpa)
 
 
@@ -382,6 +387,47 @@ rule join_bracken:
             2>&1 > {log}
         """
     
+rule bracken2krona:
+    """Convert Bracken kreport output to krona"""
+    input:
+        bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
+    output:
+        bracken_krona=OUTDIR/"kraken2/{sample}.bracken.krona",
+    log:
+        str(LOGDIR/"kraken2/{sample}.bracken2krona.log")
+    threads:
+        1
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/KrakenTools/kreport2krona.py \
+            --report-file {input.bracken_kreport} \
+            --output {output.bracken_krona} \
+            2>&1 > {log}
+        """
+
+
+rule create_bracken_krona_plot:
+    input:
+        expand(str(OUTDIR/"kraken2/{sample}.bracken.krona"), sample=SAMPLES),
+    output:
+        krona_html=report(OUTDIR/"kraken2/all_samples.bracken.krona.html",
+                          category="Taxonomic profiling",
+                          caption="../../report/bracken_krona.rst"),
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+		ktImportText \
+			-o {output.krona_html} \
+			{input}
+        """
+
 
 if config["taxonomic_profile"]["kraken2"] and kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
     filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())

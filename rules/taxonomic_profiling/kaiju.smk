@@ -44,6 +44,7 @@ if config["taxonomic_profile"]["kaiju"]:
         "Ondov BD, Bergman NH, and Phillippy AM.",
         "Interactive metagenomic visualization in a Web browser.",
         "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+        "https://doi.org/10.1186/1471-2105-12-385",
     ))
 
 

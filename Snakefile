@@ -40,12 +40,13 @@ all_outputs = []
 citations = {(
     "Boulund et al. (2018).",
     "StaG-mwc: metagenomic workflow collaboration.",
-    "DOI:10.5281/zenodo.1483891",
+    "doi:10.5281/zenodo.1483891",
 )}
 citations.add((
     "Köster, Johannes and Rahmann, Sven (2012)",
     "Snakemake - A scalable bioinformatics workflow engine.",
-    "Bioinformatics",
+    "Bioinformatics, Volume 28, Issue 19.",
+    "doi:10.1093/bioinformatics/bts480",
 ))
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)

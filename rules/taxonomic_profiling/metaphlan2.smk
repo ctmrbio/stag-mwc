@@ -34,11 +34,13 @@ if config["taxonomic_profile"]["metaphlan2"]:
         "Truong, D. T., et al. (2015).",
         "MetaPhlAn2 for enhanced metagenomic taxonomic profiling.",
         "Nature methods, 12(10), 902.",
+        "https://doi.org/10.1038/nmeth.3589",
     ))
     citations.add((
         "Ondov BD, Bergman NH, and Phillippy AM.",
         "Interactive metagenomic visualization in a Web browser.",
         "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
+        "https://doi.org/10.1186/1471-2105-12-385",
     ))
 
 
