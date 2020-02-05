@@ -38,24 +38,39 @@ qc_reads
 The quality control module uses `FastP`_ to produce HTML reports of the quality
 of the input and output reads. The quality control module also trims adapter
 sequences and performs quality trimming of the input reads. The quality assured
-reads are output into ``fastp``.
+reads are output into ``fastp``. Output filenames are::
+
+    <sample>_{1,2}.fq.gz
+
+.. note:: 
+
+    It is possible to skip fastp processing. StaG then replaces the
+    output files with symlinks to the input files.
 
 remove_host
 --------------
-:Tool: `BBMap`_
+:Tool: `Kraken2`_
 :Output folder: ``host_removal``
 
-The ``remove_host`` module uses `BBMap`_ to map reads against a database of
-host sequences to remove reads matching to a non-desired host genome. The
-output is a pair of paired-end FASTQ files, plus a single interleaved FASTQ
-file with all reads that matched the host reference. In addition, two PDF files
-with 1) a basic histogram plot of the proportion of host reads detected in each
-sample, and 2) a barplot of the same. In addition, a TSV table with the raw
+The ``remove_host`` module uses `Kraken2`_ to classify reads against a database
+of host sequences to remove reads matching to non-desired host genomes. The
+output are two sets of pairs of paired-end FASTQ files, and optionally one
+Kraken2 classification file and one Kraken2 summary report.  In addition, two
+PDF files with 1) a basic histogram plot of the proportion of host reads
+detected in each sample, and 2) a barplot of the same. A TSV table with the raw
 proportion data is also provided::
 
-   host_barplot.pdf
-   host_histogram.pdf
-   host_proportions.tsv
+    <sample>_{1,2}.fq.gz
+    <sample>.host_{1,2}.fq.gz
+    host_barplot.pdf
+    host_histogram.pdf
+    host_proportions.tsv
+
+.. note::
+
+    It is possible to skip host removal. StaG then replaces the output files
+    with symlinks to the fastp output files.
+
 
 assess_depth
 --------------
