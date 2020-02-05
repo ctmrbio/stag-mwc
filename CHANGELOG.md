@@ -60,6 +60,8 @@ situations.
 - Updated HUMAnN2 to 2.8.1.
 - Updated GROOT to v0.8.5.
 - Updated plot_metaphlan2_heatmap.py to 0.3.
+- Replaced BBMap-based host removal with Kraken2, substantially reducing time
+  and resources requirements. 
 - Added read length window filter before groot alignment step.
 - Change logdir of remove_human rule to LOGDIR/remove_human instead of
   OUTDIR/logs/remove_human.
