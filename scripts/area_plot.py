@@ -1,7 +1,9 @@
-from warnings import Warning
+import argparse
+import warnings
+# from warnings import Warning
 
 from matplotlib import rcParams
-from matplitlib import cm
+from matplotlib import cm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -116,14 +118,16 @@ def profile_one_level(collapsed, level, threshhold=0.01, count=8):
     thresh_ = (collapsed['mean'] > threshhold) & (collapsed['count'] <= count)
     top_taxa = collapsed.loc[thresh_].copy()
     top_taxa.drop(columns=['mean', 'count'], inplace=True)
+    for l_ in np.arange(level):
+        top_taxa.index = top_taxa.index.droplevel(l_)
+
+    first_ = top_taxa.index[0]
     
-    top_taxa.reset_index(inplace=True)
-    top_taxa.drop(columns=np.arange(level), inplace=True)
-    top_taxa.set_index(level, inplace=True)
-    
-    top_taxa = top_taxa[samples].sort_values(by=[top_taxa.index[0]], 
-                                             ascending=False,
-                                             axis='columns')
+    top_taxa.sort_values([first_],
+                         ascending=False,
+                         axis='columns',
+                         inplace=True,
+                         )
 
     upper_ = top_taxa.cumsum()
     lower_ = top_taxa.cumsum() - top_taxa
@@ -253,8 +257,8 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
     ax1.set_position((0.15, 0.125, 0.4, 0.75))
     
     # Pl;ots the area plot
-    x = np.arange(0, len(top_.columns))
-    for taxa, hi_ in upper_.iterrows():
+    x = np.arange(0, len(upper_.columns))
+    for taxa, hi_ in upper_.iloc[::-1].iterrows():
         lo_ = lower_.loc[taxa]
         cl_ = colors[taxa]
     
@@ -273,9 +277,283 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
 
     # Sets up x-axis without numeric labels
     ax1.set_xticklabels([])
-    ax1.set_xticks(np.arange(0, len(samples), sample_interval))
-    ax1.set_xlim((0, len(samples) - 1))
+    ax1.set_xticks(np.arange(0, x.max(), sample_interval))
+    ax1.set_xlim((0, x.max() - 1))
     ax1.set_xlabel('Samples', size=13)
 
     return fig_
 
+
+def single_area_plot(table, level=3, samples=None, 
+    tax_col='taxon_name', cmap='Set3',
+    tax_delim='|', multilevel_table=True, abund_thresh=0.1, 
+    group_thresh=8):
+    """
+    Generates an area plot for the table at the specified level of resolution
+
+    Parameters
+    ----------
+    table : DataFrame
+        A pandas dataframe of the original table of data (either containing 
+        counts or relative abundance)
+    level : int
+        The higherarchical level within the table to display as an integer
+    cmap : str
+        The qualitative colormap to use to generate your plot. Refer to 
+        colorbrewer for options. If a selected colormap exceeds the number
+        of groups (`--group-thresh`) possible, it will default to Set3.
+    samples : list, optional
+        The columns from `table` to be included in the analysis. If `samples`
+        is None, then all columns in `table` except `tax_col` will be used.
+    tax_col : str, optional
+        The column in `table` which contains the taxonomic information.
+    tax_delim: str, optional
+        The delimiter between taxonomic levels, for example "|" or ";".
+    multilevel_table: bool, optional
+        Whether the table contains multiple concatenated, in which cases 
+        considering `nan` will filter the samples to retain only the levels 
+        of interest. This is recommended for kracken/bracken tables, but not 
+        applicable for some 16s sequences
+    abund_thresh: float [0, 1]
+        The mean abundance threshhold for a sample to be plotted. This is 
+        in conjunction with the group threshhold (`--group-thresh`) will be 
+        used to determine the groups that are shown.
+    group_thresh: int, [1, 12]
+        The maximum number of groups (colors) to show in the area plot. This 
+        is handled in conjunction with the `--abund-thresh` in that 
+        to be displayed, a group must have both a mean relative abundance 
+        exceeding the `abund-thresh` and must be in the top `group-thresh` 
+        groups.
+
+    Returns
+    -------
+    Figure
+        A 8" x 4" matplotlib figure with the area plot and legend.
+
+    Also See
+    --------
+    make_joint_area_plot
+    
+    """
+
+    if group_thresh > 12:
+        raise ValueError("You may display at most 12 colors on this plot. "
+                         "Please re-consider your plotting choices.")
+    elif (group_thresh > 9) & ~(cmap in over9):
+        raise Warning('There are too many colors for your colormap. '
+                      'Changing to Set3.')
+        cmap = 'Set3'
+    elif (group_thresh > 8) & ~(cmap in over8):
+        raise Warning('There are too many colors for your colormap. '
+                      'Changing to Set3.')
+        cmap = 'Set3'
+
+    # Parses the taxonomy and collapses the table
+    taxa = extract_label_array(table, tax_col, tax_delim)
+
+    if samples is None:
+        samples = list(table.columns.values)
+        samples.remove(tax_col)
+
+    # Gets the appropriate taxonomic level information to go forward
+    collapsed = level_taxonomy(table, taxa, samples, np.array([level]), 
+                              consider_nan=multilevel_table)
+
+    # Gets the top taxonomic levels
+    upper_, lower_, = profile_one_level(collapsed, np.array([level]), 
+                                        threshhold=abund_thresh, 
+                                        count=group_thresh)
+
+    # Gets the colormap 
+    cmap = define_single_cmap(cmap, upper_)
+
+    # Plots the data
+    fig_ = plot_area(upper_, lower_, cmap)
+
+    return fig_
+
+
+def make_joint_area_plot(table, rough_level=2, fine_level=5, samples=None, 
+    tax_col='taxon_name', tax_delim='|', 
+    multilevel_table=True, abund_thresh_rough=0.1, 
+    abund_thresh_fine=0.05, group_thresh_fine=5, 
+    group_thresh_rough=5):
+    """
+    Generates an area plot with nested grouping where the the higher level
+    (`rough_level`) in the table (lower resolution/fewer groups) is used to 
+    provide the general grouping structure and then within each `rough_level`,
+    a number of `fine_level` groups are displayed. 
+
+    Parameters
+    ----------
+    table : DataFrame
+        A dataframe of hte original data, either as counts or relative 
+        abundance with the taxonomic information in `tax_col`. The data
+        can have seperate count values at multiple levels (i.e. combine)
+        collapsed phylum, class, etc levels.
+    rough_level, fine_level: int
+        The taxonomic levels to be displayed. The `fine_level` will be grouped
+        by `rough_level` to display the data grouped by `rough_level`. The
+        `rough_level` should smaller than the `fine_level`. 
+    samples : list, optional
+        The columns from `table` to be included in the analysis. If `samples`
+        is None, then all columns in `table` except `tax_col` will be used.
+    tax_col : str, optional
+        The column in `table` which contains the taxonomic information.
+    tax_delim: str, optional
+        The delimiter between taxonomic levels, for example "|" or ";".
+    multilevel_table: bool, optional
+        Whether the table contains multiple concatenated, in which cases 
+        considering `nan` will filter the samples to retain only the levels 
+        of interest. This is recommended for kracken/bracken tables, but not 
+        applicable for some 16s sequences
+    abund_thresh_rough, abund_thresh_fine : float [0, 1]
+        The mean abundance threshhold for a taxonomic group to be plotted for
+        the higher level grouping (`abund_thresh_rough`) and sub grouping
+        level. This will be used in conjunction with the `group_thresh_rough`
+        and `group_thresh_fine` to determine the number of groups to be
+        included.
+    group_thresh_fine, group_thresh_rough: int, [1, 6]
+        The maximum number of taxonmic groups to display for the respective 
+        level. If `group_thresh_rough` > 6, then it will be replaced with 
+        6 because this is the maximum number of avaliable color groups.
+
+    Returns
+    -------
+    Figure
+        A 8" x 4" matplotlib figure with the area plot and legend.
+
+    Also See
+    --------
+    single_area_plot
+
+    """
+
+    # Parses the taxonomy and collapses the table
+    taxa_ = extract_label_array(table_, taxa_, tax_delim)
+
+    # Gets the list of samples if unspecified
+    if samples is None:
+        samples = list(table_.columns.values)
+        samples.remove(tax_col)
+    else:
+        samples = pd.read_csv(samples).values
+
+    # Gets the appropriate taxonomic level information to go forward
+    collapsed = level_taxonomy(table, taxa, samples, level, 
+                              consider_nan=multilevel_table)
+
+    # Gets the top taxonomic levels
+    upper_, lower_, = profile_joint_levels(collapsed, rough_level, fine_level, 
+                                           lo_thresh=abund_thresh_rough, 
+                                           lo_count=min(5, group_thresh_rough),
+                                           hi_thresh=abund_thresh_fine,
+                                           hi_count=group_thresh_fine,
+                                           )
+
+    # Gets the colormap 
+    cmap = define_join_cmap(upper_)
+
+    # Plots the data
+    fig_ = plot_area(upper_, lower_, cmap)
+
+    return fig_
+
+
+# Sets up the main arguments for argparse.
+parser = argparse.ArgumentParser(
+    description=('A set of functions to generate diagnostic stacked area '
+                 'plots from metagenomic outputs.'),
+    prog=('area_plotter')
+    )
+parser.add_argument('-t', '--table', 
+                    help=('The abundance table as a tsv classic biom '
+                          '(features as rows, samples as columns) containing'
+                          'absloute or relative abundance for the samples.'),
+                    required=True,
+                    )
+parser.add_argument('-f', '--figure',
+                    help=('The location for the final figure'),
+                    required=True,
+                    )
+parser.add_argument('-s', '--samples', 
+                    help=('A text file with the list of samples to be include' 
+                         ' (one per line). If no list is provided, then data '
+                         'from all columns in the table (except the one '
+                         'specifying taxonomy) will be used.'),
+                    )
+parser.add_argument('--mode', choices=(["metaphlan", "kracken", "marker"]),
+                    help=('The software generating the table to make parsing'
+                          'easier. Optens are kracken, metaphlan, marker '
+                          '(i.e. CTMR amplicon) and other for all other '
+                          'processing types.'),
+                    default='kracken'
+                    )
+parser.add_argument('-l', '--level',
+                    help=('The taxonomic level (as an integer) to plot the '
+                          'data.'),
+                    default=3,
+                    type=int,
+                    )
+parser.add_argument('--abund-thresh',
+                    help=("the minimum abundance required to display a group."),
+                    default=0.01,
+                    type=float,
+                    )
+parser.add_argument('--group-thresh',
+                    help=("The maximum number of groups to be displayed in "
+                        "the graph."),
+                    default=8,
+                    type=int,
+                    )
+parser.add_argument('-c', '--colormap',
+                    help=("The qualitative colormap to use to generate your "
+                          "plot. Refer to colorbrewer for options. If a "
+                          "selected colormap exceeds the number of groups "
+                          "(`--group-thresh`) possible, it will default to "
+                          "Set3."),
+                    default='Set3',
+                    )
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+
+    if args.mode.lower() == 'metaphlan':
+        tax_delim = '|'
+        multi_level = True
+        tax_col = 'clade_name'
+        table_drop = ['NCBI_tax_id']
+        skip_rows=1
+    elif args.mode.lower() == 'kracken':
+        tax_delim = '|'
+        multi_level = True
+        tax_col = 'taxon_name'
+        table_drop = []
+        skip_rows=0
+    elif args.mode.lower() == 'marker':
+        tax_delim=';'
+        multi_level=False
+        tax_col='taxonomy'
+        table_drop=['sequence']
+        skip_rows=0
+
+    table = pd.read_csv(args.table, sep='\t', skiprows=skip_rows)
+    print(table.columns)
+    if args.samples is not None:
+        with open(args.samples, 'r') as f_:
+            samples = f_.read().split('\n')
+    else:
+        samples = None
+
+    fig_ = single_area_plot(table.drop(columns=table_drop), 
+                            level=args.level, 
+                            cmap=args.colormap,
+                            samples=samples,
+                            tax_col=tax_col,
+                            tax_delim=tax_delim,
+                            multilevel_table=multi_level,
+                            abund_thresh=args.abund_thresh,
+                            group_thresh=args.group_thresh,
+                            )
+
+    fig_.savefig(args.figure, dpi=300)
