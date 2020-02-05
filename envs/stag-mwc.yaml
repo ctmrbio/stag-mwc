@@ -20,5 +20,6 @@ dependencies:
     - samtools =1.9
     - groot =0.8.4
     - pip
+    - matplotlib =2.2.2
     - pip:
         - fastcluster
