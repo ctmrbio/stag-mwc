@@ -9,7 +9,6 @@ localrules:
     groot_report
 
 
-
 groot_db_path = Path(config["groot"]["index"])
 if config["antibiotic_resistance"]:
     if not Path(groot_db_path).exists():
@@ -24,11 +23,7 @@ if config["antibiotic_resistance"]:
             output_type=("groot_aligned.bam", "groot_report.tsv"))
     all_outputs.extend(groot_outputs)
 
-    citations.add((
-        "Rowe WPM, Winn MD (2018).",
-        "Indexed variation graphs for efficient and accurate resistome profiling.",
-        "Bioinformatics. 2018. doi: bty387",
-    ))
+    citations.add(publications["GROOT"])
 
 groot_config = config["groot"]
 rule create_groot_index:

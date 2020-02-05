@@ -47,18 +47,8 @@ if config["taxonomic_profile"]["kraken2"]:
     all_outputs.append(combined_kreport)
     all_outputs.append(kraken_krona)
     
-    citations.add((
-        "Wood, D.E., Lu, J., & Langmead, B. (2019).",  
-        "Improved metagenomic analysis with Kraken 2.",
-        "Genome biology, 20(1), 257.",                 
-        "https://doi.org/10.1186/s13059-019-1891-0"    
-    ))
-    citations.add((
-        "Ondov BD, Bergman NH, and Phillippy AM.",
-        "Interactive metagenomic visualization in a Web browser.",
-        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
-        "https://doi.org/10.1186/1471-2105-12-385",
-    ))
+    citations.add(publications["Kraken2"])
+    citations.add(publications["Krona"])
 
 
 rule download_minikraken2:
@@ -236,12 +226,7 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
         err_message += "If you do not want to run Bracken for abundance profiling, set 'kmer_distrib: ""' in the bracken section of config.yaml"
         raise WorkflowError(err_message)
 
-    citations.add((
-        "Lu J, Breitwieser FP, Thielen P, Salzberg SL (2017).",
-        "Bracken: estimating species abundance in metagenomics data.",
-        "PeerJ Computer Science 3:e104."
-        "https://doi.org/10.7717/peerj-cs.104.",
-    ))
+    citations.add(publications["Bracken"])
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES)

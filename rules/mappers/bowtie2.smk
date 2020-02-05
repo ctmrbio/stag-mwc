@@ -48,12 +48,9 @@ for bt2_config in config["bowtie2"]:
                 err_message += "If you want to skip mapping with Bowtie2, set mappers:bowtie2:False in config.yaml."
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
+            citations.add(publications["featureCount"])
 
-        citations.add((
-            "Langmead B, Salzberg S (2012).",
-            "Fast gapped-read alignment with Bowtie 2.",
-            "Nature Methods. 2012, 9:357-359.",
-        ))
+        citations.add(publications["Bowtie2"])
 
     rule:
         """Align reads using Bowtie2."""

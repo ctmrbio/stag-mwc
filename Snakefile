@@ -2,10 +2,8 @@
 #
 #    StaG Metagenomic Workflow Collaboration
 #                 StaG-mwc
-#         Copyright (c) 2018 Authors
+#         Copyright (c) 2018-2020
 #
-# Running `snakemake --use-conda --dryrun` in a clone of this repository should
-# successfully execute a test dry run of the workflow.
 # Full documentation available at:
 # https://stag-mwc.readthedocs.org
 
@@ -15,6 +13,8 @@ import textwrap
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
 min_version("5.5.4")
+
+from rules.publications import publications
 
 stag_version = "0.4.0-dev"
 singularity: "docker://continuumio/miniconda3:4.7.10"
@@ -37,17 +37,7 @@ LOGDIR = Path(config["logdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
 
-citations = {(
-    "Boulund et al. (2018).",
-    "StaG-mwc: metagenomic workflow collaboration.",
-    "https://doi.org/10.5281/zenodo.1483891",
-)}
-citations.add((
-    "Köster, Johannes and Rahmann, Sven (2012).",
-    "Snakemake - A scalable bioinformatics workflow engine.",
-    "Bioinformatics, Volume 28, Issue 19.",
-    "https://doi.org/10.1093/bioinformatics/bts480",
-))
+citations = {publications["StaG"], publications["Snakemake"]}
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
@@ -155,9 +145,11 @@ onsuccess:
 
         citation_filename = f"citations-{report_datetime}.rst"
         with open(citation_filename, "w") as citation_file:
-            for citation in sorted(set(citations)):
-                citation_file.write("* "+" ".join(["", *citation])+"\n")
-        Path("citations.rst").unlink()
+            for citation in sorted(citations):
+                citation_file.write("* "+citation+"\n")
+        citations_link = Path("citations.rst")
+        if citations_link.exists():
+            Path("citations.rst").unlink()
         Path("citations.rst").symlink_to(citation_filename)
 
         snakemake_call = " ".join(argv)

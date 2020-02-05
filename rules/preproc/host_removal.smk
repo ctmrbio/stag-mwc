@@ -22,12 +22,7 @@ if rh_config:
     all_outputs.extend(filtered_host)
     all_outputs.append(host_proportions)
 
-    citations.add((
-        "Wood, D.E., Lu, J., & Langmead, B. (2019).",
-        "Improved metagenomic analysis with Kraken 2.",
-        "Genome biology, 20(1), 257.",
-        "https://doi.org/10.1186/s13059-019-1891-0"
-    ))
+    citations.add(publications["Kraken2"])
 
     localrules:
         plot_proportion_host

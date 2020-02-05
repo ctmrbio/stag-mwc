@@ -11,13 +11,7 @@ if config["qc_reads"]:
             readpair=[1, 2])
     all_outputs.extend(trimmed_qc)
 
-    citations.add((
-        "Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu (2018).",
-        "fastp: an ultra-fast all-in-one FASTQ preprocessor.",
-        "Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i884–i890.",
-        "https://doi.org/10.1093/bioinformatics/bty560"
-    ))
-
+    citations.add(publications["fastp"])
 
     fastp_config = config["fastp"]
     rule fastp:

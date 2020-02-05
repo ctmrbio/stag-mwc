@@ -2,12 +2,7 @@
 # MultiQC
 
 if config["multiqc_report"]:
-    citations.add((
-        "Philip Ewels, Måns Magnusson, Sverker Lundin and Max Käller.",
-        "MultiQC: Summarize analysis results for multiple tools and samples in a single report.",
-        "Bioinformatics (2016).",
-        "doi: 10.1093/bioinformatics/btw354.",
-    ))
+    citations.add(publications["MultiQC"])
 
     mqc_config = config["multiqc"]
     rule multiqc:

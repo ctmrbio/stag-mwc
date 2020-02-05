@@ -46,13 +46,9 @@ for bbmap_config in config["bbmap"]:
                 err_message += "If you want to skip mapping with BBMap, set mappers:bbmap:False in config.yaml."
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
+            citations.add(publications["featureCount"])
 
-        citations.add((
-            "Bushnell, B. (2016).",
-            "BBMap short read aligner.",
-            "University of California, Berkeley, California.",
-            "Available online at: http://sourceforge.net/projects/bbmap.",
-        ))
+        citations.add(publications["BBMap"])
 
     rule:
         """BBMap to {db_name}"""
@@ -172,8 +168,7 @@ for bbmap_config in config["bbmap"]:
                 {params.extra} \
                 {input.bams} \
                 > {log} \
-                2>> {log} \
-            && \
+                2>> {log}
             cut \
                 -f1,7- \
                 {output.counts}  \

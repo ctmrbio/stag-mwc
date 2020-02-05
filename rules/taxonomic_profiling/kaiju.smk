@@ -34,18 +34,8 @@ if config["taxonomic_profile"]["kaiju"]:
     all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
 
-    citations.add((
-        "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
-        "Fast and sensitive taxonomic classification for metagenomics with Kaiju.",
-        "Nature communications, 7, 11257.",
-        "Available online at: https://github.com/bioinformatics-centre/kaiju",
-    ))
-    citations.add((
-        "Ondov BD, Bergman NH, and Phillippy AM.",
-        "Interactive metagenomic visualization in a Web browser.",
-        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
-        "https://doi.org/10.1186/1471-2105-12-385",
-    ))
+    citations.add(publications["Kaiju"])
+    citations.add(publications["Krona"])
 
 
 rule download_kaiju_database:

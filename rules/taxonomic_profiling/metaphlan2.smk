@@ -30,18 +30,8 @@ if config["taxonomic_profile"]["metaphlan2"]:
     all_outputs.extend(mpa_combined)
     all_outputs.append(mpa_plot)
 
-    citations.add((
-        "Truong, D. T., et al. (2015).",
-        "MetaPhlAn2 for enhanced metagenomic taxonomic profiling.",
-        "Nature methods, 12(10), 902.",
-        "https://doi.org/10.1038/nmeth.3589",
-    ))
-    citations.add((
-        "Ondov BD, Bergman NH, and Phillippy AM.",
-        "Interactive metagenomic visualization in a Web browser.",
-        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
-        "https://doi.org/10.1186/1471-2105-12-385",
-    ))
+    citations.add(publications["MetaPhlAn2"])
+    citations.add(publications["Krona"])
 
 
 rule metaphlan2:
