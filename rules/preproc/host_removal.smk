@@ -23,7 +23,7 @@ if rh_config:
             readpair=[1,2])
     #host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
     all_outputs.extend(filtered_host)
-    all_outputs.append(host_proportions)
+    #all_outputs.append(host_proportions)
 
     citations.add((
         "Wood, D.E., Lu, J., & Langmead, B. (2019).",
@@ -46,7 +46,6 @@ if rh_config:
             host1=OUTDIR/"host_removal/{sample}_host_1.fq.gz",
             host2=OUTDIR/"host_removal/{sample}_host_2.fq.gz",
         log:
-            statsfile=str(LOGDIR/"host_removal/{sample}.statsfile.txt"),
             stderr=str(LOGDIR/"host_removal/{sample}.stderr.log"),
         shadow:
             "shallow"
@@ -55,8 +54,8 @@ if rh_config:
         threads:
             8
         params:
-            db=rh_config["db"],
-            confidence=rh_config["confidence",
+            db=rh_config["db_path"],
+            confidence=rh_config["confidence"],
             extra=rh_config["extra"],
             classified=lambda w: f"{OUTDIR}/host_removal/{w.sample}_#.fq.gz",
             unclassified=lambda w: f"{OUTDIR}/host_removal/{w.sample}_#.host.fq.gz",
