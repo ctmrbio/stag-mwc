@@ -225,6 +225,14 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
         err_message += "Run 'snakemake download_minikraken2' to download a copy of the required files into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
         err_message += "If you do not want to run Bracken for abundance profiling, set 'kmer_distrib: ""' in the bracken section of config.yaml"
         raise WorkflowError(err_message)
+    if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
+        filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+        all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+        all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+
+        all_outputs.extend(filtered_brackens)
+        all_outputs.append(all_table)
+        all_outputs.append(all_table_filtered)
 
     citations.add(publications["Bracken"])
 
@@ -413,16 +421,6 @@ rule create_bracken_krona_plot:
 			-o {output.krona_html} \
 			{input}
         """
-
-
-if config["taxonomic_profile"]["kraken2"] and (kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]):
-    filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-    all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
-    all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
-
-    all_outputs.extend(filtered_brackens)
-    all_outputs.append(all_table)
-    all_outputs.append(all_table_filtered)
 
 
 rule filter_bracken:
