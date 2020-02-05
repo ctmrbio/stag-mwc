@@ -52,6 +52,8 @@ remove_host:
     db_path: ""            # [Required] Path to folder containing the BBMap index for host sequences
     confidence: 0.1
     extra: "--quick"
+    keep_kraken: False
+    keep_kreport: False
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
 multiqc:
