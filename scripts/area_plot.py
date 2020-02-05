@@ -18,7 +18,7 @@ rcParams['pdf.fonttype'] = 42
 rcParams['ps.fonttype'] = 42
 
 # Sets up the order of colors to be used in joint plots.
-colors_order = ['Reds', 'Blues', 'Grens', 'Purples', "Oranges", 'Greys']
+colors_order = ['Reds', 'Blues', 'Greens', 'Purples', "Oranges", 'Greys']
 
 over9 = {'Paired', 'Paired_r', 'Set3', 'Set3_r'}
 over8 = over9 | {'Set1', "Pastel1"}
@@ -59,7 +59,7 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
         in its columns.
     taxa: DataFrame
         The taxonomic strings parsed into n levels
-    level: int
+    level: list
         The level to which the taxonomy should be summarized 
     samples : list
         The columns from `table` to be included in the analysis
@@ -85,6 +85,7 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
                table.loc[leveler, samples].sum(axis=0))],
         # sort=False
     )
+    level_.reset_index()
     if taxa.loc[leveler, cols].duplicated().any():
         return level_.groupby(cols).sum()
     else:
@@ -183,15 +184,26 @@ def profile_joint_levels(collapsed, lo_, hi_, lo_thresh=0.01,
     top_lo.loc[top_lo['thresh_hi'], 'new_name'] = \
         top_lo.loc[top_lo['thresh_hi'], hi_]
 
-    new_taxa = top_lo.groupby([lo_, 'new_name']).sum()
-    new_taxa.sort_values(by=['mean_lo', 'other', 'mean_hi'], 
-                         ascending=False, inplace=True)
+    drop_levels = np.arange(hi_)[np.arange(hi_) != lo_]
+    top_lo.drop(columns=drop_levels, inplace=True)
+    new_taxa = top_lo.groupby([lo_, 'new_name']).sum(dropna=True)
+    new_taxa.reset_index(inplace=True)
+    new_taxa['mean_lo'] = new_taxa[lo_].replace(mean_lo_rep)
+    new_taxa.set_index([lo_, 'new_name'], inplace=True)
+    new_taxa.sort_values(['mean_lo', 'count_hi', 'mean_hi'], 
+                         ascending=[False, True, False], 
+                         inplace=True)
+
+    upper_ = new_taxa.cumsum()[samples]
+    upper_.sort_values([upper_.index[0], upper_.index[1]],
+                       axis='columns', 
+                       inplace=True, ascending=False)
+    lower_ = upper_ - new_taxa[upper_.columns]
     
-    upper_ = new_taxa.cumsum()
-    lower_ = new_taxa.cumsum() - new_taxa
+    upper_.index.set_names(['rough', 'fine'], inplace=True)
+    lower_.index.set_names(['rough', 'fine'], inplace=True)
 
     return upper_, lower_
-
 
 def define_single_cmap(cmap, top_taxa):
     """
@@ -208,6 +220,7 @@ def define_join_cmap(table):
     """
     Defines a joint colormap for a taxonomic table.
     """
+    table['dummy'] = 1
     grouping = table['dummy'].reset_index()
 
     rough_order = grouping['rough'].unique()
@@ -219,6 +232,8 @@ def define_join_cmap(table):
         cmap_ = rough_map[rough_]
         colors = {c: cmap_(200-(i + 1) * 20) for i, c in enumerate(fine_)}
         pooled_map.update(colors)
+
+    table.drop(columns=['dummy'], inplace=True)
 
     return pooled_map
 
@@ -258,12 +273,14 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
     
     # Pl;ots the area plot
     x = np.arange(0, len(upper_.columns))
-    for taxa, hi_ in upper_.iloc[::-1].iterrows():
-        lo_ = lower_.loc[taxa]
-        cl_ = colors[taxa]
+    for (rough, fine), hi_ in upper_.iloc[::-1].iterrows():
+        lo_ = lower_.loc[(rough, fine)]
+        cl_ = colors[fine]
+
+        # print(hi_, lo_)
     
-        ax1.fill_between(x=x, y1=1-lo_, y2=1-hi_, 
-                         color=cl_, label=taxa)
+        ax1.fill_between(x=x, y1=1-lo_.values, y2=1-hi_.values, 
+                         color=cl_, label=fine)
     # Adds the legend
     leg_ = ax1.legend()
     leg_.set_bbox_to_anchor((2.05, 1))
@@ -373,7 +390,7 @@ def single_area_plot(table, level=3, samples=None,
     return fig_
 
 
-def make_joint_area_plot(table, rough_level=2, fine_level=5, samples=None, 
+def joint_area_plot(table, rough_level=2, fine_level=5, samples=None, 
     tax_col='taxon_name', tax_delim='|', 
     multilevel_table=True, abund_thresh_rough=0.1, 
     abund_thresh_fine=0.05, group_thresh_fine=5, 
@@ -430,18 +447,13 @@ def make_joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
     """
 
     # Parses the taxonomy and collapses the table
-    taxa_ = extract_label_array(table_, taxa_, tax_delim)
-
-    # Gets the list of samples if unspecified
-    if samples is None:
-        samples = list(table_.columns.values)
-        samples.remove(tax_col)
-    else:
-        samples = pd.read_csv(samples).values
+    taxa = extract_label_array(table, tax_col, tax_delim)
 
     # Gets the appropriate taxonomic level information to go forward
-    collapsed = level_taxonomy(table, taxa, samples, level, 
-                              consider_nan=multilevel_table)
+    collapsed = level_taxonomy(table, taxa, samples, 
+                               level=np.array([fine_level]), 
+                               consider_nan=multilevel_table)
+    samples = collapsed.columns
 
     # Gets the top taxonomic levels
     upper_, lower_, = profile_joint_levels(collapsed, rough_level, fine_level, 
@@ -450,63 +462,62 @@ def make_joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
                                            hi_thresh=abund_thresh_fine,
                                            hi_count=group_thresh_fine,
                                            )
-
     # Gets the colormap 
     cmap = define_join_cmap(upper_)
 
     # Plots the data
-    fig_ = plot_area(upper_, lower_, cmap)
+    fig_ = plot_area(upper_.astype(float), lower_.astype(float), cmap)
 
     return fig_
 
 
 # Sets up the main arguments for argparse.
-parser = argparse.ArgumentParser(
+parser_one = argparse.ArgumentParser(
     description=('A set of functions to generate diagnostic stacked area '
                  'plots from metagenomic outputs.'),
-    prog=('area_plotter')
+    prog=('area_plotter'),
     )
-parser.add_argument('-t', '--table', 
+parser_one.add_argument('-t', '--table', 
                     help=('The abundance table as a tsv classic biom '
                           '(features as rows, samples as columns) containing'
                           'absloute or relative abundance for the samples.'),
                     required=True,
                     )
-parser.add_argument('-f', '--figure',
+parser_one.add_argument('-f', '--figure',
                     help=('The location for the final figure'),
                     required=True,
                     )
-parser.add_argument('-s', '--samples', 
+parser_one.add_argument('-s', '--samples', 
                     help=('A text file with the list of samples to be include' 
                          ' (one per line). If no list is provided, then data '
                          'from all columns in the table (except the one '
                          'specifying taxonomy) will be used.'),
                     )
-parser.add_argument('--mode', choices=(["metaphlan", "kracken", "marker"]),
+parser_one.add_argument('--mode', choices=(["metaphlan", "kracken", "marker"]),
                     help=('The software generating the table to make parsing'
                           'easier. Optens are kracken, metaphlan, marker '
                           '(i.e. CTMR amplicon) and other for all other '
                           'processing types.'),
                     default='kracken'
                     )
-parser.add_argument('-l', '--level',
+parser_one.add_argument('-l', '--level',
                     help=('The taxonomic level (as an integer) to plot the '
                           'data.'),
                     default=3,
                     type=int,
                     )
-parser.add_argument('--abund-thresh',
+parser_one.add_argument('--abund-thresh',
                     help=("the minimum abundance required to display a group."),
                     default=0.01,
                     type=float,
                     )
-parser.add_argument('--group-thresh',
+parser_one.add_argument('--group-thresh',
                     help=("The maximum number of groups to be displayed in "
                         "the graph."),
                     default=8,
                     type=int,
                     )
-parser.add_argument('-c', '--colormap',
+parser_one.add_argument('-c', '--colormap',
                     help=("The qualitative colormap to use to generate your "
                           "plot. Refer to colorbrewer for options. If a "
                           "selected colormap exceeds the number of groups "
@@ -514,9 +525,24 @@ parser.add_argument('-c', '--colormap',
                           "Set3."),
                     default='Set3',
                     )
+parser_one.add_argument('--sub-level',
+                        help=('The second level to use if doing a joint plot'),
+                        type=int,
+                        )
+parser_one.add_argument('--sub-abund-thresh',
+                        help=("the minimum abundance required to display a sub group"),
+                        default=0.05,
+                        type=float,
+                        )
+parser_one.add_argument('--sub-group-thresh',
+                        help=("the maximum number of sub groups allowed in "
+                              "a joint level plot."),
+                        default=5,
+                        type=float,
+                        )
 
 if __name__ == '__main__':
-    args = parser.parse_args()
+    args = parser_one.parse_args()
 
     if args.mode.lower() == 'metaphlan':
         tax_delim = '|'
@@ -538,22 +564,45 @@ if __name__ == '__main__':
         skip_rows=0
 
     table = pd.read_csv(args.table, sep='\t', skiprows=skip_rows)
-    print(table.columns)
     if args.samples is not None:
         with open(args.samples, 'r') as f_:
             samples = f_.read().split('\n')
     else:
         samples = None
 
-    fig_ = single_area_plot(table.drop(columns=table_drop), 
-                            level=args.level, 
-                            cmap=args.colormap,
-                            samples=samples,
-                            tax_col=tax_col,
-                            tax_delim=tax_delim,
-                            multilevel_table=multi_level,
-                            abund_thresh=args.abund_thresh,
-                            group_thresh=args.group_thresh,
-                            )
+    if args.sub_level is not None:
+        fig_ = joint_area_plot(table.drop(columns=table_drop),
+                               rough_level=args.level,
+                               fine_level=args.sub_level,
+                               samples=samples,
+                               tax_col=tax_col,
+                               multilevel_table=multi_level,
+                               abund_thresh_rough=args.abund_thresh,
+                               group_thresh_rough=args.group_thresh,
+                               abund_thresh_fine=args.sub_abund_thresh,
+                               group_thresh_fine=args.sub_group_thresh,
+                               )
+    else:
+        fig_ = single_area_plot(table.drop(columns=table_drop), 
+                                level=args.level, 
+                                cmap=args.colormap,
+                                samples=samples,
+                                tax_col=tax_col,
+                                tax_delim=tax_delim,
+                                multilevel_table=multi_level,
+                                abund_thresh=args.abund_thresh,
+                                group_thresh=args.group_thresh,
+                                )
+    # else:
+    #     fig_ = single_area_plot(table.drop(columns=table_drop), 
+    #                             level=args.level, 
+    #                             cmap=args.colormap,
+    #                             samples=samples,
+    #                             tax_col=tax_col,
+    #                             tax_delim=tax_delim,
+    #                             multilevel_table=multi_level,
+    #                             abund_thresh=args.abund_thresh,
+    #                             group_thresh=args.group_thresh,
+    #                             )
 
     fig_.savefig(args.figure, dpi=300)
