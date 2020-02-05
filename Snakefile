@@ -40,13 +40,13 @@ all_outputs = []
 citations = {(
     "Boulund et al. (2018).",
     "StaG-mwc: metagenomic workflow collaboration.",
-    "doi:10.5281/zenodo.1483891",
+    "https://doi.org/10.5281/zenodo.1483891",
 )}
 citations.add((
-    "Köster, Johannes and Rahmann, Sven (2012)",
+    "Köster, Johannes and Rahmann, Sven (2012).",
     "Snakemake - A scalable bioinformatics workflow engine.",
     "Bioinformatics, Volume 28, Issue 19.",
-    "doi:10.1093/bioinformatics/bts480",
+    "https://doi.org/10.1093/bioinformatics/bts480",
 ))
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
@@ -140,16 +140,6 @@ onsuccess:
 
     print("\n".join([
         "",
-        "If you use the output from StaG-mwc in your research,",
-        "please cite the following publications:",
-        ])
-    )
-
-    for citation in sorted(set(citations)):
-        print(textwrap.indent("\n".join(["", *citation]), " "*4))
-
-    print("\n".join([
-        "",
         "="*60,
         ])
     )
@@ -160,7 +150,16 @@ onsuccess:
     if config["report"]:
         from sys import argv
         from datetime import datetime
+
         report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
+
+        citation_filename = f"citations-{report_datetime}.rst"
+        with open(citation_filename, "w") as citation_file:
+            for citation in sorted(set(citations)):
+                citation_file.write("* "+" ".join(["", *citation])+"\n")
+        Path("citations.rst").unlink()
+        Path("citations.rst").symlink_to(citation_filename)
+
         snakemake_call = " ".join(argv)
         shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
         shell("{snakemake_call} --report {report}-{datetime}.html".format(

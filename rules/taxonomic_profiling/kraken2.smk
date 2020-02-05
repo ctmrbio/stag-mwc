@@ -237,9 +237,10 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
         raise WorkflowError(err_message)
 
     citations.add((
-        "Lu J, Breitwieser FP, Thielen P, Salzberg SL.",
+        "Lu J, Breitwieser FP, Thielen P, Salzberg SL (2017).",
         "Bracken: estimating species abundance in metagenomics data.",
-        "PeerJ Computer Science 3:e104, 2017, doi:10.7717/peerj-cs.104.",
+        "PeerJ Computer Science 3:e104."
+        "https://doi.org/10.7717/peerj-cs.104.",
     ))
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
