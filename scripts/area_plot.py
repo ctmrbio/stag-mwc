@@ -70,6 +70,7 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
         applicable for some 16s sequences
     """
     level = level.max()
+    print(level)
     if consider_nan:
         leveler = (taxa[level].notna() & taxa[(level + 1)].isna())
     else:
@@ -81,9 +82,8 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
     level_ = pd.concat(
         axis=1, 
         objs=[taxa.loc[leveler, cols],
-              (table.loc[leveler, samples] / 
-               table.loc[leveler, samples].sum(axis=0))],
-        # sort=False
+              (table.loc[leveler, samples] / table.loc[leveler, samples].sum(axis=0))],
+    #     # sort=False
     )
     level_.reset_index()
     if taxa.loc[leveler, cols].duplicated().any():
@@ -136,7 +136,7 @@ def profile_one_level(collapsed, level, threshhold=0.01, count=8):
     return upper_, lower_
 
 
-def profile_joint_levels(collapsed, lo_, hi_, lo_thresh=0.01, 
+def profile_joint_levels(collapsed, lo_, hi_, samples, lo_thresh=0.01, 
     hi_thresh=0.01, lo_count=4, hi_count=5):
     """
     Generates a table of taxonomy using two levels to define grouping
@@ -273,14 +273,14 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
     
     # Pl;ots the area plot
     x = np.arange(0, len(upper_.columns))
-    for (rough, fine), hi_ in upper_.iloc[::-1].iterrows():
-        lo_ = lower_.loc[(rough, fine)]
-        cl_ = colors[fine]
+    for taxa, hi_ in upper_.iloc[::-1].iterrows():
+        lo_ = lower_.loc[taxa]
+        cl_ = colors[taxa]
 
         # print(hi_, lo_)
     
         ax1.fill_between(x=x, y1=1-lo_.values, y2=1-hi_.values, 
-                         color=cl_, label=fine)
+                         color=cl_, label=taxa)
     # Adds the legend
     leg_ = ax1.legend()
     leg_.set_bbox_to_anchor((2.05, 1))
@@ -448,6 +448,8 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
 
     # Parses the taxonomy and collapses the table
     taxa = extract_label_array(table, tax_col, tax_delim)
+    if samples is None:
+    	samples = list(table.drop(columns=[tax_col]).columns)
 
     # Gets the appropriate taxonomic level information to go forward
     collapsed = level_taxonomy(table, taxa, samples, 
@@ -457,6 +459,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
 
     # Gets the top taxonomic levels
     upper_, lower_, = profile_joint_levels(collapsed, rough_level, fine_level, 
+    								       samples=samples,
                                            lo_thresh=abund_thresh_rough, 
                                            lo_count=min(5, group_thresh_rough),
                                            hi_thresh=abund_thresh_fine,
@@ -464,6 +467,8 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
                                            )
     # Gets the colormap 
     cmap = define_join_cmap(upper_)
+    upper_.index = upper_.index.droplevel('rough')
+    lower_.index = lower_.index.droplevel('rough')
 
     # Plots the data
     fig_ = plot_area(upper_.astype(float), lower_.astype(float), cmap)
