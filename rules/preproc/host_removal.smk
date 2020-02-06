@@ -51,8 +51,9 @@ if rh_config:
             db=rh_config["db_path"],
             confidence=rh_config["confidence"],
             extra=rh_config["extra"],
-            classified=lambda w: f"{OUTDIR}/host_removal/{w.sample}.host#.fq.gz",
-            unclassified=lambda w: f"{OUTDIR}/host_removal/{w.sample}#.fq.gz",
+            classified=lambda w: f"{OUTDIR}/host_removal/{w.sample}.host#.fq",
+            unclassified=lambda w: f"{OUTDIR}/host_removal/{w.sample}#.fq",
+            fq_to_compress=lambda w: f"{OUTDIR}/host_removal/{w.sample}*.fq",
         shell:
             """
             kraken2 \
@@ -67,6 +68,12 @@ if rh_config:
                 {params.extra} \
                 {input.read1} {input.read2} \
                 2> {log.stderr}
+            pigz \
+                --processes {threads} \
+                --verbose \
+                --force \
+                {params.fq_to_compress} \
+                2>> {log.stderr}
             """
 
 

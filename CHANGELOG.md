@@ -41,6 +41,7 @@ situations.
 - Added "all_samples" summary output files in a more common format for all
   taxonomic profilers, called `mpa_style`. They are not identical, but very
   similar, with full lineage listings for all detected taxa.
+- Added pigz v2.4 to the main StaG conda environment.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
@@ -48,6 +49,8 @@ situations.
   the config file.
 - HUMAnN2 rule now correctly detects if no database path has been entered in
   the config file.
+- Kraken2 rule now correctly detects if no database is available at the path
+  given in the config file.
 
 ### Changed
 - Updated Python to 3.7 in main stag-mwc conda environment.

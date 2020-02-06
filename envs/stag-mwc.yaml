@@ -19,6 +19,7 @@ dependencies:
     - sambamba =0.7.0
     - samtools =1.9
     - groot =0.8.4
+    - pigz =2.4
     - pip
     - pip:
         - fastcluster
