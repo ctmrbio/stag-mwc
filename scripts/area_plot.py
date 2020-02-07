@@ -299,7 +299,6 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
         lo_ = lower_.loc[taxa]
         cl_ = colors[taxa]
 
-        # print(hi_, lo_)
     
         ax1.fill_between(x=x, y1=1-lo_.values, y2=1-hi_.values, 
                          color=cl_, label=taxa)
