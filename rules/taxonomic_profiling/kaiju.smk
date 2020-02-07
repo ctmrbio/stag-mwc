@@ -11,7 +11,7 @@ localrules:
     kaiju2krona,
     kaiju_report,
     join_kaiju_reports,
-    kaiju_area_plot
+    kaiju_area_plot,
 
 kaiju_config = config["kaiju"]
 if config["taxonomic_profile"]["kaiju"]:
@@ -30,7 +30,7 @@ if config["taxonomic_profile"]["kaiju"]:
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
     kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
     kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
-    kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf") 
+    kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf"))
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
