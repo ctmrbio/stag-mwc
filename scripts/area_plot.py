@@ -115,7 +115,7 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
 
 def profile_one_level(collapsed, level, threshhold=0.01, count=8):
     """
-    Gets upper and lower tables for a single taxonmic level
+    Gets upper and lower tables for a single taxonomic level
     
     Parameters
     ----------
