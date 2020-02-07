@@ -602,6 +602,10 @@ if __name__ == '__main__':
     parser_one = create_argparse()
     args = parser_one.parse_args()
 
+    if len(argv) < 2:
+        args.print_help()
+        exit()
+
     if args.table_drop is not None:
         args.table_drop = [s for s in args.table_drop.split(',')]
     else:
