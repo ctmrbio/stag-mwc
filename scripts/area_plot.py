@@ -293,7 +293,7 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
     fig_.set_size_inches((8, 4))
     ax1.set_position((0.15, 0.125, 0.4, 0.75))
     
-    # Pl;ots the area plot
+    # Plots the area plot
     x = np.arange(0, len(upper_.columns))
     for taxa, hi_ in upper_.iloc[::-1].iterrows():
         lo_ = lower_.loc[taxa]
