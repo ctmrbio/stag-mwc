@@ -399,7 +399,7 @@ def single_area_plot(table, level=3, samples=None,
 
     # Gets the top taxonomic levels
     upper_, lower_, = profile_one_level(collapsed, np.array([level]), 
-                                        threshhold=abund_thresh, 
+                                        threshold=abund_thresh, 
                                         count=group_thresh)
 
     # Gets the colormap 
