@@ -1,6 +1,7 @@
+#!/bin/env python3
+
 import argparse
 import warnings
-# from warnings import Warning
 
 from matplotlib import rcParams
 from matplotlib import cm
@@ -9,8 +10,9 @@ import numpy as np
 import pandas as pd
 
 """
-A set of python scripts to generate an area plot.
+Generates a pretty areaplot from a collapsed feature table.
 """
+
 # Sets up the matplotlib paramters so that we can save to be edited in 
 # illustator if a direct conversion is required. Because it just makes life
 # better
@@ -22,6 +24,26 @@ colors_order = ['Reds', 'Blues', 'Greens', 'Purples', "Oranges", 'Greys']
 
 over9 = {'Paired', 'Paired_r', 'Set3', 'Set3_r'}
 over8 = over9 | {'Set1', "Pastel1"}
+
+mode_dict = {'metaphlan': {'tax_delim': '|',
+                           'multi_level': True,
+                           'tax_col': 'clade_name',
+                           'table_drop': ['NCBI_tax_id'],
+                           'skip_rows': 1,
+                           },
+             'kraken': {'tax_delim': '|',
+                         'multi_level': True,
+                         'tax_col': 'taxon_name',
+                         'table_drop': [],
+                         'skip_rows': 0,
+                         },
+             'marker': {'tax_delim': ';',
+                        'multi_level': False,
+                        'tax_col': 'taxonomy',
+                        'table_drop': ['sequence'],
+                        'skip_rows': 0,
+                        },
+             }
 
 def extract_label_array(table, tax_col, tax_delim='|'):
     """
@@ -66,11 +88,10 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
     consider_nan: bool, optional
         Whether the table contains multiple concatenated, in which cases 
         considering `nan` will filter the samples to retain only the levels 
-        of interest. This is recommended for kracken/bracken tables, but not 
+        of interest. This is recommended for kraken/bracken tables, but not 
         applicable for some 16s sequences
     """
     level = level.max()
-    print(level)
     if consider_nan:
         leveler = (taxa[level].notna() & taxa[(level + 1)].isna())
     else:
@@ -205,6 +226,7 @@ def profile_joint_levels(collapsed, lo_, hi_, samples, lo_thresh=0.01,
 
     return upper_, lower_
 
+
 def define_single_cmap(cmap, top_taxa):
     """
     Gets the colormap a single level table
@@ -329,7 +351,7 @@ def single_area_plot(table, level=3, samples=None,
     multilevel_table: bool, optional
         Whether the table contains multiple concatenated, in which cases 
         considering `nan` will filter the samples to retain only the levels 
-        of interest. This is recommended for kracken/bracken tables, but not 
+        of interest. This is recommended for kraken/bracken tables, but not 
         applicable for some 16s sequences
     abund_thresh: float [0, 1]
         The mean abundance threshhold for a sample to be plotted. This is 
@@ -357,11 +379,11 @@ def single_area_plot(table, level=3, samples=None,
         raise ValueError("You may display at most 12 colors on this plot. "
                          "Please re-consider your plotting choices.")
     elif (group_thresh > 9) & ~(cmap in over9):
-        raise Warning('There are too many colors for your colormap. '
+        warnings.warn('There are too many colors for your colormap. '
                       'Changing to Set3.')
         cmap = 'Set3'
     elif (group_thresh > 8) & ~(cmap in over8):
-        raise Warning('There are too many colors for your colormap. '
+        warnings.warn('There are too many colors for your colormap. '
                       'Changing to Set3.')
         cmap = 'Set3'
 
@@ -422,7 +444,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
     multilevel_table: bool, optional
         Whether the table contains multiple concatenated, in which cases 
         considering `nan` will filter the samples to retain only the levels 
-        of interest. This is recommended for kracken/bracken tables, but not 
+        of interest. This is recommended for kraken/bracken tables, but not 
         applicable for some 16s sequences
     abund_thresh_rough, abund_thresh_fine : float [0, 1]
         The mean abundance threshhold for a taxonomic group to be plotted for
@@ -449,7 +471,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
     # Parses the taxonomy and collapses the table
     taxa = extract_label_array(table, tax_col, tax_delim)
     if samples is None:
-    	samples = list(table.drop(columns=[tax_col]).columns)
+        samples = list(table.drop(columns=[tax_col]).columns)
 
     # Gets the appropriate taxonomic level information to go forward
     collapsed = level_taxonomy(table, taxa, samples, 
@@ -459,7 +481,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
 
     # Gets the top taxonomic levels
     upper_, lower_, = profile_joint_levels(collapsed, rough_level, fine_level, 
-    								       samples=samples,
+                                           samples=samples,
                                            lo_thresh=abund_thresh_rough, 
                                            lo_count=min(5, group_thresh_rough),
                                            hi_thresh=abund_thresh_fine,
@@ -477,98 +499,121 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
 
 
 # Sets up the main arguments for argparse.
-parser_one = argparse.ArgumentParser(
-    description=('A set of functions to generate diagnostic stacked area '
-                 'plots from metagenomic outputs.'),
-    prog=('area_plotter'),
-    )
-parser_one.add_argument('-t', '--table', 
-                    help=('The abundance table as a tsv classic biom '
-                          '(features as rows, samples as columns) containing'
-                          'absloute or relative abundance for the samples.'),
-                    required=True,
-                    )
-parser_one.add_argument('-f', '--figure',
-                    help=('The location for the final figure'),
-                    required=True,
-                    )
-parser_one.add_argument('-s', '--samples', 
-                    help=('A text file with the list of samples to be include' 
-                         ' (one per line). If no list is provided, then data '
-                         'from all columns in the table (except the one '
-                         'specifying taxonomy) will be used.'),
-                    )
-parser_one.add_argument('--mode', choices=(["metaphlan", "kracken", "marker"]),
-                    help=('The software generating the table to make parsing'
-                          'easier. Optens are kracken, metaphlan, marker '
-                          '(i.e. CTMR amplicon) and other for all other '
-                          'processing types.'),
-                    default='kracken'
-                    )
-parser_one.add_argument('-l', '--level',
-                    help=('The taxonomic level (as an integer) to plot the '
-                          'data.'),
-                    default=3,
-                    type=int,
-                    )
-parser_one.add_argument('--abund-thresh',
-                    help=("the minimum abundance required to display a group."),
-                    default=0.01,
-                    type=float,
-                    )
-parser_one.add_argument('--group-thresh',
-                    help=("The maximum number of groups to be displayed in "
-                        "the graph."),
-                    default=8,
-                    type=int,
-                    )
-parser_one.add_argument('-c', '--colormap',
-                    help=("The qualitative colormap to use to generate your "
-                          "plot. Refer to colorbrewer for options. If a "
-                          "selected colormap exceeds the number of groups "
-                          "(`--group-thresh`) possible, it will default to "
-                          "Set3."),
-                    default='Set3',
-                    )
-parser_one.add_argument('--sub-level',
-                        help=('The second level to use if doing a joint plot'),
-                        type=int,
-                        )
-parser_one.add_argument('--sub-abund-thresh',
-                        help=("the minimum abundance required to display a sub group"),
-                        default=0.05,
-                        type=float,
-                        )
-parser_one.add_argument('--sub-group-thresh',
-                        help=("the maximum number of sub groups allowed in "
-                              "a joint level plot."),
-                        default=5,
-                        type=float,
-                        )
+def create_argparse():
+    parser_one = argparse.ArgumentParser(
+        description=('A set of functions to generate diagnostic stacked area '
+                     'plots from metagenomic outputs.'),
+        prog=('area_plotter'),
+        )
+    parser_one.add_argument(
+        '-t', '--table', 
+        help=('The abundance table as a tsv classic biom (features as rows, '
+              'samples as columns) containing absloute or relative abundance '
+              'for the samples.'),
+        required=True,
+        )
+    parser_one.add_argument(
+        '-o', '--output',
+        help=('The location for the final figure'),
+        required=True,
+        )
+    parser_one.add_argument(
+        '-s', '--samples', 
+        help=('A text file with the list of samples to be included (one '
+            'per line). If no list is provided, then data from all columns '
+            'in the table (except the one specifying taxonomy) will be used.'),
+        )
+    parser_one.add_argument(
+        '--mode', 
+        choices=(["metaphlan", "kraken", "marker"]),
+        help=('The software generating the table to make parsing easier. '
+              'Options are kraken, metaphlan, marker (i.e. CTMR amplicon).'),
+        )
+    parser_one.add_argument(
+        '-l', '--level',
+        help=('The taxonomic level (as an integer) to plot the data.'),
+        default=3,
+        type=int,
+        )
+    parser_one.add_argument(
+        '--abund-thresh',
+        help=("the minimum abundance required to display a group."),
+        default=0.01,
+        type=float,
+        )
+    parser_one.add_argument(
+        '--group-thresh',
+        help=("The maximum number of groups to be displayed in the graph."),
+        default=8,
+        type=int,
+        )
+    parser_one.add_argument(
+        '-c', '--colormap',
+        help=("The qualitative colormap to use to generate your plot. Refer"
+             ' to colorbrewer for options. If a selected colormap exceeds '
+             'the number of groups (`--group-thresh`) possible, it will '
+             'default to Set3.'),
+        default='Set3',
+        )
+    parser_one.add_argument(
+        '--sub-level',
+        help=('The second level to use if doing a joint plot'),
+        type=int,
+        )
+    parser_one.add_argument(
+        '--sub-abund-thresh',
+        help=("the minimum abundance required to display a sub group"),
+        default=0.05,
+        type=float,
+        )
+    parser_one.add_argument(
+        '--sub-group-thresh',
+        help=("the maximum number of sub groups allowed in a joint level plot."),
+        default=5,
+        type=float,
+        )
+    parser_one.add_argument(
+        '--tax-delim',
+        help=("String delimiting taxonomic levels."),
+        type=str,
+        )
+    parser_one.add_argument(
+        '--multi-level',
+        help=("Whether the table contains multiple concatenated, in which "
+             "case considering `nan` will filter the samples to retain only"
+             "the levels of interest. This is recommended for most "
+             "metagenomic tables, but not applicable for some 16s sequences."),
+        )
+    parser_one.add_argument(
+        "--tax-col",
+        help=("The column in `table` containig the taxobnomy information"),
+        )
+    parser_one.add_argument(
+        '--table-drop',
+        help=('A comma-seperated list describing the columns to drop'),
+        )
+    parser_one.add_argument(
+        '--skip-rows',
+        help=('The number of rows to skip when reading in the feature table.')
+        )
+
+    return parser_one
 
 if __name__ == '__main__':
+    parser_one = create_argparse()
     args = parser_one.parse_args()
 
-    if args.mode.lower() == 'metaphlan':
-        tax_delim = '|'
-        multi_level = True
-        tax_col = 'clade_name'
-        table_drop = ['NCBI_tax_id']
-        skip_rows=1
-    elif args.mode.lower() == 'kracken':
-        tax_delim = '|'
-        multi_level = True
-        tax_col = 'taxon_name'
-        table_drop = []
-        skip_rows=0
-    elif args.mode.lower() == 'marker':
-        tax_delim=';'
-        multi_level=False
-        tax_col='taxonomy'
-        table_drop=['sequence']
-        skip_rows=0
+    if args.table_drop is not None:
+        args.table_drop = [s for s in args.table_drop.split(',')]
+    else:
+        args.table_drop = []
 
-    table = pd.read_csv(args.table, sep='\t', skiprows=skip_rows)
+    mode_defaults = mode_dict.get(args.mode, mode_dict['kraken'])
+    mode_defaults.update({k: v for k, v in args.__dict__.items() 
+                         if (k in mode_defaults) and (v)})
+
+    table = pd.read_csv(args.table, sep='\t', 
+                        skiprows=mode_defaults['skip_rows'])
     if args.samples is not None:
         with open(args.samples, 'r') as f_:
             samples = f_.read().split('\n')
@@ -576,38 +621,28 @@ if __name__ == '__main__':
         samples = None
 
     if args.sub_level is not None:
-        fig_ = joint_area_plot(table.drop(columns=table_drop),
+        fig_ = joint_area_plot(table.drop(columns=mode_defaults['table_drop']),
                                rough_level=args.level,
                                fine_level=args.sub_level,
-                               samples=samples,
-                               tax_col=tax_col,
-                               multilevel_table=multi_level,
+                               samples=args.samples,
+                               tax_delim=mode_defaults['tax_delim'],
+                               tax_col=mode_defaults['tax_col'],
+                               multilevel_table=mode_defaults['multi_level'],
                                abund_thresh_rough=args.abund_thresh,
                                group_thresh_rough=args.group_thresh,
                                abund_thresh_fine=args.sub_abund_thresh,
                                group_thresh_fine=args.sub_group_thresh,
                                )
     else:
-        fig_ = single_area_plot(table.drop(columns=table_drop), 
+        fig_ = single_area_plot(table.drop(columns=mode_defaults['table_drop']),
                                 level=args.level, 
                                 cmap=args.colormap,
                                 samples=samples,
-                                tax_col=tax_col,
-                                tax_delim=tax_delim,
-                                multilevel_table=multi_level,
+                                tax_delim=mode_defaults['tax_delim'],
+                                tax_col=mode_defaults['tax_col'],
+                                multilevel_table=mode_defaults['multi_level'],
                                 abund_thresh=args.abund_thresh,
                                 group_thresh=args.group_thresh,
                                 )
-    # else:
-    #     fig_ = single_area_plot(table.drop(columns=table_drop), 
-    #                             level=args.level, 
-    #                             cmap=args.colormap,
-    #                             samples=samples,
-    #                             tax_col=tax_col,
-    #                             tax_delim=tax_delim,
-    #                             multilevel_table=multi_level,
-    #                             abund_thresh=args.abund_thresh,
-    #                             group_thresh=args.group_thresh,
-    #                             )
 
-    fig_.savefig(args.figure, dpi=300)
+    fig_.savefig(args.output, dpi=300)
