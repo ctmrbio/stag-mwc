@@ -11,6 +11,7 @@ localrules:
     kaiju2krona,
     kaiju_report,
     join_kaiju_reports,
+    kaiju_area_plot
 
 kaiju_config = config["kaiju"]
 if config["taxonomic_profile"]["kaiju"]:
@@ -29,10 +30,12 @@ if config["taxonomic_profile"]["kaiju"]:
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
     kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv"), sample=SAMPLES, level=kaiju_config["levels"])
     kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv"), level=kaiju_config["levels"])
+    kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf") 
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
+    all_outputs.append(kaiju_area_plot)
 
     citations.add((
         "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
@@ -197,3 +200,24 @@ rule join_kaiju_reports:
             2>&1 > {log}
         """
     
+
+rule kaiju_area_plot:
+    input:
+        OUTDIR/"kaiju/all_samples.kaiju.{level}.txt".format(level=kaiju_config["levels"][-1])
+    output:
+        report(OUTDIR/"kaiju/area_plot.kaiju.pdf",
+            category="Taxonomic profiling",
+            caption="../../report/area_plot.rst")
+    log:
+        str(LOGDIR/"kaiju/area_plot.log")
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/area_plot.py \
+            --table {input} \
+            --output-figure {output} \
+            --mode kaiju \
+            2>&1 > {log}
+        """
+
