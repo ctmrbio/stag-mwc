@@ -88,7 +88,7 @@ if rh_config:
             barplot=report(OUTDIR/"host_removal/host_barplot.pdf",
                        category="Proportion host reads",
                        caption="../../report/host_barplot.rst"),
-           .txt=report(OUTDIR/"host_removal/host_proportions.txt",
+            txt=report(OUTDIR/"host_removal/host_proportions.txt",
                        category="Proportion host reads",
                        caption="../../report/host_proportions.rst"),
         log:

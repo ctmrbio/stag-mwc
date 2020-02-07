@@ -110,7 +110,7 @@ rule kraken_mpa_style:
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
-       .txt=OUTDIR/"kraken2/{sample}.mpa_style.txt",
+        txt=OUTDIR/"kraken2/{sample}.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.mpa_style.log")
     threads:
@@ -130,7 +130,7 @@ rule kraken_mpa_style:
 
 rule join_kraken2_mpa:
     input:
-       .txt=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES),
+        txt=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.mpa_style.txt",
                category="Taxonomic profiling",
@@ -310,7 +310,7 @@ rule bracken_mpa_style:
     input:
         kreport=OUTDIR/"kraken2/{sample}_bracken.kreport"
     output:
-       .txt=OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt",
+        txt=OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
     threads:
@@ -330,7 +330,7 @@ rule bracken_mpa_style:
 
 rule join_bracken_mpa:
     input:
-       .txt=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES),
+        txt=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt",
                category="Taxonomic profiling",

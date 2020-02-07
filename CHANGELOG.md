@@ -63,6 +63,8 @@ situations.
 - Updated HUMAnN2 to 2.8.1.
 - Updated GROOT to v0.8.5.
 - Updated plot_metaphlan2_heatmap.py to 0.3.
+- Changed output filenames ending with `.tsv` to `.txt` to avoid pretty HTML
+  representations in report.
 - Replaced BBMap-based host removal with Kraken2, substantially reducing time
   and resources requirements. 
 - Added read length window filter before groot alignment step.

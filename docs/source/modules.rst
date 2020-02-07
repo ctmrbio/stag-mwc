@@ -64,7 +64,7 @@ proportion data is also provided::
     <sample>.host_{1,2}.fq.gz
     host_barplot.pdf
     host_histogram.pdf
-    host_proportions.tsv
+    host_proportions.txt
 
 .. note::
 
@@ -228,7 +228,7 @@ file to summarize on. The column names need to be assigned as a string of
 comma-separated column names. They must match exactly to the column names
 defined in the annotation file. This is configured in ``config.yaml``. The
 script outputs one file per column, with output filename matching
-``counts.<column_name>.tsv``. The count table feature is activated by entering
+``counts.<column_name>.txt``. The count table feature is activated by entering
 an annotation filename in the relevant section of the configuration file,
 e.g.::
 
@@ -259,7 +259,7 @@ The featureCounts module outputs several files::
 
     all_samples.featureCounts
     all_samples.featureCounts.summary
-    all_samples.featureCounts.table.tsv
+    all_samples.featureCounts.table.txt
 
 The first two files are the default output files from `featureCounts`_, and the
 third file is a simplified tab-separated table with count per annotation, in a
@@ -289,10 +289,10 @@ report with the profiles of all samples and a TSV table per taxonomic level.
 The output files are::
 
     <sample>.kaiju
-    <sample>.kaiju.<level>.tsv
+    <sample>.kaiju.<level>.txt
     <sample>.krona
     all_samples.kaiju.krona.html
-    all_samples.kaiju.<level>.tsv
+    all_samples.kaiju.<level>.txt
 
 Kraken2
 -------
@@ -305,8 +305,8 @@ user-specified taxonomic level. The Kraken2 module produces the following files:
 
     <sample>.kraken
     <sample>.kreport
-    all_samples.kraken2.tsv
-    all_samples.mpa_style.tsv
+    all_samples.kraken2.txt
+    all_samples.mpa_style.txt
 
 This modules outputs two tables containing the same information in two formats:
 one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
@@ -316,10 +316,10 @@ each sample::
     <sample>.<taxonomic_level>.bracken
     <sample>.<taxonomic_level>.filtered.bracken
     <sample>_bracken.kreport
-    <sample>.bracken.mpa_style.tsv
-    all_samples.<taxonomic_level>.bracken.tsv
-    all_samples.<taxonomic_level>.filtered.bracken.tsv
-    all_samples.bracken.mpa_style.tsv
+    <sample>.bracken.mpa_style.txt
+    all_samples.<taxonomic_level>.bracken.txt
+    all_samples.<taxonomic_level>.filtered.bracken.txt
+    all_samples.bracken.mpa_style.txt
     
 
 MetaPhlAn2
@@ -354,15 +354,15 @@ HUMAnN2
 Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
 Outputs five files per sample, plus three summaries for all samples::
 
-    <sample>.genefamilies_relab.tsv
-    <sample>.genefamilies.tsv
-    <sample>.pathabundance_relab.tsv
-    <sample>.pathabundance.tsv
-    <sample>.pathcoverage.tsv
+    <sample>.genefamilies_relab.txt
+    <sample>.genefamilies.txt
+    <sample>.pathabundance_relab.txt
+    <sample>.pathabundance.txt
+    <sample>.pathcoverage.txt
     
-    all_samples.humann2_genefamilies.tsv
-    all_samples.humann2_pathcoverage.tsv
-    all_samples.humann2_pathabundances.tsv
+    all_samples.humann2_genefamilies.txt
+    all_samples.humann2_pathcoverage.txt
+    all_samples.humann2_pathabundances.txt
 
 Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
 so all MetaPhlAn2-associated steps are run regardless of whether it is actually
@@ -395,12 +395,12 @@ produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
 containing two files and two subfolders::
 
     <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.tsv
+    <sample>/<sample>.groot_report.txt
     <sample>/<sample>/groot-graphs
     <sample>/<sample>/groot-plots
 
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of all
+gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
 observed antibiotic resistance genes in the sample. The two subfolders contain 
 all mapped graphs and coverage plots of all detected antibiotic resistance genes.
 
