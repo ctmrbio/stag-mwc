@@ -354,7 +354,7 @@ def single_area_plot(table, level=3, samples=None,
         applicable for some 16s sequences
     abund_thresh: float [0, 1]
         The mean abundance threshhold for a sample to be plotted. This is 
-        in conjunction with the group threshhold (`--group-thresh`) will be 
+        in conjunction with the group threshold (`--group-thresh`) will be 
         used to determine the groups that are shown.
     group_thresh: int, [1, 12]
         The maximum number of groups (colors) to show in the area plot. This 
