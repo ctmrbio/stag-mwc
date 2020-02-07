@@ -12,6 +12,7 @@
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 .. _MEGAHIT: https://github.com/voutcn/megahit
+.. _MultiQC: https://multiqc.info/
 
 Modules
 =======
@@ -72,19 +73,24 @@ proportion data is also provided::
     with symlinks to the fastp output files.
 
 
-assess_depth
---------------
-:Tool: `BBCountUnique`_
-:Output folder: ``bbcountunique``
-
-The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
-to produce saturation curves. The saturation curve essentially shows a
-histogram of the proportion of unique kmers observed per reads processed, and
-can be used to assess how deep a sample has been sequenced. The module outputs
-one plot per sample.
+preprocessing_summary
+---------------------
+This module summarize the number of reads passing through each preprocessing
+step and produces a summary table and a basic line plot showing the proportions
+of reads after each step. For more detailed information about read QC please
+refer to the MulitQC report.
 
 
-Naive sample comparison
+multiqc
+-------
+:Tool: `MultiQC`_
+:Output folder: ``multiqc``
+
+`MultiQC`_ summarizes information about several steps in StaG in an easy-to-use
+HTML report. Refer to this report for details about e.g. read QC.
+
+
+Naive sample analysis
 ***********************
 
 sketch_compare
@@ -97,6 +103,19 @@ The ``sketch_compare`` module uses the very fast MinHash implementation in
 comparison of all samples based on their kmer content. The module outputs
 gzip-compressed sketches for each sample, as well as two heatmap plots showing
 the overall similarity of all samples (one with hierarchical clustering).
+
+
+assess_depth
+--------------
+:Tool: `BBCountUnique`_
+:Output folder: ``bbcountunique``
+
+The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
+to produce saturation curves. The saturation curve essentially shows a
+histogram of the proportion of unique kmers observed per reads processed, and
+can be used to assess how deep a sample has been sequenced. The module outputs
+one plot per sample.
+
 
 
 Mappers

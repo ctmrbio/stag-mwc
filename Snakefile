@@ -52,12 +52,13 @@ report: "report/workflow.rst"
 #############################
 include: "rules/preproc/read_quality.smk"
 include: "rules/preproc/host_removal.smk"
-include: "rules/preproc/bbcountunique.smk"
+include: "rules/preproc/preprocessing_summary.smk"
 
 #############################
-# Naive sample comparison
+# Naive sample analyses
 #############################
-include: "rules/sketch_compare/sketch_compare.smk"
+include: "rules/naive/sketch_compare.smk"
+include: "rules/naive/bbcountunique.smk"
 
 #############################
 # Mappers
