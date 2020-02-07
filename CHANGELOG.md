@@ -42,6 +42,8 @@ situations.
   taxonomic profilers, called `mpa_style`. They are not identical, but very
   similar, with full lineage listings for all detected taxa.
 - Added pigz v2.4 to the main StaG conda environment.
+- Added summary with read counts passing preprocessing steps as a table and
+  basic line plot. Only runs if both read QC and host removal are performed.
 
 ### Fixed
 - Fixed bug in Slurm profile handling of cancelled/failed jobs.
