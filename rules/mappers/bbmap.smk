@@ -23,13 +23,13 @@ for bbmap_config in config["bbmap"]:
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
                 output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.txt"),
                 db_name=bbmap_config["db_name"],
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
-                output_type=["", ".summary", ".table.tsv"])
+                output_type=["", ".summary", ".table.txt"])
         all_outputs.extend(bbmap_alignments)
 
         if bbmap_config["counts_table"]["annotations"]:
@@ -101,7 +101,7 @@ for bbmap_config in config["bbmap"]:
                     db_name=bbmap_config["db_name"],
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.txt"),
                     db_name=bbmap_config["db_name"],
                     column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
             )
@@ -139,7 +139,7 @@ for bbmap_config in config["bbmap"]:
                     sample=SAMPLES)
         output:
             counts=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts".format(db_name=bbmap_config["db_name"]),
-            counts_table=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.table.tsv".format(db_name=bbmap_config["db_name"]),
+            counts_table=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.table.txt".format(db_name=bbmap_config["db_name"]),
             summary=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.summary".format(db_name=bbmap_config["db_name"]),
         log:
             str(bbmap_logdir/"all_samples.featureCounts.log")

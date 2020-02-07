@@ -27,8 +27,8 @@ if config["taxonomic_profile"]["kaiju"]:
     # SAMPLES is also from the main Snakefile scope.
     kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
-    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv"), sample=SAMPLES, level=kaiju_config["levels"])
-    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv"), level=kaiju_config["levels"])
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
+    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
@@ -139,7 +139,7 @@ rule kaiju_report:
     input:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     output:
-        OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv",
+        OUTDIR/"kaiju/{sample}.kaiju.{level}.txt",
     log:
         str(LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log")
     shadow: 
@@ -164,9 +164,9 @@ rule kaiju_report:
 
 rule join_kaiju_reports:
     input:
-        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.tsv"), sample=SAMPLES),
+        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.txt"), sample=SAMPLES),
     output:
-        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv",
+        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt",
             category="Taxonomic profiling",
             caption="../../report/kaiju_table.rst")
     log:
