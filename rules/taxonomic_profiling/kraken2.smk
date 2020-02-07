@@ -21,7 +21,7 @@ localrules:
     kreport2krona,
     bracken2krona,
     create_bracken_krona_plot,
-    
+    kraken2_area_plot,
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
@@ -159,7 +159,7 @@ rule join_kraken2_mpa:
 
 rule kraken2_area_plot:
     input:
-        OUTDIR/"kraken2/all_samples.kraken.mpa_style.txt"
+        OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt"
     output:
         report(OUTDIR/"kraken2/area_plot.kraken2.pdf",
             category="Taxonomic profiling",
