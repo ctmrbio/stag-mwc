@@ -37,7 +37,7 @@ if config["taxonomic_profile"]["kraken2"]:
     krakens = expand(str(OUTDIR/"kraken2/{sample}.kraken"), sample=SAMPLES)
     kreports = expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES)
     kreports_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES)
-    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.mpa_style.txt")
+    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt")
     combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.txt")
     kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
     all_outputs.extend(krakens)
@@ -132,7 +132,7 @@ rule join_kraken2_mpa:
     input:
         txt=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES),
     output:
-        table=report(OUTDIR/"kraken2/all_samples.mpa_style.txt",
+        table=report(OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt",
                category="Taxonomic profiling",
                caption="../../report/kraken2_table_mpa.rst"),
     log:
