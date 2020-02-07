@@ -15,16 +15,8 @@ if config["assembly"]:
     assemblies = expand(f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta", sample=SAMPLES)
     all_outputs.extend(assemblies)
 
-    citations.add((
-        "Uritskiy, Gherman V., DiRuggiero, Jocelyne, Taylor, James (2018).",
-        "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis."
-        "Microbiome 158:8, doi: 10.1186/s40168-018-0541-1"
-    ))
-    citations.add((
-       "Li, D., Liu, C-M., Luo, R., Sadakane, K., and Lam, T-W., (2015).",
-        "MEGAHIT: An ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph.",
-        "Bioinformatics, doi: 10.1093/bioinformatics/btv033 [PMID: 25609793]."
-    ))
+    citations.add(publications["MetaWRAP"])
+    citations.add(publications["MEGAHIT"])
 
 if config["binning"]:
     primary_bins = expand(f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins", sample=SAMPLES)
@@ -34,27 +26,10 @@ if config["binning"]:
     all_outputs.extend(consolidated_bins)
     all_outputs.extend(blobology)
 
-    citations.add((
-        "Uritskiy, Gherman V., DiRuggiero, Jocelyne, Taylor, James (2018).",
-        "MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis."
-        "Microbiome 158:8, doi: 10.1186/s40168-018-0541-1"
-    ))
-    citations.add((
-        "Alneberg, J., Bjarnason, B.S., de Bruijn, I., Schirmer, M., Quick, J., Ijaz, U.Z., Lahti, L., Loman, N.J, Andersson, A.F, Quince, C. (2014).",
-        "Binning metagenomic contigs by coverage and composition.",
-        "Nature Methods, doi: 10.1038/nmeth.3103",
-    ))
-    citations.add((
-        "Kang DD, Li F, Kirton E, Thomas A, Egan R, An H, Wang Z. (2019).",
-        "MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies.",
-        "PeerJ 7:e7359 https://doi.org/10.7717/peerj.7359",
-    ))
-    citations.add((
-        "Yu-Wei Wu, Blake A. Simmons, Steven W. Singer (2016).",
-        "MaxBin 2.0: an automated binning algorithm to recover genomes from multiple metagenomic datasets.",
-        "Bioinformatics, Volume 32, Issue 4, 15 February 2016, Pages 605–607, https://doi.org/10.1093/bioinformatics/btv638",
-    ))
-
+    citations.add(publications["MetaWRAP"])
+    citations.add(publications["CONCOCT"])
+    citations.add(publications["MetaBAT2"])
+    citations.add(publications["MaxBin2"])
 
 
 rule assembly:

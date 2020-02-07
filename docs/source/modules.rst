@@ -12,6 +12,7 @@
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 .. _MEGAHIT: https://github.com/voutcn/megahit
+.. _MultiQC: https://multiqc.info/
 
 Modules
 =======
@@ -38,38 +39,58 @@ qc_reads
 The quality control module uses `FastP`_ to produce HTML reports of the quality
 of the input and output reads. The quality control module also trims adapter
 sequences and performs quality trimming of the input reads. The quality assured
-reads are output into ``fastp``.
+reads are output into ``fastp``. Output filenames are::
+
+    <sample>_{1,2}.fq.gz
+
+.. note:: 
+
+    It is possible to skip fastp processing. StaG then replaces the
+    output files with symlinks to the input files.
 
 remove_host
 --------------
-:Tool: `BBMap`_
+:Tool: `Kraken2`_
 :Output folder: ``host_removal``
 
-The ``remove_host`` module uses `BBMap`_ to map reads against a database of
-host sequences to remove reads matching to a non-desired host genome. The
-output is a pair of paired-end FASTQ files, plus a single interleaved FASTQ
-file with all reads that matched the host reference. In addition, two PDF files
-with 1) a basic histogram plot of the proportion of host reads detected in each
-sample, and 2) a barplot of the same. In addition, a TSV table with the raw
+The ``remove_host`` module uses `Kraken2`_ to classify reads against a database
+of host sequences to remove reads matching to non-desired host genomes. The
+output are two sets of pairs of paired-end FASTQ files, and optionally one
+Kraken2 classification file and one Kraken2 summary report.  In addition, two
+PDF files with 1) a basic histogram plot of the proportion of host reads
+detected in each sample, and 2) a barplot of the same. A TSV table with the raw
 proportion data is also provided::
 
-   host_barplot.pdf
-   host_histogram.pdf
-   host_proportions.tsv
+    <sample>_{1,2}.fq.gz
+    <sample>.host_{1,2}.fq.gz
+    host_barplot.pdf
+    host_histogram.pdf
+    host_proportions.txt
 
-assess_depth
---------------
-:Tool: `BBCountUnique`_
-:Output folder: ``bbcountunique``
+.. note::
 
-The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
-to produce saturation curves. The saturation curve essentially shows a
-histogram of the proportion of unique kmers observed per reads processed, and
-can be used to assess how deep a sample has been sequenced. The module outputs
-one plot per sample.
+    It is possible to skip host removal. StaG then replaces the output files
+    with symlinks to the fastp output files.
 
 
-Naive sample comparison
+preprocessing_summary
+---------------------
+This module summarize the number of reads passing through each preprocessing
+step and produces a summary table and a basic line plot showing the proportions
+of reads after each step. For more detailed information about read QC please
+refer to the MulitQC report.
+
+
+multiqc
+-------
+:Tool: `MultiQC`_
+:Output folder: ``multiqc``
+
+`MultiQC`_ summarizes information about several steps in StaG in an easy-to-use
+HTML report. Refer to this report for details about e.g. read QC.
+
+
+Naive sample analysis
 ***********************
 
 sketch_compare
@@ -82,6 +103,19 @@ The ``sketch_compare`` module uses the very fast MinHash implementation in
 comparison of all samples based on their kmer content. The module outputs
 gzip-compressed sketches for each sample, as well as two heatmap plots showing
 the overall similarity of all samples (one with hierarchical clustering).
+
+
+assess_depth
+--------------
+:Tool: `BBCountUnique`_
+:Output folder: ``bbcountunique``
+
+The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
+to produce saturation curves. The saturation curve essentially shows a
+histogram of the proportion of unique kmers observed per reads processed, and
+can be used to assess how deep a sample has been sequenced. The module outputs
+one plot per sample.
+
 
 
 Mappers
@@ -213,7 +247,7 @@ file to summarize on. The column names need to be assigned as a string of
 comma-separated column names. They must match exactly to the column names
 defined in the annotation file. This is configured in ``config.yaml``. The
 script outputs one file per column, with output filename matching
-``counts.<column_name>.tsv``. The count table feature is activated by entering
+``counts.<column_name>.txt``. The count table feature is activated by entering
 an annotation filename in the relevant section of the configuration file,
 e.g.::
 
@@ -244,7 +278,7 @@ The featureCounts module outputs several files::
 
     all_samples.featureCounts
     all_samples.featureCounts.summary
-    all_samples.featureCounts.table.tsv
+    all_samples.featureCounts.table.txt
 
 The first two files are the default output files from `featureCounts`_, and the
 third file is a simplified tab-separated table with count per annotation, in a
@@ -274,10 +308,10 @@ report with the profiles of all samples and a TSV table per taxonomic level.
 The output files are::
 
     <sample>.kaiju
-    <sample>.kaiju.<level>.tsv
+    <sample>.kaiju.<level>.txt
     <sample>.krona
     all_samples.kaiju.krona.html
-    all_samples.kaiju.<level>.tsv
+    all_samples.kaiju.<level>.txt
 
 Kraken2
 -------
@@ -290,8 +324,8 @@ user-specified taxonomic level. The Kraken2 module produces the following files:
 
     <sample>.kraken
     <sample>.kreport
-    all_samples.kraken2.tsv
-    all_samples.mpa_style.tsv
+    all_samples.kraken2.txt
+    all_samples.mpa_style.txt
 
 This modules outputs two tables containing the same information in two formats:
 one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
@@ -301,10 +335,10 @@ each sample::
     <sample>.<taxonomic_level>.bracken
     <sample>.<taxonomic_level>.filtered.bracken
     <sample>_bracken.kreport
-    <sample>.bracken.mpa_style.tsv
-    all_samples.<taxonomic_level>.bracken.tsv
-    all_samples.<taxonomic_level>.filtered.bracken.tsv
-    all_samples.bracken.mpa_style.tsv
+    <sample>.bracken.mpa_style.txt
+    all_samples.<taxonomic_level>.bracken.txt
+    all_samples.<taxonomic_level>.filtered.bracken.txt
+    all_samples.bracken.mpa_style.txt
     
 
 MetaPhlAn2
@@ -339,15 +373,15 @@ HUMAnN2
 Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
 Outputs five files per sample, plus three summaries for all samples::
 
-    <sample>.genefamilies_relab.tsv
-    <sample>.genefamilies.tsv
-    <sample>.pathabundance_relab.tsv
-    <sample>.pathabundance.tsv
-    <sample>.pathcoverage.tsv
+    <sample>.genefamilies_relab.txt
+    <sample>.genefamilies.txt
+    <sample>.pathabundance_relab.txt
+    <sample>.pathabundance.txt
+    <sample>.pathcoverage.txt
     
-    all_samples.humann2_genefamilies.tsv
-    all_samples.humann2_pathcoverage.tsv
-    all_samples.humann2_pathabundances.tsv
+    all_samples.humann2_genefamilies.txt
+    all_samples.humann2_pathcoverage.txt
+    all_samples.humann2_pathabundances.txt
 
 Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
 so all MetaPhlAn2-associated steps are run regardless of whether it is actually
@@ -357,6 +391,14 @@ HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
 It is possible to limit the number of concurrent HUMANn2 processes by using
 e.g. `--resources humann2=3` to tell Snakemake to not run more than three
 instances in parallel.
+
+.. note::
+
+    Until HUMAnN2 v2.9 has been released it is important to make sure you run
+    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
+    does not support the most recent MPA2 database version (201901).
+
+    
 
 
 Antibiotic resistance
@@ -372,12 +414,12 @@ produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
 containing two files and two subfolders::
 
     <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.tsv
+    <sample>/<sample>.groot_report.txt
     <sample>/<sample>/groot-graphs
     <sample>/<sample>/groot-plots
 
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of all
+gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
 observed antibiotic resistance genes in the sample. The two subfolders contain 
 all mapped graphs and coverage plots of all detected antibiotic resistance genes.
 

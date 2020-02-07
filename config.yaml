@@ -49,18 +49,11 @@ multiqc_report: True
 fastp:
     extra: ""
 remove_host:
-    db_path: ""            # [Required] Path to folder containing the BBMap index for host sequences
-    minid: 0.95
-    maxindel: 3
-    minhits: 2
-    bandwidthratio: 0.16
-    bandwidth: 12
-    qtrim: "rl"
-    trimq: 10
-    quickmatch: "quickmatch"
-    fast: "fast"
-    untrim: "untrim"
-    plot_unambigous: False
+    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+    confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
+    extra: "--quick"         # Additional command line arguments to kraken2
+    keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
+    keep_kreport: False
 bbcountunique:
     interval: 5000           # Typically set to 10000, but test data requires <=5035
 multiqc:

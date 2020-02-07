@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Plot proportion of reads mapped to host DB with BBMap."""
+"""Plot proportion of reads mapped to DB with BBMap."""
 __author__ = "CTMR, Fredrik Boulund"
 __date__ = "2020"
-__version__ = "0.2"
+__version__ = "0.3"
 
 from sys import argv, exit
 from pathlib import Path
@@ -21,13 +21,13 @@ def parse_args():
     parser.add_argument("statsfile", metavar="statsfile", nargs="+",
             help="BBMap statsfile(s).")
     parser.add_argument("-H", "--histogram", dest="histogram", metavar="FILE",
-            default="host_histogram.pdf",
+            default="histogram.pdf",
             help="Filename of output histogram plot [%(default)s].")
     parser.add_argument("-b", "--barplot", dest="barplot", metavar="FILE",
-            default="host_barplot.pdf",
+            default="barplot.pdf",
             help="Filename of output barplot [%(default)s].")
     parser.add_argument("-t", "--table", dest="table", metavar="FILE",
-            default="host_proportions.tsv",
+            default="proportions.tsv",
             help="Filename of histogram data in TSV format [%(default)s].")
     parser.add_argument("-u", "--unambigous", dest="unambigous", action="store_true",
             default=False,
@@ -59,23 +59,23 @@ if __name__ == "__main__":
     
     df = pd.DataFrame(
             proportions,
-            columns=["Sample", "Proportion"]).set_index("Sample").rename(columns={"Proportion": "% host"})
+            columns=["Sample", "Proportion"]).set_index("Sample").rename(columns={"Proportion": "% mapped"})
     print("Loaded {} proportions for {} samples.".format(
             df.shape[0],
             len(df.index.unique())))
 
     fig, ax = plt.subplots()
     df.plot(kind="hist", ax=ax)
-    ax.set_title("Proportion host reads")
-    ax.set_xlabel("Proportion host reads")
+    ax.set_title("Proportion mapped reads")
+    ax.set_xlabel("Proportion mapped reads")
     ax.set_ylabel("Frequency")
     fig.savefig(options.histogram)
 
 
     fig2, ax2 = plt.subplots()
     df.plot(kind="barh", ax=ax2)
-    ax2.set_title("Proportion host reads")
-    ax2.set_xlabel("Proportion host reads")
+    ax2.set_title("Proportion mapped reads")
+    ax2.set_xlabel("Proportion mapped reads")
     ax2.set_ylabel("Sample")
     fig2.savefig(options.barplot)
 

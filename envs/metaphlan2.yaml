@@ -4,5 +4,5 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - metaphlan2 =2.9.21
+    - metaphlan2 =2.96.1
     - krona =2.7.1

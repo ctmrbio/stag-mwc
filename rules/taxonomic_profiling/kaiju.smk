@@ -28,8 +28,8 @@ if config["taxonomic_profile"]["kaiju"]:
     # SAMPLES is also from the main Snakefile scope.
     kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
-    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv"), sample=SAMPLES, level=kaiju_config["levels"])
-    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv"), level=kaiju_config["levels"])
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
+    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
     kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf") 
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
@@ -37,17 +37,8 @@ if config["taxonomic_profile"]["kaiju"]:
     all_outputs.append(kaiju_joined_table)
     all_outputs.append(kaiju_area_plot)
 
-    citations.add((
-        "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
-        "Fast and sensitive taxonomic classification for metagenomics with Kaiju.",
-        "Nature communications, 7, 11257.",
-        "Available online at: https://github.com/bioinformatics-centre/kaiju",
-    ))
-    citations.add((
-        "Ondov BD, Bergman NH, and Phillippy AM.",
-        "Interactive metagenomic visualization in a Web browser.",
-        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
-    ))
+    citations.add(publications["Kaiju"])
+    citations.add(publications["Krona"])
 
 
 rule download_kaiju_database:
@@ -151,7 +142,7 @@ rule kaiju_report:
     input:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     output:
-        OUTDIR/"kaiju/{sample}.kaiju.{level}.tsv",
+        OUTDIR/"kaiju/{sample}.kaiju.{level}.txt",
     log:
         str(LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log")
     shadow: 
@@ -176,9 +167,9 @@ rule kaiju_report:
 
 rule join_kaiju_reports:
     input:
-        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.tsv"), sample=SAMPLES),
+        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.txt"), sample=SAMPLES),
     output:
-        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.tsv",
+        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt",
             category="Taxonomic profiling",
             caption="../../report/kaiju_table.rst")
     log:

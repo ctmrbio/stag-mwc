@@ -9,7 +9,6 @@ localrules:
     groot_report
 
 
-
 groot_db_path = Path(config["groot"]["index"])
 if config["antibiotic_resistance"]:
     if not Path(groot_db_path).exists():
@@ -21,14 +20,10 @@ if config["antibiotic_resistance"]:
 
     groot_outputs = expand(str(OUTDIR/"groot/{sample}/{sample}.{output_type}"),
             sample=SAMPLES,
-            output_type=("groot_aligned.bam", "groot_report.tsv"))
+            output_type=("groot_aligned.bam", "groot_report.txt"))
     all_outputs.extend(groot_outputs)
 
-    citations.add((
-        "Rowe WPM, Winn MD (2018).",
-        "Indexed variation graphs for efficient and accurate resistome profiling.",
-        "Bioinformatics. 2018. doi: bty387",
-    ))
+    citations.add(publications["GROOT"])
 
 groot_config = config["groot"]
 rule create_groot_index:
@@ -112,7 +107,7 @@ rule groot_report:
     input:
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
     output:
-        report=OUTDIR/"groot/{sample}/{sample}.groot_report.tsv",
+        report=OUTDIR/"groot/{sample}/{sample}.groot_report.txt",
         plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
     log:
         report=str(LOGDIR/"groot/{sample}.groot_report.log"),

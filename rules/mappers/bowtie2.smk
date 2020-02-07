@@ -24,13 +24,13 @@ for bt2_config in config["bowtie2"]:
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
+        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
                 db_name=bt2_db_name,
                 column=map(str.strip, bt2_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bt2_db_name,
                 sample=SAMPLES,
-                output_type=["", ".summary", ".table.tsv"])
+                output_type=["", ".summary", ".table.txt"])
         all_outputs.extend(bowtie2_alignments)
         all_outputs.extend(bowtie2_stats)
 
@@ -48,12 +48,9 @@ for bt2_config in config["bowtie2"]:
                 err_message += "If you want to skip mapping with Bowtie2, set mappers:bowtie2:False in config.yaml."
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
+            citations.add(publications["featureCount"])
 
-        citations.add((
-            "Langmead B, Salzberg S (2012).",
-            "Fast gapped-read alignment with Bowtie 2.",
-            "Nature Methods. 2012, 9:357-359.",
-        ))
+        citations.add(publications["Bowtie2"])
 
     rule:
         """Align reads using Bowtie2."""
@@ -111,7 +108,7 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
+            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
                     db_name=bt2_db_name,
                     column=map(str.strip, bt2_config["counts_table"]["columns"].split(","))
             )
@@ -149,7 +146,7 @@ for bt2_config in config["bowtie2"]:
                     sample=SAMPLES)
         output:
             counts=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts".format(db_name=bt2_db_name),
-            counts_table=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.table.tsv".format(db_name=bt2_db_name),
+            counts_table=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.table.txt".format(db_name=bt2_db_name),
             summary=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.summary".format(db_name=bt2_db_name),
         log:
             str(LOGDIR/"bowtie2/{db_name}/all_samples.featureCounts.log".format(db_name=bt2_db_name))

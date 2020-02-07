@@ -14,11 +14,11 @@ __default__:
 # Pre-processing
 #############################
 fastp:
-    n: 1
+    n: 4
     time: "01:00:00"
-remove_human:
-    n: 8
-    time: "10:00:00"
+remove_host:
+    n: 4
+    time: "01:00:00"
 bbcountunique:
     n: 2
     time: "00:45:00"
