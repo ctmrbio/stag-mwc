@@ -446,7 +446,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
         of interest. This is recommended for kraken/bracken tables, but not 
         applicable for some 16s sequences
     abund_thresh_rough, abund_thresh_fine : float [0, 1]
-        The mean abundance threshhold for a taxonomic group to be plotted for
+        The mean abundance threshold for a taxonomic group to be plotted for
         the higher level grouping (`abund_thresh_rough`) and sub grouping
         level. This will be used in conjunction with the `group_thresh_rough`
         and `group_thresh_fine` to determine the number of groups to be
