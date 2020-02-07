@@ -22,11 +22,11 @@ if config["functional_profile"]["humann2"]:
 
     # Add HUMAnN2 output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
-    humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.tsv"),
+    humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.txt"),
             sample=SAMPLES,
             output_type=("genefamilies", "pathcoverage", "pathabundance",
                         "genefamilies_{method}".format(method=h_config["norm_method"])))
-    merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.tsv"),
+    merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.txt"),
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
     all_outputs.extend(humann2_outputs)
     all_outputs.extend(merged_humann2_tables)
@@ -60,9 +60,9 @@ rule humann2:
         read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         taxonomic_profile=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
     output:
-        OUTDIR/"humann2/{sample}_genefamilies.tsv",
-        OUTDIR/"humann2/{sample}_pathcoverage.tsv",
-        OUTDIR/"humann2/{sample}_pathabundance.tsv",
+        OUTDIR/"humann2/{sample}_genefamilies.txt",
+        OUTDIR/"humann2/{sample}_pathcoverage.txt",
+        OUTDIR/"humann2/{sample}_pathabundance.txt",
     log:
         stdout=str(LOGDIR/"humann2/{sample}.humann2.stdout.log"),
         stderr=str(LOGDIR/"humann2/{sample}.humann2.stderr.log"),
@@ -106,11 +106,11 @@ rule humann2:
 rule normalize_humann2_tables:
     """Normalize abundance tables from HUMAnN2."""
     input:
-        genefamilies=OUTDIR/"humann2/{sample}_genefamilies.tsv",
-        pathabundance=OUTDIR/"humann2/{sample}_pathabundance.tsv",
+        genefamilies=OUTDIR/"humann2/{sample}_genefamilies.txt",
+        pathabundance=OUTDIR/"humann2/{sample}_pathabundance.txt",
     output:
-        genefamilies=OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv".format(method=h_config["norm_method"]),
-        pathabundance=OUTDIR/"humann2/{{sample}}_pathabundance_{method}.tsv".format(method=h_config["norm_method"]),
+        genefamilies=OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt".format(method=h_config["norm_method"]),
+        pathabundance=OUTDIR/"humann2/{{sample}}_pathabundance_{method}.txt".format(method=h_config["norm_method"]),
     log:
         stdout=str(LOGDIR/"humann2/{sample}.humann2_sample_normalize.stdout.log"),
         stderr=str(LOGDIR/"humann2/{sample}.humann2_sample_normalize.stderr.log"),
@@ -145,19 +145,19 @@ rule normalize_humann2_tables:
 rule join_humann2_tables:
     """Join abundance tables from HUMAnN2."""
     input:
-        genefamilies=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv").format(method=h_config["norm_method"]),
+        genefamilies=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt").format(method=h_config["norm_method"]),
             sample=SAMPLES),
-        pathabundance=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv").format(method=h_config["norm_method"]),
+        pathabundance=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt").format(method=h_config["norm_method"]),
             sample=SAMPLES),
-        pathcoverage=expand(str(OUTDIR/"humann2/{sample}_pathcoverage.tsv"), sample=SAMPLES),
+        pathcoverage=expand(str(OUTDIR/"humann2/{sample}_pathcoverage.txt"), sample=SAMPLES),
     output:
-        genefamilies=report(OUTDIR/"humann2/all_samples.humann2_genefamilies.tsv",
+        genefamilies=report(OUTDIR/"humann2/all_samples.humann2_genefamilies.txt",
                 category="Functional profiling",
                 caption="../../report/humann2_table.rst"),
-        pathabundance=report(OUTDIR/"humann2/all_samples.humann2_pathabundance.tsv",
+        pathabundance=report(OUTDIR/"humann2/all_samples.humann2_pathabundance.txt",
                 category="Functional profiling",
                 caption="../../report/humann2_table.rst"),
-        pathcoverage=report(OUTDIR/"humann2/all_samples.humann2_pathcoverage.tsv",
+        pathcoverage=report(OUTDIR/"humann2/all_samples.humann2_pathcoverage.txt",
                 category="Functional profiling",
                 caption="../../report/humann2_table.rst"),
     log:

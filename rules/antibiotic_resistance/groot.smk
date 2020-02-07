@@ -20,7 +20,7 @@ if config["antibiotic_resistance"]:
 
     groot_outputs = expand(str(OUTDIR/"groot/{sample}/{sample}.{output_type}"),
             sample=SAMPLES,
-            output_type=("groot_aligned.bam", "groot_report.tsv"))
+            output_type=("groot_aligned.bam", "groot_report.txt"))
     all_outputs.extend(groot_outputs)
 
     citations.add(publications["GROOT"])
@@ -107,7 +107,7 @@ rule groot_report:
     input:
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
     output:
-        report=OUTDIR/"groot/{sample}/{sample}.groot_report.tsv",
+        report=OUTDIR/"groot/{sample}/{sample}.groot_report.txt",
         plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
     log:
         report=str(LOGDIR/"groot/{sample}.groot_report.log"),

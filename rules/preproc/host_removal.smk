@@ -18,7 +18,7 @@ if rh_config:
     filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
-    host_proportions = str(OUTDIR/"host_removal/host_proportions.tsv")
+    host_proportions = str(OUTDIR/"host_removal/host_proportions.txt")
     all_outputs.extend(filtered_host)
     all_outputs.append(host_proportions)
 
@@ -88,7 +88,7 @@ if rh_config:
             barplot=report(OUTDIR/"host_removal/host_barplot.pdf",
                        category="Proportion host reads",
                        caption="../../report/host_barplot.rst"),
-            tsv=report(OUTDIR/"host_removal/host_proportions.tsv",
+            txt=report(OUTDIR/"host_removal/host_proportions.txt",
                        category="Proportion host reads",
                        caption="../../report/host_proportions.rst"),
         log:
@@ -105,7 +105,7 @@ if rh_config:
                 {input} \
                 --histogram {output.histogram} \
                 --barplot {output.barplot} \
-                --table {output.tsv} \
+                --table {output.txt} \
                 2>&1 > {log}
             """
 

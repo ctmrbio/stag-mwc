@@ -36,9 +36,9 @@ if config["taxonomic_profile"]["kraken2"]:
     # SAMPLES is also from the main Snakefile scope.
     krakens = expand(str(OUTDIR/"kraken2/{sample}.kraken"), sample=SAMPLES)
     kreports = expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES)
-    kreports_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.mpa_style.tsv"), sample=SAMPLES)
-    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.mpa_style.tsv")
-    combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.tsv")
+    kreports_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES)
+    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.mpa_style.txt")
+    combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.txt")
     kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
     all_outputs.extend(krakens)
     all_outputs.extend(kreports)
@@ -110,7 +110,7 @@ rule kraken_mpa_style:
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
-        tsv=OUTDIR/"kraken2/{sample}.mpa_style.tsv",
+        txt=OUTDIR/"kraken2/{sample}.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.mpa_style.log")
     threads:
@@ -121,18 +121,18 @@ rule kraken_mpa_style:
         """
         kreport2mpa.py \
             --report-file {input.kreport} \
-            --output {output.tsv} \
+            --output {output.txt} \
             --display-header \
             2>&1 > {log}
-        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.tsv}
+        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.txt}
         """
 
 
 rule join_kraken2_mpa:
     input:
-        tsv=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.tsv"), sample=SAMPLES),
+        txt=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES),
     output:
-        table=report(OUTDIR/"kraken2/all_samples.mpa_style.tsv",
+        table=report(OUTDIR/"kraken2/all_samples.mpa_style.txt",
                category="Taxonomic profiling",
                caption="../../report/kraken2_table_mpa.rst"),
     log:
@@ -150,7 +150,7 @@ rule join_kraken2_mpa:
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
-            {input.tsv} \
+            {input.txt} \
             2>&1 > {log}
         """
 
@@ -158,7 +158,7 @@ rule combine_kreports:
     input:
         kreports=expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES),
     output:
-        report(OUTDIR/"kraken2/all_samples.kraken2.tsv",
+        report(OUTDIR/"kraken2/all_samples.kraken2.txt",
                category="Taxonomic profiling",
                caption="../../report/kraken2_table.rst"),
     log:
@@ -227,8 +227,8 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
         raise WorkflowError(err_message)
     if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
         filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-        all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
-        all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.tsv"), level=kraken2_config["bracken"]["levels"].split())
+        all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.txt"), level=kraken2_config["bracken"]["levels"].split())
+        all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.txt"), level=kraken2_config["bracken"]["levels"].split())
 
         all_outputs.extend(filtered_brackens)
         all_outputs.append(all_table)
@@ -237,9 +237,9 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
     citations.add(publications["Bracken"])
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-    brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES)
+    brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES)
     bracken_krona = str(OUTDIR/"kraken2/all_samples.bracken.krona.html")
-    all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.tsv")
+    all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt")
 
     all_outputs.extend(brackens)
     all_outputs.extend(brackens_mpa_style)
@@ -310,7 +310,7 @@ rule bracken_mpa_style:
     input:
         kreport=OUTDIR/"kraken2/{sample}_bracken.kreport"
     output:
-        tsv=OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv",
+        txt=OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
     threads:
@@ -321,18 +321,18 @@ rule bracken_mpa_style:
         """
         kreport2mpa.py \
             --report-file {input.kreport} \
-            --output {output.tsv} \
+            --output {output.txt} \
             --display-header \
             2>&1 > {log}
-        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.tsv}
+        sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.txt}
         """
 
 
 rule join_bracken_mpa:
     input:
-        tsv=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.tsv"), sample=SAMPLES),
+        txt=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES),
     output:
-        table=report(OUTDIR/"kraken2/all_samples.bracken.mpa_style.tsv",
+        table=report(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table_mpa.rst"),
     log:
@@ -350,7 +350,7 @@ rule join_bracken_mpa:
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
-            {input.tsv} \
+            {input.txt} \
             2>&1 > {log}
         """
 
@@ -359,7 +359,7 @@ rule join_bracken:
     input:
         bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.bracken"), sample=SAMPLES),
     output:
-        table=report(OUTDIR/"kraken2/all_samples.{level,[DPOCFGS]}.bracken.tsv",
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPOCFGS]}.bracken.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table.rst"),
     log:
@@ -453,7 +453,7 @@ rule join_bracken_filtered:
     input:
         bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken"), sample=SAMPLES),
     output:
-        table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.tsv",
+        table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table.rst"),
     log:
