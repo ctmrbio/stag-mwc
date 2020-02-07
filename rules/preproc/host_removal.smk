@@ -83,13 +83,13 @@ if rh_config:
             expand(str(LOGDIR/"host_removal/{sample}.kraken2.log"), sample=SAMPLES)
         output:
             histogram=report(OUTDIR/"host_removal/host_histogram.pdf",
-                       category="Proportion host reads",
+                       category="Preprocessing",
                        caption="../../report/host_histogram.rst"),
             barplot=report(OUTDIR/"host_removal/host_barplot.pdf",
-                       category="Proportion host reads",
+                       category="Preprocessing",
                        caption="../../report/host_barplot.rst"),
             txt=report(OUTDIR/"host_removal/host_proportions.txt",
-                       category="Proportion host reads",
+                       category="Preprocessing",
                        caption="../../report/host_proportions.rst"),
         log:
             str(LOGDIR/"host_removal/proportion_host.log")
