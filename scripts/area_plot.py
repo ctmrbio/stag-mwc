@@ -335,7 +335,7 @@ def single_area_plot(table, level=3, samples=None,
         A pandas dataframe of the original table of data (either containing 
         counts or relative abundance)
     level : int
-        The higherarchical level within the table to display as an integer
+        The hierarchical level within the table to display as an integer
     cmap : str
         The qualitative colormap to use to generate your plot. Refer to 
         colorbrewer for options. If a selected colormap exceeds the number
