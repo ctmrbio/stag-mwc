@@ -122,7 +122,7 @@ def profile_one_level(collapsed, level, threshhold=0.01, count=8):
     Collapsed: DataFrame
         The counts data with the index as a multi-level index of 
         levels of interest and the columns as samples
-    threshhold: float, optional
+    threshold: float, optional
         The minimum relative abundance for an organism to be shown
     count : int, optional
         The maximum number of levels to show for a single group
