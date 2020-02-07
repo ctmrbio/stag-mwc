@@ -428,7 +428,7 @@ def joint_area_plot(table, rough_level=2, fine_level=5, samples=None,
     table : DataFrame
         A dataframe of hte original data, either as counts or relative 
         abundance with the taxonomic information in `tax_col`. The data
-        can have seperate count values at multiple levels (i.e. combine)
+        can have separate count values at multiple levels (i.e. combine)
         collapsed phylum, class, etc levels.
     rough_level, fine_level: int
         The taxonomic levels to be displayed. The `fine_level` will be grouped
