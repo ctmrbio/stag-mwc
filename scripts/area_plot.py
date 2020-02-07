@@ -13,7 +13,7 @@ import pandas as pd
 Generates a pretty areaplot from a collapsed feature table.
 """
 
-# Sets up the matplotlib paramters so that we can save to be edited in 
+# Sets up the matplotlib parameters so that we can save to be edited in 
 # illustator if a direct conversion is required. Because it just makes life
 # better
 rcParams['pdf.fonttype'] = 42
