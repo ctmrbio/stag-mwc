@@ -30,25 +30,37 @@ colors_order = ['Reds', 'Blues', 'Greens', 'Purples', "Oranges", 'Greys']
 over9 = {'Paired', 'Paired_r', 'Set3', 'Set3_r'}
 over8 = over9 | {'Set1', "Pastel1"}
 
-mode_dict = {'metaphlan': {'tax_delim': '|',
-                           'multi_level': True,
-                           'tax_col': 'clade_name',
-                           'table_drop': ['NCBI_tax_id'],
-                           'skip_rows': 1,
-                           },
-             'kraken': {'tax_delim': '|',
-                         'multi_level': True,
-                         'tax_col': 'taxon_name',
-                         'table_drop': [],
-                         'skip_rows': 0,
-                         },
-             'marker': {'tax_delim': ';',
-                        'multi_level': False,
-                        'tax_col': 'taxonomy',
-                        'table_drop': ['sequence'],
-                        'skip_rows': 0,
-                        },
-             }
+mode_dict = {
+    'kaiju': {
+        'tax_delim': ';',
+        'multi_level': True,
+        'tax_col': 'taxon_name',
+        'table_drop': [],
+        'skip_rows': 0,
+    },
+    'kraken2': {
+        'tax_delim': '|',
+        'multi_level': True,
+        'tax_col': 'taxon_name',
+        'table_drop': [],
+        'skip_rows': 0,
+    },
+    'metaphlan2': {
+        'tax_delim': '|',
+        'multi_level': True,
+        'tax_col': 'clade_name',
+        'table_drop': ['NCBI_tax_id'],
+        'skip_rows': 1,
+    },
+    'marker': {
+        'tax_delim': ';',
+        'multi_level': False,
+        'tax_col': 'taxonomy',
+        'table_drop': ['sequence'],
+        'skip_rows': 0,
+    },
+}
+
 
 def extract_label_array(table, tax_col, tax_delim='|'):
     """
