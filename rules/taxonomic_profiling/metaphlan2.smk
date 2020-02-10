@@ -141,8 +141,8 @@ rule metaphlan2_area_plot:
         """
         scripts/area_plot.py \
             --table {input} \
-            --output-figure {output} \
-            --mode metaphlan \
+            --output {output} \
+            --mode metaphlan2 \
             2>&1 > {log}
         """
 

@@ -207,7 +207,7 @@ rule kaiju_area_plot:
         """
         scripts/area_plot.py \
             --table {input} \
-            --output-figure {output} \
+            --output {output} \
             --mode kaiju \
             2>&1 > {log}
         """

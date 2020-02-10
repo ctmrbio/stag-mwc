@@ -21,6 +21,5 @@ dependencies:
     - groot =0.8.4
     - pigz =2.4
     - pip
-    - matplotlib =2.2.2
     - pip:
         - fastcluster
