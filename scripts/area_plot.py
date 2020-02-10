@@ -1,5 +1,6 @@
 #!/bin/env python3
 
+from sys import argv, exit
 import argparse
 import warnings
 
@@ -149,11 +150,12 @@ def profile_one_level(collapsed, level, threshhold=0.01, count=8):
 
     first_ = top_taxa.index[0]
     
-    top_taxa.sort_values([first_],
-                         ascending=False,
-                         axis='columns',
-                         inplace=True,
-                         )
+    top_taxa.sort_values(
+        [first_],
+        ascending=False,
+        axis='columns',
+        inplace=True,
+    )
 
     upper_ = top_taxa.cumsum()
     lower_ = top_taxa.cumsum() - top_taxa
@@ -528,7 +530,7 @@ def create_argparse():
         )
     parser_one.add_argument(
         '--mode', 
-        choices=(["metaphlan", "kraken", "marker"]),
+        choices=mode_dict.keys(),
         help=('The software generating the table to make parsing easier. '
               'Options are kraken, metaphlan, marker (i.e. CTMR amplicon).'),
         )
@@ -602,20 +604,22 @@ def create_argparse():
 
     return parser_one
 
+
 if __name__ == '__main__':
     parser_one = create_argparse()
-    args = parser_one.parse_args()
 
     if len(argv) < 2:
-        args.print_help()
+        parser_one.print_help()
         exit()
+
+    args = parser_one.parse_args()
 
     if args.table_drop is not None:
         args.table_drop = [s for s in args.table_drop.split(',')]
     else:
         args.table_drop = []
 
-    mode_defaults = mode_dict.get(args.mode, mode_dict['kraken'])
+    mode_defaults = mode_dict.get(args.mode, mode_dict['kraken2'])
     mode_defaults.update({k: v for k, v in args.__dict__.items() 
                          if (k in mode_defaults) and (v)})
 
@@ -628,28 +632,30 @@ if __name__ == '__main__':
         samples = None
 
     if args.sub_level is not None:
-        fig_ = joint_area_plot(table.drop(columns=mode_defaults['table_drop']),
-                               rough_level=args.level,
-                               fine_level=args.sub_level,
-                               samples=args.samples,
-                               tax_delim=mode_defaults['tax_delim'],
-                               tax_col=mode_defaults['tax_col'],
-                               multilevel_table=mode_defaults['multi_level'],
-                               abund_thresh_rough=args.abund_thresh,
-                               group_thresh_rough=args.group_thresh,
-                               abund_thresh_fine=args.sub_abund_thresh,
-                               group_thresh_fine=args.sub_group_thresh,
-                               )
+        fig_ = joint_area_plot(
+            table.drop(columns=mode_defaults['table_drop']),
+            rough_level=args.level,
+            fine_level=args.sub_level,
+            samples=args.samples,
+            tax_delim=mode_defaults['tax_delim'],
+            tax_col=mode_defaults['tax_col'],
+            multilevel_table=mode_defaults['multi_level'],
+            abund_thresh_rough=args.abund_thresh,
+            group_thresh_rough=args.group_thresh,
+            abund_thresh_fine=args.sub_abund_thresh,
+            group_thresh_fine=args.sub_group_thresh,
+        )
     else:
-        fig_ = single_area_plot(table.drop(columns=mode_defaults['table_drop']),
-                                level=args.level, 
-                                cmap=args.colormap,
-                                samples=samples,
-                                tax_delim=mode_defaults['tax_delim'],
-                                tax_col=mode_defaults['tax_col'],
-                                multilevel_table=mode_defaults['multi_level'],
-                                abund_thresh=args.abund_thresh,
-                                group_thresh=args.group_thresh,
-                                )
+        fig_ = single_area_plot(
+            table.drop(columns=mode_defaults['table_drop']),
+            level=args.level,
+            cmap=args.colormap,
+            samples=samples,
+            tax_delim=mode_defaults['tax_delim'],
+            tax_col=mode_defaults['tax_col'],
+            multilevel_table=mode_defaults['multi_level'],
+            abund_thresh=args.abund_thresh,
+            group_thresh=args.group_thresh,
+        )
 
     fig_.savefig(args.output, dpi=300)
