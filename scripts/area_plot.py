@@ -72,7 +72,7 @@ def extract_label_array(table, tax_col, tax_delim='|'):
         A DataFrame with observation on the rows (biom-style table) with 
         `tax_col` as one of its columns.
     tax_col : str
-        The column in `table` containig the taxobnomy information
+        The column in `table` containing the taxonomy information
     tax_delim: str, optional
         The delimiter between taxonomic groups
         
