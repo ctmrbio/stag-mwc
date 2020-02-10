@@ -13,13 +13,10 @@ import pandas as pd
 """
 Generates a pretty areaplot from a collapsed feature table.
 """
-__author__ = "Justine Debelius"
-__date__ = "2020"
-__version__ = "1.0"
 
-__author__: 'JW Debelius'
-__date__: '2020-02'
-__version__ : "0.1"
+__author__ = 'JW Debelius'
+__date__ = '2020-02'
+__version__ = "0.1"
 
 # Sets up the matplotlib parameters so that we can save to be edited in 
 # illustator if a direct conversion is required. Because it just makes life
