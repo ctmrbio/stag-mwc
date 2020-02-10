@@ -17,7 +17,7 @@ input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
-report: "stag_report_"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
+report: ""                   # Report file basename (".html" will be appended); if empty then "StaG_report-{datetime}.html" will be used.
 email: ""                    # Email to send status message after completed/failed run.
 
 

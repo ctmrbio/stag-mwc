@@ -138,27 +138,29 @@ onsuccess:
     if config["email"]:
         shell("""mail -s "StaG-mwc run completed" {config[email]} < {log}""")
 
-    if config["report"]:
-        from sys import argv
-        from datetime import datetime
+    from sys import argv
+    from datetime import datetime
 
-        report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
+    report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
 
-        citation_filename = f"citations-{report_datetime}.rst"
-        with open(citation_filename, "w") as citation_file:
-            for citation in sorted(citations):
-                citation_file.write("* "+citation+"\n")
-        citations_link = Path("citations.rst")
-        if citations_link.exists():
-            Path("citations.rst").unlink()
-        Path("citations.rst").symlink_to(citation_filename)
+    citation_filename = f"citations-{report_datetime}.rst"
+    with open(citation_filename, "w") as citation_file:
+        for citation in sorted(citations):
+            citation_file.write("* "+citation+"\n")
+    citations_link = Path("citations.rst")
+    if citations_link.exists():
+        Path("citations.rst").unlink()
+    Path("citations.rst").symlink_to(citation_filename)
 
-        snakemake_call = " ".join(argv)
-        shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
-        shell("{snakemake_call} --report {report}-{datetime}.html".format(
-            snakemake_call=snakemake_call,
-            report=config["report"],
-            datetime=report_datetime,
-            )
+    snakemake_call = " ".join(argv)
+    shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
+
+    report_filename = f"{config['report']}.html" if config["report"] else f"StaG_report-{report_datetime}.html"
+    print(report_filename)
+    shell("{snakemake_call} --report {report_filename}".format(
+        snakemake_call=snakemake_call,
+        report_filename=report_filename,
+        datetime=report_datetime,
         )
+    )
 
