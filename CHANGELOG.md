@@ -90,6 +90,11 @@ situations.
 - Set Kraken2 --confidence to 0.1 by default.
 - Adjusted HUMAnN2 cores to 20 (up from 8).
 - Adjusted MetaPhlAn2 cores to 5 (up from 4).
+- Changed so that if no report filename is given, a default of
+  "StaG_report-{datetime}.html" is used. If a filename is given that string is
+  used instead (i.e. no datetime added to the report filename). This makes it
+  easier to keep the report file when StaG is executed inside other workflows.
+  It also means that the report is no longer optional and is always generated.
 
 
 ### Removed
