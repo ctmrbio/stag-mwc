@@ -13,6 +13,9 @@ import pandas as pd
 """
 Generates a pretty areaplot from a collapsed feature table.
 """
+__author__ = "Justine Debelius"
+__date__ = "2020"
+__version__ = "1.0"
 
 __author__: 'JW Debelius'
 __date__: '2020-02'
