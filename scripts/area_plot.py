@@ -118,7 +118,7 @@ def level_taxonomy(table, taxa, samples, level, consider_nan=True):
         return level_.set_index(cols)
 
 
-def profile_one_level(collapsed, level, threshhold=0.01, count=8):
+def profile_one_level(collapsed, level, threshold=0.01, count=8):
     """
     Gets upper and lower tables for a single taxonomic level
     
@@ -142,7 +142,7 @@ def profile_one_level(collapsed, level, threshhold=0.01, count=8):
     collapsed['count'] = 1
     collapsed['count'] = collapsed['count'].cumsum()
 
-    thresh_ = (collapsed['mean'] > threshhold) & (collapsed['count'] <= count)
+    thresh_ = (collapsed['mean'] > threshold) & (collapsed['count'] <= count)
     top_taxa = collapsed.loc[thresh_].copy()
     top_taxa.drop(columns=['mean', 'count'], inplace=True)
     for l_ in np.arange(level):
@@ -359,7 +359,7 @@ def single_area_plot(table, level=3, samples=None,
         of interest. This is recommended for kraken/bracken tables, but not 
         applicable for some 16s sequences
     abund_thresh: float [0, 1]
-        The mean abundance threshhold for a sample to be plotted. This is 
+        The mean abundance threshold for a sample to be plotted. This is 
         in conjunction with the group threshold (`--group-thresh`) will be 
         used to determine the groups that are shown.
     group_thresh: int, [1, 12]
