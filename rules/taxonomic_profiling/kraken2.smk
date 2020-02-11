@@ -21,7 +21,7 @@ localrules:
     kreport2krona,
     bracken2krona,
     create_bracken_krona_plot,
-    
+    kraken2_area_plot,
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
@@ -40,12 +40,14 @@ if config["taxonomic_profile"]["kraken2"]:
     joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt")
     combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.txt")
     kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
+    kraken_area_plot = str(OUTDIR/"kraken2/area_plot.kraken2.pdf")
     all_outputs.extend(krakens)
     all_outputs.extend(kreports)
     all_outputs.extend(kreports_mpa_style)
     all_outputs.append(joined_kreport_mpa_style)
     all_outputs.append(combined_kreport)
     all_outputs.append(kraken_krona)
+    all_outputs.append(kraken_area_plot)
     
     citations.add(publications["Kraken2"])
     citations.add(publications["Krona"])
@@ -154,6 +156,28 @@ rule join_kraken2_mpa:
             2>&1 > {log}
         """
 
+
+rule kraken2_area_plot:
+    input:
+        OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt"
+    output:
+        report(OUTDIR/"kraken2/area_plot.kraken2.pdf",
+            category="Taxonomic profiling",
+            caption="../../report/area_plot.rst")
+    log:
+        str(LOGDIR/"kraken2/area_plot.kraken2.log")
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/area_plot.py \
+            --table {input} \
+            --output {output} \
+            --mode kraken2 \
+            2>&1 > {log}
+        """
+
+
 rule combine_kreports:
     input:
         kreports=expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES),
@@ -238,6 +262,7 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
 
     brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
     brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES)
+    bracken_area_plot = str(OUTDIR/"kraken2/area_plot.bracken.pdf")
     bracken_krona = str(OUTDIR/"kraken2/all_samples.bracken.krona.html")
     all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt")
 
@@ -245,6 +270,7 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
     all_outputs.extend(brackens_mpa_style)
     all_outputs.append(bracken_krona)
     all_outputs.append(all_table_mpa)
+    all_outputs.append(bracken_area_plot)
 
 
 rule bracken_kreport:
@@ -351,6 +377,27 @@ rule join_bracken_mpa:
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
             {input.txt} \
+            2>&1 > {log}
+        """
+
+
+rule bracken_area_plot:
+    input:
+        OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt"
+    output:
+        report(OUTDIR/"kraken2/area_plot.bracken.pdf",
+            category="Taxonomic profiling",
+            caption="../../report/area_plot.rst")
+    log:
+        str(LOGDIR/"kraken2/area_plot.bracken.log")
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/area_plot.py \
+            --table {input} \
+            --output {output} \
+            --mode kraken2 \
             2>&1 > {log}
         """
 

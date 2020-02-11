@@ -26,9 +26,11 @@ if config["taxonomic_profile"]["metaphlan2"]:
     mpa_combined = expand(f"{OUTDIR}/metaphlan2/all_samples.metaphlan2.{{ext}}",
             ext=("txt", "krona.html"))
     mpa_plot = f"{OUTDIR}/metaphlan2/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf"
+    mpa_area_plot = f"{OUTDIR}/metaphlan2/area_plot.metaphlan2.pdf"
     all_outputs.extend(mpa_outputs)
     all_outputs.extend(mpa_combined)
     all_outputs.append(mpa_plot)
+    all_outputs.append(mpa_area_plot)
 
     citations.add(publications["MetaPhlAn2"])
     citations.add(publications["Krona"])
@@ -122,6 +124,28 @@ rule combine_metaphlan2_tables:
         merge_metaphlan_tables.py {input} > {output.txt}
         sed --in-place 's/\.metaphlan2//g' {output.txt} 
         """
+
+
+rule metaphlan2_area_plot:
+    input:
+        OUTDIR/"metaphlan2/all_samples.metaphlan2.txt"
+    output:
+        report(OUTDIR/"metaphlan2/area_plot.metaphlan2.pdf",
+            category="Taxonomic profiling",
+            caption="../../report/area_plot.rst")
+    log:
+        str(LOGDIR/"metaphlan2/area_plot.log")
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/area_plot.py \
+            --table {input} \
+            --output {output} \
+            --mode metaphlan2 \
+            2>&1 > {log}
+        """
+
 
 rule plot_metaphlan2_heatmap:
     """Plot MetaPhlAn2 heatmap."""
