@@ -502,7 +502,7 @@ rule join_bracken_filtered:
     output:
         table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.txt",
                category="Taxonomic profiling",
-               caption="../../report/bracken_table.rst"),
+               caption="../../report/bracken_table_filtered.rst"),
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
     threads:
