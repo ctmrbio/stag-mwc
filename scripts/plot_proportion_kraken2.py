@@ -59,20 +59,22 @@ if __name__ == "__main__":
     df = pd.DataFrame(proportions, columns=["Sample", "Proportion"]).set_index("Sample").rename(columns={"Proportion": f"% {action}"})
     print("Loaded {} proportions for {} samples.".format(df.shape[0], len(df.index.unique())))
 
-    fig, ax = plt.subplots()
-    df.plot(kind="hist", ax=ax)
+    fig, ax = plt.subplots(figsize=(7, 5))
+    df.plot(kind="hist", ax=ax, legend=None)
     ax.set_title(f"Proportion {action} reads")
     ax.set_xlabel(f"Proportion {action} reads")
     ax.set_ylabel("Frequency")
-    fig.savefig(options.histogram)
+    fig.savefig(options.histogram, bbox_inches="tight")
 
 
-    fig2, ax2 = plt.subplots()
-    df.plot(kind="barh", ax=ax2)
+    fig2_width = max(5, max(len(s) for s in df.index.str) * 0.4)
+    fig2_height = max(3, df.shape[0] * 0.25)
+    fig2, ax2 = plt.subplots(figsize=(fig2_width, fig2_height))
+    df.plot(kind="barh", ax=ax2, legend=None)
     ax2.set_title(f"Proportion {action} reads")
     ax2.set_xlabel(f"Proportion {action} reads")
     ax2.set_ylabel("Sample")
-    fig2.savefig(options.barplot)
+    fig2.savefig(options.barplot, bbox_index="tight")
 
     df.to_csv(options.table, sep="\t")
 
