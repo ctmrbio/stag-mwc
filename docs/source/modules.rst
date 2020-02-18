@@ -118,6 +118,141 @@ one plot per sample.
 
 
 
+Taxonomic profiling
+*******************
+
+Kaiju
+-----
+:Tool: `Kaiju`_
+:Output folder: ``kaiju``
+
+Run `Kaiju`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs several files per sample (one per taxonomic level specified in the
+config), plus two files that combine all samples in the run: an HTML Krona
+report with the profiles of all samples and a TSV table per taxonomic level.
+The output files are::
+
+    <sample>.kaiju
+    <sample>.kaiju.<level>.txt
+    <sample>.krona
+    all_samples.kaiju.krona.html
+    all_samples.kaiju.<level>.txt
+
+Kraken2
+-------
+:Tool: `Kraken2`_
+:Output folder: ``kraken2``
+
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile. 
+Optionally Bracken can be run to produce abundance profiles for each sample at a
+user-specified taxonomic level. The Kraken2 module produces the following files::
+
+    <sample>.kraken
+    <sample>.kreport
+    all_samples.kraken2.txt
+    all_samples.mpa_style.txt
+
+This modules outputs two tables containing the same information in two formats:
+one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
+(``mpa_style``). The optional Bracken further adds additional output files for
+each sample::
+
+    <sample>.<taxonomic_level>.bracken
+    <sample>.<taxonomic_level>.filtered.bracken
+    <sample>_bracken.kreport
+    <sample>.bracken.mpa_style.txt
+    all_samples.<taxonomic_level>.bracken.txt
+    all_samples.<taxonomic_level>.filtered.bracken.txt
+    all_samples.bracken.mpa_style.txt
+    
+
+MetaPhlAn2
+----------
+:Tool: `MetaPhlAn2`_
+:Output folder: ``metaphlan2``
+
+Run `MetaPhlAn2`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs three files per sample, plus three summaries for all samples::
+
+    <sample>.bowtie2.bz2
+    <sample>.metaphlan2.krona
+    <sample>.metaphlan2.txt
+    
+    all_samples.metaphlan2.krona.html
+    all_samples.Species_top50.pdf
+    all_samples.metaphlan2.txt
+
+The file called ``all_samples.Species_top50.pdf`` contains a clustered heatmap
+plot showing abundances of the top 50 species across all samples. The taxonomic
+level and the top ``N`` can be adjusted in the config.
+
+
+Functional profiling
+**************
+
+HUMAnN2
+----------
+:Tool: `HUMAnN2`_
+:Output folder: ``humann2``
+
+Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
+Outputs five files per sample, plus three summaries for all samples::
+
+    <sample>.genefamilies_relab.txt
+    <sample>.genefamilies.txt
+    <sample>.pathabundance_relab.txt
+    <sample>.pathabundance.txt
+    <sample>.pathcoverage.txt
+    
+    all_samples.humann2_genefamilies.txt
+    all_samples.humann2_pathcoverage.txt
+    all_samples.humann2_pathabundances.txt
+
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
+so all MetaPhlAn2-associated steps are run regardless of whether it is actually
+enabled in ``config.yaml`` or not.
+
+HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
+It is possible to limit the number of concurrent HUMANn2 processes by using
+e.g. `--resources humann2=3` to tell Snakemake to not run more than three
+instances in parallel.
+
+.. note::
+
+    Until HUMAnN2 v2.9 has been released it is important to make sure you run
+    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
+    does not support the most recent MPA2 database version (201901).
+
+    
+
+
+Antibiotic resistance
+*********************
+
+Groot
+-------
+:Tool: `groot`_
+:Output folder: ``groot``
+
+Run `groot`_ to align reads to an antibiotic resistance gene database to
+produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
+containing two files and two subfolders::
+
+    <sample>/<sample>.groot_aligned.bam
+    <sample>/<sample>.groot_report.txt
+    <sample>/<sample>/groot-graphs
+    <sample>/<sample>/groot-plots
+
+The ``<sample>.groot.bam`` file contains mapping results against all resistance
+gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
+observed antibiotic resistance genes in the sample. The two subfolders contain 
+all mapped graphs and coverage plots of all detected antibiotic resistance genes.
+
+The read lengths input to `groot`_ must conform to the settings used during
+`groot`_ database construction. The length window can be configured in the
+config file.
+
+
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
@@ -293,139 +428,6 @@ featureCounts ``extra`` configuration setting, e.g.::
             extra: "-F SAF"
 
 
-Taxonomic profiling
-*******************
-
-Kaiju
------
-:Tool: `Kaiju`_
-:Output folder: ``kaiju``
-
-Run `Kaiju`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs several files per sample (one per taxonomic level specified in the
-config), plus two files that combine all samples in the run: an HTML Krona
-report with the profiles of all samples and a TSV table per taxonomic level.
-The output files are::
-
-    <sample>.kaiju
-    <sample>.kaiju.<level>.txt
-    <sample>.krona
-    all_samples.kaiju.krona.html
-    all_samples.kaiju.<level>.txt
-
-Kraken2
--------
-:Tool: `Kraken2`_
-:Output folder: ``kraken2``
-
-Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile. 
-Optionally Bracken can be run to produce abundance profiles for each sample at a
-user-specified taxonomic level. The Kraken2 module produces the following files::
-
-    <sample>.kraken
-    <sample>.kreport
-    all_samples.kraken2.txt
-    all_samples.mpa_style.txt
-
-This modules outputs two tables containing the same information in two formats:
-one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
-(``mpa_style``). The optional Bracken further adds additional output files for
-each sample::
-
-    <sample>.<taxonomic_level>.bracken
-    <sample>.<taxonomic_level>.filtered.bracken
-    <sample>_bracken.kreport
-    <sample>.bracken.mpa_style.txt
-    all_samples.<taxonomic_level>.bracken.txt
-    all_samples.<taxonomic_level>.filtered.bracken.txt
-    all_samples.bracken.mpa_style.txt
-    
-
-MetaPhlAn2
-----------
-:Tool: `MetaPhlAn2`_
-:Output folder: ``metaphlan2``
-
-Run `MetaPhlAn2`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs three files per sample, plus three summaries for all samples::
-
-    <sample>.bowtie2.bz2
-    <sample>.metaphlan2.krona
-    <sample>.metaphlan2.txt
-    
-    all_samples.metaphlan2.krona.html
-    all_samples.Species_top50.pdf
-    all_samples.metaphlan2.txt
-
-The file called ``all_samples.Species_top50.pdf`` contains a clustered heatmap
-plot showing abundances of the top 50 species across all samples. The taxonomic
-level and the top ``N`` can be adjusted in the config.
-
-
-Functional profiling
-**************
-
-HUMAnN2
-----------
-:Tool: `HUMAnN2`_
-:Output folder: ``humann2``
-
-Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
-Outputs five files per sample, plus three summaries for all samples::
-
-    <sample>.genefamilies_relab.txt
-    <sample>.genefamilies.txt
-    <sample>.pathabundance_relab.txt
-    <sample>.pathabundance.txt
-    <sample>.pathcoverage.txt
-    
-    all_samples.humann2_genefamilies.txt
-    all_samples.humann2_pathcoverage.txt
-    all_samples.humann2_pathabundances.txt
-
-Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
-so all MetaPhlAn2-associated steps are run regardless of whether it is actually
-enabled in ``config.yaml`` or not.
-
-HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
-It is possible to limit the number of concurrent HUMANn2 processes by using
-e.g. `--resources humann2=3` to tell Snakemake to not run more than three
-instances in parallel.
-
-.. note::
-
-    Until HUMAnN2 v2.9 has been released it is important to make sure you run
-    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
-    does not support the most recent MPA2 database version (201901).
-
-    
-
-
-Antibiotic resistance
-*********************
-
-Groot
--------
-:Tool: `groot`_
-:Output folder: ``groot``
-
-Run `groot`_ to align reads to an antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
-containing two files and two subfolders::
-
-    <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.txt
-    <sample>/<sample>/groot-graphs
-    <sample>/<sample>/groot-plots
-
-The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
-observed antibiotic resistance genes in the sample. The two subfolders contain 
-all mapped graphs and coverage plots of all detected antibiotic resistance genes.
-
-The read lengths input to `groot`_ must conform to the settings used during
-`groot`_ database construction. The length window can be configured in the
-config file.
 
 
 Assembly

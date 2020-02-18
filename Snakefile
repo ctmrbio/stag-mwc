@@ -61,12 +61,6 @@ include: "rules/naive/sketch_compare.smk"
 include: "rules/naive/bbcountunique.smk"
 
 #############################
-# Mappers
-#############################
-include: "rules/mappers/bbmap.smk"
-include: "rules/mappers/bowtie2.smk"
-
-#############################
 # Taxonomic profiling
 #############################
 include: "rules/taxonomic_profiling/kaiju.smk"
@@ -82,6 +76,12 @@ include: "rules/functional_profiling/humann2.smk"
 # Antibiotic resistance
 #############################
 include: "rules/antibiotic_resistance/groot.smk"
+
+#############################
+# Mappers
+#############################
+include: "rules/mappers/bbmap.smk"
+include: "rules/mappers/bowtie2.smk"
 
 #############################
 # Assembly
