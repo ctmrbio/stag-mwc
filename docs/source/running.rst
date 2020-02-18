@@ -29,48 +29,15 @@ other workflow steps depend on.
     run the workflow with this configuration file by using the ``--configfile``
     commandline argument when running the workflow.
 
-A reference database is required in order to run the ``remove_human`` step. If
+A reference database is required in order to run the ``host_removal`` step. If
 you already have it downloaded somewhere, point |full_name| to the location
-using the ``hg19_path`` parameter under the ``bbduk`` part of ``config.yaml``.
-|full_name| can download and index the database for you, see `Downloading
-databases` below. 
+using the ``db_path`` parameter under the ``remove_host`` section of ``config.yaml``.
 
 The config file contains a parameter called ``email``. This can be used to have
 the workflow send an email after a successful or failed run. Note that this 
 requires that the Linux system your workflow is running on has a working email
 configuration. It is also quite common that most email clients will mark email sent
 from unknown random computers as spam, so don't forget to check your spam folder.
-
-
-Downloading databases
-*********************
-Several of the tools used in |full_name| need special databases to work. Fortunately,
-|full_name| makes it easy to download and prepare the required databases. The first
-database you will need is the ``hg19`` reference database for use in the ``remove_host``
-read processing step. If you do not have it available before using |full_name|, run
-the following command to download and index the database for you::
-
-    snakemake index_hg19
-
-This will automatically download and index the BBMap masked hg19 file for you. The
-database will be downloaded to the ``dbdir`` parameter specified in ``config.yaml``.
-Note that creating the hg19 index requires at least 16GB of RAM, so it is typically
-not recommended to do this on a laptop.
-
-|full_name| can download several databases by typing ``snakemake <rule_name>``
-using any of the following rules::
-
-    build_metaphlan2_index
-    create_megares_index
-    download_humann2_databases
-    download_kaiju_database
-    download_minikraken2
-    index_hg19  (already shown above) 
-
-.. note::
-
-    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
-    you have downloaded.
 
 
 Running
@@ -91,7 +58,8 @@ is::
 
 where ``N`` is the maximum number of cores you want to allow for the workflow.
 Snakemake will automatically reduce the number of cores available to individual
-steps to this limit.
+steps to this limit. Another variant of ``--cores`` is called ``--jobs``, they
+are equivalent.
 
 .. note::
 
@@ -163,3 +131,40 @@ Execution report
 Snakemake provides facilites to produce an HTML report of the execution of the
 workflow. An HTML report is automatically created when the workflow finishes.
 It is currently very simple, but will be expanded in the future.
+
+
+Downloading databases (deprecated in v0.4)
+*********************
+.. note::
+    Since version 0.4 this section is considered outdated and no longer supported.
+    Some of the rules mentioned in this section still exist in the codebase, but 
+    the functionality provided by them should not be relied upon.
+
+Several of the tools used in |full_name| need special databases to work. Fortunately,
+|full_name| makes it easy to download and prepare the required databases. The first
+database you will need is the ``hg19`` reference database for use in the ``remove_host``
+read processing step. If you do not have it available before using |full_name|, run
+the following command to download and index the database for you::
+
+    snakemake index_hg19
+
+This will automatically download and index the BBMap masked hg19 file for you. The
+database will be downloaded to the ``dbdir`` parameter specified in ``config.yaml``.
+Note that creating the hg19 index requires at least 16GB of RAM, so it is typically
+not recommended to do this on a laptop.
+
+|full_name| can download several databases by typing ``snakemake <rule_name>``
+using any of the following rules::
+
+    build_metaphlan2_index
+    create_megares_index
+    download_humann2_databases
+    download_kaiju_database
+    download_minikraken2
+    index_hg19  (already shown above) 
+
+.. note::
+
+    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
+    you have downloaded.
+
