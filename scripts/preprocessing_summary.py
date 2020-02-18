@@ -77,15 +77,17 @@ if __name__ == "__main__":
     ]
     df = df_read_qc.join(df_host_removal)[final_column_order]
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6, 5))
     df[final_column_order[1:]]\
         .div(df["before_fastp"], axis=0)\
         .transpose()\
         .plot(kind="line", style=".-", ax=ax)
-    ax.set_title("Proportion passing through QC and host removal")
+    ax.set_title("Proportion reads passing through QC and host removal")
     ax.set_xlabel("Stage")
     ax.set_ylabel("% reads")
-    fig.savefig(args.output_plot)
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc="upper left", bbox_to_anchor=(0, -0.1))
+    fig.savefig(args.output_plot, bbox_inches="tight")
 
     df.to_csv(args.output_table, sep="\t")
 
