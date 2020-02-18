@@ -2,19 +2,22 @@
 #
 #    StaG Metagenomic Workflow Collaboration
 #                 StaG-mwc
-#         Copyright (c) 2018 Authors
+#         Copyright (c) 2018-2020
 #
-# Running `snakemake --use-conda --dryrun` in a clone of this repository should
-# successfully execute a test dry run of the workflow.
+# Full documentation available at:
+# https://stag-mwc.readthedocs.org
+
 from pathlib import Path
 import textwrap
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
-min_version("5.2.0")  # TODO: Bump version requirement when Snakemake is pathlib compatible
+min_version("5.5.4")
 
+from rules.publications import publications
 
-stag_version = "0.3.2-dev"
+stag_version = "0.4.0"
+singularity: "docker://continuumio/miniconda3:4.7.10"
 
 onstart:
     print("\n".join([
@@ -27,25 +30,20 @@ onstart:
     )
 
 configfile: "config.yaml"
+
 INPUTDIR = Path(config["inputdir"])
 OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
-citations = {(
-    "Boulund et al. (2018).",
-    "StaG-mwc: metagenomic workflow collaboration.",
-    "DOI:10.5281/zenodo.1483891",
-)}
-citations.add((
-    "Köster, Johannes and Rahmann, Sven (2012)",
-    "Snakemake - A scalable bioinformatics workflow engine.",
-    "Bioinformatics",
-))
+
+citations = {publications["StaG"], publications["Snakemake"]}
 
 SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 if len(SAMPLES) < 1:
     raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
+else:
+    print(f"Found the following samples in inputdir using input filename pattern '{config['input_fn_pattern']}':\n{SAMPLES}")
 
 report: "report/workflow.rst"
 
@@ -53,31 +51,21 @@ report: "report/workflow.rst"
 # Pre-processing
 #############################
 include: "rules/preproc/read_quality.smk"
-include: "rules/preproc/remove_human.smk"
-include: "rules/preproc/bbcountunique.smk"
+include: "rules/preproc/host_removal.smk"
+include: "rules/preproc/preprocessing_summary.smk"
 
 #############################
-# Naive sample comparison
+# Naive sample analyses
 #############################
-include: "rules/sketch_compare/sketch_compare.smk"
-
-#############################
-# Mappers
-#############################
-include: "rules/mappers/bbmap.smk"
-include: "rules/mappers/bowtie2.smk"
+include: "rules/naive/sketch_compare.smk"
+include: "rules/naive/bbcountunique.smk"
 
 #############################
 # Taxonomic profiling
 #############################
-include: "rules/taxonomic_profiling/centrifuge.smk"
 include: "rules/taxonomic_profiling/kaiju.smk"
 include: "rules/taxonomic_profiling/kraken2.smk"
 include: "rules/taxonomic_profiling/metaphlan2.smk"
-
-#############################
-# Assembly
-#############################
 
 #############################
 # Functional profiling
@@ -88,6 +76,22 @@ include: "rules/functional_profiling/humann2.smk"
 # Antibiotic resistance
 #############################
 include: "rules/antibiotic_resistance/groot.smk"
+
+#############################
+# Mappers
+#############################
+include: "rules/mappers/bbmap.smk"
+include: "rules/mappers/bowtie2.smk"
+
+#############################
+# Assembly
+#############################
+include: "rules/assembly/metawrap.smk"
+
+#############################
+# MultiQC
+#############################
+include: "rules/multiqc/multiqc.smk"
 
 
 localrules: all
@@ -127,16 +131,6 @@ onsuccess:
 
     print("\n".join([
         "",
-        "If you use the output from StaG-mwc in your research,",
-        "please cite the following publications:",
-        ])
-    )
-
-    for citation in sorted(set(citations)):
-        print(textwrap.indent("\n".join(["", *citation]), " "*4))
-
-    print("\n".join([
-        "",
         "="*60,
         ])
     )
@@ -147,7 +141,18 @@ onsuccess:
     if config["report"]:
         from sys import argv
         from datetime import datetime
+
         report_datetime = datetime.now().strftime("%Y%m%d-%H%S")
+
+        citation_filename = f"citations-{report_datetime}.rst"
+        with open(citation_filename, "w") as citation_file:
+            for citation in sorted(citations):
+                citation_file.write("* "+citation+"\n")
+        citations_link = Path("citations.rst")
+        if citations_link.exists():
+            Path("citations.rst").unlink()
+        Path("citations.rst").symlink_to(citation_filename)
+
         snakemake_call = " ".join(argv)
         shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
         shell("{snakemake_call} --report {report}-{datetime}.html".format(

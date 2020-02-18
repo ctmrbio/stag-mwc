@@ -4,14 +4,22 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python =3.5
-    - bbmap =37.99
-    - centrifuge =1.0.3
-    - kaiju =1.6.2
-    - kraken2 =2.0.7_beta
+    - python =3.7
+    - fastp =0.20.0
+    - bbmap =38.68
+    - kaiju =1.7.2
+    - kraken2 =2.0.8_beta
+    - bracken =2.5
     - krona =2.7
-    - matplotlib =2.2.2
-    - pandas =0.22.0
-    - seaborn =0.8.1
+    - matplotlib =3.1.1
+    - multiqc =1.8
+    - pandas =0.25.1
+    - seaborn =0.9.0
     - subread =1.6.0
-    - groot =0.8.3
+    - sambamba =0.7.0
+    - samtools =1.9
+    - groot =0.8.4
+    - pigz =2.4
+    - pip
+    - pip:
+        - fastcluster

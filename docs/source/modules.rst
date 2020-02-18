@@ -1,20 +1,24 @@
 .. _BBCountUnique: https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/calcuniqueness-guide/
-.. _BBDuk:  https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbduk-guide/
+.. _FastP:  https://github.com/OpenGene/fastp
 .. _BBMap: https://sourceforge.net/projects/bbmap/
-.. _Centrifuge: https://ccb.jhu.edu/software/centrifuge/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
+.. _Bracken: https://ccb.jhu.edu/software/bracken/
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 .. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
+.. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
+.. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
+.. _MEGAHIT: https://github.com/voutcn/megahit
+.. _MultiQC: https://multiqc.info/
 
 Modules
 =======
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
-sequencing reads (using `FastQC`_), followed by human sequence removal (using
+sequencing reads (using `FastQC`_), followed by host sequence removal (using
 `BBMap`_). This section of the documentation aims to describe useful details
 about the separate tools that are used in |full_name|.
 
@@ -29,38 +33,64 @@ Pre-processing
 
 qc_reads
 --------------
-:Tools: `FastQC`_, `BBDuk`_
-:Output folder: ``fastqc``, ``trimmed_qa``
+:Tools: `FastP`_
+:Output folder: ``fastp``
 
-The quality control module uses `FastQC`_ to produce HTML reports of the
-quality of the input reads. The quality control module also trims adapter
+The quality control module uses `FastP`_ to produce HTML reports of the quality
+of the input and output reads. The quality control module also trims adapter
 sequences and performs quality trimming of the input reads. The quality assured
-reads are output into ``trimmed_qa``.
+reads are output into ``fastp``. Output filenames are::
 
-remove_human
+    <sample>_{1,2}.fq.gz
+
+.. note:: 
+
+    It is possible to skip fastp processing. StaG then replaces the
+    output files with symlinks to the input files.
+
+remove_host
 --------------
-:Tool: `BBMap`_
-:Output folder: ``filtered_human``
+:Tool: `Kraken2`_
+:Output folder: ``host_removal``
 
-The ``remove_human`` module uses `BBMap`_ to map reads against a specially
-filtered and masked version of the human genome to remove reads matching to the
-human genome. The output is a pair of paired-end FASTQ files, plus a single
-interleaved FASTQ file with all reads that matched the human reference.
+The ``remove_host`` module uses `Kraken2`_ to classify reads against a database
+of host sequences to remove reads matching to non-desired host genomes. The
+output are two sets of pairs of paired-end FASTQ files, and optionally one
+Kraken2 classification file and one Kraken2 summary report.  In addition, two
+PDF files with 1) a basic histogram plot of the proportion of host reads
+detected in each sample, and 2) a barplot of the same. A TSV table with the raw
+proportion data is also provided::
+
+    <sample>_{1,2}.fq.gz
+    <sample>.host_{1,2}.fq.gz
+    host_barplot.pdf
+    host_histogram.pdf
+    host_proportions.txt
+
+.. note::
+
+    It is possible to skip host removal. StaG then replaces the output files
+    with symlinks to the fastp output files.
 
 
-assess_depth
---------------
-:Tool: `BBCountUnique`_
-:Output folder: ``bbcountunique``
-
-The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
-to produce saturation curves. The saturation curve essentially shows a
-histogram of the proportion of unique kmers observed per reads processed, and
-can be used to assess how deep a sample has been sequenced. The module outputs
-one plot per sample.
+preprocessing_summary
+---------------------
+This module summarize the number of reads passing through each preprocessing
+step and produces a summary table and a basic line plot showing the proportions
+of reads after each step. For more detailed information about read QC please
+refer to the MulitQC report.
 
 
-Naive sample comparison
+multiqc
+-------
+:Tool: `MultiQC`_
+:Output folder: ``multiqc``
+
+`MultiQC`_ summarizes information about several steps in StaG in an easy-to-use
+HTML report. Refer to this report for details about e.g. read QC.
+
+
+Naive sample analysis
 ***********************
 
 sketch_compare
@@ -75,6 +105,154 @@ gzip-compressed sketches for each sample, as well as two heatmap plots showing
 the overall similarity of all samples (one with hierarchical clustering).
 
 
+assess_depth
+--------------
+:Tool: `BBCountUnique`_
+:Output folder: ``bbcountunique``
+
+The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
+to produce saturation curves. The saturation curve shows a histogram of the
+proportion of unique kmers observed per reads processed, and can be used to
+assess how deep a sample has been sequenced. The module outputs one plot per
+sample.
+
+
+
+Taxonomic profiling
+*******************
+
+Kaiju
+-----
+:Tool: `Kaiju`_
+:Output folder: ``kaiju``
+
+Run `Kaiju`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs several files per sample (one per taxonomic level specified in the
+config), plus two files that combine all samples in the run: an HTML Krona
+report with the profiles of all samples and a TSV table per taxonomic level.
+The output files are::
+
+    <sample>.kaiju
+    <sample>.kaiju.<level>.txt
+    <sample>.krona
+    all_samples.kaiju.krona.html
+    all_samples.kaiju.<level>.txt
+
+Kraken2
+-------
+:Tool: `Kraken2`_
+:Output folder: ``kraken2``
+
+Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile. 
+Optionally Bracken can be run to produce abundance profiles for each sample at a
+user-specified taxonomic level. The Kraken2 module produces the following files::
+
+    <sample>.kraken
+    <sample>.kreport
+    all_samples.kraken2.txt
+    all_samples.mpa_style.txt
+
+This modules outputs two tables containing the same information in two formats:
+one is the default Kraken2 output format, the other is a MetaPhlAn2-like format
+(``mpa_style``). The optional Bracken further adds additional output files for
+each sample::
+
+    <sample>.<taxonomic_level>.bracken
+    <sample>.<taxonomic_level>.filtered.bracken
+    <sample>_bracken.kreport
+    <sample>.bracken.mpa_style.txt
+    all_samples.<taxonomic_level>.bracken.txt
+    all_samples.<taxonomic_level>.filtered.bracken.txt
+    all_samples.bracken.mpa_style.txt
+    
+
+MetaPhlAn2
+----------
+:Tool: `MetaPhlAn2`_
+:Output folder: ``metaphlan2``
+
+Run `MetaPhlAn2`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs three files per sample, plus three summaries for all samples::
+
+    <sample>.bowtie2.bz2
+    <sample>.metaphlan2.krona
+    <sample>.metaphlan2.txt
+    
+    all_samples.metaphlan2.krona.html
+    all_samples.Species_top50.pdf
+    all_samples.metaphlan2.txt
+
+The file called ``all_samples.Species_top50.pdf`` contains a clustered heatmap
+plot showing abundances of the top 50 species across all samples. The taxonomic
+level and the top ``N`` can be adjusted in the config.
+
+
+Functional profiling
+**************
+
+HUMAnN2
+----------
+:Tool: `HUMAnN2`_
+:Output folder: ``humann2``
+
+Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
+Outputs five files per sample, plus three summaries for all samples::
+
+    <sample>.genefamilies_relab.txt
+    <sample>.genefamilies.txt
+    <sample>.pathabundance_relab.txt
+    <sample>.pathabundance.txt
+    <sample>.pathcoverage.txt
+    
+    all_samples.humann2_genefamilies.txt
+    all_samples.humann2_pathcoverage.txt
+    all_samples.humann2_pathabundances.txt
+
+Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
+so all MetaPhlAn2-associated steps are run regardless of whether it is actually
+enabled in ``config.yaml`` or not.
+
+HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
+It is possible to limit the number of concurrent HUMANn2 processes by using
+e.g. `--resources humann2=3` to tell Snakemake to not run more than three
+instances in parallel.
+
+.. note::
+
+    Until HUMAnN2 v2.9 has been released it is important to make sure you run
+    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
+    does not support the most recent MPA2 database version (201901).
+
+    
+
+
+Antibiotic resistance
+*********************
+
+Groot
+-------
+:Tool: `groot`_
+:Output folder: ``groot``
+
+Run `groot`_ to align reads to an antibiotic resistance gene database to
+produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
+containing two files and two subfolders::
+
+    <sample>/<sample>.groot_aligned.bam
+    <sample>/<sample>.groot_report.txt
+    <sample>/<sample>/groot-graphs
+    <sample>/<sample>/groot-plots
+
+The ``<sample>.groot.bam`` file contains mapping results against all resistance
+gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
+observed antibiotic resistance genes in the sample. The two subfolders contain 
+all mapped graphs and coverage plots of all detected antibiotic resistance genes.
+
+The read lengths input to `groot`_ must conform to the settings used during
+`groot`_ database construction. The length window can be configured in the
+config file.
+
+
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
@@ -85,10 +263,10 @@ counts per annotated feature via one of two options: 1) supplying a two-column
 tab-separated annotation file with one annotation per reference sequence, or 2)
 supplying a GTF or SAF format annotation file for features on the reference
 sequences. Option number 1 uses a custom Python script
-(``make_count_table.py``) to merge read counts per annotation which works well
-for annotations as large as your memory allows, and option number 2 uses
-`featureCounts`_ to summarize read counts per annotated feature. Option number
-2 is more flexible and normally faster for typical annotation scenarios, but
+(``scripts/make_count_table.py``) to merge read counts per annotation, which
+works well for annotations as large as your memory allows, and option number 2
+uses `featureCounts`_ to summarize read counts per annotated feature. Option
+number 2 is more flexible and fairly fast for typical annotation scenarios, but
 might not work when the number of unique features is much lower than the number
 of reference sequences. Read more about these alternatives in :ref:`Summarizing
 read counts` below.
@@ -148,6 +326,7 @@ configuration options, but with different settings. For example, to map against
           extra: ""
           counts_table:
               annotations: ""
+              columns: ""
           featureCounts:
               annotations: ""
               feature_type: ""
@@ -159,6 +338,7 @@ configuration options, but with different settings. For example, to map against
           extra: ""
           counts_table:
               annotations: "/path/to/db2/annotations.txt"
+              columns: "Genus,Phylum"
           featureCounts:
               annotations: ""
               feature_type: ""
@@ -174,20 +354,43 @@ make_count_table.py
 :Tool: ``make_count_table.py``
 :Output folder: ``<mapper>/<database_name>``
 
-A custom Python script produces a tab-separated count table with one row per
+A custom Python script produces tab-separated count tables with one row per
 annotation, and one column per sample. The input is an annotation file that
-consists of two tab-separated columns (no header)::
+consists of at least two tab-separated columns. The first line is a header line
+with column names (must not contain spaces and avoid strange characters). Here 
+is an example of column names:: 
 
-    Reference sequence
-    Annotation
+    Reference
+    Annotation1
+    Annotation2
+    ...
+    AnnotationN
 
-The script sums counts for each annotation for each sample. The output filename
-is ``all_samples.counts_table.tab``. To produce the output table, enter an
-annotation filename in the configuration file, e.g.::
+The column names doesn't matter, but the names defined in the annotation file
+can be used to select a subset of columns to summarize read counts for (see
+more below). The first column should contain the FASTA header for each
+reference sequence in the reference database used in the mapping. The count
+table script truncates the header string at the first space (because Bowtie2
+does this automatically it's easier to just always do it). In practice, since
+the script performs truncation of headers, it doesn't matter which mapper was
+used or if the annotation file contains entire headers or only the truncated
+headers, as long as the bit up until the first space in each reference header
+is unique. The script sums counts for each annotation for each sample. 
+
+One parameter for the count summarization is which columns in the annoation
+file to summarize on. The column names need to be assigned as a string of
+comma-separated column names. They must match exactly to the column names
+defined in the annotation file. This is configured in ``config.yaml``. The
+script outputs one file per column, with output filename matching
+``counts.<column_name>.txt``. The count table feature is activated by entering
+an annotation filename in the relevant section of the configuration file,
+e.g.::
 
     bbmap:
         counts_table:
             annotations: "path/to/annotations.tab"
+            columns: "Species,Genus,taxid"
+
 
 featureCounts
 .............
@@ -210,7 +413,7 @@ The featureCounts module outputs several files::
 
     all_samples.featureCounts
     all_samples.featureCounts.summary
-    all_samples.featureCounts.table.tsv
+    all_samples.featureCounts.table.txt
 
 The first two files are the default output files from `featureCounts`_, and the
 third file is a simplified tab-separated table with count per annotation, in a
@@ -225,108 +428,19 @@ featureCounts ``extra`` configuration setting, e.g.::
             extra: "-F SAF"
 
 
-Taxonomic profiling
-*******************
 
-Centrifuge
----------
-:Tool: `Centrifuge`_
-:Output folder: ``centrifuge``
 
-Run `Centrifuge`_ on the trimmed and filtered reads to produce a taxonomic
-profile.  Outputs two files per sample: ``<sample>.centrifuge_report.tsv`` and
-``<sample>.centrifuge.tsv``.
+Assembly
+********
 
-Kaiju
------
-:Tool: `Kaiju`_
-:Output folder: ``kaiju``
-
-Run `Kaiju`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs four files per sample, plus a summary HTML Krona report with the
-profiles of all samples (``all_samples.kaiju.krona.html``). The four per-sample
-output files are::
-
-    <sample>.kaiju
-    <sample>.kaiju.summary.family
-    <sample>.kaiju.summary.genus
-    <sample>.kaiju.summary.species
-    <sample>.krona
-
-Kraken2
+MEGAHIT
 -------
-:Tool: `Kraken2`_
-:Output folder: ``kraken2``
+:Tool: `MEGAHIT`_
+:Output folder: ``assembly/megahit``
 
-Run `Kraken2`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs two files per sample::
+Run MEGAHIT to assembly each sample. Outputs one subfolder per sample, containing
+contigs and several log and intermediate files::
 
-    <sample>.kraken
-    <sample>.kreport
+    assembly/megahit/<sample>/<sample>.contigs.fa
 
-MetaPhlAn2
-----------
-:Tool: `MetaPhlAn2`_
-:Output folder: ``metaphlan2``
-
-Run `MetaPhlAn2`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs three files per sample, plus three summaries for all samples::
-
-    <sample>.bowtie2.bz2
-    <sample>.metaphlan2.krona
-    <sample>.metaphlan2.txt
-    
-    all_samples.metaphlan2.krona.html
-    all_samples.metaphlan2.pdf
-    all_samples.metaphlan2.txt
-
-The file called ``all_samples.metaphlan2.pdf`` contains a standard MetaPhlAn2
-clustered heatmap plot containing all samples.
-
-
-Functional profiling
-**************
-
-HUMAnN2
-----------
-:Tool: `HUMAnN2`_
-:Output folder: ``humann2``
-
-Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
-Outputs three files per sample, plus three summaries for all samples::
-
-    <sample>.genefamilies.tsv
-    <sample>.pathcoverage.tsv
-    <sample>.pathabundances.tsv
-    
-    all_samples.humann2_genefamilies.tsv
-    all_samples.humann2_pathcoverage.tsv
-    all_samples.humann2_pathabundances.tsv
-
-Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2, so all
-MetaPhlAn2-associated steps are run regardless of whether it is actually
-enabled in ``config.yaml`` or not.
-
-
-Antibiotic resistance
-*********************
-
-Groot
--------
-:Tool: `groot`_
-:Output folder: ``groot``
-
-Run `groot`_ to align reads to an antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
-containing two files and two subfolders::
-
-    <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.tsv
-    <sample>/<sample>/groot-graphs
-    <sample>/<sample>/groot-plots
-
-The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.tsv`` file contains a list of
-observed antibiotic resistance genes in the sample. The two subfolders contain 
-all mapped graphs and coverage plots of all detected antibiotic resisatance genes.
-
+Assembly is the primary step required before binning the assembled contigs.

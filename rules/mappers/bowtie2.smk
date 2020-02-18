@@ -1,3 +1,4 @@
+# vim: syntax=python expandtab
 # Generic rules for alignment of reads to a reference database using Bowtie2
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
@@ -23,13 +24,13 @@ for bt2_config in config["bowtie2"]:
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.counts_table.tab"),
+        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
                 db_name=bt2_db_name,
-                sample=SAMPLES)
+                column=map(str.strip, bt2_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
                 db_name=bt2_db_name,
                 sample=SAMPLES,
-                output_type=["", ".summary", ".table.tsv"])
+                output_type=["", ".summary", ".table.txt"])
         all_outputs.extend(bowtie2_alignments)
         all_outputs.extend(bowtie2_stats)
 
@@ -47,18 +48,15 @@ for bt2_config in config["bowtie2"]:
                 err_message += "If you want to skip mapping with Bowtie2, set mappers:bowtie2:False in config.yaml."
                 raise WorkflowError(err_message)
             all_outputs.extend(featureCounts)
+            citations.add(publications["featureCount"])
 
-        citations.add((
-            "Langmead B, Salzberg S (2012).",
-            "Fast gapped-read alignment with Bowtie 2.",
-            "Nature Methods. 2012, 9:357-359.",
-        ))
+        citations.add(publications["Bowtie2"])
 
     rule:
         """Align reads using Bowtie2."""
         input:
-            sample=[OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-                    OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz"]
+            sample=[OUTDIR/"host_removal/{sample}_1.fq.gz",
+                    OUTDIR/"host_removal/{sample}_2.fq.gz"]
         output:
             OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)
         log:
@@ -98,6 +96,11 @@ for bt2_config in config["bowtie2"]:
                 2> {log}
             """
 
+
+    if bt2_config["counts_table"]["annotations"] and not bt2_config["counts_table"]["columns"]:
+        raise WorkflowError("Must define annotation column(s) for count table production!")
+
+
     rule:
         """Create count table for Bowtie2 mappings."""
         input:
@@ -105,9 +108,12 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            counts=OUTDIR/"bowtie2/{db_name}/all_samples.counts_table.tab".format(db_name=bt2_db_name),
+            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
+                    db_name=bt2_db_name,
+                    column=map(str.strip, bt2_config["counts_table"]["columns"].split(","))
+            )
         log:
-            str(LOGDIR/"bowtie2/{db_name}/all_samples.counts_table.log".format(db_name=bt2_db_name))
+            str(LOGDIR/"bowtie2/{db_name}/counts.log".format(db_name=bt2_db_name))
         message:
             "Creating count table for mappings to {db_name}".format(db_name=bt2_db_name)
         shadow:
@@ -117,13 +123,16 @@ for bt2_config in config["bowtie2"]:
         threads:
             1
         params:
-            annotations=bt2_config["counts_table"]["annotations"]
+            annotations=bt2_config["counts_table"]["annotations"],
+            columns=bt2_config["counts_table"]["columns"],
+            outdir=OUTDIR/"bowtie2/{db_name}/".format(db_name=bt2_db_name),
         shell:
             """
             scripts/make_count_table.py \
-                --annotations {params.annotations} \
+                --annotation-file {params.annotations} \
+                --columns {params.columns} \
+                --outdir {params.outdir} \
                 {input} \
-                > {output} \
                 2> {log}
             """
 
@@ -137,7 +146,7 @@ for bt2_config in config["bowtie2"]:
                     sample=SAMPLES)
         output:
             counts=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts".format(db_name=bt2_db_name),
-            counts_table=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.table.tsv".format(db_name=bt2_db_name),
+            counts_table=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.table.txt".format(db_name=bt2_db_name),
             summary=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.summary".format(db_name=bt2_db_name),
         log:
             str(LOGDIR/"bowtie2/{db_name}/all_samples.featureCounts.log".format(db_name=bt2_db_name))

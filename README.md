@@ -2,7 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/125840716.svg)](https://zenodo.org/badge/latestdoi/125840716)
 [![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
-<!--[![Build Status](https://travis-ci.org/snakemake-workflows/mwc.svg?branch=master)](https://travis-ci.org/snakemake-workflows/mwc) -->
+[![CircleCI](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master.svg?style=svg)](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master)
+
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
 This repo contains the code for a Snakemake workflow of the StaG Metagenomic
@@ -10,11 +11,7 @@ Workflow Collaboration (mwc). Currently, the project focus is a barebones
 metagenomics analysis workflow to produce primary output files from several
 different metagenomic analysis tools. 
 
-## Authors
-
-* Fredrik Boulund (@boulund)
-* Lisa Olsson (@lis4matilda)
-* (your name here)
+Go to https://stag-mwc.readthedocs.org for the full documentation.
 
 ## Usage
 
@@ -26,7 +23,7 @@ StaG-mwc. Most people would probably want to install
 base environment. Conda will automatically install the required versions of 
 all tools required to run StaG-mwc.
 
-### Step 1: Install workflow
+### Step 1: Clone workflow
 To use StaG-mwc, you need a local copy of the workflow repository. Start by
 making a clone of the repository: 
 
@@ -62,17 +59,10 @@ documentation](https://snakemake.readthedocs.io) for further details on how to
 run Snakemake workflows on other types of cluster resources.
 
 
-### Automatic database download
-The workflow offers steps that can automatically download the required
-reference databases. Note that this step is normally only required once, as
-previously downloaded databases are reused. See the 
-[official documentation](https://stag-mwc.readthedocs.org) for more information.
-
-
 ## Testing
-Tests are currently not implemented. The ambition is that StaG-mwc will contain
-extensive tests to verify functionality. We plan to implement automated linting
-and testing on a small test data set via continuous integration.
+A very basic continuous integration test is currently in place. It merely
+validates the syntax by trying to let Snakemake build the dependency graph if
+all outputs are activated.
 
 
 ## Contributing
@@ -82,6 +72,11 @@ how to contribute to StaG-mwc.
 If you intend to modify or further develop this workflow, you are welcome to
 fork this reposity. Please consider sharing potential improvements via a pull
 request.
+
+## Citing
+If you find StaG-mwc useful in your research, please cite the Zenodo DOI:
+https://zenodo.org/record/1483891
+
 
 # Logo attribution
 <a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>

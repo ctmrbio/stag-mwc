@@ -7,18 +7,13 @@ localrules:
     plot_sample_similarity,
 
 
-if config["sketch_compare"]:
+if config["naive"]["sketch_compare"]:
     # Add final output files from this module to 'all_outputs' from the
     # main Snakefile scope.
     sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
     all_outputs.append(sample_similarity_plot)
 
-    citations.add((
-        "Bushnell, B. (2016).",
-        "BBMap short read aligner.",
-        "University of California, Berkeley, California.",
-        "Available online at: http://sourceforge.net/projects/bbmap.",
-    ))
+    citations.add(publications["BBMap"])
 
 
 rule sketch:

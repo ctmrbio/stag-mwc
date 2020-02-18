@@ -38,24 +38,24 @@ for i in range(STATUS_ATTEMPTS):
 
 status = res[jobid]
 
-if (status == "BOOT_FAIL"):
+if (status.startswith("BOOT_FAIL")):
     print("failed")
-elif (status == "CANCELLED"):
+elif (status.startswith("CANCELLED")):
     print("failed")
-elif (status == "COMPLETED"):
+elif (status.startswith("COMPLETED")):
     print("success")
-elif (status == "DEADLINE"):
+elif (status.startswith("DEADLINE")):
     print("failed")
-elif (status == "FAILED"):
+elif (status.startswith("FAILED")):
     print("failed")
-elif (status == "NODE_FAIL"):
+elif (status.startswith("NODE_FAIL")):
     print("failed")
-elif (status == "PREEMPTED"):
+elif (status.startswith("PREEMPTED")):
     print("failed")
-elif (status == "TIMEOUT"):
+elif (status.startswith("TIMEOUT")):
     print("failed")
 # Unclear whether SUSPENDED should be treated as running or failed
-elif (status == "SUSPENDED"):
+elif (status.startswith("SUSPENDED")):
     print("failed")
 else:
     print("running")

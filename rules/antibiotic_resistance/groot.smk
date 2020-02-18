@@ -5,7 +5,9 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    create_groot_index
+    create_groot_index,
+    groot_report
+
 
 groot_db_path = Path(config["groot"]["index"])
 if config["antibiotic_resistance"]:
@@ -18,14 +20,10 @@ if config["antibiotic_resistance"]:
 
     groot_outputs = expand(str(OUTDIR/"groot/{sample}/{sample}.{output_type}"),
             sample=SAMPLES,
-            output_type=("groot_aligned.bam", "groot_report.tsv"))
+            output_type=("groot_aligned.bam", "groot_report.txt"))
     all_outputs.extend(groot_outputs)
 
-    citations.add((
-        "Rowe WPM, Winn MD (2018).",
-        "Indexed variation graphs for efficient and accurate resistome profiling.",
-        "Bioinformatics. 2018. doi: bty387",
-    ))
+    citations.add(publications["GROOT"])
 
 groot_config = config["groot"]
 rule create_groot_index:
@@ -64,16 +62,16 @@ rule create_groot_index:
 rule groot_align:
     """Align reads to groot index."""
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
+        read1=temp(OUTDIR/"groot/{sample}/{sample}_1.size_window.fq.gz"),
+        read2=temp(OUTDIR/"groot/{sample}/{sample}_2.size_window.fq.gz"),
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
-        report=OUTDIR/"groot/{sample}/{sample}.groot_report.tsv",
-        plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
         graphs=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
+        reformat=str(LOGDIR/"groot/{sample}.reformat.log"),
         align=str(LOGDIR/"groot/{sample}.groot_align.log"),
-        report=str(LOGDIR/"groot/{sample}.groot_report.log"),
     shadow:
         "shallow"
     conda:
@@ -81,19 +79,53 @@ rule groot_align:
     threads:
         8
     params:
-        index=groot_config["index"]
+        index=groot_config["index"],
+        minlength=groot_config["minlength"],
+        maxlength=groot_config["maxlength"],
     shell:
         """
+        reformat.sh \
+            in1={input.read1} \
+            in2={input.read2} \
+            out1={output.read1} \
+            out2={output.read2} \
+            minlength={params.minlength} \
+            maxlength={params.maxlength} \
+            tossbrokenreads \
+            2> {log.reformat}
         groot align \
-            --fastq {input.read1},{input.read2} \
+            --fastq {output.read1},{output.read2} \
             --graphDir {output.graphs} \
             --indexDir {params.index} \
             --processors {threads} \
             --logFile {log.align} \
             > {output.bam}
+        """
+
+rule groot_report:
+    """Report and plot ARG coverage from GROOT"""
+    input:
+        bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
+    output:
+        report=OUTDIR/"groot/{sample}/{sample}.groot_report.txt",
+        plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
+    log:
+        report=str(LOGDIR/"groot/{sample}.groot_report.log"),
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/stag-mwc.yaml"
+    threads:
+        1
+    params:
+        covcutoff=groot_config["covcutoff"],
+        lowcov=lambda _: "--lowCov" if groot_config["lowcov"] else ""
+    shell:
+        """
         groot report \
-            --bamFile {output.bam} \
-            --lowCov \
+            --bamFile {input.bam} \
+            --covCutoff {params.covcutoff} \
+            {params.lowcov} \
             --plotCov \
             --processors {threads} \
             --logFile {log.report} \

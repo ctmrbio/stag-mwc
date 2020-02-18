@@ -26,11 +26,23 @@ Miniconda3 is quick to install and does not require administrator permissions.
 After installing `Conda`_ and activating the base environment, install
 snakemake into your base environment::
 
-    (base)$ conda install snakemake
+    (base)$ conda install -c bioconda -c conda-forge snakemake
 
 These are the only external dependencies you need to install manually. The
 correct versions of any remaining dependencies will be automatically downloaded
 and installed when you run the workflow the first time.
+
+If you have a newly installed `miniconda3`_ environment, do not forget to add
+the following channels before installing snakemake::
+
+    conda config --add channels conda-forge
+    conda config --add channels bioconda
+
+You create new environment and activate environment or deactivate environment with::
+
+    conda create --name stag-mwc
+    source activate stag-mwc
+    source deactivate
 
 
 Download the workflow code
@@ -48,9 +60,8 @@ Congratulations
 ***************
 You have now installed |full_name|. 
 
-The intended way of working with |full_name|, or really any Snakemake
-workflow, is that you download/clone a complete copy of the repository for
-each analysis you intend to make. That way, the local copy you have will
-remain after the analysis has been run, so you can go back and see exactly
-what was run, and how. This forms the basis of how Snakemake enables
-traceability and reproducibility.
+The intended way of working with |full_name|, is that you download/clone a
+complete copy of the repository for each analysis you intend to make. That way,
+the local copy you have will remain after the analysis has been run, so you can
+go back and see exactly what was run, and how. This forms the basis of how
+Snakemake enables traceability and reproducibility.

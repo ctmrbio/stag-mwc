@@ -12,31 +12,26 @@ localrules:
 
 h_config = config["humann2"]
 if config["functional_profile"]["humann2"]:
-    if not any([Path(h_config["nucleotide_db"]).exists(),
-                Path(h_config["protein_db"]).exists()]):
+    if (not all([h_config["nucleotide_db"], h_config["protein_db"]]) 
+        or not any([Path(h_config["nucleotide_db"]).is_dir(), Path(h_config["protein_db"]).is_dir()])):
         err_message = "Could not find HUMAnN2 nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
         err_message += "Specify relevant paths in the humann2 section of config.yaml.\n"
-        err_message += "Run 'snakemake download_humann2_databases' to download and build the default ChocoPhlAn and UniRef90 databases in '{dbdir}'\n".format(dbdir=DBDIR/"humann2")
         err_message += "If you do not want to run HUMAnN2 for functional profiling, set functional_profile:humann2: False in config.yaml"
         raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2"
 
     # Add HUMAnN2 output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
-    humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.tsv"),
+    humann2_outputs = expand(str(OUTDIR/"humann2/{sample}_{output_type}.txt"),
             sample=SAMPLES,
             output_type=("genefamilies", "pathcoverage", "pathabundance",
                         "genefamilies_{method}".format(method=h_config["norm_method"])))
-    merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.tsv"),
+    merged_humann2_tables = expand(str(OUTDIR/"humann2/all_samples.humann2_{output_type}.txt"),
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
     all_outputs.extend(humann2_outputs)
     all_outputs.extend(merged_humann2_tables)
 
-    citations.add((
-        "Franzosa EA*, McIver LJ*, et al. (2018).",
-        "Species-level functional profiling of metagenomes and metatranscriptomes.",
-        "Nat Methods 15: 962-968.",
-    ))
+    citations.add(publications["HUMAnN2"])
 
 
 rule download_humann2_databases:
@@ -49,7 +44,7 @@ rule download_humann2_databases:
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     params:
         dbdir=config["dbdir"]+"/humann2"
     shell:
@@ -61,30 +56,40 @@ rule download_humann2_databases:
 rule humann2:
     """Functional profiling using HUMAnN2."""
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         taxonomic_profile=OUTDIR/"metaphlan2/{sample}.metaphlan2.txt",
     output:
-        OUTDIR/"humann2/{sample}_genefamilies.tsv",
-        OUTDIR/"humann2/{sample}_pathcoverage.tsv",
-        OUTDIR/"humann2/{sample}_pathabundance.tsv",
+        OUTDIR/"humann2/{sample}_genefamilies.txt",
+        OUTDIR/"humann2/{sample}_pathcoverage.txt",
+        OUTDIR/"humann2/{sample}_pathabundance.txt",
     log:
         stdout=str(LOGDIR/"humann2/{sample}.humann2.stdout.log"),
         stderr=str(LOGDIR/"humann2/{sample}.humann2.stderr.log"),
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads:
-        8
+        20
+    resources:
+        humann2=1
     params:
         outdir=OUTDIR/"humann2",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
     shell:
         """
-        cat {input.read1} {input.read2} > concat_input_reads.fq.gz \
-        && \
+        # Convert MPA2 v2.96.1 output to something like MPA2 v2.7.7 output 
+        # so it can be used with HUMAnN2, avoids StaG issue #138.
+        # TODO: Remove this once HUMANn2 v2.9 is out.
+        echo "#SampleID\t{wildcards.sample}" > mpa2_table-v2.7.7.txt
+        sed '/#/d' {input.taxonomic_profile} \
+            | cut -f1,3 \
+            >> mpa2_table-v2.7.7.txt
+
+        cat {input.read1} {input.read2} > concat_input_reads.fq.gz
+
         humann2 \
             --input concat_input_reads.fq.gz \
             --output {params.outdir} \
@@ -92,7 +97,7 @@ rule humann2:
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
             --threads {threads} \
-            --taxonomic-profile {input.taxonomic_profile} \
+            --taxonomic-profile mpa2_table-v2.7.7.txt \
             > {log.stdout} \
             2> {log.stderr}
         """
@@ -101,18 +106,18 @@ rule humann2:
 rule normalize_humann2_tables:
     """Normalize abundance tables from HUMAnN2."""
     input:
-        genefamilies=OUTDIR/"humann2/{sample}_genefamilies.tsv",
-        pathabundance=OUTDIR/"humann2/{sample}_pathabundance.tsv",
+        genefamilies=OUTDIR/"humann2/{sample}_genefamilies.txt",
+        pathabundance=OUTDIR/"humann2/{sample}_pathabundance.txt",
     output:
-        genefamilies=OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv".format(method=h_config["norm_method"]),
-        pathabundance=OUTDIR/"humann2/{{sample}}_pathabundance_{method}.tsv".format(method=h_config["norm_method"]),
+        genefamilies=OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt".format(method=h_config["norm_method"]),
+        pathabundance=OUTDIR/"humann2/{{sample}}_pathabundance_{method}.txt".format(method=h_config["norm_method"]),
     log:
         stdout=str(LOGDIR/"humann2/{sample}.humann2_sample_normalize.stdout.log"),
         stderr=str(LOGDIR/"humann2/{sample}.humann2_sample_normalize.stderr.log"),
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads: 
         1
     params:
@@ -140,22 +145,28 @@ rule normalize_humann2_tables:
 rule join_humann2_tables:
     """Join abundance tables from HUMAnN2."""
     input:
-        genefamilies=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv").format(method=h_config["norm_method"]),
+        genefamilies=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt").format(method=h_config["norm_method"]),
             sample=SAMPLES),
-        pathabundance=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.tsv").format(method=h_config["norm_method"]),
+        pathabundance=expand(str(OUTDIR/"humann2/{{sample}}_genefamilies_{method}.txt").format(method=h_config["norm_method"]),
             sample=SAMPLES),
-        pathcoverage=expand(str(OUTDIR/"humann2/{sample}_pathcoverage.tsv"), sample=SAMPLES),
+        pathcoverage=expand(str(OUTDIR/"humann2/{sample}_pathcoverage.txt"), sample=SAMPLES),
     output:
-        genefamilies=OUTDIR/"humann2/all_samples.humann2_genefamilies.tsv",
-        pathabundance=OUTDIR/"humann2/all_samples.humann2_pathabundance.tsv",
-        pathcoverage=OUTDIR/"humann2/all_samples.humann2_pathcoverage.tsv",
+        genefamilies=report(OUTDIR/"humann2/all_samples.humann2_genefamilies.txt",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
+        pathabundance=report(OUTDIR/"humann2/all_samples.humann2_pathabundance.txt",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
+        pathcoverage=report(OUTDIR/"humann2/all_samples.humann2_pathcoverage.txt",
+                category="Functional profiling",
+                caption="../../report/humann2_table.rst"),
     log:
         stdout=str(LOGDIR/"humann2/humann2_join_tables.stdout.log"),
         stderr=str(LOGDIR/"humann2/humann2_join_tables.stderr.log"),
     shadow:
         "shallow"
     conda:
-        "../../envs/biobakery.yaml"
+        "../../envs/humann2.yaml"
     threads: 
         1
     params:

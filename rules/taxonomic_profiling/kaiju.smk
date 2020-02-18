@@ -8,6 +8,10 @@ from snakemake.exceptions import WorkflowError
 localrules:
     download_kaiju_database,
     create_kaiju_krona_plot,
+    kaiju2krona,
+    kaiju_report,
+    join_kaiju_reports,
+    kaiju_area_plot,
 
 kaiju_config = config["kaiju"]
 if config["taxonomic_profile"]["kaiju"]:
@@ -23,23 +27,18 @@ if config["taxonomic_profile"]["kaiju"]:
     # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
     kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
-    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.summary.species"), sample=SAMPLES)
     kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
+    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
+    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
+    kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf"))
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
+    all_outputs.append(kaiju_joined_table)
+    all_outputs.append(kaiju_area_plot)
 
-    citations.append((
-        "Menzel, P., Ng, K. L., & Krogh, A. (2016).",
-        "Fast and sensitive taxonomic classification for metagenomics with Kaiju.",
-        "Nature communications, 7, 11257.",
-        "Available online at: https://github.com/bioinformatics-centre/kaiju",
-    ))
-    citations.append((
-        "Ondov BD, Bergman NH, and Phillippy AM.",
-        "Interactive metagenomic visualization in a Web browser.",
-        "BMC Bioinformatics. 2011 Sep 30; 12(1):385.",
-    ))
+    citations.add(publications["Kaiju"])
+    citations.add(publications["Krona"])
 
 
 rule download_kaiju_database:
@@ -62,8 +61,8 @@ rule download_kaiju_database:
 
 rule kaiju:
     input:
-        read1=OUTDIR/"filtered_human/{sample}_R1.filtered_human.fq.gz",
-        read2=OUTDIR/"filtered_human/{sample}_R2.filtered_human.fq.gz",
+        read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
+        read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     log:
@@ -100,14 +99,12 @@ rule kaiju:
         """
 
 
-rule kaiju_report:
+rule kaiju2krona:
+    """Convert Kaiju output to Krona input"""
     input:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     output:
         krona=OUTDIR/"kaiju/{sample}.krona",
-        family=OUTDIR/"kaiju/{sample}.summary.family",
-        genus=OUTDIR/"kaiju/{sample}.kaiju.summary.genus",
-        species=OUTDIR/"kaiju/{sample}.kaiju.summary.species",
     shadow: 
         "shallow"
     params:
@@ -117,33 +114,12 @@ rule kaiju_report:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-		kaiju2krona \
-			-t {params.nodes} \
-			-n {params.names} \
-			-i {input.kaiju} \
-			-o {output.krona} \
+        kaiju2krona \
+            -t {params.nodes} \
+            -n {params.names} \
+            -i {input.kaiju} \
+            -o {output.krona} \
             -u
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r species \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.species}
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r genus \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.genus}
-        kaijuReport \
-            -t {params.nodes} \
-            -n {params.names} \
-            -i {input.kaiju} \
-            -r family \
-            -l superkingdom,phylum,class,order,family,genus,species \
-            -o {output.family}
         """
 
 rule create_kaiju_krona_plot:
@@ -157,7 +133,82 @@ rule create_kaiju_krona_plot:
         "../../envs/stag-mwc.yaml"
     shell:
         """
-		ktImportText \
-			-o {output.krona_html} \
-			{input}
+        ktImportText \
+            -o {output.krona_html} \
+            {input}
         """
+
+rule kaiju_report:
+    input:
+        kaiju=OUTDIR/"kaiju/{sample}.kaiju",
+    output:
+        OUTDIR/"kaiju/{sample}.kaiju.{level}.txt",
+    log:
+        str(LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log")
+    shadow: 
+        "shallow"
+    params:
+        nodes=kaiju_config["nodes"],
+        names=kaiju_config["names"],
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        kaiju2table \
+            -t {params.nodes} \
+            -n {params.names} \
+            -r {wildcards.level} \
+            -l superkingdom,phylum,class,order,family,genus,species \
+            -o {output} \
+            {input.kaiju} \
+            2>&1 > {log}
+        """
+
+
+rule join_kaiju_reports:
+    input:
+        expand(str(OUTDIR/"kaiju/{sample}.kaiju.{{level}}.txt"), sample=SAMPLES),
+    output:
+        report(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt",
+            category="Taxonomic profiling",
+            caption="../../report/kaiju_table.rst")
+    log:
+        str(LOGDIR/"kaiju/join_kaiju_reports.{level}.log")
+    shadow: 
+        "shallow"
+    params:
+        feature_column=kaiju_config["feature_column"],
+        value_column=kaiju_config["value_column"],
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/join_tables.py \
+            --feature-column {params.feature_column} \
+            --value-column {params.value_column} \
+            --outfile {output} \
+            {input} \
+            2>&1 > {log}
+        """
+    
+
+rule kaiju_area_plot:
+    input:
+        OUTDIR/"kaiju/all_samples.kaiju.{level}.txt".format(level=kaiju_config["levels"][-1])
+    output:
+        report(OUTDIR/"kaiju/area_plot.kaiju.pdf",
+            category="Taxonomic profiling",
+            caption="../../report/area_plot.rst")
+    log:
+        str(LOGDIR/"kaiju/area_plot.log")
+    conda:
+        "../../envs/stag-mwc.yaml"
+    shell:
+        """
+        scripts/area_plot.py \
+            --table {input} \
+            --output {output} \
+            --mode kaiju \
+            2>&1 > {log}
+        """
+
