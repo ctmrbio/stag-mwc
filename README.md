@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/125840716.svg)](https://zenodo.org/badge/latestdoi/125840716)
 [![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![CircleCI](https://circleci.com/gh/ctmrbio/stag-mwc/tree/develop.svg?style=svg)](https://circleci.com/gh/ctmrbio/stag-mwc/tree/develop)
+[![CircleCI](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master.svg?style=svg)](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master)
 
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
