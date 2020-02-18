@@ -2,7 +2,7 @@
 # Assess sequencing depth of sample using BBCountUnique from the BBMap suite.
 # TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
-if config["assess_depth"]:
+if config["naive"]["assess_depth"]:
     # Add final output files from this module to 'all_outputs' from
     # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
     bcu_output = expand(str(OUTDIR/"bbcountunique/{sample}.{output_type}"),

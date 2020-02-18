@@ -17,7 +17,7 @@ input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
-report: "stag_report_"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
+report: "StaG_report-"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
 
 
@@ -26,8 +26,9 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 qc_reads: True
 host_removal: True
-assess_depth: False
-sketch_compare: False
+naive:
+    assess_depth: False
+    sketch_compare: False
 taxonomic_profile:
     kaiju: False
     kraken2: False
@@ -54,10 +55,16 @@ remove_host:
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
     keep_kreport: False
-bbcountunique:
-    interval: 5000           # Typically set to 10000, but test data requires <=5035
 multiqc:
     extra: ""
+
+
+#########################
+# Naive sample analyses
+#########################
+bbcountunique:
+    interval: 5000           # Typically set to 10000, but test data requires <=5035
+
 
 #########################
 # Taxonomic profiling

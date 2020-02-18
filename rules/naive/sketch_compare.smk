@@ -7,7 +7,7 @@ localrules:
     plot_sample_similarity,
 
 
-if config["sketch_compare"]:
+if config["naive"]["sketch_compare"]:
     # Add final output files from this module to 'all_outputs' from the
     # main Snakefile scope.
     sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
