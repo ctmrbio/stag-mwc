@@ -111,10 +111,10 @@ assess_depth
 :Output folder: ``bbcountunique``
 
 The ``assess_depth`` module uses `BBMap`_'s very fast kmer counting algorithms
-to produce saturation curves. The saturation curve essentially shows a
-histogram of the proportion of unique kmers observed per reads processed, and
-can be used to assess how deep a sample has been sequenced. The module outputs
-one plot per sample.
+to produce saturation curves. The saturation curve shows a histogram of the
+proportion of unique kmers observed per reads processed, and can be used to
+assess how deep a sample has been sequenced. The module outputs one plot per
+sample.
 
 
 
