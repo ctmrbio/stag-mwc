@@ -13,7 +13,7 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [0.4.0] Unreleased
+## [0.4.0] 2020-02-18
 ### Added
 - Added resource limiter for HUMAnN2 due to its intense use of huge temporary
   files in the output folder. Activated with --resources humann2=X, where X is
