@@ -16,7 +16,7 @@ min_version("5.5.4")
 
 from rules.publications import publications
 
-stag_version = "0.4.0-dev"
+stag_version = "0.4.0"
 singularity: "docker://continuumio/miniconda3:4.7.10"
 
 onstart:
