@@ -1,0 +1,26 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%help
+	Singularity image containing the conda environment defined in stag-mwc.yaml 
+	To build, run:
+	  sudo singularity build stag-mwc.simg Singularity.stag-mwc
+
+%files
+	stag-mwc.yaml
+
+%labels
+	Author boulund
+	Version 1.0
+	conda_env /opt/conda/envs/stag-mwc-main
+
+%environment
+    PATH=/opt/conda/envs/stag-mwc-main/bin:/opt/conda/bin:$PATH
+    export PATH
+
+%post
+	/opt/conda/bin/conda env create -f stag-mwc.yaml
+
+%runscript
+    exec echo "$@"
+
