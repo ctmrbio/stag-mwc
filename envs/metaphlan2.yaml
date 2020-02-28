@@ -1,4 +1,4 @@
-name: stag-mwc-biobakery
+name: stag-mwc-metaphlan2
 channels:
     - bioconda
     - conda-forge

@@ -46,6 +46,8 @@ rule assembly:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
         20
     params:
@@ -83,6 +85,8 @@ rule binning:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
         20
     params:
@@ -122,6 +126,8 @@ rule consolidate_bins:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
         20
     params:
@@ -158,6 +164,8 @@ rule blobology:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
         20
     params:

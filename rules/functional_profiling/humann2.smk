@@ -45,6 +45,8 @@ rule download_humann2_databases:
         "shallow"
     conda:
         "../../envs/humann2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     params:
         dbdir=config["dbdir"]+"/humann2"
     shell:
@@ -70,6 +72,8 @@ rule humann2:
         "shallow"
     conda:
         "../../envs/humann2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
         20
     resources:
@@ -118,6 +122,8 @@ rule normalize_humann2_tables:
         "shallow"
     conda:
         "../../envs/humann2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads: 
         1
     params:
@@ -167,6 +173,8 @@ rule join_humann2_tables:
         "shallow"
     conda:
         "../../envs/humann2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads: 
         1
     params:

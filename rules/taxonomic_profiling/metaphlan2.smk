@@ -52,7 +52,7 @@ rule metaphlan2:
     conda:
         "../../envs/metaphlan2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
         5
     params:
@@ -120,7 +120,7 @@ rule combine_metaphlan2_tables:
     conda:
         "../../envs/metaphlan2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
         1
     shell:
@@ -205,7 +205,7 @@ rule create_metaphlan2_krona_plots:
     conda:
         "../../envs/metaphlan2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
         1
     shell:
