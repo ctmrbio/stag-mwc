@@ -98,6 +98,8 @@ Singularity. The workflow comes preconfigured to download and use containers
 from Singularity hub. To use Singularity launch Snakemake with the
 ``--use-singularity`` argument. 
 
+.. _specifying-bind-paths: https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html#specifying-bind-paths
+
 .. note:: 
 
     Do not combine ``--use-conda`` with ``--use-singularity``.
@@ -113,7 +115,8 @@ from Singularity hub. To use Singularity launch Snakemake with the
     from the same folder, so you can bind the main database folder into the
     Singularity container with e.g. ``--singularity-args "-B /db"``. Note that
     database paths need to specified in the config file so that the paths are
-    correct from inside the Singularity container.
+    correct from inside the Singularity container. Read more about specifying
+    bind paths in the official Singularity docs: specifying-bind-paths_. 
 
 To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
 inside the workflow repository directory::
