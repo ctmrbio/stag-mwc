@@ -17,9 +17,11 @@ situations.
 ### Added
 - Created Singularity images for all conda environments. Run with
   `--use-singularity` (do not combine with `--use-conda`).
-- New cluster profile "pseudo-rules" for anonymous rules for mappers: "bbmap"
-  and "bowtie2" can now accept threads from "n" in the cluster profile. They
-  still use the time allocation for the "__default__" rule, however.
+- New cluster profile "pseudo-rules" for anonymous rules for mappers: `bbmap`
+  and `bowtie2` can now accept threads from `n` in the cluster profile. They
+  still use the time allocation for the `__default__` rule, however.
+- Added possibility to use `extra:` to define additional arguments passed on to
+  Slurm submissions. Useful to request e.g. fat nodes with `extra: "-C fat"` 
 
 ### Fixed
 
