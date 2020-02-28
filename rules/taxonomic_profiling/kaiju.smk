@@ -73,6 +73,8 @@ rule kaiju:
         4
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -112,6 +114,8 @@ rule kaiju2krona:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kaiju2krona \
@@ -152,6 +156,8 @@ rule kaiju_report:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kaiju2table \
@@ -181,6 +187,8 @@ rule join_kaiju_reports:
         value_column=kaiju_config["value_column"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/join_tables.py \
@@ -203,6 +211,8 @@ rule kaiju_area_plot:
         str(LOGDIR/"kaiju/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \

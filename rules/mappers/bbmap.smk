@@ -68,6 +68,8 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             8
         params:
@@ -113,6 +115,8 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             1
         params:
@@ -149,6 +153,8 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             4
         params:

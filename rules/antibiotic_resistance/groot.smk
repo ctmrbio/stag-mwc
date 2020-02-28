@@ -37,6 +37,8 @@ rule create_groot_index:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         dbdir=DBDIR/"groot/",
         db=groot_config["db"],
@@ -76,6 +78,8 @@ rule groot_align:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         8
     params:
@@ -115,6 +119,8 @@ rule groot_report:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     params:

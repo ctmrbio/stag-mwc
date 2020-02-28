@@ -87,6 +87,8 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         shell:
             """
             pileup.sh \
@@ -120,6 +122,8 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             1
         params:
@@ -156,6 +160,8 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             4
         params:

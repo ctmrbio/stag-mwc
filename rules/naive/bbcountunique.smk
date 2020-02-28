@@ -30,6 +30,8 @@ if config["naive"]["assess_depth"]:
             2
         conda:
             "../../envs/stag-mwc.yaml",
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         params:
             interval=config["bbcountunique"]["interval"]
         shell:

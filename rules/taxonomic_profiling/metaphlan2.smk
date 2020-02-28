@@ -51,6 +51,8 @@ rule metaphlan2:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         5
     params:
@@ -117,6 +119,8 @@ rule combine_metaphlan2_tables:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     shell:
@@ -137,6 +141,8 @@ rule metaphlan2_area_plot:
         str(LOGDIR/"metaphlan2/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -161,6 +167,8 @@ rule plot_metaphlan2_heatmap:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     params:
@@ -196,6 +204,8 @@ rule create_metaphlan2_krona_plots:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     shell:
