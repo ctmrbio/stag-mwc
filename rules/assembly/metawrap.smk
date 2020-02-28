@@ -49,7 +49,7 @@ rule assembly:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
-        20
+        cluster_config["assembly"]["n"] if "assembly" in cluster_config else 20
     params:
         outdir=lambda w: f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{w.sample}",
         assembler=mw_config["assembler"],
@@ -88,7 +88,7 @@ rule binning:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
-        20
+        cluster_config["binning"]["n"] if "binning" in cluster_config else 20
     params:
         outdir=lambda w: f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{w.sample}",
         universal=mw_config["universal"],
@@ -129,7 +129,7 @@ rule consolidate_bins:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
-        20
+        cluster_config["consolidate_bins"]["n"] if "consolidate_bins" in cluster_config else 20
     params:
         outdir=lambda w: f"{OUTDIR}/metawrap/consolidated_bins/{w.sample}",
         minimum_completion=mw_config["minimum_completion"],
@@ -167,7 +167,7 @@ rule blobology:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
     threads:
-        20
+        cluster_config["blobology"]["n"] if "blobology" in cluster_config else 20
     params:
         outdir=lambda w: f"{OUTDIR}/metawrap/blobology/{w.sample}",
     shell:

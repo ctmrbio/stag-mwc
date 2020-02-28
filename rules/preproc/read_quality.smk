@@ -33,7 +33,7 @@ if config["qc_reads"]:
         singularity:
             "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
-            4
+            cluster_config["fastp"]["n"] if "fastp" in cluster_config else 4
         params:
             extra=fastp_config["extra"],
         shell:

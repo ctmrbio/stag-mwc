@@ -71,7 +71,7 @@ for bbmap_config in config["bbmap"]:
         singularity:
             "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
-            8
+            cluster_config["bbmap"]["n"] if "bbmap" in cluster_config else 8
         params:
             db_path=bbmap_config["db_path"],
             min_id=bbmap_config["min_id"],

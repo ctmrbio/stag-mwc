@@ -70,7 +70,7 @@ rule kaiju:
     shadow: 
         "shallow"
     threads:
-        4
+        cluster_config["kaiju"]["n"] if "kaiju" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:

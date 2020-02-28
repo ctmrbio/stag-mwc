@@ -27,7 +27,7 @@ if config["naive"]["assess_depth"]:
         shadow: 
             "shallow"
         threads:
-            2
+            cluster_config["bbcountunique"]["n"] if "bbcountunique" in cluster_config else 2
         conda:
             "../../envs/stag-mwc.yaml",
         singularity:

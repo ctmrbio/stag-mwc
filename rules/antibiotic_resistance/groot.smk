@@ -81,7 +81,7 @@ rule groot_align:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
-        8
+        cluster_config["groot_align"]["n"] if "groot_align" in cluster_config else 8
     params:
         index=groot_config["index"],
         minlength=groot_config["minlength"],

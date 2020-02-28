@@ -32,7 +32,7 @@ rule sketch:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
-        4
+        cluster_config["sketch"]["n"] if "sketch" in cluster_config else 4
     shell:
         """
         sketch.sh \

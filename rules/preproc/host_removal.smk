@@ -48,7 +48,7 @@ if rh_config:
         singularity:
             "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
-            8
+            cluster_config["remove_host"]["n"] if "remove_host" in cluster_config else 8
         params:
             db=rh_config["db_path"],
             confidence=rh_config["confidence"],

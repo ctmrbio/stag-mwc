@@ -54,7 +54,7 @@ rule metaphlan2:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
-        5
+        cluster_config["metaphlan2"]["n"] if "metaphlan2" in cluster_config else 5
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
         bt2_index=mpa_config["bt2_index"],

@@ -85,7 +85,7 @@ rule kraken2:
     shadow: 
         "shallow"
     threads:
-        4
+        cluster_config["kraken2"]["n"] if "kraken2" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -118,7 +118,7 @@ rule kraken_mpa_style:
     log:
         str(LOGDIR/"kraken2/{sample}.mpa_style.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -144,7 +144,7 @@ rule join_kraken2_mpa:
     log:
         str(LOGDIR/"kraken2/join_kraken2_mpa_tables.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -297,7 +297,7 @@ rule bracken_kreport:
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.log")
     threads:
-        2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_profile else 2
     shadow:
         "shallow"
     conda:
@@ -330,7 +330,7 @@ rule bracken_all_levels:
     shadow:         # shadow required because est_abundance.py always creates the
         "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
     threads:
-        2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_profile else 2
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -358,7 +358,7 @@ rule bracken_mpa_style:
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -384,7 +384,7 @@ rule join_bracken_mpa:
     log:
         str(LOGDIR/"kraken2/join_bracken_mpa_tables.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -436,7 +436,7 @@ rule join_bracken:
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -508,7 +508,7 @@ rule filter_bracken:
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
@@ -538,7 +538,7 @@ rule join_bracken_filtered:
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:

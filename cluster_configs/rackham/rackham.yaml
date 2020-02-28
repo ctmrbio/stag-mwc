@@ -31,16 +31,6 @@ sketch:
     time: "00:20:00"
 
 #############################
-# Mappers
-#############################
-bbmap:
-    n: 8
-    time: "02:00:00"
-bowtie2:
-    n: 8
-    time: "02:00:00"
-
-#############################
 # Taxonomic profiling
 #############################
 kaiju:
@@ -52,6 +42,9 @@ kraken2:
 metaphlan2:
     n: 8
     time: "01:30:00"
+bracken:
+    n: 2
+    time: "01:00:00"
 
 #############################
 # Functional profiling
@@ -68,8 +61,27 @@ groot_align:
     time: "01:00:00"
 
 #############################
+# Mappers
+#############################
+bbmap:
+    n: 8
+    time: "02:00:00"
+bowtie2:
+    n: 8
+    time: "02:00:00"
+
+#############################
 # Assembly
 #############################
-megahit:
+assembly:
+    n: 20
+    time: "05:00:00"
+assembly:
+    n: 20
+    time: "05:00:00"
+consolidate_bins:
+    n: 20
+    time: "05:00:00"
+blobology:
     n: 20
     time: "05:00:00"

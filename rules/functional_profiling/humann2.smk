@@ -75,7 +75,7 @@ rule humann2:
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     threads:
-        20
+        cluster_config["humann2"]["n"] if "humann2" in cluster_config else 20
     resources:
         humann2=1
     params:

@@ -67,7 +67,7 @@ for bt2_config in config["bowtie2"]:
             index=bt2_config["db_prefix"],
             extra=bt2_config["extra"],
         threads:
-            8
+            cluster_config["bowtie2"]["n"] if "bowtie2" in cluster_config else 8
         wrapper:
             "0.23.1/bio/bowtie2/align"
 
