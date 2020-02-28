@@ -16,11 +16,18 @@ situations.
 ## [0.4.1] Unreleased
 ### Added
 - Created Singularity images for all conda environments. Run with
-  --use-singularity (do not combine with --use-conda).
+  `--use-singularity` (do not combine with `--use-conda`).
+- New cluster profile "pseudo-rules" for anonymous rules for mappers: "bbmap"
+  and "bowtie2" can now accept threads from "n" in the cluster profile. They
+  still use the time allocation for the "__default__" rule, however.
 
 ### Fixed
 
 ### Changed
+- Do not combine `--use-singularity` with `--use-conda` anymore. The new 
+  Singularity images already contain all dependencies.
+- All rules now define the number of threads from cluster_config if defined.
+  Old defaults are still used for local execution.
 
 ### Removed
 
