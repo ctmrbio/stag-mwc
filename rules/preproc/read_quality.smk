@@ -30,6 +30,8 @@ if config["qc_reads"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             4
         params:

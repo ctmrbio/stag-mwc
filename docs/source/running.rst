@@ -93,10 +93,32 @@ Slurm project account), as well as the number of CPUs, time, and memory
 requirements for each individual step. Snakemake uses this information when
 submitting jobs to the cluster scheduler.
 
+When running on a cluster it will likely work best if you run StaG using
+Singularity. The workflow comes preconfigured to download and use containers
+from Singularity hub. To use Singularity launch Snakemake with the
+``--use-singularity`` argument. 
+
+.. note:: 
+
+    Do not combine ``--use-conda`` with ``--use-singularity``.
+
+    It is important that you do not download the Singularity images from
+    Singularity hub too often due to quota limitations. To prevent |full_name|
+    from downloading the image again between several projects you can use the
+    ``--singularity-prefix`` to specify a directory where Snakemake can store
+    the downloaded images for reuse between projects.
+
+    Paths to databases need to be located so that they are accessible from
+    inside the Singularity containers. It's easiest if they are all available
+    from the same folder, so you can bind the main database folder into the
+    Singularity container with e.g. ``--singularity-args "-B /db"``. Note that
+    database paths need to specified in the config file so that the paths are
+    correct from inside the Singularity container.
+
 To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
 inside the workflow repository directory::
 
-    snakemake --use-conda --profile cluster_configs/rackham 
+    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --singularity-args "-B /proj/uppstore2017086/db" --profile cluster_configs/rackham 
 
 This will make Snakemake submit each workflow step as a separate cluster job
 using the CPU and time requirements specified in ``rackham.yaml`` inside the
@@ -118,12 +140,6 @@ disconnected and the pipeline needs to be restarted, remove slurm metadadata
 files before restarting pipeline using::
 
     (base)$ rm -rfv .snakemake/metadata
-
-.. note:: 
-
-    When running on a cluster it can speed up node initialization if you run
-    using Singularity containers and conda combined. This is done by running
-    snakemake with both the `--use-conda` and `--use-singularity` arguments.
 
 
 Execution report

@@ -88,6 +88,8 @@ rule kraken2:
         4
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         db=kraken2_config["db"],
         confidence=kraken2_config["confidence"],
@@ -119,6 +121,8 @@ rule kraken_mpa_style:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kreport2mpa.py \
@@ -143,6 +147,8 @@ rule join_kraken2_mpa:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -168,6 +174,8 @@ rule kraken2_area_plot:
         str(LOGDIR/"kraken2/area_plot.kraken2.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -191,6 +199,8 @@ rule combine_kreports:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/combine_kreports.py \
@@ -214,6 +224,8 @@ rule kreport2krona:
         1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/kreport2krona.py \
@@ -234,6 +246,8 @@ rule create_kraken2_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
 		ktImportText \
@@ -288,6 +302,8 @@ rule bracken_kreport:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -317,6 +333,8 @@ rule bracken_all_levels:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -343,6 +361,8 @@ rule bracken_mpa_style:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kreport2mpa.py \
@@ -367,6 +387,8 @@ rule join_bracken_mpa:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -392,6 +414,8 @@ rule bracken_area_plot:
         str(LOGDIR/"kraken2/area_plot.bracken.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -415,6 +439,8 @@ rule join_bracken:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="fraction_total_reads",
         feature_column="name",
@@ -442,6 +468,8 @@ rule bracken2krona:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/kreport2krona.py \
@@ -462,6 +490,8 @@ rule create_bracken_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
 		ktImportText \
@@ -481,6 +511,8 @@ rule filter_bracken:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
         include=kraken2_config["filter_bracken"]["include"],
@@ -509,6 +541,8 @@ rule join_bracken_filtered:
         2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="fraction_total_reads",
         feature_column="name",

@@ -15,6 +15,8 @@ situations.
 
 ## [0.4.1] Unreleased
 ### Added
+- Created Singularity images for all conda environments. Run with
+  --use-singularity (do not combine with --use-conda).
 
 ### Fixed
 
