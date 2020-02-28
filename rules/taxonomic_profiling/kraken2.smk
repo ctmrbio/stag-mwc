@@ -297,7 +297,7 @@ rule bracken_kreport:
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.log")
     threads:
-        cluster_config["bracken"]["n"] if "bracken" in cluster_profile else 2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
     shadow:
         "shallow"
     conda:
@@ -330,7 +330,7 @@ rule bracken_all_levels:
     shadow:         # shadow required because est_abundance.py always creates the
         "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
     threads:
-        cluster_config["bracken"]["n"] if "bracken" in cluster_profile else 2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
