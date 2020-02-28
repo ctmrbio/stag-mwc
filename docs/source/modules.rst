@@ -18,8 +18,8 @@ Modules
 =======
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
-sequencing reads (using `FastQC`_), followed by host sequence removal (using
-`BBMap`_). This section of the documentation aims to describe useful details
+sequencing reads (using `FastP`_), followed by host sequence removal (using
+`Kraken2`_). This section of the documentation aims to describe useful details
 about the separate tools that are used in |full_name|.
 
 The following subsections describe the function of each module included in
