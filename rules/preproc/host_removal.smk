@@ -6,7 +6,7 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 rh_config = config["remove_host"]
-if rh_config:
+if config["host_removal"]:
     db_path = Path(config["remove_host"]["db_path"])
     if not Path(db_path/"taxo.k2d").is_file():
         err_message = "Cannot find database for host sequence removal at: '{}/*.k2d'!\n".format(db_path)

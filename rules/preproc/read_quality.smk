@@ -1,6 +1,6 @@
 # vim: syntax=python expandtab
 # Read pre-processing 
-#TODO: Remove superfluous str conversions of paths in expand and log statements
+# TODO: Remove superfluous str conversions of paths in expand and log statements
 #      when Snakemake is pathlib compatible.
 
 if config["qc_reads"]:
