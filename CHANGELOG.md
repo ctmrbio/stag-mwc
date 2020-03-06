@@ -24,6 +24,8 @@ situations.
   Slurm submissions. Useful to request e.g. fat nodes with `extra: "-C fat"` 
 
 ### Fixed
+- The host removal module now correctly identifies setting host_removal: False
+  in the config file.
 
 ### Changed
 - Do not combine `--use-singularity` with `--use-conda` anymore. The new 
