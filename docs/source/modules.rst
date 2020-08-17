@@ -277,12 +277,13 @@ produce antibiotic resistance gene profiles. Output will structured as::
         │   ├ <sample>.group.tsv
         │   └ <sample>.mech.tsv
 
-The ``<sample>.amr.alignment.sam`` file contains aggregated results of gene counts for all 
-samples aligned against `megares`_, based on threshold in ``config.yaml``. Pasting gene 
-name or accession number into the database will provide detailed information and links to 
+``AMR_analytic_matrix.csv`` contains aggregated results of gene counts for all samples 
+aligned against `megares`_, based on the threshold set in ``config.yaml``. Pasting a gene name 
+or accession number into the database will provide detailed information and links to 
 published papers.
 
-`amrplusplus`_ can only be run with the ``--use-singularity`` setting.
+`amrplusplus`_ can only be run with the ``--use-singularity`` setting, meaning it can not be 
+executed with conda.
 
 Mappers
 *******
