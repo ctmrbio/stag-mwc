@@ -125,20 +125,18 @@ groot:
     maxlength: 125           # Maxlength for groot index
     covcutoff: 0.97          # Coverage cutoff for groot report
     lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
+
 amrplusplus:
-    databases:
-        megares_fasta: "scripts/amrplusplus/db/megares_modified_database_v2.00.fasta"
-        megares_annotation: "scripts/amrplusplus/db/megares_modified_annotations_v2.00.csv"
+    megares:
+        fasta: "databases/amrplusplus/megares_modified_database_v2.00.fasta"
+        annotation: "databases/amrplusplus/megares_modified_annotations_v2.00.csv"
     rarefaction:
-        script: "scripts/amrplusplus/bin/rarefaction"   # path to rarefaction script
         min: "5"                                        # starting rarefaction level
         max: "100"                                      # ending rarefaction level
         skip: "5"                                       # number of levels to skip
         samples: "1"                                    # number of iterations to sample at
     resistome:
-        script: "scripts/amrplusplus/bin/resistome"                     # path to resistome script
         threshold: "80"                                                 # resistome threshold
-    amr_long_to_wide: "scripts/amrplusplus/bin/amr_long_to_wide.py"     # path to amr_long_to_wide.py script
 
 #########################
 # Mappers
