@@ -127,7 +127,7 @@ groot:
     lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
 amrplusplus:
     databases:
-        db: "scripts/amrplusplus/db/megares_modified_database_v2.00.fasta"
+        megares_fasta: "scripts/amrplusplus/db/megares_modified_database_v2.00.fasta"
         annotation: "scripts/amrplusplus/db/megares_modified_annotations_v2.00.csv"
     rarefaction:
         script: "scripts/amrplusplus/bin/rarefaction"   # path to rarefaction script
