@@ -12,7 +12,7 @@
 #########################
 # Run configuration
 #########################
-inputdir: "/home/aron.arzoomand/amrplusplus/input"
+inputdir: "input"
 input_fn_pattern: "{sample}_{readpair}.fq.gz" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
@@ -177,4 +177,3 @@ metawrap:
     universal: "--universal"  # Use universal marker genes
     minimum_completion: 70
     maximum_contamination: 10
-
