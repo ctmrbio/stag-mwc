@@ -23,9 +23,6 @@ amrplusplus_config=config["amrplusplus"]
 
 rule build_amr_index:
     """Get the Megares_2.0 database and annotations"""
-    input:
-        R1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
-        R2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
     output:
         megares_db=amrplusplus_config["databases"]["db"],
         megares_annot=amrplusplus_config["databases"]["annotation"],
@@ -36,14 +33,12 @@ rule build_amr_index:
         "shallow"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
-    params:
-        db_dir="scripts/amrplusplus/db",
     shell:
         """
         wget -O {output.megares_db} https://raw.githubusercontent.com/meglab-metagenomics/amrplusplus_v2/master/data/amr/megares_modified_database_v2.00.fasta 
         wget -O {output.megares_annot} https://raw.githubusercontent.com/meglab-metagenomics/amrplusplus_v2/master/data/amr/megares_modified_annotations_v2.00.csv
         bwa index {output.megares_db} \
-        2> {log.stderr \
+        2> {log.stderr} \
         > {log.stdout}
         """
 
@@ -108,7 +103,7 @@ rule run_resistome:
         -class_fp {output.klass} \
         -type_fp {output.typ} \
         -t {params.threshold} \
-        2> {log.stderr \
+        2> {log.stderr} \
         > {log.stdout}
         """
 
@@ -154,7 +149,7 @@ rule run_rarefaction:
         -skip {params.skip} \
         -samples {params.samples} \
         -t {params.threshold} \
-        2> {log.stderr \
+        2> {log.stderr} \
         > {log.stdout}
         """
 
@@ -179,6 +174,6 @@ rule resistome_results:
         python3 {params.script} \
         -i {input.gene_resistome} \
         -o {output.AMR_matrix} \
-        2> {log.stderr \
+        2> {log.stderr} \
         > {log.stdout}
         """
