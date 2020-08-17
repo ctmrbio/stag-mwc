@@ -10,7 +10,7 @@ localrules:
 
 
 groot_db_path = Path(config["groot"]["index"])
-if config["antibiotic_resistance"]:
+if config["antibiotic_resistance"]["groot"]:
     if not Path(groot_db_path).exists():
         err_message = "No groot database found at: '{}'!\n".format(groot_db_path)
         err_message += "Specify the DB path in the groot section of config.yaml.\n"

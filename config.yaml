@@ -12,7 +12,7 @@
 #########################
 # Run configuration
 #########################
-inputdir: "input"
+inputdir: "/home/aron.arzoomand/amrplusplus/input"
 input_fn_pattern: "{sample}_{readpair}.fq.gz" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
@@ -35,11 +35,13 @@ taxonomic_profile:
     metaphlan2: False
 functional_profile:
     humann2: False
-antibiotic_resistance: False
+antibiotic_resistance:
+    groot: False
+    amrplusplus: False
 mappers:
     bbmap: False
     bowtie2: False
-assembly: False
+assembly: True
 binning: False
 multiqc_report: True
 
@@ -50,7 +52,7 @@ multiqc_report: True
 fastp:
     extra: ""
 remove_host:
-    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+    db_path: "/db/kraken2/kraken2_GRCh38"              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
     confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
@@ -123,7 +125,20 @@ groot:
     maxlength: 125           # Maxlength for groot index
     covcutoff: 0.97          # Coverage cutoff for groot report
     lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
-
+amrplusplus:
+    databases:
+        db: "scripts/amrplusplus/db/megares_modified_database_v2.00.fasta"
+        annotation: "scripts/amrplusplus/db/megares_modified_annotations_v2.00.csv"
+    rarefaction:
+        script: "scripts/amrplusplus/bin/rarefaction"   # path to rarefaction script
+        min: "5"                                        # starting rarefaction level
+        max: "100"                                      # ending rarefaction level
+        skip: "5"                                       # number of levels to skip
+        samples: "1"                                    # number of iterations to sample at
+    resistome:
+        script: "scripts/amrplusplus/bin/resistome"                     # path to resistome script
+        threshold: "80"                                                 # resistome threshold
+    amr_long_to_wide: "scripts/amrplusplus/bin/amr_long_to_wide.py"     # path to amr_long_to_wide.py script
 
 #########################
 # Mappers

@@ -75,6 +75,7 @@ include: "rules/functional_profiling/humann2.smk"
 # Antibiotic resistance
 #############################
 include: "rules/antibiotic_resistance/groot.smk"
+include: "rules/antibiotic_resistance/amrplusplus.smk"
 
 #############################
 # Mappers
