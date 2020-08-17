@@ -128,7 +128,7 @@ groot:
 amrplusplus:
     databases:
         megares_fasta: "scripts/amrplusplus/db/megares_modified_database_v2.00.fasta"
-        annotation: "scripts/amrplusplus/db/megares_modified_annotations_v2.00.csv"
+        megares_annotation: "scripts/amrplusplus/db/megares_modified_annotations_v2.00.csv"
     rarefaction:
         script: "scripts/amrplusplus/bin/rarefaction"   # path to rarefaction script
         min: "5"                                        # starting rarefaction level
