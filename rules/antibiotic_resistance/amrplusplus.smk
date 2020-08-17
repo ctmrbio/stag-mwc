@@ -24,8 +24,8 @@ amrplusplus_config=config["amrplusplus"]
 rule build_amr_index:
     """Get the Megares_2.0 database and annotations"""
     output:
-        megares_db=amrplusplus_config["databases"]["db"],
-        megares_annot=amrplusplus_config["databases"]["annotation"],
+        megares_db=amrplusplus_config["megares"]["fasta"],
+        megares_annot=amrplusplus_config["megares"]["annotation"],
     log:
         stdout=f"{LOGDIR}/amrplusplus/build_amr.index.stdout.log",
         stderr=f"{LOGDIR}/amrplusplus/build_amr.index.stderr.log",
@@ -47,7 +47,7 @@ rule align_to_amr:
     input:
         R1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
         R2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
-        megares_db=amrplusplus_config["databases"]["db"],
+        megares_db=amrplusplus_config["megares"]["fasta"],
     output:
         alignment=f"{OUTDIR}/amrplusplus/AlignToAMR/{{sample}}.amr.alignment.sam"
     log:
@@ -58,7 +58,7 @@ rule align_to_amr:
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
-        megares_db=amrplusplus_config["databases"]["db"],
+        megares_db=amrplusplus_config["megares"]["fasta"],
     shell:
         """
         bwa mem \
@@ -87,10 +87,10 @@ rule run_resistome:
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
-        script=amrplusplus_config["resistome"]["script"],
+        script="scripts/amrplusplus/resistome",
         threshold=amrplusplus_config["resistome"]["threshold"],
-        megares_db=amrplusplus_config["databases"]["db"],
-        megares_annot=amrplusplus_config["databases"]["annotation"],
+        megares_db=amrplusplus_config["megares"]["fasta"],
+        megares_annot=amrplusplus_config["megares"]["annotation"],
     shell:
         """
         {params.script} \
@@ -125,9 +125,9 @@ rule run_rarefaction:
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
-        megares_db=amrplusplus_config["databases"]["db"],
-        megares_annot=amrplusplus_config["databases"]["annotation"],
-        script=amrplusplus_config["rarefaction"]["script"],
+        megares_db=amrplusplus_config["megares"]["fasta"],
+        megares_annot=amrplusplus_config["megares"]["annotation"],
+        script="scripts/amrplusplus/rarefaction",
         min=amrplusplus_config["rarefaction"]["min"],
         max=amrplusplus_config["rarefaction"]["max"],
         skip=amrplusplus_config["rarefaction"]["skip"],
@@ -168,7 +168,7 @@ rule resistome_results:
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
-        script=amrplusplus_config["amr_long_to_wide"]
+        script="scripts/amrplusplus/amr_long_to_wide.py"
     shell:
         """
         python3 {params.script} \
