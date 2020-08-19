@@ -135,17 +135,17 @@ rule run_resistome:
     shell:
         """
         {params.script} \
-        -ref_fp {params.megares_db} \
-        -annot_fp {params.megares_annot} \
-        -sam_fp {input.alignment} \
-        -gene_fp {output.gene} \
-        -group_fp {output.group} \
-        -mech_fp {output.mech} \
-        -class_fp {output.klass} \
-        -type_fp {output.type} \
-        -t {params.threshold} \
-        2> {log.stderr} \
-        > {log.stdout}
+            -ref_fp {params.megares_db} \
+            -annot_fp {params.megares_annot} \
+            -sam_fp {input.alignment} \
+            -gene_fp {output.gene} \
+            -group_fp {output.group} \
+            -mech_fp {output.mech} \
+            -class_fp {output.klass} \
+            -type_fp {output.type} \
+            -t {params.threshold} \
+            2> {log.stderr} \
+            > {log.stdout}
         """
 
 rule run_rarefaction:
@@ -177,21 +177,21 @@ rule run_rarefaction:
     shell:
         """
         {params.script} \
-        -ref_fp {params.megares_db} \
-        -sam_fp {input.alignment} \
-        -annot_fp {params.megares_annot} \
-        -gene_fp {output.gene} \
-        -group_fp {output.group} \
-        -mech_fp {output.mech} \
-        -class_fp {output.klass} \
-        -type_fp {output.type} \
-        -min {params.min} \
-        -max {params.max} \
-        -skip {params.skip} \
-        -samples {params.samples} \
-        -t {params.threshold} \
-        2> {log.stderr} \
-        > {log.stdout}
+            -ref_fp {params.megares_db} \
+            -sam_fp {input.alignment} \
+            -annot_fp {params.megares_annot} \
+            -gene_fp {output.gene} \
+            -group_fp {output.group} \
+            -mech_fp {output.mech} \
+            -class_fp {output.klass} \
+            -type_fp {output.type} \
+            -min {params.min} \
+            -max {params.max} \
+            -skip {params.skip} \
+            -samples {params.samples} \
+            -t {params.threshold} \
+            2> {log.stderr} \
+            > {log.stdout}
         """
 
 rule resistome_results:
@@ -213,8 +213,8 @@ rule resistome_results:
     shell:
         """
         python3 {params.script} \
-        -i {input.gene_resistome} \
-        -o {output.AMR_matrix} \
-        2> {log.stderr} \
-        > {log.stdout}
+            -i {input.gene_resistome} \
+            -o {output.AMR_matrix} \
+            2> {log.stderr} \
+            > {log.stdout}
         """
