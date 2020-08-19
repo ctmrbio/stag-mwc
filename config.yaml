@@ -128,15 +128,15 @@ groot:
 
 amrplusplus:
     megares:
-        fasta: ""            # Leave as "" to run with megares_modified_database_v2.00.fasta
-        annotation: ""       # Leave as "" to run with megares_modified_annotations_v2.00.csv
+        fasta: ""            # Leave as "" to run with megares_modified_database_v2.00.fasta or specify database path
+        annotation: ""       # Leave as "" to run with megares_modified_annotations_v2.00.csv or specify annotations path
     rarefaction:
-        min: "5"             # starting rarefaction level
-        max: "100"           # ending rarefaction level
-        skip: "5"            # number of levels to skip
-        samples: "1"         # number of iterations to sample at
+        min: "5"             # Starting rarefaction level
+        max: "100"           # Ending rarefaction level
+        skip: "5"            # Number of levels to skip
+        samples: "1"         # Number of iterations to sample at
     resistome:
-        threshold: "80"      # resistome threshold
+        threshold: "80"      # Resistome threshold
 
 #########################
 # Mappers
