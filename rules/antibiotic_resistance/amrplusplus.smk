@@ -1,6 +1,6 @@
 # vim: syntax=python expandtab tabstop=4
 # AMRPlusPlus v2.0 snakemake integration
-# Aron Arzoomand 12/8 2020
+# Aron Arzoomand 2020-08-12
 
 from pathlib import Path, PurePath
 from snakemake.exceptions import WorkflowError
