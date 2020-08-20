@@ -7,6 +7,7 @@ dependencies:
     - python =3.7
     - fastp =0.20.0
     - bbmap =38.68
+    - bwa =0.7.17
     - kaiju =1.7.2
     - kraken2 =2.0.8_beta
     - bracken =2.5
