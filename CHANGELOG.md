@@ -22,8 +22,8 @@ situations.
   still use the time allocation for the `__default__` rule, however.
 - Added possibility to use `extra:` to define additional arguments passed on to
   Slurm submissions. Useful to request e.g. fat nodes with `extra: "-C fat"` 
-- Added custom reimplementation of AMRPlusPlus v2.0 using singularity containerization,
-  not compatible with conda execution.
+- Added custom reimplementation of AMRPlusPlus v2.0 which can be executed with 
+  either `--use-singularity` or `--use-conda`.
 
 ### Fixed
 - The host removal module now correctly identifies setting `host_removal: False`
