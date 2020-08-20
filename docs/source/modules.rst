@@ -282,8 +282,7 @@ aligned against `megares`_, based on the threshold set in ``config.yaml``. Pasti
 or accession number into the database will provide detailed information and links to 
 published papers.
 
-`amrplusplus`_ can only be run with the ``--use-singularity`` setting, meaning it cannot be 
-executed with conda.
+`amrplusplus`_ can only be run with ``--use-singularity`` and ``--use-conda`` settings.
 
 Mappers
 *******
