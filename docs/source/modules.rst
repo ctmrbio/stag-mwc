@@ -260,7 +260,7 @@ AMRPlusPlus_v2
 :Output folder: ``amrplusplus``
 
 `amrplusplus`_ will align reads to `megares`_ antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Output will structured as::
+produce antibiotic resistance gene profiles. Output is structured as::
 
         ├ AlignToAMR
         │   └ <sample>.amr.alignment.sam
