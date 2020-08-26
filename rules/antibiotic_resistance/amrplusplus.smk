@@ -71,7 +71,7 @@ rule build_amr_index:
     shadow:
         "shallow"
     conda:
-        "../../envs/stag-mwc.yaml"
+        "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     shell:
@@ -99,7 +99,7 @@ rule align_to_amr:
     shadow:
         "shallow"
     conda:
-        "../../envs/stag-mwc.yaml"
+        "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
@@ -130,7 +130,7 @@ rule run_resistome:
     shadow:
         "shallow"
     conda:
-        "../../envs/stag-mwc.yaml"
+        "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
@@ -170,7 +170,7 @@ rule run_rarefaction:
     shadow:
         "shallow"
     conda:
-        "../../envs/stag-mwc.yaml"
+        "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
@@ -215,7 +215,7 @@ rule resistome_results:
     shadow:
         "shallow"
     conda:
-        "../../envs/stag-mwc.yaml"
+        "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
     params:
