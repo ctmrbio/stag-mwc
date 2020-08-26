@@ -7,7 +7,6 @@ dependencies:
     - python =3.7
     - fastp =0.20.0
     - bbmap =38.68
-    - bwa =0.7.17
     - kaiju =1.7.2
     - kraken2 =2.0.8_beta
     - bracken =2.5
@@ -18,7 +17,7 @@ dependencies:
     - seaborn =0.9.0
     - subread =1.6.0
     - sambamba =0.7.0
-    - samtools =1.10
+    - samtools =1.9
     - groot =0.8.4
     - pigz =2.4
     - pip
