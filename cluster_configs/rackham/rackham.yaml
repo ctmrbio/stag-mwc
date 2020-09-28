@@ -59,6 +59,9 @@ humann2:
 groot_align:
     n: 6
     time: "01:00:00"
+align_to_amr:
+    n: 10
+    time: "04:00:00"
 
 #############################
 # Mappers
