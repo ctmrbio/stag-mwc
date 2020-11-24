@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_{readpair}.fq.gz" 
+input_fn_pattern: "reduced.{sample}_R{readpair}_001.fastq" 
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
@@ -25,19 +25,19 @@ email: ""                    # Email to send status message after completed/fail
 # Pipeline steps included
 #########################
 qc_reads: True
-host_removal: True
+host_removal: False
 naive:
     assess_depth: False
     sketch_compare: False
 taxonomic_profile:
     kaiju: False
     kraken2: False
-    metaphlan2: False
+    metaphlan2: True
 functional_profile:
-    humann2: False
+    humann: True
 antibiotic_resistance:
     groot: False
-    amrplusplus: True
+    amrplusplus: False
 mappers:
     bbmap: False
     bowtie2: False
@@ -52,7 +52,7 @@ multiqc_report: True
 fastp:
     extra: ""
 remove_host:
-    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+    db_path: "/Users/aroarz/projects/databases/kraken2_GRCh38"              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
     confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
@@ -92,8 +92,8 @@ kraken2:
         exclude: "--exclude 9605 9606"  # Taxid 9605 and 9606 are (G) Homo and (S) Homo sapiens
 
 metaphlan2:
-    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
-    bt2_index: ""            # [Required] Name of MetaPhlAn2 database index
+    bt2_db_dir: "/Users/aroarz/projects/databases/metaphlan_databases"           # [Required] Path to MetaPhlAn2 database dir
+    bt2_index: "mpa_v30_CHOCOPhlAn_201901"            # [Required] Name of MetaPhlAn2 database index
     extra: ""                # Extra command line arguments for metaphlan2.py
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
@@ -108,12 +108,13 @@ metaphlan2:
 #########################
 # Functional profiling
 #########################
-humann2:
-    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory
-    protein_db: ""           # [Required] Path to protein database (typically UniRef90)
-    norm_method: "relab"     # Normalization method (HUMAnN2 default is "cpm")
-    norm_mode: "community"   # Normalization mode, "community" or "levelwise"
-
+humann:
+    nucleotide_db: "/Users/aroarz/projects/databases/humann_databases/chocophlan"        # [Required] Path to ChocoPhlAn DB directory.
+    protein_db: "/Users/aroarz/projects/databases/humann_databases/protein_database/uniref"           # [Required] Path to protein database (typically UniRef90).
+    norm_method: "relab"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
+    norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
+    groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec, 																 uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
+    rename: "ec" # Rename abundance table: kegg-orthology, kegg-pathway, kegg-module, ec, metacyc-rxn, metacyc-pwy, pfam, eggnog, go, infogo1000, uniref50, uniref90.
 
 #########################
 # Antibiotic Resistance

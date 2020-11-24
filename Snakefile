@@ -69,7 +69,7 @@ include: "rules/taxonomic_profiling/metaphlan2.smk"
 #############################
 # Functional profiling
 #############################
-include: "rules/functional_profiling/humann2.smk"
+include: "rules/functional_profiling/humann.smk"
 
 #############################
 # Antibiotic resistance

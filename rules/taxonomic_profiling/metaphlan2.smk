@@ -61,7 +61,7 @@ rule metaphlan2:
         extra=mpa_config["extra"],
     shell:
         """
-        metaphlan2.py \
+        metaphlan \
             --input_type fastq \
             --nproc {threads} \
             --sample_id {wildcards.sample} \
@@ -95,12 +95,12 @@ rule metaphlan2_krona:
         #    2>&1 > {log}
        
         set +o pipefail  # Small samples can produce empty output files failing the pipeline
-        sed '/#/d' {input.mpa_out} \
+        gsed '/#/d' {input.mpa_out} \
             | grep -E "s__|unclassified" \
             | cut -f1,3 \
             | awk '{{print $2,"\t",$1}}' \
-            | sed 's/|\w__/\t/g' \
-            | sed 's/k__//' \
+            | gsed 's/|\w__/\t/g' \
+            | gsed 's/k__//' \
             > {output.krona} \
             2> {log}
         """
@@ -126,7 +126,7 @@ rule combine_metaphlan2_tables:
     shell:
         """
         merge_metaphlan_tables.py {input} > {output.txt}
-        sed --in-place 's/\.metaphlan2//g' {output.txt} 
+        gsed --in-place 's/\.metaphlan2//g' {output.txt} 
         """
 
 
