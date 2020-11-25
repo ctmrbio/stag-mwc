@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/aroarz/projects/stag-mwc/.snakemake/conda/32e30a93/bin/python3
 """Plot MetaPhlAn2 heatmap"""
 __author__ = "Fredrik Boulund"
 __date__ = "2019"

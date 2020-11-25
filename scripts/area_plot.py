@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/aroarz/projects/stag-mwc/.snakemake/conda/32e30a93/bin/python3
 
 from sys import argv, exit
 import argparse
@@ -45,7 +45,7 @@ mode_dict = {
         'table_drop': [],
         'skip_rows': 0,
     },
-    'metaphlan2': {
+    'metaphlan': {
         'tax_delim': '|',
         'multi_level': True,
         'tax_col': 'clade_name',

@@ -64,7 +64,7 @@ include: "rules/naive/bbcountunique.smk"
 #############################
 include: "rules/taxonomic_profiling/kaiju.smk"
 include: "rules/taxonomic_profiling/kraken2.smk"
-include: "rules/taxonomic_profiling/metaphlan2.smk"
+include: "rules/taxonomic_profiling/metaphlan.smk"
 
 #############################
 # Functional profiling
