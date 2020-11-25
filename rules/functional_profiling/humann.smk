@@ -1,16 +1,15 @@
 # vim: syntax=python expandtab
 # Functional profiling of metagenomic reads using HUMAnN
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
-from pathlib import Path
 
+from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
     download_humann_databases,
     normalize_humann_tables,
     join_humann_tables,
-
-
+    regroup_humann_tables,
+    rename_humann_tables,
 
 h_config = config["humann"]
 HMN_METHOD=h_config["norm_method"]
@@ -28,21 +27,21 @@ if config["functional_profile"]["humann"]:
         raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2"
 
-    # Add HUMAnN output files to 'all_outputs' from the main Snakefile scope.
-    # SAMPLES is also from the main Snakefile scope.
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.tsv",
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
     all_outputs.extend(merged_humann_tables)
 
     citations.add(publications["HUMAnN"])
 
+
+
 rule download_humann_databases:
     """Download ChocoPhlAn and UniRef90 (diamond)"""
     output:
-        DBDIR/"humann/chocophlan",
-        DBDIR/"humann/uniref",
+        f"{DBDIR}/humann/chocophlan",
+        f"{DBDIR}/humann/uniref",
     log:
-        str(LOGDIR/"humann/database_download.log")
+        f"{LOGDIR}/humann/database_download.log"
     shadow:
         "shallow"
     conda:
@@ -56,6 +55,7 @@ rule download_humann_databases:
         humann_databases --download chocophlan full {params.dbdir} > {log}
         humann_databases --download uniref uniref90_diamond {params.dbdir} >> {log}
         """
+
 
 rule humann:
     """Functional profiling using HUMAnN."""
@@ -171,6 +171,7 @@ rule regroup_humann_tables:
             2> {log.stderr}
         """
 
+
 rule rename_humann_tables:
     """rename gene families"""
     input:
@@ -253,6 +254,3 @@ rule join_humann_tables:
             >> {log.stdout} \
             2>> {log.stderr}
         """
-
-
-
