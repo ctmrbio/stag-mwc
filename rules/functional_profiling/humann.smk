@@ -62,7 +62,7 @@ rule humann:
     input:
         read1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
-        taxonomic_profile=f"{OUTDIR}/metaphlan2/{{sample}}.metaphlan2.txt",
+        taxonomic_profile=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
     output:
         f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
         f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv",

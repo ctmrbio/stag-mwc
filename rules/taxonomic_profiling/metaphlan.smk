@@ -20,17 +20,9 @@ if config["taxonomic_profile"]["metaphlan"]:
 
     # Add MetaPhlAn output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
-    mpa_outputs = expand(f"{OUTDIR}/metaphlan/{{sample}}.{{output_type}}",
-            sample=SAMPLES,
-            output_type=("bowtie2.bz2", "metaphlan.txt", "metaphlan.krona"))
-    mpa_combined = expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}",
-            ext=("txt", "krona.html"))
-    mpa_plot = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf"
-    mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf"
-    all_outputs.extend(mpa_outputs)
-    all_outputs.extend(mpa_combined)
-    all_outputs.append(mpa_plot)
-    all_outputs.append(mpa_area_plot)
+    mpa_outputs=f"{OUTDIR}/metaphlan/visualizations_success.txt"
+
+    all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
     citations.add(publications["Krona"])
@@ -63,7 +55,7 @@ rule metaphlan:
         """
         metaphlan \
             --input_type fastq \
-            --nproc {threads} \
+            --nproc 10 \
             --sample_id {wildcards.sample} \
             --bowtie2out {output.bt2_out} \
             --bowtie2db {params.bt2_db_dir} \
@@ -197,7 +189,7 @@ rule create_metaphlan_krona_plots:
     input:
         expand(f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.krona", sample=SAMPLES)
     output:
-        html=report(OUTDIR/"metaphlan/all_samples.metaphlan.krona.html",
+        html=report(f"{OUTDIR}/metaphlan/all_samples.metaphlan.krona.html",
                     category="Taxonomic profiling",
                     caption="../../report/metaphlan_krona.rst"),
     shadow:
@@ -213,4 +205,66 @@ rule create_metaphlan_krona_plots:
         ktImportText \
             -o {output.html} \
             {input}
+        """
+
+rule metaphlan_hclust2:
+    """Create hclust2 species heatmap"""
+    input:
+        f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
+    output:
+        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
+        species=f"{OUTDIR}/metaphlan/merged_abundance_table_species.txt",
+    log:
+        f"{LOGDIR}/metaphlan/merged_abundance_table_species.log",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/metaphlan.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+    params:
+        title=mpa_config["hclust_heatmap"]["title"],
+        scale=mpa_config["hclust_heatmap"]["scale"],
+        feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
+        sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
+    shell:
+        """
+            grep -E "s__|clade" {input} \
+            | sed 's/^.*s__//g' \
+            | cut -f1,3-8 \
+            | sed -e 's/clade_name/body_site/g' \
+            > {output.species}
+
+        hclust2.py \
+            -i {output.species} \
+            -o {output.hclust_heatmap} \
+            --ftop 25 \
+            --f_dist_f {params.feature_distance} \
+            --s_dist_f {params.sample_distance} \
+            --cell_aspect_ratio 0.5 \
+            {params.scale} \
+            --flabel_size 6 \
+            --slabel_size 6 \
+            --max_flabel_len 100 \
+            --max_slabel_len 100 \
+            --minv 0.1 \
+            --dpi 300 \
+            2> {log}
+        """
+
+rule gather_visualizations:
+    input:
+        mpa_combined = expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}", ext=("txt", "krona.html")),
+        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
+        species=f"{OUTDIR}/metaphlan/merged_abundance_table_species.txt",
+        mpa_plot = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+        mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+    output:
+        visualuzations_success=f"{OUTDIR}/metaphlan/visualizations_success.txt"
+    shell:
+        """
+        echo "area_plot done" > {output}
+        echo "heatmap done" >> {output}
+        echo "kron_plot done" >> {output}
+        echo "hclust heatmap done" >> {output}
         """

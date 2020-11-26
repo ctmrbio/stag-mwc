@@ -103,6 +103,11 @@ metaphlan:
         method: "average"        # Linkage method, see scipy.cluster.hierarchy.linkage
         metric: "braycurtis"     # Distrance metric to use
         extra: ""                # Extra params, mostly to set loglevel to DEBUG in case of problems.
+    hclust_heatmap:
+        title: "kakor"                       # Select title
+        scale: "--log_scale"                          # --log_scale/-l or --sqrt_scale/-s
+        feature_distance: "braycurtis"       # Distance function for features [default correlation]
+        sample_distance: "braycurtis"        # Distance function for sample [default euclidean]
 
 
 #########################
@@ -113,7 +118,7 @@ humann:
     protein_db: "/Users/aroarz/projects/databases/humann_databases/protein_database/uniref"           # [Required] Path to protein database (typically UniRef90).
     norm_method: "relab"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
-    groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec, 																 uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
+    groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec,                                                                                                   uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
     rename: "ec" # Rename abundance table: kegg-orthology, kegg-pathway, kegg-module, ec, metacyc-rxn, metacyc-pwy, pfam, eggnog, go, infogo1000, uniref50, uniref90.
 
 #########################
