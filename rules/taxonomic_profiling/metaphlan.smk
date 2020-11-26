@@ -1,8 +1,7 @@
 # vim: syntax=python expandtab
 # Taxonomic classification of metagenomic reads using MetaPhlAn
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
-from pathlib import Path
 
+from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
@@ -18,10 +17,7 @@ if config["taxonomic_profile"]["metaphlan"]:
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    # Add MetaPhlAn output files to 'all_outputs' from the main Snakefile scope.
-    # SAMPLES is also from the main Snakefile scope.
     mpa_outputs=f"{OUTDIR}/metaphlan/visualizations_success.txt"
-
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -80,12 +76,6 @@ rule metaphlan_krona:
         "shallow"
     shell:
         """
-        # This command is broken in MetaPhlAn v2.96.1 when running with old DB
-        #metaphlankrona.py \
-        #    --profile {input.mpa_out} \
-        #    --krona {output.krona} \
-        #    2>&1 > {log}
-       
         set +o pipefail  # Small samples can produce empty output files failing the pipeline
         gsed '/#/d' {input.mpa_out} \
             | grep -E "s__|unclassified" \
@@ -219,11 +209,10 @@ rule metaphlan_hclust2:
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan.yaml"
+        "../../envs/graphlan.yaml"
     singularity:
         "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
     params:
-        title=mpa_config["hclust_heatmap"]["title"],
         scale=mpa_config["hclust_heatmap"]["scale"],
         feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
         sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
@@ -232,7 +221,7 @@ rule metaphlan_hclust2:
             grep -E "s__|clade" {input} \
             | sed 's/^.*s__//g' \
             | cut -f1,3-8 \
-            | sed -e 's/clade_name/body_site/g' \
+            | sed -e 's/clade_name/species/g' \
             > {output.species}
 
         hclust2.py \
@@ -252,6 +241,68 @@ rule metaphlan_hclust2:
             2> {log}
         """
 
+rule metaphlan_cladogram:
+    input:
+        f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
+    output:
+        clado_format=f"{OUTDIR}/metaphlan/all_samples.metaphlan.clado",
+        abundance_tree=f"{OUTDIR}/metaphlan/all_samples_abundance.tree.txt",
+        abundance_annot=f"{OUTDIR}/metaphlan/all_samples_abundance.annot.txt",
+        abundance_xml=f"{OUTDIR}/metaphlan/all_samples_abundance.xml",
+        cladogram=f"{OUTDIR}/metaphlan/all_samples_cladogram.png",
+    log:
+        f"{LOGDIR}/metaphlan/merged_abundance_table_species.log",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/graphlan.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+    params:
+        skip_rows=mpa_config["cladogram"]["skip_rows"],
+        most_abundance=mpa_config["cladogram"]["most_abundance"],
+        threshold=mpa_config["cladogram"]["minimum_abundance"],
+        least_biomarkers=mpa_config["cladogram"]["least_biomarkers"],
+        annotation=mpa_config["cladogram"]["annotation"],
+        external_annotation=mpa_config["cladogram"]["external_annotation"],
+        min_clade_size=mpa_config["cladogram"]["min_clade_size"],
+    shell:
+        """
+        tail \
+            -n +2 {input} \
+            | cut -f1,3- \
+            > {output.clado_format}
+        
+        export2graphlan.py \
+            --skip_rows {params.skip_rows} \
+            -i {output.clado_format} \
+            --tree {output.abundance_tree} \
+            --annotation {output.abundance_annot} \
+            --most_abundant {params.most_abundance} \
+            --abundance_threshold {params.threshold} \
+            --least_biomarkers {params.least_biomarkers} \
+            --annotations {params.annotation} \
+            --external_annotations {params.external_annotation} \
+            --min_clade_size {params.min_clade_size} \
+            2> {log}
+
+        graphlan_annotate.py \
+            --annot \
+                {output.abundance_annot} \
+                {output.abundance_tree} \
+                {output.abundance_xml} \
+                2>> {log}
+
+        graphlan.py \
+            --dpi 300 \
+                {output.abundance_xml} \
+                {output.cladogram} \
+            --external_legends \
+            2>> {log}
+        """
+
+
+
 rule gather_visualizations:
     input:
         mpa_combined = expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}", ext=("txt", "krona.html")),
@@ -259,6 +310,7 @@ rule gather_visualizations:
         species=f"{OUTDIR}/metaphlan/merged_abundance_table_species.txt",
         mpa_plot = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
         mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+        cladogram=f"{OUTDIR}/metaphlan/all_samples_cladogram.png",
     output:
         visualuzations_success=f"{OUTDIR}/metaphlan/visualizations_success.txt"
     shell:
@@ -267,4 +319,5 @@ rule gather_visualizations:
         echo "heatmap done" >> {output}
         echo "kron_plot done" >> {output}
         echo "hclust heatmap done" >> {output}
+        echo "cladogram done" >> {output}
         """

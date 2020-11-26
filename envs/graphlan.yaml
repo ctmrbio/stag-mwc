@@ -1,0 +1,11 @@
+name: graphlan
+channels:
+  - biobakery
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - export2graphlan=0.20=py27_0
+  - graphlan=1.1.3=py27_0
+  - hclust2=1.0.0_3d589ab=py27_0
+  - python=2.7.15=h8e446fc_1011_cpython

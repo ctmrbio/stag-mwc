@@ -104,11 +104,17 @@ metaphlan:
         metric: "braycurtis"     # Distrance metric to use
         extra: ""                # Extra params, mostly to set loglevel to DEBUG in case of problems.
     hclust_heatmap:
-        title: "kakor"                       # Select title
-        scale: "--log_scale"                          # --log_scale/-l or --sqrt_scale/-s
+        scale: "--log_scale"                 # --log_scale/-l or --sqrt_scale/-s
         feature_distance: "braycurtis"       # Distance function for features [default correlation]
         sample_distance: "braycurtis"        # Distance function for sample [default euclidean]
-
+    cladogram:
+        skip_rows: "1"                       # Skip headers: 1 or 2.
+        most_abundance: "100"                # Select the top 100 most abundance clades to highlight.
+        minimum_abundance: "1"               # Set a minimum abundance threshold for clades to be annotated.
+        least_biomarkers: "10"               # Extract a minimum of 10 biomarkers.
+        annotation: "5,6"                    # Select taxonomic levels 5 and 6 to be annotated within the tree.
+        external_annotation: "7"             # Select taxonomic level 7 to be used in the external legend.
+        min_clade_size: "1"                  # Set the minimum size of clades annotated as biomarkers to 1.
 
 #########################
 # Functional profiling
