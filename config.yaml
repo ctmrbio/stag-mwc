@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "reduced.{sample}_R{readpair}_001.fastq" 
+input_fn_pattern: "reduced.{sample}_R{readpair}_001.fastq"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
@@ -33,6 +33,8 @@ taxonomic_profile:
     kaiju: False
     kraken2: False
     metaphlan: True
+strain_level_profiling:
+    strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
     humann: False
 antibiotic_resistance:
@@ -115,6 +117,14 @@ metaphlan:
         annotation: "5,6"                    # Select taxonomic levels 5 and 6 to be annotated within the tree.
         external_annotation: "7"             # Select taxonomic level 7 to be used in the external legend.
         min_clade_size: "1"                  # Set the minimum size of clades annotated as biomarkers to 1.
+
+#########################
+# Strain Level Profiling 
+#########################
+strainphlan:
+    clade_of_interest: "s__Bifidobacterium_longum"
+    mode: "accurate"
+    extra: "--marker_in_n_samples 1 --sample_with_n_markers 1"
 
 #########################
 # Functional profiling

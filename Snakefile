@@ -67,6 +67,11 @@ include: "rules/taxonomic_profiling/kraken2.smk"
 include: "rules/taxonomic_profiling/metaphlan.smk"
 
 #############################
+# Strain level profiling
+#############################
+include: "rules/taxonomic_profiling/strainphlan.smk"
+
+#############################
 # Functional profiling
 #############################
 include: "rules/functional_profiling/humann.smk"

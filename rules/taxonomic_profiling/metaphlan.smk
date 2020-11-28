@@ -32,6 +32,7 @@ rule metaphlan:
     output:
         bt2_out=f"{OUTDIR}/metaphlan/{{sample}}.bowtie2.bz2",
         mpa_out=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
+        sam_out=f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2",
     log:
         stdout=f"{LOGDIR}/metaphlan/{{sample}}.metaphlan.stdout.log",
         stderr=f"{LOGDIR}/metaphlan/{{sample}}.metaphlan.stderr.log",
@@ -53,6 +54,7 @@ rule metaphlan:
             --input_type fastq \
             --nproc 10 \
             --sample_id {wildcards.sample} \
+            --samout {output.sam_out} \
             --bowtie2out {output.bt2_out} \
             --bowtie2db {params.bt2_db_dir} \
             --index {params.bt2_index} \
@@ -218,7 +220,7 @@ rule metaphlan_hclust2:
         sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
     shell:
         """
-            grep -E "s__|clade" {input} \
+        grep -E "s__|clade" {input} \
             | sed 's/^.*s__//g' \
             | cut -f1,3-8 \
             | sed -e 's/clade_name/species/g' \
@@ -243,9 +245,10 @@ rule metaphlan_hclust2:
 
 rule metaphlan_cladogram:
     input:
-        f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
+        txt=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
+        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
     output:
-        clado_format=f"{OUTDIR}/metaphlan/all_samples.metaphlan.clado",
+        clado_format=f"{OUTDIR}/metaphlan/all_samples.metaphlan.clado.txt",
         abundance_tree=f"{OUTDIR}/metaphlan/all_samples_abundance.tree.txt",
         abundance_annot=f"{OUTDIR}/metaphlan/all_samples_abundance.annot.txt",
         abundance_xml=f"{OUTDIR}/metaphlan/all_samples_abundance.xml",
@@ -269,7 +272,7 @@ rule metaphlan_cladogram:
     shell:
         """
         tail \
-            -n +2 {input} \
+            -n +2 {input.txt} \
             | cut -f1,3- \
             > {output.clado_format}
         
