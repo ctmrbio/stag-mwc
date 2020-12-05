@@ -8,6 +8,7 @@ localrules:
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
     metaphlan_krona,
+    gather_visualizations,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"]:

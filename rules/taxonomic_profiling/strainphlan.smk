@@ -5,7 +5,7 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-     extract_markers,
+#     extract_markers,
 
 mpa_config = config["metaphlan"]
 spa_config = config["strainphlan"]

@@ -37,11 +37,14 @@ kaiju:
     n: 8
     time: "02:00:00"
 kraken2:
-    n: 8
+    n: 10
     time: "02:00:00"
-metaphlan2:
-    n: 8
+metaphlan:
+    n: 10
     time: "01:30:00"
+strainphlan:
+    n: 8
+    time: "01:30:00" 
 bracken:
     n: 2
     time: "01:00:00"
