@@ -42,7 +42,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads:
         cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
     params:
@@ -105,7 +105,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads:
         1
     shell:
@@ -190,7 +190,7 @@ rule create_metaphlan_krona_plots:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads:
         1
     shell:
@@ -214,7 +214,7 @@ rule metaphlan_hclust2:
     conda:
         "../../envs/graphlan.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:graphlan"
     params:
         scale=mpa_config["hclust_heatmap"]["scale"],
         feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
@@ -261,7 +261,7 @@ rule metaphlan_cladogram:
     conda:
         "../../envs/graphlan.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:graphlan"
     params:
         skip_rows=mpa_config["cladogram"]["skip_rows"],
         most_abundance=mpa_config["cladogram"]["most_abundance"],
