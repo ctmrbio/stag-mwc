@@ -99,17 +99,15 @@ opt_keys = {"array", "account", "begin", "cpus_per_task",
 
 # Set default partition
 if arg_dict["partition"] is None:
-    if not "core":
-        # partitions and SLURM - If not specified, the default behavior is to
-        # allow the slurm controller to select the default partition as
-        # designated by the system administrator.
-        opt_keys.remove("partition")
-    else:
-        arg_dict["partition"] = "core"
+    # partitions and SLURM - If not specified, the default behavior is to
+    # allow the slurm controller to select the default partition as
+    # designated by the system administrator.
+    opt_keys.remove("partition")
 
-# Set default account
-if arg_dict["account"] is None:
-    raise Exception("Cannot submit Slurm jobs without account!")
+# NOT APPLICABLE FOR CTMR UCP
+#### Set default account
+###if arg_dict["account"] is None:
+###    raise Exception("Cannot submit Slurm jobs without account!")
 
 # Ensure output folder for Slurm log files exist
 # This is a bit hacky; it will try to create the folder
