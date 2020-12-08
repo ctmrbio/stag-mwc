@@ -134,6 +134,6 @@ else:
             stderr=str(LOGDIR/"host_removal/{sample}.stderr.log"),
         shell:
             """
-            ln -sv $(greadlink -f {input.read1}) {output.read1} >> {log.stderr}
-            ln -sv $(greadlink -f {input.read2}) {output.read2} >> {log.stderr}
+            ln -sv $(readlink -f {input.read1}) {output.read1} >> {log.stderr}
+            ln -sv $(readlink -f {input.read2}) {output.read2} >> {log.stderr}
             """
