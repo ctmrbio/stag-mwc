@@ -47,7 +47,7 @@ rule download_humann_databases:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     params:
         dbdir=config["dbdir"]+"/humann"
     shell:
@@ -75,7 +75,7 @@ rule humann:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads:
         cluster_config["humann"]["n"] if "humann" in cluster_config else 20
     resources:
@@ -117,7 +117,7 @@ rule normalize_humann_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads: 
         1
     params:
@@ -156,7 +156,7 @@ rule regroup_humann_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads: 
         1
     params:
@@ -186,7 +186,7 @@ rule rename_humann_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads: 
         1
     params:
@@ -226,7 +226,7 @@ rule join_humann_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://AroArz/singularity_playground:biobakery"
     threads: 
         1
     params:
