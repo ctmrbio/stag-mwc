@@ -1,6 +1,6 @@
 # Cluster config file for StaG-mwc for use on UPPMAX Rackham
 __default__:
-    account: "snic2017-7-245"
+    account: "snic2020-5-589"
     partition: "core"
     extra: ""
     time: "03:00:00"
@@ -52,8 +52,8 @@ bracken:
 #############################
 # Functional profiling
 #############################
-humann2:
-    n: 8
+humann:
+    n: 20
     time: "12:00:00"
 
 #############################
