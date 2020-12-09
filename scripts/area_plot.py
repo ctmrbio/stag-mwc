@@ -1,4 +1,4 @@
-#!/Users/aroarz/projects/stag-mwc/.snakemake/conda/32e30a93/bin/python3
+#!/usr/bin/env python3
 
 from sys import argv, exit
 import argparse
