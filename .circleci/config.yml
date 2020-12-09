@@ -69,8 +69,9 @@ jobs:
                     sed -i 's/sketch_compare: False/sketch_compare: True/' config.yaml
                     sed -i 's/kaiju: False/kaiju: True/' config.yaml
                     sed -i 's/kraken2: False/kraken2: True/' config.yaml
-                    sed -i 's/metaphlan2: False/metaphlan2: True/' config.yaml
-                    sed -i 's/humann2: False/humann2: True/' config.yaml
+                    sed -i 's/metaphlan: False/metaphlan: True/' config.yaml
+                    sed -i 's/humann: False/humann: True/' config.yaml
+                    sed -i 's/strainphlan: False/strainphlan: True/' config.yaml
                     sed -i 's/groot: False/groot: True/' config.yaml
                     sed -i 's/amrplusplus: False/amrplusplus: True/' config.yaml
                     sed -i 's/assembly: False/assembly: True/' config.yaml
