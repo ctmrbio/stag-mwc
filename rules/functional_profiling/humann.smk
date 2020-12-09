@@ -25,7 +25,7 @@ if config["functional_profile"]["humann"]:
         err_message += "Specify relevant paths in the humann section of config.yaml.\n"
         err_message += "If you do not want to run HUMAnN for functional profiling, set functional_profile:humann: False in config.yaml"
         raise WorkflowError(err_message)
-    bt2_db_ext = ".1.bt2"
+    bt2_db_ext = ".1.bt2" # what does this line do??
 
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.tsv",
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
@@ -64,9 +64,9 @@ rule humann:
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
         taxonomic_profile=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
     output:
-        f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
-        f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv",
-        f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
+        pathcoverage=f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann.stderr.log",
@@ -209,13 +209,13 @@ rule join_humann_tables:
         pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv", sample=SAMPLES),
         pathcoverage=expand(f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv", sample=SAMPLES),
     output:
-        genefamilies=report(OUTDIR/"humann/all_samples.humann_genefamilies.tsv",
+        genefamilies=report(f"{OUTDIR}/humann/all_samples.humann_genefamilies.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
-        pathabundance=report(OUTDIR/"humann/all_samples.humann_pathabundance.tsv",
+        pathabundance=report(f"{OUTDIR}/humann/all_samples.humann_pathabundance.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
-        pathcoverage=report(OUTDIR/"humann/all_samples.humann_pathcoverage.tsv",
+        pathcoverage=report(f"{OUTDIR}/humann/all_samples.humann_pathcoverage.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
     log:
@@ -230,7 +230,7 @@ rule join_humann_tables:
     threads: 
         1
     params:
-        output_dir=OUTDIR/"humann",
+        output_dir=f"{OUTDIR}/humann",
         genefamilies=f"genefamilies_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}",
         pathabundance=f"pathabundance_{HMN_METHOD}",
     shell:
@@ -241,12 +241,14 @@ rule join_humann_tables:
             --file_name {params.genefamilies} \
             > {log.stdout} \
             2> {log.stderr}
+
         humann_join_tables \
             --input {params.output_dir} \
             --output {output.pathcoverage} \
             --file_name pathcoverage \
             >> {log.stdout} \
             2>> {log.stderr}
+
         humann_join_tables \
             --input {params.output_dir} \
             --output {output.pathabundance} \
