@@ -80,12 +80,12 @@ rule metaphlan_krona:
     shell:
         """
         set +o pipefail  # Small samples can produce empty output files failing the pipeline
-        gsed '/#/d' {input.mpa_out} \
+        sed '/#/d' {input.mpa_out} \
             | grep -E "s__|unclassified" \
             | cut -f1,3 \
             | awk '{{print $2,"\t",$1}}' \
-            | gsed 's/|\w__/\t/g' \
-            | gsed 's/k__//' \
+            | sed 's/|\w__/\t/g' \
+            | sed 's/k__//' \
             > {output.krona} \
             2> {log}
         """
@@ -111,7 +111,7 @@ rule combine_metaphlan_tables:
     shell:
         """
         merge_metaphlan_tables.py {input} > {output.txt}
-        gsed --in-place 's/\.metaphlan//g' {output.txt} 
+        sed --in-place 's/\.metaphlan//g' {output.txt} 
         """
 
 
@@ -144,8 +144,8 @@ rule plot_metaphlan_heatmap:
         f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
         pdf=report(f"{OUTDIR}/metaphlan/all_samples.{{level}}_top{{topN}}.pdf",
-                   category="Taxonomic profiling",
-                   caption="../../report/metaphlan.rst"),
+            category="Taxonomic profiling",
+            caption="../../report/metaphlan.rst"),
     log:
         f"{LOGDIR}/metaphlan/plot_metaphlan_heatmap.{{level}}_top{{topN}}.log",
     shadow:
@@ -183,8 +183,8 @@ rule create_metaphlan_krona_plots:
         expand(f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.krona", sample=SAMPLES)
     output:
         html=report(f"{OUTDIR}/metaphlan/all_samples.metaphlan.krona.html",
-                    category="Taxonomic profiling",
-                    caption="../../report/metaphlan_krona.rst"),
+            category="Taxonomic profiling",
+            caption="../../report/metaphlan_krona.rst"),
     shadow:
         "shallow"
     conda:
@@ -205,10 +205,12 @@ rule metaphlan_hclust2:
     input:
         f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
-        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
-        species=f"{OUTDIR}/metaphlan/merged_abundance_table_species.txt",
+        hclust_heatmap=report(f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
+            category="Taxonomic profiling",
+            caption="../../report/hclust2_heatmap.rst"),
+        species=f"{OUTDIR}/metaphlan/hclust2_species_abundance_table.txt",
     log:
-        f"{LOGDIR}/metaphlan/merged_abundance_table_species.log",
+        f"{LOGDIR}/metaphlan/hclust2_species_abundance.log",
     shadow:
         "shallow"
     conda:
@@ -219,6 +221,7 @@ rule metaphlan_hclust2:
         scale=mpa_config["hclust_heatmap"]["scale"],
         feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
         sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
+        hclust2=f"scripts/biobakery/hclust2.py",
     shell:
         """
         grep -E "s__|clade" {input} \
@@ -247,15 +250,20 @@ rule metaphlan_hclust2:
 rule metaphlan_cladogram:
     input:
         txt=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
-        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
+        hclust_heatmap=f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
     output:
-        clado_format=f"{OUTDIR}/metaphlan/all_samples.metaphlan.clado.txt",
-        abundance_tree=f"{OUTDIR}/metaphlan/all_samples_abundance.tree.txt",
-        abundance_annot=f"{OUTDIR}/metaphlan/all_samples_abundance.annot.txt",
-        abundance_xml=f"{OUTDIR}/metaphlan/all_samples_abundance.xml",
-        cladogram=f"{OUTDIR}/metaphlan/all_samples_cladogram.png",
+        clado_format=f"{OUTDIR}/metaphlan/cladogram.txt",
+        abundance_tree=f"{OUTDIR}/metaphlan/cladogram_abundance_tree.txt",
+        abundance_annot=f"{OUTDIR}/metaphlan/cladogram_abundance_annot.txt",
+        abundance_xml=f"{OUTDIR}/metaphlan/cladogram_abundance.xml",
+        cladogram=f"{OUTDIR}/metaphlan/cladogram.png",
+        cladogram_report=report(
+            expand(f"{OUTDIR}/metaphlan/{{clado}}.png", 
+                        clado=("cladogram","cladogram_annot","cladogram_legend")),
+                        category="Taxonomic profiling",
+                        caption="../../report/metaphlan_cladogram.rst"),
     log:
-        f"{LOGDIR}/metaphlan/merged_abundance_table_species.log",
+        f"{LOGDIR}/metaphlan/metaphlan_cladogram.log",
     shadow:
         "shallow"
     conda:
@@ -270,13 +278,16 @@ rule metaphlan_cladogram:
         annotation=mpa_config["cladogram"]["annotation"],
         external_annotation=mpa_config["cladogram"]["external_annotation"],
         min_clade_size=mpa_config["cladogram"]["min_clade_size"],
+        export2graphlan=f"scripts/biobakery/export2graphlan.py",
+        graphlan_annotate=f"scripts/biobakery/graphlan_annotate.py",
+        graphlan=f"scripts/biobakery/graphlan.py",
     shell:
         """
         tail \
             -n +2 {input.txt} \
             | cut -f1,3- \
             > {output.clado_format}
-        
+         
         export2graphlan.py \
             --skip_rows {params.skip_rows} \
             -i {output.clado_format} \
@@ -295,7 +306,7 @@ rule metaphlan_cladogram:
                 {output.abundance_annot} \
                 {output.abundance_tree} \
                 {output.abundance_xml} \
-                2>> {log}
+            2>> {log}
 
         graphlan.py \
             --dpi 300 \
@@ -309,12 +320,12 @@ rule metaphlan_cladogram:
 
 rule gather_visualizations:
     input:
-        mpa_combined = expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}", ext=("txt", "krona.html")),
-        hclust_heatmap=f"{OUTDIR}/metaphlan/abundance_heatmap_species.png",
-        species=f"{OUTDIR}/metaphlan/merged_abundance_table_species.txt",
-        mpa_plot = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
-        mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
-        cladogram=f"{OUTDIR}/metaphlan/all_samples_cladogram.png",
+        mpa_combined=expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}", ext=("txt", "krona.html")),
+        hclust_heatmap=f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
+        species=f"{OUTDIR}/metaphlan/hclust2_species_abundance_table.txt",
+        mpa_plot=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+        cladogram=f"{OUTDIR}/metaphlan/cladogram.png",
     output:
         visualuzations_success=f"{OUTDIR}/metaphlan/visualizations_success.txt"
     shell:
