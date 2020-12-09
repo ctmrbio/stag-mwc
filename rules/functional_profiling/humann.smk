@@ -16,7 +16,7 @@ HMN_METHOD=h_config["norm_method"]
 HMN_MODE=h_config["norm_mode"]
 HMN_GRP=h_config["groups"]
 HMN_RENAME=h_config["rename"]
-
+HMN_UTILITY=h_config["utility_db"]
 
 if config["functional_profile"]["humann"]:
     if (not all([h_config["nucleotide_db"], h_config["protein_db"]]) 
@@ -125,6 +125,9 @@ rule normalize_humann_tables:
         mode=h_config["norm_mode"],
     shell:
         """
+        humann_config \
+            --update database_folders utility_mapping {HMN_UTILITY}
+
         humann_renorm_table \
             --input {input.genefamilies} \
             --output {output.genefamilies} \
@@ -132,6 +135,7 @@ rule normalize_humann_tables:
             --mode {params.mode} \
             > {log.stdout} \
             2> {log.stderr}
+
         humann_renorm_table \
             --input {input.pathabundance} \
             --output {output.pathabundance} \
@@ -163,6 +167,9 @@ rule regroup_humann_tables:
         groups=h_config["groups"]
     shell:
         """
+        humann_config \
+            --update database_folders utility_mapping {HMN_UTILITY}
+
         humann_regroup_table \
             --input {input.genefamilies} \
             --output {output.genefamilies} \
@@ -193,6 +200,9 @@ rule rename_humann_tables:
         rename=h_config["rename"]
     shell:
         """
+        humann_config \
+            --update database_folders utility_mapping {HMN_UTILITY}
+
         humann_rename_table \
             --input {input.genefamilies} \
             --output {output.genefamilies} \
@@ -235,6 +245,9 @@ rule join_humann_tables:
         pathabundance=f"pathabundance_{HMN_METHOD}",
     shell:
         """
+        humann_config \
+            --update database_folders utility_mapping {HMN_UTILITY}
+
         humann_join_tables \
             --input {params.output_dir} \
             --output {output.genefamilies} \
