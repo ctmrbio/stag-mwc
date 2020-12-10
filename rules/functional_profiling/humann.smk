@@ -219,13 +219,16 @@ rule join_humann_tables:
         pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv", sample=SAMPLES),
         pathcoverage=expand(f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv", sample=SAMPLES),
     output:
-        genefamilies=report(f"{OUTDIR}/humann/all_samples.humann_genefamilies.tsv",
+        genefamilies=f"{OUTDIR}/humann/all_samples.humann_genefamilies.tsv",
+        pathabundance=f"{OUTDIR}/humann/all_samples.humann_pathabundance.tsv",
+        pathcoverage=f"{OUTDIR}/humann/all_samples.humann_pathcoverage.tsv",
+        readable_genefamilies=report(f"{OUTDIR}/humann/all_samples_readable.humann_genefamilies.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
-        pathabundance=report(f"{OUTDIR}/humann/all_samples.humann_pathabundance.tsv",
+        readable_pathabundance=report(f"{OUTDIR}/humann/all_samples_readable.humann_pathabundance.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
-        pathcoverage=report(f"{OUTDIR}/humann/all_samples.humann_pathcoverage.tsv",
+        readable_pathcoverage=report(f"{OUTDIR}/humann/all_samples_readable.humann_pathcoverage.tsv",
                 category="Functional profiling",
                 caption="../../report/humann_table.rst"),
     log:
@@ -268,4 +271,9 @@ rule join_humann_tables:
             --file_name {params.pathabundance} \
             >> {log.stdout} \
             2>> {log.stderr}
+
+        column -t -s $'\t' {output.genefamilies} | cat > {output.readable_genefamilies}
+        column -t -s $'\t' {output.pathabundance} | cat > {output.readable_pathabundance}
+        column -t -s $'\t' {output.pathcoverage} | cat > {output.readable_pathcoverage}
+        
         """
