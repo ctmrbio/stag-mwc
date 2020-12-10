@@ -28,7 +28,7 @@ rule consensus_markers:
     input:
         sam=f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2", 
     output:
-        consensus_markers=f"{OUTDIR}/strainphlan/{{sample}}.pkl",
+        consensus_markers=f"{OUTDIR}/strainphlan/{{sample}}/{{sample}}.pkl",
     log:
         stdout=f"{LOGDIR}/strainphlan/sample2markers.{{sample}}.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/sample2markers.{{sample}}.strainphlan.stderr.log",
@@ -41,7 +41,7 @@ rule consensus_markers:
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
-        output_dir=f"{OUTDIR}/strainphlan/"
+        output_dir=f"{OUTDIR}/strainphlan/{{sample}}"
     shell:
         """
         sample2markers.py \
@@ -55,7 +55,7 @@ rule consensus_markers:
 rule extract_markers:
     """extract marker sequences"""
     input:
-        consensus_markers=expand(f"{OUTDIR}/strainphlan/{{sample}}.pkl", sample=SAMPLES),
+        consensus_markers=expand(f"{OUTDIR}/strainphlan/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
     output:
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
     log:
@@ -86,7 +86,7 @@ rule extract_markers:
 rule strainphlan:
     """generate tree and alignment"""
     input:
-        consensus_markers=expand(f"{OUTDIR}/strainphlan/{{sample}}.pkl", sample=SAMPLES),
+        consensus_markers=expand(f"{OUTDIR}/strainphlan/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
     output:
         alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_concatenated.aln",
@@ -94,6 +94,7 @@ rule strainphlan:
     log:
         stdout=f"{LOGDIR}/strainphlan/alignment.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/alignment.strainphlan.stderr.log",
+        available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
     shadow:
         "shallow"
     conda:
@@ -110,6 +111,20 @@ rule strainphlan:
         extra=spa_config["extra"],  # This is extremely useful if you want to include a reference genome
     shell:
         """
+        strainphlan \
+             -s {input.consensus_markers} \
+             --print_clades_only \
+             -d {params.database} \
+             -o {params.out_dir} \
+             -n {threads} \
+             2>&1 > {log.available_clades}
+ 
+        echo "#######################################################################"
+        echo "##  If pipeline failed please edit clade_of_interest in config.yaml  ##" 
+        echo "##      type \\"less {log.available_clades}\\"      ##"
+        echo "##  To see the clades that were identified available for strainphlan ##"
+        echo "#######################################################################"   
+
         strainphlan \
              -s {input.consensus_markers} \
              -m {input.reference_markers} \
