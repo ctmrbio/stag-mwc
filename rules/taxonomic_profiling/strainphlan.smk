@@ -144,7 +144,7 @@ rule add_metadata:
     input:
         tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
     output:
-        meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
+        meta_tree_png=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
     log:
         stdout=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stderr.log",
@@ -158,7 +158,6 @@ rule add_metadata:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
         metadata=spa_config["metadata"],
-        script=f"scripts/add_metadata_tree.py",
     shell:
         """
         add_metadata_tree.py \
@@ -174,26 +173,27 @@ rule visualise_tree:
     input:
         meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
     output:
-        meta_tree_png=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
+        meta_tree=report(f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
+            category="Taxonomic profiling",
+            caption="../../report/graphlan_strain_tree.rst"),
     log:
         stdout=f"{LOGDIR}/strainphlan/visualise_tree.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/visualise_tree.strainphlan.stderr.log",
     shadow:
         "shallow"
     conda:
-        "../../envs/metaphlan.yaml"
+        "../../envs/graphlan.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "shub://AroArz/singularity_playground:graphlan"
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
-        metadata=spa_config["metadata"],
-        script=f"scripts/add_metadata_tree.py",
+        script=f"scripts/plot_tree_graphlan.py",
     shell:
         """
-        plot_tree_graphlan.py \
+        {params.script} \
              --ifn_tree {input.meta_tree} \
-             --colorized_metadata mode_delivery \
+             --colorized_metadata SampledID \
              --leaf_marker_size 60 \
              --legend_marker_size 60 \
              > {log.stdout} \
