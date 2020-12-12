@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "simulated.{sample}_R{readpair}_001.fastq.gz"
+input_fn_pattern: "{sample}_R{readpair}_001.fastq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
@@ -25,7 +25,7 @@ email: ""                    # Email to send status message after completed/fail
 # Pipeline steps included
 #########################
 qc_reads: True
-host_removal: False
+host_removal: True
 naive:
     assess_depth: False
     sketch_compare: False
@@ -34,7 +34,7 @@ taxonomic_profile:
     kraken2: False
     metaphlan: True
 strain_level_profiling:
-    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
     humann: False
 antibiotic_resistance:
@@ -109,9 +109,11 @@ metaphlan:
         scale: "--log_scale"                 # --log_scale/-l or --sqrt_scale/-s
         feature_distance: "braycurtis"       # Distance function for features [default correlation]
         sample_distance: "braycurtis"        # Distance function for sample [default euclidean]
+        top_features: "50"                   # Number of top taxa to include in heatmap.
+        top_samples: "50"                    # Number of top samples to include in heatmap.
     cladogram:
         skip_rows: "1"                       # Skip headers: 1 or 2.
-        most_abundance: "100"                # Select the top 100 most abundance clades to highlight.
+        most_abundance: "50"                # Select the top N most abundance clades to highlight.
         minimum_abundance: "1"               # Set a minimum abundance threshold for clades to be annotated.
         least_biomarkers: "10"               # Extract a minimum of 10 biomarkers.
         annotation: "5,6"                    # Select taxonomic levels 5 and 6 to be annotated within the tree.
@@ -124,7 +126,9 @@ metaphlan:
 strainphlan:
     clade_of_interest: "s__Bifidobacterium_longum"
     mode: "accurate"
-    extra: "--marker_in_n_samples 1 --sample_with_n_markers 1"
+    extra: "--marker_in_n_samples 11"
+    metadata: "metadata_fecal_samples_twins_excl_siblings.csv"
+#    extra: "--marker_in_n_samples 1 --sample_with_n_markers 1"
 
 #########################
 # Functional profiling
@@ -132,6 +136,7 @@ strainphlan:
 humann:
     nucleotide_db: "/proj/snic2020-6-233/db/humann_databases/chocophlan"        # [Required] Path to ChocoPhlAn DB directory.
     protein_db: "/proj/snic2020-6-233/db/humann_databases/protein_database/uniref"           # [Required] Path to protein database (typically UniRef90).
+    utility_db: "/proj/snic2020-6-233/db/humann_databases/utility_mapping"           # [Required] Path to utility_mapping database.
     norm_method: "relab"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
     groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec,                                                                                                   uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
