@@ -6,4 +6,5 @@ channels:
 dependencies:
   - export2graphlan
   - graphlan
+  - dendropy
   - python=2.7.15
