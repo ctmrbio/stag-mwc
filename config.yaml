@@ -113,7 +113,7 @@ metaphlan:
         top_samples: "50"                    # Number of top samples to include in heatmap.
     cladogram:
         skip_rows: "1"                       # Skip headers: 1 or 2.
-        most_abundance: "50"                # Select the top N most abundance clades to highlight.
+        most_abundance: "25"                # Select the top N most abundance clades to highlight.
         minimum_abundance: "1"               # Set a minimum abundance threshold for clades to be annotated.
         least_biomarkers: "10"               # Extract a minimum of 10 biomarkers.
         annotation: "5,6"                    # Select taxonomic levels 5 and 6 to be annotated within the tree.
