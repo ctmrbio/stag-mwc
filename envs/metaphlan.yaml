@@ -6,4 +6,5 @@ channels:
     - biobakery
 dependencies:
     - metaphlan =3.0.5
+    - phylophlan =3.0.1
     - krona =2.7.1
