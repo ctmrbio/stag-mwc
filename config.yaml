@@ -108,7 +108,7 @@ metaphlan:
     hclust_heatmap:
         scale: "--log_scale"                 # --log_scale/-l or --sqrt_scale/-s
         feature_distance: "braycurtis"       # Distance function for features [default correlation]
-        sample_distance: "braycurtis"        # Distance function for sample [default euclidean]
+        sample_distance: "braycurtis --image_size 16"        # Distance function for sample [default euclidean]
         top_features: "50"                   # Number of top taxa to include in heatmap.
         top_samples: "50"                    # Number of top samples to include in heatmap.
     cladogram:
@@ -127,7 +127,7 @@ strainphlan:
     clade_of_interest: "s__Bifidobacterium_longum"
     mode: "accurate"
     extra: "--marker_in_n_samples 11"
-    metadata: "metadata_fecal_samples_twins_excl_siblings.csv"
+    metadata: "metadata_fecal_samples_twins_excl_siblings.txt"
 #    extra: "--marker_in_n_samples 1 --sample_with_n_markers 1"
 
 #########################
