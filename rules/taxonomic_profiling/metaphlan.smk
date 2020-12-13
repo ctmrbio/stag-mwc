@@ -182,7 +182,10 @@ rule create_metaphlan_krona_plots:
     input:
         expand(f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.krona", sample=SAMPLES)
     output:
-        html=report(f"{OUTDIR}/metaphlan/all_samples.metaphlan.krona.html",
+        html_samples=report(f"{OUTDIR}/metaphlan/all_samples.metaphlan.krona.html",
+            category="Taxonomic profiling",
+            caption="../../report/metaphlan_krona.rst"),
+        html_all=report(f"{OUTDIR}/metaphlan/combined_samples.metaphlan.krona.html",
             category="Taxonomic profiling",
             caption="../../report/metaphlan_krona.rst"),
     shadow:
@@ -196,7 +199,12 @@ rule create_metaphlan_krona_plots:
     shell:
         """
         ktImportText \
-            -o {output.html} \
+            -o {output.html_samples} \
+            {input}
+
+        ktImportText \
+            -o {output.html_all} \
+            -c \
             {input}
         """
 
@@ -221,19 +229,22 @@ rule metaphlan_hclust2:
         scale=mpa_config["hclust_heatmap"]["scale"],
         feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
         sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
+        top_samples=mpa_config["hclust_heatmap"]["top_samples"],
+        top_features=mpa_config["hclust_heatmap"]["top_features"],
         hclust2=f"scripts/biobakery/hclust2.py",
-    shell:
+    shell: # Takes all lines with species and the header "clade". Then replace everything until s__ with nothing. 
         """
         grep -E "s__|clade" {input} \
             | sed 's/^.*s__//g' \
-            | cut -f1,3-8 \
+            | cut -f1,3- \
             | sed -e 's/clade_name/species/g' \
             > {output.species}
 
         hclust2.py \
             -i {output.species} \
             -o {output.hclust_heatmap} \
-            --ftop 25 \
+            --ftop {params.top_features} \
+            --stop {params.top_samples} \
             --f_dist_f {params.feature_distance} \
             --s_dist_f {params.sample_distance} \
             --cell_aspect_ratio 0.5 \
