@@ -15,6 +15,7 @@ From: continuumio/miniconda
 
 	conda install -c bioconda graphlan
         conda install -c bioconda export2graphlan
+        conda install -c bioconda dendropy
 
 %runscript
         echo "$@"
