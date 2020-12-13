@@ -5,7 +5,10 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-#     extract_markers,
+     add_metadata,
+     visualise_tree,
+     ete3_tree,
+
 
 mpa_config = config["metaphlan"]
 spa_config = config["strainphlan"]
@@ -17,8 +20,11 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set \"metaphlan: False\" and \"strainphlan: false\" in config.yaml"
         raise WorkflowError(err_message)
 
-    spa_outputs=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png"
+    spa_outputs=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
+    ete3_tree=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_alignment_tree.png",
+
     all_outputs.append(spa_outputs)
+    all_outputs.append(ete3_tree)
 
     citations.add(publications["MetaPhlAn"])
     citations.add(publications["Krona"])
@@ -154,8 +160,6 @@ rule add_metadata:
         "../../envs/metaphlan.yaml"
     singularity:
         "shub://AroArz/singularity_playground:biobakery"
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
         metadata=spa_config["metadata"],
     shell:
@@ -185,8 +189,6 @@ rule visualise_tree:
         "../../envs/graphlan.yaml"
     singularity:
         "shub://AroArz/singularity_playground:graphlan"
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
         script=f"scripts/plot_tree_graphlan.py",
     shell:
@@ -201,6 +203,33 @@ rule visualise_tree:
         """
 
 
+rule ete3_tree:
+    """concatenate ete3 tree and alignment"""
+    input:
+        alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
+        tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
+    output:
+        tree_alignment=report(f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_alignment_tree.png",
+            category="Strain profiling",
+            caption="../../report/ete3_tree.rst"),
+    log:
+        stdout=f"{LOGDIR}/strainphlan/ete3_tree.strainphlan.stdout.log",
+        stderr=f"{LOGDIR}/strainphlan/ete3_tree.strainphlan.stderr.log",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/graphlan.yaml"
+    singularity:
+        "shub://AroArz/singularity_playground:graphlan"
+    shell:
+        """
+        xvfb-run ete3 view \
+             -t {input.tree} \
+             --alg {input.alignment} \
+             -i {output.tree_alignment} \
+             > {log.stdout} \
+             2> {log.stderr}
+        """
 
 
 
