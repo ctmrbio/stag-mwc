@@ -144,7 +144,7 @@ rule add_metadata:
     input:
         tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
     output:
-        meta_tree_png=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
+        meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
     log:
         stdout=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stderr.log",
@@ -173,8 +173,8 @@ rule visualise_tree:
     input:
         meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
     output:
-        meta_tree=report(f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
-            category="Taxonomic profiling",
+        meta_tree_png=report(f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
+            category="Strain profiling",
             caption="../../report/graphlan_strain_tree.rst"),
     log:
         stdout=f"{LOGDIR}/strainphlan/visualise_tree.strainphlan.stdout.log",
@@ -193,7 +193,7 @@ rule visualise_tree:
         """
         {params.script} \
              --ifn_tree {input.meta_tree} \
-             --colorized_metadata SampledID \
+             --colorized_metadata subject \
              --leaf_marker_size 60 \
              --legend_marker_size 60 \
              > {log.stdout} \
