@@ -3,7 +3,7 @@ From: continuumio/miniconda3
 
 
 %post
-	### Sets correct channels and installs metaphlan3, humann3, strainphlan3 and krona
+	### Sets correct channels and installs metaphlan3, humann3, strainphlan3, phylophlan3 and krona
 
 	PATH=/opt/conda/bin:$PATH
         export PATH	
@@ -13,8 +13,7 @@ From: continuumio/miniconda3
 	conda config --add channels conda-forge
 	conda config --add channels biobakery
 
-	conda install -c bioconda -c biobakery python=3.7 metaphlan humann krona=2.7.1 -y
-
+	conda install -c bioconda -c biobakery python=3.7 metaphlan humann phylophlan krona=2.7.1 phylophlan=3.0.1 -y
 
 %files
 
