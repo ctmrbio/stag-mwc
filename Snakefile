@@ -154,8 +154,8 @@ onsuccess:
         Path("citations.rst").symlink_to(citation_filename)
 
         snakemake_call = " ".join(argv)
-        shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
-        shell("{snakemake_call} --report {report}-{datetime}.html".format(
+        shell("{snakemake_call[0]} --unlock".format(snakemake_call=snakemake_call))
+        shell("{snakemake_call[0]} --report {report}-{datetime}.html".format(
             snakemake_call=snakemake_call,
             report=config["report"],
             datetime=report_datetime,
