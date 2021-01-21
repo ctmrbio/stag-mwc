@@ -153,7 +153,7 @@ onsuccess:
             Path("citations.rst").unlink()
         Path("citations.rst").symlink_to(citation_filename)
 
-        shell("snakemake --unlock")
+        shell("{snakemake_call} --unlock".format(snakemake_call=argv[0]))
         shell("{snakemake_call} --report {report}-{datetime}.html".format(
                 snakemake_call=argv[0],
             report=config["report"],
