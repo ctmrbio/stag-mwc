@@ -1,7 +1,7 @@
 # Cluster config file for StaG-mwc for use on CTMR UCP
 __default__:
-    account: ""
-    partition: ""
+    account: "bio"
+    partition: "ctmr"
     extra: ""
     time: "03:00:00"
     n: 2

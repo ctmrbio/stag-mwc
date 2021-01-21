@@ -1,5 +1,5 @@
 jobscript: "cluster_configs/ctmr_ucp/slurm-jobscript.sh"
-cluster: "cluster_configs/ctmr_ucp/slurm-submit.py --cpus-per-task {cluster.n} --time {cluster.time} --error {cluster.stderr} --output {cluster.stdout} --job-name '{cluster.jobname}' {cluster.extra}"
+cluster: "cluster_configs/ctmr_ucp/slurm-submit.py --time {cluster.time} --error {cluster.stderr} --output {cluster.stdout} --job-name '{cluster.jobname}' {cluster.extra}"
 cluster-status: "cluster_configs/ctmr_ucp/slurm-status.py"
 cluster-config: "cluster_configs/ctmr_ucp/ctmr_ucp.yaml"
 max-jobs-per-second: 10
