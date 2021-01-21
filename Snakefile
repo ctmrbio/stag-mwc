@@ -154,9 +154,9 @@ onsuccess:
         Path("citations.rst").symlink_to(citation_filename)
 
         shell("snakemake --unlock")
-        shell("snakemake --report {report}-{datetime}.html".format(
+        shell("{snakemake_call} --report {report}-{datetime}.html".format(
+                snakemake_call=argv[0],
             report=config["report"],
             datetime=report_datetime,
             )
         )
-
