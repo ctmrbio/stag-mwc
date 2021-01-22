@@ -62,7 +62,7 @@ rule assembly:
             -o {params.outdir} \
             -t {threads} \
             -m {params.memory} \
-            --use-{params.assembler} \
+            --{params.assembler} \
             2> {log.stderr} \
             > {log.stdout}
         """
