@@ -135,6 +135,8 @@ rule create_kaiju_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         ktImportText \
