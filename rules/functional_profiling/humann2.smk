@@ -46,7 +46,7 @@ rule download_humann2_databases:
     conda:
         "../../envs/humann2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://ctmrbio/stag-mwc:biobakery"
     params:
         dbdir=config["dbdir"]+"/humann2"
     shell:
@@ -73,7 +73,7 @@ rule humann2:
     conda:
         "../../envs/humann2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads:
         cluster_config["humann2"]["n"] if "humann2" in cluster_config else 20
     resources:
@@ -123,7 +123,7 @@ rule normalize_humann2_tables:
     conda:
         "../../envs/humann2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads: 
         1
     params:
@@ -174,7 +174,7 @@ rule join_humann2_tables:
     conda:
         "../../envs/humann2.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-biobakery"
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads: 
         1
     params:
