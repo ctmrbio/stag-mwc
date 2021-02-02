@@ -16,8 +16,7 @@ min_version("5.5.4")
 
 from rules.publications import publications
 
-stag_version = "0.4.0"
-singularity: "docker://continuumio/miniconda3:4.7.10"
+stag_version = "0.4.1"
 
 onstart:
     print("\n".join([
@@ -76,6 +75,7 @@ include: "rules/functional_profiling/humann2.smk"
 # Antibiotic resistance
 #############################
 include: "rules/antibiotic_resistance/groot.smk"
+include: "rules/antibiotic_resistance/amrplusplus.smk"
 
 #############################
 # Mappers
@@ -153,12 +153,10 @@ onsuccess:
             Path("citations.rst").unlink()
         Path("citations.rst").symlink_to(citation_filename)
 
-        snakemake_call = " ".join(argv)
-        shell("{snakemake_call} --unlock".format(snakemake_call=snakemake_call))
+        shell("{snakemake_call} --unlock".format(snakemake_call=argv[0]))
         shell("{snakemake_call} --report {report}-{datetime}.html".format(
-            snakemake_call=snakemake_call,
+            snakemake_call=argv[0],
             report=config["report"],
             datetime=report_datetime,
             )
         )
-

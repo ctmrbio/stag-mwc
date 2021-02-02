@@ -18,6 +18,8 @@ if config["multiqc_report"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             1
         params:

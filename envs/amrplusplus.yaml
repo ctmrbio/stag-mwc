@@ -1,0 +1,8 @@
+name: amrplusplus
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - samtools=1.10
+  - bwa=0.7.17

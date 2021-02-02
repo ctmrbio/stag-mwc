@@ -71,7 +71,8 @@ jobs:
                     sed -i 's/kraken2: False/kraken2: True/' config.yaml
                     sed -i 's/metaphlan2: False/metaphlan2: True/' config.yaml
                     sed -i 's/humann2: False/humann2: True/' config.yaml
-                    sed -i 's/antibiotic_resistance: False/antibiotic_resistance: True/' config.yaml
+                    sed -i 's/groot: False/groot: True/' config.yaml
+                    sed -i 's/amrplusplus: False/amrplusplus: True/' config.yaml
                     sed -i 's/assembly: False/assembly: True/' config.yaml
                     sed -i 's/binning: False/binning: True/' config.yaml
                     sed -i 's|db_path: \"\"|db_path: \"db/hg19\"|' config.yaml

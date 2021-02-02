@@ -13,6 +13,36 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
+## [0.4.1] Unreleased
+### Added
+- Created Singularity images for all conda environments. Run with
+  `--use-singularity` (do not combine with `--use-conda`).
+- New cluster profile "pseudo-rules" for anonymous rules for mappers: `bbmap`
+  and `bowtie2` can now accept threads from `n` in the cluster profile. They
+  still use the time allocation for the `__default__` rule, however.
+- Added possibility to use `extra:` to define additional arguments passed on to
+  Slurm submissions. Useful to request e.g. fat nodes with `extra: "-C fat"` 
+- Added custom reimplementation of AMRPlusPlus v2.0 which can be executed with 
+  either `--use-singularity` or `--use-conda`.
+
+### Fixed
+- The host removal module now correctly identifies setting `host_removal: False`
+  in the config file. Thank you chrsb!
+
+### Changed
+- Do not combine `--use-singularity` with `--use-conda` anymore. The new 
+  Singularity images already contain all dependencies.
+- All rules now define the number of threads from cluster_config if defined.
+  Old defaults are still used for local execution.
+- The shebang of `area_plot.py` has been changed to work in more environments.
+- Implemented workaround for error caused by automatic report generation when
+  using Singularity.
+- Disabled taxonomic area plot for Kaiju outputs due to issues processing the
+  output files.
+
+### Removed
+
+
 ## [0.4.0] 2020-02-18
 ### Added
 - Added resource limiter for HUMAnN2 due to its intense use of huge temporary

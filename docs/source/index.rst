@@ -8,7 +8,7 @@ The StaG metagenomic workflow collaboration (mwc) is a Snakemake implementation
 of a general metagenomic analysis workflow. It started out as a joint project
 between The Center for Translational Microbiome Research (`CTMR`_) at
 Karolinska Institutet in Stockholm and Fredrik Bäckhed's `research group`_ at
-Sahlgrenska in Gothenburg, but has since evolved into the default workflow for
+Sahlgrenska in Gothenburg, and has since evolved into the default workflow for
 metagenomics analyses used at CTMR.
 
 .. _CTMR: https://ki.se/en/research/centre-for-translational-microbiome-research-ctmr

@@ -1,0 +1,30 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%help
+	Singularity image containing the conda environment defined in
+	assembly.yaml.
+
+	To build, run:
+	  sudo singularity build stag-mwc-assembly.simg Singularity.assembly
+
+%files
+	assembly.yaml
+
+%labels
+	AUTHOR boulund
+	VERSION 1.0
+	CONDA_ENV /opt/conda/envs/assembly
+
+%environment
+    PATH=/opt/conda/envs/stag-mwc-assembly/bin:/opt/conda/bin:$PATH
+    export PATH
+
+%post
+	# Install stag-mwc-assembly conda environment
+	/opt/conda/bin/conda env create -f assembly.yaml --force
+	/opt/conda/bin/conda clean --yes --all
+
+%runscript
+    exec echo "$@"
+

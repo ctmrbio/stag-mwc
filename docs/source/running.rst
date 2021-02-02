@@ -56,10 +56,11 @@ is::
 
     snakemake --use-conda --cores N
 
-where ``N`` is the maximum number of cores you want to allow for the workflow.
-Snakemake will automatically reduce the number of cores available to individual
-steps to this limit. Another variant of ``--cores`` is called ``--jobs``, they
-are equivalent.
+where ``N`` is the maximum number of cores you want to allow for the
+workflow. Snakemake will automatically reduce the number of cores available
+to individual steps to this limit. Another variant of ``--cores`` is called
+``--jobs``, which you might encounter occassionally. The two commands are
+equivalent.
 
 .. note::
 
@@ -81,6 +82,26 @@ instruct snakemake to keep going even if a job should fail, e.g. maybe the
 taxonomic profiling step will fail for a sample if the sample contains no assignable
 reads after quality filtering (extreme example).
 
+If you are having trouble running |full_name| with conda, try with
+Singularity. There are pre-built Singularity images that are ready to use
+with |full_name|. In order to prevent exhausting the project's quota on
+Singularity Hub please use ``--singularity-prefix`` to specify a folder where
+Snakemake can download and re-use the downloaded Singularity images. The
+command to run |full_name| with Singularity instead of conda is::
+
+    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --dryrun
+
+There are some additional details that need to be considered when using
+Singularity instead of conda, most notably that you will have to specify bind
+paths (specifying-bind-paths_) so that your reference databases are
+accessible from within the containers when running |full_name|. It might look
+something like this::
+
+    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --singularity-args "-B /home/username/databases"
+
+The above example assumes you have entered paths to your databases in
+``config.yaml`` with a base path like the one shown in the above command
+(e.g. ``/home/username/databases/kraken2/kraken2_human/``).
 
 Running on cluster resources
 ****************************
@@ -93,10 +114,35 @@ Slurm project account), as well as the number of CPUs, time, and memory
 requirements for each individual step. Snakemake uses this information when
 submitting jobs to the cluster scheduler.
 
+When running on a cluster it will likely work best if you run StaG using
+Singularity. The workflow comes preconfigured to download and use containers
+from Singularity hub. To use Singularity launch Snakemake with the
+``--use-singularity`` argument. 
+
+.. _specifying-bind-paths: https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html#specifying-bind-paths
+
+.. note:: 
+
+    Do not combine ``--use-conda`` with ``--use-singularity``.
+
+    It is important that you do not download the Singularity images from
+    Singularity hub too often due to quota limitations. To prevent |full_name|
+    from downloading the image again between several projects you can use the
+    ``--singularity-prefix`` to specify a directory where Snakemake can store
+    the downloaded images for reuse between projects.
+
+    Paths to databases need to be located so that they are accessible from
+    inside the Singularity containers. It's easiest if they are all available
+    from the same folder, so you can bind the main database folder into the
+    Singularity container with e.g. ``--singularity-args "-B /db"``. Note that
+    database paths need to specified in the config file so that the paths are
+    correct from inside the Singularity container. Read more about specifying
+    bind paths in the official Singularity docs: specifying-bind-paths_. 
+
 To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
 inside the workflow repository directory::
 
-    snakemake --use-conda --profile cluster_configs/rackham 
+    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --singularity-args "-B /proj/uppstore2017086/db" --profile cluster_configs/rackham 
 
 This will make Snakemake submit each workflow step as a separate cluster job
 using the CPU and time requirements specified in ``rackham.yaml`` inside the
@@ -118,12 +164,6 @@ disconnected and the pipeline needs to be restarted, remove slurm metadadata
 files before restarting pipeline using::
 
     (base)$ rm -rfv .snakemake/metadata
-
-.. note:: 
-
-    When running on a cluster it can speed up node initialization if you run
-    using Singularity containers and conda combined. This is done by running
-    snakemake with both the `--use-conda` and `--use-singularity` arguments.
 
 
 Execution report

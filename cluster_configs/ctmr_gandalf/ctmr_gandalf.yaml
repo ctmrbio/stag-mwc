@@ -1,7 +1,7 @@
-# Cluster config file for StaG-mwc for use on UPPMAX Rackham
+# Cluster config file for StaG-mwc for use on CTMR UCP
 __default__:
-    account: "snic2017-7-245"
-    partition: "core"
+    account: "bio"
+    partition: "ctmr"
     extra: ""
     time: "03:00:00"
     n: 2
@@ -14,30 +14,30 @@ __default__:
 # Pre-processing
 #############################
 fastp:
-    n: 4
+    n: 8
     time: "01:00:00"
 remove_host:
-    n: 4
+    n: 8
     time: "01:00:00"
 bbcountunique:
-    n: 2
+    n: 4
     time: "00:45:00"
 
 #############################
 # Naive comparisons
 #############################
 sketch:
-    n: 2
+    n: 8
     time: "00:20:00"
 
 #############################
 # Taxonomic profiling
 #############################
 kaiju:
-    n: 8
+    n: 10
     time: "02:00:00"
 kraken2:
-    n: 8
+    n: 10
     time: "02:00:00"
 metaphlan2:
     n: 8
@@ -50,14 +50,14 @@ bracken:
 # Functional profiling
 #############################
 humann2:
-    n: 8
+    n: 12
     time: "12:00:00"
 
 #############################
 # Antibiotic resistance
 #############################
 groot_align:
-    n: 6
+    n: 8
     time: "01:00:00"
 align_to_amr:
     n: 10
@@ -67,10 +67,10 @@ align_to_amr:
 # Mappers
 #############################
 bbmap:
-    n: 8
+    n: 10
     time: "02:00:00"
 bowtie2:
-    n: 8
+    n: 10
     time: "02:00:00"
 
 #############################

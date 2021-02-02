@@ -85,9 +85,11 @@ rule kraken2:
     shadow: 
         "shallow"
     threads:
-        4
+        cluster_config["kraken2"]["n"] if "kraken2" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         db=kraken2_config["db"],
         confidence=kraken2_config["confidence"],
@@ -116,9 +118,11 @@ rule kraken_mpa_style:
     log:
         str(LOGDIR/"kraken2/{sample}.mpa_style.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kreport2mpa.py \
@@ -140,9 +144,11 @@ rule join_kraken2_mpa:
     log:
         str(LOGDIR/"kraken2/join_kraken2_mpa_tables.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -168,6 +174,8 @@ rule kraken2_area_plot:
         str(LOGDIR/"kraken2/area_plot.kraken2.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -191,6 +199,8 @@ rule combine_kreports:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/combine_kreports.py \
@@ -214,6 +224,8 @@ rule kreport2krona:
         1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/kreport2krona.py \
@@ -234,6 +246,8 @@ rule create_kraken2_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
 		ktImportText \
@@ -283,11 +297,13 @@ rule bracken_kreport:
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.log")
     threads:
-        2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
     shadow:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -314,9 +330,11 @@ rule bracken_all_levels:
     shadow:         # shadow required because est_abundance.py always creates the
         "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
     threads:
-        2
+        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -340,9 +358,11 @@ rule bracken_mpa_style:
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kreport2mpa.py \
@@ -364,9 +384,11 @@ rule join_bracken_mpa:
     log:
         str(LOGDIR/"kraken2/join_bracken_mpa_tables.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -392,6 +414,8 @@ rule bracken_area_plot:
         str(LOGDIR/"kraken2/area_plot.bracken.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -412,9 +436,11 @@ rule join_bracken:
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="fraction_total_reads",
         feature_column="name",
@@ -442,6 +468,8 @@ rule bracken2krona:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/KrakenTools/kreport2krona.py \
@@ -462,6 +490,8 @@ rule create_bracken_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
 		ktImportText \
@@ -478,9 +508,11 @@ rule filter_bracken:
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
         include=kraken2_config["filter_bracken"]["include"],
@@ -506,9 +538,11 @@ rule join_bracken_filtered:
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
     threads:
-        2
+        1
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         value_column="fraction_total_reads",
         feature_column="name",

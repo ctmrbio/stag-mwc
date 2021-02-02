@@ -1,0 +1,50 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%help
+	Singularity image containing the conda environment defined in
+	stag-mwc.yaml.
+
+	To build, run:
+	  sudo singularity build stag-mwc.simg Singularity.stag-mwc
+
+	Note that the Kraken2 package installed through conda is ignored in favor
+	of one built and installed from source, due to issues with the conda
+	package giving segfaults.
+
+%files
+	stag-mwc.yaml
+
+%labels
+	AUTHOR boulund
+	VERSION 1.0
+	CONDA_ENV /opt/conda/envs/stag-mwc-main
+	KRAKEN2_BUILD SOURCE_v2.0.8-beta
+
+%environment
+    PATH=/opt/kraken2-2.0.8-beta:/opt/conda/envs/stag-mwc-main/bin:/opt/conda/bin:$PATH
+    export PATH
+
+%post
+	# Install stag-mwc-main conda environment
+	/opt/conda/bin/conda env create -f stag-mwc.yaml --force
+	/opt/conda/bin/conda clean --yes --all
+
+	# Install Kraken2 from source; the conda version segafaults.
+	apt-get update && apt-get -y install \
+		wget \
+		zlib1g-dev \
+		make \
+		g++
+	wget \
+		https://github.com/DerrickWood/kraken2/archive/v2.0.8-beta.tar.gz \
+		--output-document kraken2-2.0.8-beta.tar.gz
+	tar -xvf kraken2-2.0.8-beta.tar.gz
+	mkdir -pv /opt/kraken2-2.0.8-beta
+	cd kraken2-2.0.8-beta
+	./install_kraken2.sh /opt/kraken2-2.0.8-beta
+	rm -rfv kraken2-2.0.8-beta*
+
+%runscript
+    exec echo "$@"
+

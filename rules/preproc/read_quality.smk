@@ -1,6 +1,6 @@
 # vim: syntax=python expandtab
 # Read pre-processing 
-#TODO: Remove superfluous str conversions of paths in expand and log statements
+# TODO: Remove superfluous str conversions of paths in expand and log statements
 #      when Snakemake is pathlib compatible.
 
 if config["qc_reads"]:
@@ -30,8 +30,10 @@ if config["qc_reads"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
-            4
+            cluster_config["fastp"]["n"] if "fastp" in cluster_config else 4
         params:
             extra=fastp_config["extra"],
         shell:

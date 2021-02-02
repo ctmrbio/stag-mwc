@@ -55,13 +55,13 @@ This will clone the repo into a folder called ``stag-mwc`` inside your current
 working directory. You will manage all workflow-related business from inside this
 folder (i.e. configuring and running the workflow).
 
+The intended way of working with |full_name| is that you download/clone a
+complete copy of the repository for each analysis you intend to make. That way,
+the local copy you have will remain after the analysis has been run, so you can
+go back and see exactly what was run, and how. This forms the basis of how
+Snakemake enables traceability and reproducibility.
 
 Congratulations
 ***************
 You have now installed |full_name|. 
 
-The intended way of working with |full_name|, is that you download/clone a
-complete copy of the repository for each analysis you intend to make. That way,
-the local copy you have will remain after the analysis has been run, so you can
-go back and see exactly what was run, and how. This forms the basis of how
-Snakemake enables traceability and reproducibility.

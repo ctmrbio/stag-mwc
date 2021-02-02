@@ -10,7 +10,7 @@ localrules:
 
 
 groot_db_path = Path(config["groot"]["index"])
-if config["antibiotic_resistance"]:
+if config["antibiotic_resistance"]["groot"]:
     if not Path(groot_db_path).exists():
         err_message = "No groot database found at: '{}'!\n".format(groot_db_path)
         err_message += "Specify the DB path in the groot section of config.yaml.\n"
@@ -37,6 +37,8 @@ rule create_groot_index:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         dbdir=DBDIR/"groot/",
         db=groot_config["db"],
@@ -76,8 +78,10 @@ rule groot_align:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
-        8
+        cluster_config["groot_align"]["n"] if "groot_align" in cluster_config else 8
     params:
         index=groot_config["index"],
         minlength=groot_config["minlength"],
@@ -115,6 +119,8 @@ rule groot_report:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     params:

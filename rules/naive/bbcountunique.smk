@@ -27,9 +27,11 @@ if config["naive"]["assess_depth"]:
         shadow: 
             "shallow"
         threads:
-            2
+            cluster_config["bbcountunique"]["n"] if "bbcountunique" in cluster_config else 2
         conda:
             "../../envs/stag-mwc.yaml",
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         params:
             interval=config["bbcountunique"]["interval"]
         shell:

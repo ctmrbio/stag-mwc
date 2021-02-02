@@ -51,8 +51,10 @@ rule metaphlan2:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads:
-        5
+        cluster_config["metaphlan2"]["n"] if "metaphlan2" in cluster_config else 5
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
         bt2_index=mpa_config["bt2_index"],
@@ -117,6 +119,8 @@ rule combine_metaphlan2_tables:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads:
         1
     shell:
@@ -137,6 +141,8 @@ rule metaphlan2_area_plot:
         str(LOGDIR/"metaphlan2/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \
@@ -161,6 +167,8 @@ rule plot_metaphlan2_heatmap:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     threads:
         1
     params:
@@ -196,6 +204,8 @@ rule create_metaphlan2_krona_plots:
         "shallow"
     conda:
         "../../envs/metaphlan2.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:biobakery"
     threads:
         1
     shell:

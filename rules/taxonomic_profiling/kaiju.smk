@@ -35,7 +35,7 @@ if config["taxonomic_profile"]["kaiju"]:
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
-    all_outputs.append(kaiju_area_plot)
+    #all_outputs.append(kaiju_area_plot)  # Buggy in stag 4.1
 
     citations.add(publications["Kaiju"])
     citations.add(publications["Krona"])
@@ -70,9 +70,11 @@ rule kaiju:
     shadow: 
         "shallow"
     threads:
-        4
+        cluster_config["kaiju"]["n"] if "kaiju" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -112,6 +114,8 @@ rule kaiju2krona:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kaiju2krona \
@@ -131,6 +135,8 @@ rule create_kaiju_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         ktImportText \
@@ -152,6 +158,8 @@ rule kaiju_report:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         kaiju2table \
@@ -181,6 +189,8 @@ rule join_kaiju_reports:
         value_column=kaiju_config["value_column"],
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/join_tables.py \
@@ -203,6 +213,8 @@ rule kaiju_area_plot:
         str(LOGDIR/"kaiju/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
+    singularity:
+        "shub://ctmrbio/stag-mwc:stag-mwc"
     shell:
         """
         scripts/area_plot.py \

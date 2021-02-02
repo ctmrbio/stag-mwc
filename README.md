@@ -20,8 +20,11 @@ Go to https://stag-mwc.readthedocs.org for the full documentation.
 [Snakemake](https://snakemake.readthedocs.io) are required to be able to use
 StaG-mwc. Most people would probably want to install
 [Miniconda](https://conda.io/miniconda.html) and install Snakemake into their
-base environment. Conda will automatically install the required versions of 
-all tools required to run StaG-mwc.
+base environment. When running StaG with the `--use-conda` or
+`--use-singularity` flags, all dependencies are managed automatically. If
+using conda it will automatically install the required versions of all tools
+required to run StaG-mwc. There is no need to combine the flags: the
+Singularity images already contain all required dependencies.
 
 ### Step 1: Clone workflow
 To use StaG-mwc, you need a local copy of the workflow repository. Start by
@@ -58,11 +61,16 @@ Make sure you edit the Slurm project account in
 documentation](https://snakemake.readthedocs.io) for further details on how to
 run Snakemake workflows on other types of cluster resources.
 
+Note that in all examples above, `--use-conda` and essentially be replaced
+with `--use-singularity` to run in Singularity containers instead of using a
+locally installed conda. Read more about it under the Running section in the
+docs.
 
 ## Testing
 A very basic continuous integration test is currently in place. It merely
 validates the syntax by trying to let Snakemake build the dependency graph if
-all outputs are activated.
+all outputs are activated. Suggestions for how to improve the automated
+testing of StaG-mwc are very welcome!
 
 
 ## Contributing

@@ -6,7 +6,7 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 rh_config = config["remove_host"]
-if rh_config:
+if config["host_removal"]:
     db_path = Path(config["remove_host"]["db_path"])
     if not Path(db_path/"taxo.k2d").is_file():
         err_message = "Cannot find database for host sequence removal at: '{}/*.k2d'!\n".format(db_path)
@@ -45,8 +45,10 @@ if rh_config:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
-            8
+            cluster_config["remove_host"]["n"] if "remove_host" in cluster_config else 8
         params:
             db=rh_config["db_path"],
             confidence=rh_config["confidence"],
@@ -97,6 +99,8 @@ if rh_config:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
+        singularity:
+            "shub://ctmrbio/stag-mwc:stag-mwc"
         threads:
             1
         shell:

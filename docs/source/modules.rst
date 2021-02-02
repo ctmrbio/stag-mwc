@@ -13,13 +13,15 @@
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 .. _MEGAHIT: https://github.com/voutcn/megahit
 .. _MultiQC: https://multiqc.info/
+.. _amrplusplus: https://megares.meglab.org/amrplusplus/latest/html/what_AMR++_produces.html
+.. _megares: https://megares.meglab.org/
 
 Modules
 =======
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
-sequencing reads (using `FastQC`_), followed by host sequence removal (using
-`BBMap`_). This section of the documentation aims to describe useful details
+sequencing reads (using `FastP`_), followed by host sequence removal (using
+`Kraken2`_). This section of the documentation aims to describe useful details
 about the separate tools that are used in |full_name|.
 
 The following subsections describe the function of each module included in
@@ -252,6 +254,35 @@ The read lengths input to `groot`_ must conform to the settings used during
 `groot`_ database construction. The length window can be configured in the
 config file.
 
+AMRPlusPlus_v2
+-------
+:Tool: `amrplusplus`_
+:Output folder: ``amrplusplus``
+
+`amrplusplus`_ will align reads to `megares`_ antibiotic resistance gene database to
+produce antibiotic resistance gene profiles. Output is structured as::
+
+        ├ AlignToAMR
+        │   └ <sample>.amr.alignment.sam
+        ├ RunResistome
+        │   ├ <sample>.class.tsv
+        │   ├ <sample>.gene.tsv
+        │   ├ <sample>.group.tsv
+        │   └ <sample>.mech.tsv
+        ├ ResistomeResults
+        │   └ AMR_analytic_matrix.csv
+        ├ RunRarefaction
+        │   ├ <sample>.class.tsv
+        │   ├ <sample>.gene.tsv
+        │   ├ <sample>.group.tsv
+        │   └ <sample>.mech.tsv
+
+``AMR_analytic_matrix.csv`` contains aggregated results of gene counts for all samples 
+aligned against `megares`_, based on the threshold set in ``config.yaml``. Pasting a gene name 
+or accession number into the database will provide detailed information and links to 
+published papers.
+
+`amrplusplus`_ can be executed with either ``--use-singularity`` or ``--use-conda`` settings.
 
 Mappers
 *******
