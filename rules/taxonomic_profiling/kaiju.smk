@@ -35,7 +35,7 @@ if config["taxonomic_profile"]["kaiju"]:
     all_outputs.extend(kaiju_reports)
     all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
-    all_outputs.append(kaiju_area_plot)
+    #all_outputs.append(kaiju_area_plot)  # Buggy in stag 4.1
 
     citations.add(publications["Kaiju"])
     citations.add(publications["Krona"])

@@ -35,7 +35,10 @@ situations.
 - All rules now define the number of threads from cluster_config if defined.
   Old defaults are still used for local execution.
 - The shebang of `area_plot.py` has been changed to work in more environments.
-- Implemented workaround for error caused by automatic report generation when using Singularity
+- Implemented workaround for error caused by automatic report generation when
+  using Singularity.
+- Disabled taxonomic area plot for Kaiju outputs due to issues processing the
+  output files.
 
 ### Removed
 
