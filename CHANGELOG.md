@@ -13,7 +13,7 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [0.4.1] Unreleased
+## [0.4.1] 2021-02-02
 ### Added
 - Created Singularity images for all conda environments. Run with
   `--use-singularity` (do not combine with `--use-conda`).
