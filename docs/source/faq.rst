@@ -13,8 +13,8 @@ both the read QC step and the host removal steps if you need to. In order to do
 so, we must "trick" Snakemake into thinking that those rules have already been
 performed. The rules for read QC and host removal are configured with bypasses
 so that if the user sets ``host_removal: False`` or ``qc_reads: False``, those
-steps will be bypassed by creating symlinks to directly to the input files in 
-the respective output directories. 
+steps will be bypassed by creating symlinks directly to the input files in the
+respective output directories. 
 
 
 Skip host removal
