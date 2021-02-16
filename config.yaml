@@ -36,7 +36,7 @@ taxonomic_profile:
 strain_level_profiling:
     strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
-    humann: False
+    humann: True
 antibiotic_resistance:
     groot: False
     amrplusplus: False
@@ -134,10 +134,10 @@ strainphlan:
 # Functional profiling
 #########################
 humann:
-    nucleotide_db: "/proj/snic2020-6-233/db/humann_databases/chocophlan"        # [Required] Path to ChocoPhlAn DB directory.
+    nucleotide_db: "/proj/snic2020-6-233/db/hmo"        # [Required] Path to ChocoPhlAn DB directory.
     protein_db: "/proj/snic2020-6-233/db/humann_databases/protein_database/uniref"           # [Required] Path to protein database (typically UniRef90).
     utility_db: "/proj/snic2020-6-233/db/humann_databases/utility_mapping"           # [Required] Path to utility_mapping database.
-    norm_method: "relab"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
+    norm_method: "cpm"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
     groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec,                                                                                                   uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
     rename: "ec" # Rename abundance table: kegg-orthology, kegg-pathway, kegg-module, ec, metacyc-rxn, metacyc-pwy, pfam, eggnog, go, infogo1000, uniref50, uniref90.
