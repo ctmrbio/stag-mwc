@@ -28,6 +28,7 @@ situations.
 ### Fixed
 - The host removal module now correctly identifies setting `host_removal: False`
   in the config file. Thank you chrsb!
+- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
 
 ### Changed
 - Do not combine `--use-singularity` with `--use-conda` anymore. The new 
