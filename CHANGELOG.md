@@ -13,7 +13,17 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [0.4.1] Unreleased
+## [0.4.2] Unreleased
+### Added
+
+### Fixed
+- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
+
+### Changed
+
+### Removed
+
+## [0.4.1] 2021-02-02
 ### Added
 - Created Singularity images for all conda environments. Run with
   `--use-singularity` (do not combine with `--use-conda`).
@@ -28,7 +38,6 @@ situations.
 ### Fixed
 - The host removal module now correctly identifies setting `host_removal: False`
   in the config file. Thank you chrsb!
-- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
 
 ### Changed
 - Do not combine `--use-singularity` with `--use-conda` anymore. The new 
