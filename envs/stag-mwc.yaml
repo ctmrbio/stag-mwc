@@ -13,7 +13,7 @@ dependencies:
     - krona =2.7
     - matplotlib =3.1.1
     - multiqc =1.8
-    - pandas =0.25.1
+    - pandas =1.2.1
     - seaborn =0.9.0
     - subread =1.6.0
     - sambamba =0.7.0

@@ -16,7 +16,7 @@ min_version("5.5.4")
 
 from rules.publications import publications
 
-stag_version = "0.4.1"
+stag_version = "0.4.2-dev"
 
 onstart:
     print("\n".join([
