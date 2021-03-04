@@ -13,6 +13,7 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
+
 ## [0.4.2] Unreleased
 ### Added
 
@@ -22,6 +23,7 @@ situations.
 ### Changed
 
 ### Removed
+
 
 ## [0.4.1] 2021-02-02
 ### Added
