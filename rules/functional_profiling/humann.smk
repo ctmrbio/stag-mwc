@@ -5,17 +5,12 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_humann_databases,
     normalize_humann_tables,
-    join_humann_tables,
-    regroup_humann_tables,
-    rename_humann_tables,
+    humann_join_tables,
 
 h_config = config["humann"]
 HMN_METHOD=h_config["norm_method"]
 HMN_MODE=h_config["norm_mode"]
-HMN_GRP=h_config["groups"]
-HMN_RENAME=h_config["rename"]
 HMN_UTILITY=h_config["utility_db"]
 
 if config["functional_profile"]["humann"]:
@@ -24,7 +19,10 @@ if config["functional_profile"]["humann"]:
         err_message = "Could not find HUMAnN nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
         err_message += "Specify relevant paths in the humann section of config.yaml.\n"
         err_message += "If you do not want to run HUMAnN for functional profiling, set functional_profile:humann: False in config.yaml"
+        err_message += "If you want to download the HUMAnN databases please see https://github.com/biobakery/humann"
         raise WorkflowError(err_message)
+    if not [Path(h_config["tmpdir"]).is_dir()]:
+        err_message = "Please specify a tmpdir, if specified tmpdir does not exist, create it"
     bt2_db_ext = ".1.bt2" # what does this line do??
 
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.tsv",
@@ -32,29 +30,6 @@ if config["functional_profile"]["humann"]:
     all_outputs.extend(merged_humann_tables)
 
     citations.add(publications["HUMAnN"])
-
-
-
-rule download_humann_databases:
-    """Download ChocoPhlAn and UniRef90 (diamond)"""
-    output:
-        f"{DBDIR}/humann/chocophlan",
-        f"{DBDIR}/humann/uniref",
-    log:
-        f"{LOGDIR}/humann/database_download.log"
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/humann.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:biobakery"
-    params:
-        dbdir=config["dbdir"]+"/humann"
-    shell:
-        """
-        humann_databases --download chocophlan full {params.dbdir} > {log}
-        humann_databases --download uniref uniref90_diamond {params.dbdir} >> {log}
-        """
 
 
 rule humann:
@@ -81,23 +56,28 @@ rule humann:
     resources:
         humann=1
     params:
-        outdir=OUTDIR/"humann",
+        outdir=f"{OUTDIR}/humann/",
+        tmpdir=f"{h_config['tmpdir']}/{{sample}}/",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
+        extra=h_config["extra"],
     shell:
         """
         cat {input.read1} {input.read2} > concat_input_reads.fq.gz
 
         humann \
             --input concat_input_reads.fq.gz \
-            --output {params.outdir} \
+            --output {params.tmpdir} \
             --nucleotide-database {params.nucleotide_db} \
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
             --threads {threads} \
             --taxonomic-profile {input.taxonomic_profile} \
+            {params.extra} \
             > {log.stdout} \
             2> {log.stderr}
+
+        mv {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
         """
 
 
@@ -125,9 +105,6 @@ rule normalize_humann_tables:
         mode=h_config["norm_mode"],
     shell:
         """
-        humann_config \
-            --update database_folders utility_mapping {HMN_UTILITY}
-
         humann_renorm_table \
             --input {input.genefamilies} \
             --output {output.genefamilies} \
@@ -145,92 +122,15 @@ rule normalize_humann_tables:
             2>> {log.stderr}
         """
 
-
-rule regroup_humann_tables:
-    """regroup gene families"""
+rule humann_join_tables:
+    """Join normalized abundance tables from HUMAnN."""
     input:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv",
-    output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}_{HMN_GRP}.tsv",
-    log:
-        stdout=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}_{HMN_GRP}.stdout.log",
-        stderr=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}_{HMN_GRP}.stderr.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/humann.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:biobakery"
-    threads: 
-        1
-    params:
-        groups=h_config["groups"]
-    shell:
-        """
-        humann_config \
-            --update database_folders utility_mapping {HMN_UTILITY}
-
-        humann_regroup_table \
-            --input {input.genefamilies} \
-            --output {output.genefamilies} \
-            --groups {params.groups} \
-            > {log.stdout} \
-            2> {log.stderr}
-        """
-
-
-rule rename_humann_tables:
-    """rename gene families"""
-    input:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}_{HMN_GRP}.tsv",
-    output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}.tsv",
-    log:
-        stdout=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}.stdout.log",
-        stderr=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}.stderr.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/humann.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:biobakery"
-    threads: 
-        1
-    params:
-        rename=h_config["rename"]
-    shell:
-        """
-        humann_config \
-            --update database_folders utility_mapping {HMN_UTILITY}
-
-        humann_rename_table \
-            --input {input.genefamilies} \
-            --output {output.genefamilies} \
-            --names {params.rename} \
-            > {log.stdout} \
-            2> {log.stderr}
-        """
-
-
-rule join_humann_tables:
-    """Join abundance tables from HUMAnN."""
-    input:
-        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}.tsv", sample=SAMPLES),
+        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv", sample=SAMPLES),
         pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv", sample=SAMPLES),
-        pathcoverage=expand(f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv", sample=SAMPLES),
     output:
         genefamilies=f"{OUTDIR}/humann/all_samples.humann_genefamilies.tsv",
         pathabundance=f"{OUTDIR}/humann/all_samples.humann_pathabundance.tsv",
         pathcoverage=f"{OUTDIR}/humann/all_samples.humann_pathcoverage.tsv",
-        readable_genefamilies=report(f"{OUTDIR}/humann/all_samples_readable.humann_genefamilies.tsv",
-                category="Functional profiling",
-                caption="../../report/humann_table.rst"),
-        readable_pathabundance=report(f"{OUTDIR}/humann/all_samples_readable.humann_pathabundance.tsv",
-                category="Functional profiling",
-                caption="../../report/humann_table.rst"),
-        readable_pathcoverage=report(f"{OUTDIR}/humann/all_samples_readable.humann_pathcoverage.tsv",
-                category="Functional profiling",
-                caption="../../report/humann_table.rst"),
     log:
         stdout=f"{LOGDIR}/humann/humann_join_tables.stdout.log",
         stderr=f"{LOGDIR}/humann/humann_join_tables.stderr.log",
@@ -244,13 +144,11 @@ rule join_humann_tables:
         1
     params:
         output_dir=f"{OUTDIR}/humann",
-        genefamilies=f"genefamilies_{HMN_METHOD}_{HMN_GRP}_{HMN_RENAME}",
+        genefamilies=f"genefamilies_{HMN_METHOD}",
         pathabundance=f"pathabundance_{HMN_METHOD}",
+        pathcoverage=f"pathcoverage",
     shell:
         """
-        humann_config \
-            --update database_folders utility_mapping {HMN_UTILITY}
-
         humann_join_tables \
             --input {params.output_dir} \
             --output {output.genefamilies} \
@@ -261,7 +159,7 @@ rule join_humann_tables:
         humann_join_tables \
             --input {params.output_dir} \
             --output {output.pathcoverage} \
-            --file_name pathcoverage \
+            --file_name {params.pathcoverage} \
             >> {log.stdout} \
             2>> {log.stderr}
 
@@ -271,9 +169,4 @@ rule join_humann_tables:
             --file_name {params.pathabundance} \
             >> {log.stdout} \
             2>> {log.stderr}
-
-        column -t -s $'\t' {output.genefamilies} | cat > {output.readable_genefamilies}
-        column -t -s $'\t' {output.pathabundance} | cat > {output.readable_pathabundance}
-        column -t -s $'\t' {output.pathcoverage} | cat > {output.readable_pathcoverage}
-        
         """
