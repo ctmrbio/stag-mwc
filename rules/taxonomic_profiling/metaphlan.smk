@@ -5,10 +5,11 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
+    combine_metaphlan_tables,
+    metaphlan_krona,
+    metaphlan_area_plot,
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
-    metaphlan_krona,
-    gather_visualizations,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"]:
@@ -18,7 +19,8 @@ if config["taxonomic_profile"]["metaphlan"]:
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    mpa_outputs=f"{OUTDIR}/metaphlan/visualizations_success.txt"
+    mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
+        krona=("all_samples","combined_samples"))
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -206,144 +208,4 @@ rule create_metaphlan_krona_plots:
             -o {output.html_all} \
             -c \
             {input}
-        """
-
-rule metaphlan_hclust2:
-    """Create hclust2 species heatmap"""
-    input:
-        f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
-    output:
-        hclust_heatmap=report(f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
-            category="Taxonomic profiling",
-            caption="../../report/hclust2_heatmap.rst"),
-        species=f"{OUTDIR}/metaphlan/hclust2_species_abundance_table.txt",
-    log:
-        f"{LOGDIR}/metaphlan/hclust2_species_abundance.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/graphlan.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:graphlan"
-    params:
-        scale=mpa_config["hclust_heatmap"]["scale"],
-        feature_distance=mpa_config["hclust_heatmap"]["feature_distance"],
-        sample_distance=mpa_config["hclust_heatmap"]["sample_distance"],
-        top_samples=mpa_config["hclust_heatmap"]["top_samples"],
-        top_features=mpa_config["hclust_heatmap"]["top_features"],
-        hclust2=f"scripts/biobakery/hclust2.py",
-    shell: # Takes all lines with species and the header "clade". Then replace everything until s__ with nothing. 
-        """
-        grep -E "s__|clade" {input} \
-            | sed 's/^.*s__//g' \
-            | cut -f1,3- \
-            | sed -e 's/clade_name/species/g' \
-            > {output.species}
-
-        hclust2.py \
-            -i {output.species} \
-            -o {output.hclust_heatmap} \
-            --ftop {params.top_features} \
-            --stop {params.top_samples} \
-            --f_dist_f {params.feature_distance} \
-            --s_dist_f {params.sample_distance} \
-            --cell_aspect_ratio 0.5 \
-            {params.scale} \
-            --flabel_size 6 \
-            --slabel_size 6 \
-            --max_flabel_len 100 \
-            --max_slabel_len 100 \
-            --minv 0.1 \
-            --dpi 300 \
-            2> {log}
-        """
-
-rule metaphlan_cladogram:
-    input:
-        txt=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
-        hclust_heatmap=f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
-    output:
-        clado_format=f"{OUTDIR}/metaphlan/cladogram.txt",
-        abundance_tree=f"{OUTDIR}/metaphlan/cladogram_abundance_tree.txt",
-        abundance_annot=f"{OUTDIR}/metaphlan/cladogram_abundance_annot.txt",
-        abundance_xml=f"{OUTDIR}/metaphlan/cladogram_abundance.xml",
-        cladogram=f"{OUTDIR}/metaphlan/cladogram.png",
-        cladogram_report=report(
-            expand(f"{OUTDIR}/metaphlan/{{clado}}.png", 
-                        clado=("cladogram","cladogram_annot","cladogram_legend")),
-                        category="Taxonomic profiling",
-                        caption="../../report/metaphlan_cladogram.rst"),
-    log:
-        f"{LOGDIR}/metaphlan/metaphlan_cladogram.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/graphlan.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:graphlan"
-    params:
-        skip_rows=mpa_config["cladogram"]["skip_rows"],
-        most_abundance=mpa_config["cladogram"]["most_abundance"],
-        threshold=mpa_config["cladogram"]["minimum_abundance"],
-        least_biomarkers=mpa_config["cladogram"]["least_biomarkers"],
-        annotation=mpa_config["cladogram"]["annotation"],
-        external_annotation=mpa_config["cladogram"]["external_annotation"],
-        min_clade_size=mpa_config["cladogram"]["min_clade_size"],
-        export2graphlan=f"scripts/biobakery/export2graphlan.py",
-        graphlan_annotate=f"scripts/biobakery/graphlan_annotate.py",
-        graphlan=f"scripts/biobakery/graphlan.py",
-    shell:
-        """
-        tail \
-            -n +2 {input.txt} \
-            | cut -f1,3- \
-            > {output.clado_format}
-         
-        export2graphlan.py \
-            --skip_rows {params.skip_rows} \
-            -i {output.clado_format} \
-            --tree {output.abundance_tree} \
-            --annotation {output.abundance_annot} \
-            --most_abundant {params.most_abundance} \
-            --abundance_threshold {params.threshold} \
-            --least_biomarkers {params.least_biomarkers} \
-            --annotations {params.annotation} \
-            --external_annotations {params.external_annotation} \
-            --min_clade_size {params.min_clade_size} \
-            2> {log}
-
-        graphlan_annotate.py \
-            --annot \
-                {output.abundance_annot} \
-                {output.abundance_tree} \
-                {output.abundance_xml} \
-            2>> {log}
-
-        graphlan.py \
-            --dpi 300 \
-                {output.abundance_xml} \
-                {output.cladogram} \
-            --external_legends \
-            2>> {log}
-        """
-
-
-
-rule gather_visualizations:
-    input:
-        mpa_combined=expand(f"{OUTDIR}/metaphlan/all_samples.metaphlan.{{ext}}", ext=("txt", "krona.html")),
-        hclust_heatmap=f"{OUTDIR}/metaphlan/hclust2_species_abundance_heatmap.png",
-        species=f"{OUTDIR}/metaphlan/hclust2_species_abundance_table.txt",
-        mpa_plot=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
-        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
-        cladogram=f"{OUTDIR}/metaphlan/cladogram.png",
-    output:
-        visualuzations_success=f"{OUTDIR}/metaphlan/visualizations_success.txt"
-    shell:
-        """
-        echo "area_plot done" > {output}
-        echo "heatmap done" >> {output}
-        echo "kron_plot done" >> {output}
-        echo "hclust heatmap done" >> {output}
-        echo "cladogram done" >> {output}
         """
