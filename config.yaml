@@ -34,7 +34,7 @@ taxonomic_profile:
     kraken2: False
     metaphlan: True
 strain_level_profiling:
-    strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
     humann: True
 antibiotic_resistance:
@@ -105,20 +105,6 @@ metaphlan:
         method: "average"        # Linkage method, see scipy.cluster.hierarchy.linkage
         metric: "braycurtis"     # Distrance metric to use
         extra: ""                # Extra params, mostly to set loglevel to DEBUG in case of problems.
-    hclust_heatmap:
-        scale: "--log_scale"                 # --log_scale/-l or --sqrt_scale/-s
-        feature_distance: "braycurtis"       # Distance function for features [default correlation]
-        sample_distance: "braycurtis --image_size 16"        # Distance function for sample [default euclidean]
-        top_features: "50"                   # Number of top taxa to include in heatmap.
-        top_samples: "50"                    # Number of top samples to include in heatmap.
-    cladogram:
-        skip_rows: "1"                       # Skip headers: 1 or 2.
-        most_abundance: "25"                # Select the top N most abundance clades to highlight.
-        minimum_abundance: "1"               # Set a minimum abundance threshold for clades to be annotated.
-        least_biomarkers: "10"               # Extract a minimum of 10 biomarkers.
-        annotation: "5,6"                    # Select taxonomic levels 5 and 6 to be annotated within the tree.
-        external_annotation: "7"             # Select taxonomic level 7 to be used in the external legend.
-        min_clade_size: "1"                  # Set the minimum size of clades annotated as biomarkers to 1.
 
 #########################
 # Strain Level Profiling 
@@ -126,21 +112,20 @@ metaphlan:
 strainphlan:
     clade_of_interest: "s__Bifidobacterium_longum"
     mode: "accurate"
-    extra: "--marker_in_n_samples 11"
     metadata: "metadata_fecal_samples_twins_excl_siblings.txt"
-#    extra: "--marker_in_n_samples 1 --sample_with_n_markers 1"
+    extra: "--marker_in_n_samples 1"
 
 #########################
 # Functional profiling
 #########################
 humann:
-    nucleotide_db: "/proj/snic2020-6-233/db/hmo"        # [Required] Path to ChocoPhlAn DB directory.
+    nucleotide_db: "/crex/proj/snic2020-6-233/db/humann_databases/chocophlan"        # [Required] Path to ChocoPhlAn DB directory.
     protein_db: "/proj/snic2020-6-233/db/humann_databases/protein_database/uniref"           # [Required] Path to protein database (typically UniRef90).
     utility_db: "/proj/snic2020-6-233/db/humann_databases/utility_mapping"           # [Required] Path to utility_mapping database.
     norm_method: "cpm"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
-    groups: "uniref90_level4ec" # Regroup abundance table: uniref90_rxn, uniref50_rxn, uniref50_go, uniref90_go, uniref50_ko, uniref90_ko, uniref50_level4ec,                                                                                                   uniref90_level4ec, uniref50_pfam, uniref90_pfam, uniref50_eggnog, uniref90_eggnog.
-    rename: "ec" # Rename abundance table: kegg-orthology, kegg-pathway, kegg-module, ec, metacyc-rxn, metacyc-pwy, pfam, eggnog, go, infogo1000, uniref50, uniref90.
+    extra: "--bypass-translated-search" # Extra command line arguments for humann e.g. --bypass-translated-search
+    tmpdir: "/scratch/21312hehdg78gsad21" # HUMAnN creates huge tmp_folders. Please enter path to a temp directory e.g. /scratch
 
 #########################
 # Antibiotic Resistance
