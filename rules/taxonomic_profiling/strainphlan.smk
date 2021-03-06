@@ -5,10 +5,6 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-     add_metadata,
-     visualise_tree,
-     ete3_tree,
-
 
 mpa_config = config["metaphlan"]
 spa_config = config["strainphlan"]
@@ -20,11 +16,10 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set \"metaphlan: False\" and \"strainphlan: false\" in config.yaml"
         raise WorkflowError(err_message)
 
-    spa_outputs=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
-    ete3_tree=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_alignment_tree.png",
-
-    all_outputs.append(spa_outputs)
-    all_outputs.append(ete3_tree)
+    spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
+    spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
+    all_outputs.append(spa_alignment)
+    all_outputs.append(spa_tree)
 
     citations.add(publications["MetaPhlAn"])
     citations.add(publications["Krona"])
@@ -34,7 +29,7 @@ rule consensus_markers:
     input:
         sam=f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2", 
     output:
-        consensus_markers=f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}.pkl",
+        consensus_markers=f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl",
     log:
         stdout=f"{LOGDIR}/strainphlan/sample2markers.{{sample}}.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/sample2markers.{{sample}}.strainphlan.stderr.log",
@@ -47,7 +42,7 @@ rule consensus_markers:
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
     params:
-        output_dir=f"{OUTDIR}/strainphlan/{{sample}}"
+        output_dir=f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}"
     shell:
         """
         sample2markers.py \
@@ -61,7 +56,7 @@ rule consensus_markers:
 rule extract_markers:
     """extract marker sequences"""
     input:
-        consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}.pkl", sample=SAMPLES),
+        consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
     output:
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
     log:
@@ -92,7 +87,7 @@ rule extract_markers:
 rule strainphlan:
     """generate tree and alignment"""
     input:
-        consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}.pkl", sample=SAMPLES),
+        consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
     output:
         alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
@@ -144,134 +139,4 @@ rule strainphlan:
              > {log.stdout} \
              2> {log.stderr}
         """
-
-rule add_metadata:
-    """add metadata"""
-    input:
-        tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
-    output:
-        meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
-    log:
-        stdout=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stdout.log",
-        stderr=f"{LOGDIR}/strainphlan/add_metadata.strainphlan.stderr.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/metaphlan.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:biobakery"
-    params:
-        metadata=spa_config["metadata"],
-    shell:
-        """
-        add_metadata_tree.py \
-             --ifn_trees {input} \
-             --ifn_metadata {params.metadata} \
-             > {log.stdout} \
-             2> {log.stderr}
-        """
-
-
-rule visualise_tree:
-    """visualise tree"""
-    input:
-        meta_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata",
-    output:
-        meta_tree_png=report(f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre.metadata.png",
-            category="Strain profiling",
-            caption="../../report/graphlan_strain_tree.rst"),
-    log:
-        stdout=f"{LOGDIR}/strainphlan/visualise_tree.strainphlan.stdout.log",
-        stderr=f"{LOGDIR}/strainphlan/visualise_tree.strainphlan.stderr.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/graphlan.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:graphlan"
-    params:
-        script=f"scripts/plot_tree_graphlan.py",
-    shell:
-        """
-        {params.script} \
-             --ifn_tree {input.meta_tree} \
-             --colorized_metadata subject \
-             --leaf_marker_size 60 \
-             --legend_marker_size 60 \
-             > {log.stdout} \
-             2> {log.stderr}
-        """
-
-
-rule ete3_tree:
-    """concatenate ete3 tree and alignment"""
-    input:
-        alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
-        tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
-    output:
-        tree_alignment=report(f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_alignment_tree.png",
-            category="Strain profiling",
-            caption="../../report/ete3_tree.rst"),
-    log:
-        stdout=f"{LOGDIR}/strainphlan/ete3_tree.strainphlan.stdout.log",
-        stderr=f"{LOGDIR}/strainphlan/ete3_tree.strainphlan.stderr.log",
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/graphlan.yaml"
-    singularity:
-        "shub://AroArz/singularity_playground:graphlan"
-    shell:
-        """
-        xvfb-run ete3 view \
-             -t {input.tree} \
-             --alg {input.alignment} \
-             -i {output.tree_alignment} \
-             > {log.stdout} \
-             2> {log.stderr}
-        """
-
-
-
-# 
-# rule visualize_tree:
-#     """visualize"""
-#     input:
-#         consensus_markers=expand(f"{OUTDIR}/strainphlan/{{sample}}.pkl", sample=SAMPLES),
-#      reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
-#     output:
-#         alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}_concatenated.aln",
-#      tree=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.tre"
-#     log:
-#         stdout=f"{LOGDIR}/strainphlan/alignment.strainphlan.stdout.log",
-#         stderr=f"{LOGDIR}/strainphlan/alignment.strainphlan.stderr.log",
-#     shadow:
-#         "shallow"
-#     conda:
-#         "../../envs/metaphlan.yaml"
-#     singularity:
-#             "shub://AroArz/singularity_playground:biobakery"
-#     threads:
-#         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
-#     params:
-#         clade=spa_config["clade_of_interest"],
-#      out_dir=f"{OUTDIR}/strainphlan/",
-#      database=f"{mpa_config['bt2_db_dir']}/{mpa_config['bt2_idex']}.pkl",
-#      mode=spa_config["phylophlan_mode"],
-#      extra=spa_config["extra"],  # This is extremely useful if you want to include a reference genome
-#     shell:
-#         """
-#      strainphlan \
-#           -s {input.consensus_markers} \
-#           -m {input.reference_markers} \
-#           {params.extra} \
-#           -o {output.alignment} \
-#           -n {threads} \
-#           -c {params.clade} \
-#           --phylophlan_mode accurate \
-#           --mutation_rates \
-#           > {log.stdout} \
-#           2> {log.stderr}
-#      """
-
 
