@@ -6,9 +6,10 @@
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _Bracken: https://ccb.jhu.edu/software/bracken/
 .. _groot: https://groot-documentation.readthedocs.io
-.. _MetaPhlAn2: https://bitbucket.org/biobakery/metaphlan2/
+.. _MetaPhlAn: https://github.com/biobakery/biobakery/wiki/metaphlan3
+.. _StrainpPlAn: https://github.com/biobakery/biobakery/wiki/strainphlan3
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
-.. _HUMAnN2: https://bitbucket.org/biobakery/humann2/
+.. _HUMAnN: https://github.com/biobakery/biobakery/wiki/humann3
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
 .. _MEGAHIT: https://github.com/voutcn/megahit
@@ -168,64 +169,80 @@ each sample::
     all_samples.bracken.mpa_style.txt
     
 
-MetaPhlAn2
+MetaPhlAn
 ----------
-:Tool: `MetaPhlAn2`_
-:Output folder: ``metaphlan2``
+:Tool: `MetaPhlAn`_
+:Output folder: ``metaphlan``
 
-Run `MetaPhlAn2`_ on the trimmed and filtered reads to produce a taxonomic profile.
-Outputs three files per sample, plus three summaries for all samples::
+Run `MetaPhlAn`_ on the trimmed and filtered reads to produce a taxonomic profile.
+Outputs four files per sample, plus four summaries for all samples::
 
     <sample>.bowtie2.bz2
-    <sample>.metaphlan2.krona
-    <sample>.metaphlan2.txt
+    <sample>.sam.bz2
+    <sample>.metaphlan.krona
+    <sample>.metaphlan.txt
     
-    all_samples.metaphlan2.krona.html
+    all_samples.metaphlan.krona.html
     all_samples.Species_top50.pdf
-    all_samples.metaphlan2.txt
+    all_samples.metaphlan.txt
+    area_plot.metaphlan.pdf
 
 The file called ``all_samples.Species_top50.pdf`` contains a clustered heatmap
 plot showing abundances of the top 50 species across all samples. The taxonomic
-level and the top ``N`` can be adjusted in the config.
+level and the top ``N`` can be adjusted in the config. The file called
+``area_plot.metaphlan.pdf`` is an areaplot summarizing the samples.
 
+StrainPhlAn
+------------
+:Tool: `StrainPhlAn`_
+:Output folder: ``strainphlan``
+
+Run `StrainPhlAn`_ on the ``<sample>.sam.bz2`` output from MetaPhlAn. Generates
+two output files of primary interest::
+
+    available_clades.txt
+    RAxML_bestTree.{clade_of_interest}.StrainPhlAn3.tre
+    {clade_of_interest}.StrainPhlAn3_concatenated.aln
+
+``{clade_of_interest}`` is specified in ``config.yaml``. The outputs are a tree
+and an alignment file. Note that StrainPhlAn uses output generated from MetaPhlan
+and will thus also run MetaPhlAn-associated steps. 
+
+If the pipeline fails the main issue will be that the ``{clade_of_interest}`` cannot
+be detected in sufficient quantities in a sufficient number of samples. Reviwing the 
+fles ``available_clades.txt`` should reveal which clades can be investigated in your
+set of samples. 
 
 Functional profiling
 **************
 
-HUMAnN2
+HUMAnN
 ----------
-:Tool: `HUMAnN2`_
-:Output folder: ``humann2``
+:Tool: `HUMAnN`_
+:Output folder: ``humann``
 
-Run `HUMAnN2`_ on the trimmed and filtered reads to produce a functional profile.
+Run `HUMAnN`_ on the trimmed and filtered reads to produce a functional profile.
 Outputs five files per sample, plus three summaries for all samples::
 
-    <sample>.genefamilies_relab.txt
+    <sample>.genefamilies_{unit}.txt
     <sample>.genefamilies.txt
-    <sample>.pathabundance_relab.txt
+    <sample>.pathabundance_{unit}.txt
     <sample>.pathabundance.txt
     <sample>.pathcoverage.txt
     
-    all_samples.humann2_genefamilies.txt
-    all_samples.humann2_pathcoverage.txt
-    all_samples.humann2_pathabundances.txt
+    all_samples.humann_genefamilies.txt
+    all_samples.humann_pathcoverage.txt
+    all_samples.humann_pathabundances.txt
 
-Note that HUMAnN2 uses the taxonomic profiles produced by MetaPhlAn2 as input,
-so all MetaPhlAn2-associated steps are run regardless of whether it is actually
+``{unit}`` refers to the normalization method specified in ``config.yaml``, 
+the default unit is counts per million (cpm).
+
+Note that HUMAnN uses the taxonomic profiles produced by MetaPhlAn as input,
+so all MetaPhlAn-associated steps are run regardless of whether it is actually
 enabled in ``config.yaml`` or not.
 
-HUMAnN2 uses A LOT of temporary disk space in the output folder while running.
-It is possible to limit the number of concurrent HUMANn2 processes by using
-e.g. `--resources humann2=3` to tell Snakemake to not run more than three
-instances in parallel.
-
-.. note::
-
-    Until HUMAnN2 v2.9 has been released it is important to make sure you run
-    MetaPhlAn2 with the old database (v20_m200), as the 2.8 version of HUMAnN2
-    does not support the most recent MPA2 database version (201901).
-
-    
+Due to temporary disk space issues with running HUMAnN it is now a requirement
+to specify a $TMPDIR in ``config.yaml``, an excellent example is ``/scratch``.
 
 
 Antibiotic resistance
@@ -457,9 +474,6 @@ featureCounts ``extra`` configuration setting, e.g.::
     bowtie2:
         featureCounts:
             extra: "-F SAF"
-
-
-
 
 Assembly
 ********

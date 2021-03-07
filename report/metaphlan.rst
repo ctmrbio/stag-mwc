@@ -1,1 +1,1 @@
-A clustered heatmap from MetaPhlAn2 comparing the taxonomic profiles of all samples.
+A clustered heatmap from MetaPhlAn comparing the taxonomic profiles of all samples.

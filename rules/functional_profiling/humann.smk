@@ -26,7 +26,7 @@ if config["functional_profile"]["humann"]:
         raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2" # what does this line do??
 
-    merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.tsv",
+    merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.txt",
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
     all_outputs.extend(merged_humann_tables)
 
@@ -40,9 +40,9 @@ rule humann:
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
         taxonomic_profile=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
     output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
-        pathcoverage=f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.txt",
+        pathcoverage=f"{OUTDIR}/humann/{{sample}}_pathcoverage.txt",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.txt",
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann.stderr.log",
@@ -78,18 +78,18 @@ rule humann:
             > {log.stdout} \
             2> {log.stderr}
 
-        mv {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
+        mv {params.tmpdir}/{wildcards.sample}*.txt {params.outdir}
         """
 
 
 rule normalize_humann_tables:
     """Normalize abundance tables from HUMAnN."""
     input:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.txt",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.txt",
     output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.txt",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.txt",
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}.stderr.log",
@@ -126,12 +126,18 @@ rule normalize_humann_tables:
 rule humann_join_tables:
     """Join normalized abundance tables from HUMAnN."""
     input:
-        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv", sample=SAMPLES),
-        pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv", sample=SAMPLES),
+        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.txt", sample=SAMPLES),
+        pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.txt", sample=SAMPLES),
     output:
-        genefamilies=f"{OUTDIR}/humann/all_samples.humann_genefamilies.tsv",
-        pathabundance=f"{OUTDIR}/humann/all_samples.humann_pathabundance.tsv",
-        pathcoverage=f"{OUTDIR}/humann/all_samples.humann_pathcoverage.tsv",
+        genefamilies=report(f"{OUTDIR}/humann/all_samples.humann_genefamilies.txt",
+            category="Functional profiling",
+            caption="../../report/humann_genefamilies.rst"),
+        pathabundance=report(f"{OUTDIR}/humann/all_samples.humann_pathabundance.txt",
+            category="Functional profiling",
+            caption="../../report/humann_pathabundance.rst"),
+        pathcoverage=report(f"{OUTDIR}/humann/all_samples.humann_pathcoverage.txt",
+            category="Functional profiling",
+            caption="../../report/humann_pathcoverage.rst"),
     log:
         stdout=f"{LOGDIR}/humann/humann_join_tables.stdout.log",
         stderr=f"{LOGDIR}/humann/humann_join_tables.stderr.log",

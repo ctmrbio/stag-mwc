@@ -16,6 +16,10 @@ situations.
 
 ## [0.4.2] Unreleased
 ### Added
+- Biobakery update. Upgrading MetaPhlAn and HUMAnN to version 3 as well as introducing 
+StrainPhlAn3 for strain-level genomics. 
+- Added $TMPDIR variable which can be specified in config.yaml. It is normally not required
+to specify $TMPDIR but will be necessary to run HUMAnN due to large intermediary files.
 
 ### Fixed
 - Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.

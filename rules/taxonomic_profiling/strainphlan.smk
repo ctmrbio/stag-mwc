@@ -22,7 +22,7 @@ if config["strain_level_profiling"]["strainphlan"]:
     all_outputs.append(spa_tree)
 
     citations.add(publications["MetaPhlAn"])
-    citations.add(publications["Krona"])
+    citations.add(publications["StrainPhlAn"])
 
 rule consensus_markers:
     """Generate consensus markers"""

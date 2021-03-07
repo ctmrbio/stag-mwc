@@ -14,11 +14,12 @@ publications = {
     "MEGAHIT": "Li, D., Liu, C-M., Luo, R., Sadakane, K., and Lam, T-W., (2015). MEGAHIT: An ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph. Bioinformatics, https://doi.org/10.1093/bioinformatics/btv033 [PMID: 25609793].",
     "MaxBin2": "Yu-Wei Wu, Blake A. Simmons, Steven W. Singer (2016). MaxBin 2.0: an automated binning algorithm to recover genomes from multiple metagenomic datasets. Bioinformatics, Volume 32, Issue 4, 15 February 2016, Pages 605–607, https://doi.org/10.1093/bioinformatics/btv638",
     "MetaBAT2": "Kang DD, Li F, Kirton E, Thomas A, Egan R, An H, Wang Z. (2019). MetaBAT 2: an adaptive binning algorithm for robust and efficient genome reconstruction from metagenome assemblies. PeerJ 7:e7359. https://doi.org/10.7717/peerj.7359",
-    "MetaPhlAn": "Truong, D. T., et al. (2015). MetaPhlAn2 for enhanced metagenomic taxonomic profiling. Nature methods, 12, 902. https://doi.org/10.1038/nmeth.3589",
+    "MetaPhlAn": "Beghini et al. (2020). Integrating taxonomic, functional, and strain-level profiling of diverse microbial communities with bioBakery 3. bioRxiv preprint. 2020 Nov 21. https://doi.org/10.1101/2020.11.19.388223",
     "MetaWRAP": "Uritskiy, Gherman V., DiRuggiero, Jocelyne, Taylor, James (2018). MetaWRAP—a flexible pipeline for genome-resolved metagenomic data analysis. Microbiome 158:8, https://doi.org/10.1186/s40168-018-0541-1",
     "MultiQC": "Philip Ewels, Måns Magnusson, Sverker Lundin and Max Käller (2018). MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics. https://doi.org/10.1093/bioinformatics/btw354",
     "Snakemake": "Köster, Johannes and Rahmann, Sven (2012). Snakemake - A scalable bioinformatics workflow engine. Bioinformatics, Volume 28, Issue 19. https://doi.org/10.1093/bioinformatics/bts480",
     "StaG": "Boulund et al. (2018). StaG-mwc: metagenomic workflow collaboration. https://doi.org/10.5281/zenodo.1483891",
+    "StrainPhlAn": "Beghini et al. (2020). Integrating taxonomic, functional, and strain-level profiling of diverse microbial communities with bioBakery 3. bioRxiv preprint. 2020 Nov 21. https://doi.org/10.1101/2020.11.19.388223",
     "fastp": "Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu (2018). fastp: an ultra-fast all-in-one FASTQ preprocessor. Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i884–i890. https://doi.org/10.1093/bioinformatics/bty560",
     "featureCount": "Yang Liao, Gordon K. Smyth, Wei Shi (2014). featureCounts: an efficient general purpose program for assigning sequence reads to genomic features, Bioinformatics, Volume 30, Issue 7, 1 April 2014, Pages 923–930, https://doi.org/10.1093/bioinformatics/btt656",
 }

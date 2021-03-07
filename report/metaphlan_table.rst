@@ -1,1 +1,1 @@
-The raw taxonomic profile table from MetaPhlAn2.
+The raw taxonomic profile table from MetaPhlAn.
