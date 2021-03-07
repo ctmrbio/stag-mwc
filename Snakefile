@@ -33,6 +33,7 @@ configfile: "config.yaml"
 INPUTDIR = Path(config["inputdir"])
 OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
+TMPDIR = Path(config["tmpdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
 
