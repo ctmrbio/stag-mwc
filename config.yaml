@@ -16,6 +16,7 @@ inputdir: "input"
 input_fn_pattern: "{sample}_R{readpair}_001.fastq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
+tmpdir: "cokies"            # Specifying a tmpdir is not normally necessary but soom tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
 report: "StaG_report-"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
@@ -125,7 +126,6 @@ humann:
     norm_method: "cpm"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
     extra: "--bypass-translated-search" # Extra command line arguments for humann e.g. --bypass-translated-search
-    tmpdir: "/scratch/21312hehdg78gsad21" # HUMAnN creates huge tmp_folders. Please enter path to a temp directory e.g. /scratch
 
 #########################
 # Antibiotic Resistance
