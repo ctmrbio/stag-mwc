@@ -31,8 +31,8 @@ if config["antibiotic_resistance"]["amrplusplus"]:
     citations.add(publications["AMRPlusPlus2"])
 
 
-MEGARES_FASTA = "databases/amrplusplus/megares_modified_database_v2.00.fasta"
-MEGARES_ANNOT = "databases/amrplusplus/megares_modified_annotations_v2.00.csv"
+MEGARES_FASTA = f"{config['dbdir']}/amrplusplus/megares_modified_database_v2.00.fasta"
+MEGARES_ANNOT = f"{config['dbdir']}/amrplusplus/megares_modified_annotations_v2.00.csv"
 
 
 rule get_local_megares:
@@ -102,6 +102,8 @@ rule align_to_amr:
         "../../envs/amrplusplus.yaml"
     singularity:
         "shub://meglab-metagenomics/amrplusplus_v2"
+    threads:
+        cluster_config["align_to_amr"]["n"] if "align_to_amr" in cluster_config else 10
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}"
     shell:
@@ -110,7 +112,7 @@ rule align_to_amr:
             {params.megares_db} \
             {input.R1} \
             {input.R2} \
-            -t 10 \
+            -t {threads} \
             -R '@RG\\tID:{wildcards.sample}\\tSM:{wildcards.sample}' > {output.alignment} 
         """
 

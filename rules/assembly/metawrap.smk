@@ -47,7 +47,7 @@ rule assembly:
     conda:
         "../../envs/assembly.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
+        "shub://ctmrbio/stag-mwc:assembly"
     threads:
         cluster_config["assembly"]["n"] if "assembly" in cluster_config else 20
     params:
@@ -62,7 +62,7 @@ rule assembly:
             -o {params.outdir} \
             -t {threads} \
             -m {params.memory} \
-            --use-{params.assembler} \
+            --{params.assembler} \
             2> {log.stderr} \
             > {log.stdout}
         """
@@ -86,7 +86,7 @@ rule binning:
     conda:
         "../../envs/assembly.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
+        "shub://ctmrbio/stag-mwc:assembly"
     threads:
         cluster_config["binning"]["n"] if "binning" in cluster_config else 20
     params:
@@ -127,7 +127,7 @@ rule consolidate_bins:
     conda:
         "../../envs/assembly.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
+        "shub://ctmrbio/stag-mwc:assembly"
     threads:
         cluster_config["consolidate_bins"]["n"] if "consolidate_bins" in cluster_config else 20
     params:
@@ -165,7 +165,7 @@ rule blobology:
     conda:
         "../../envs/assembly.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc-assembly"
+        "shub://ctmrbio/stag-mwc:assembly"
     threads:
         cluster_config["blobology"]["n"] if "blobology" in cluster_config else 20
     params:

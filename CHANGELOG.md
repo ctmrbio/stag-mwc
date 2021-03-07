@@ -13,7 +13,19 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
-## [0.4.1] Unreleased
+
+## [0.4.2] Unreleased
+### Added
+
+### Fixed
+- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
+
+### Changed
+
+### Removed
+
+
+## [0.4.1] 2021-02-02
 ### Added
 - Created Singularity images for all conda environments. Run with
   `--use-singularity` (do not combine with `--use-conda`).
@@ -35,6 +47,10 @@ situations.
 - All rules now define the number of threads from cluster_config if defined.
   Old defaults are still used for local execution.
 - The shebang of `area_plot.py` has been changed to work in more environments.
+- Implemented workaround for error caused by automatic report generation when
+  using Singularity.
+- Disabled taxonomic area plot for Kaiju outputs due to issues processing the
+  output files.
 
 ### Removed
 
