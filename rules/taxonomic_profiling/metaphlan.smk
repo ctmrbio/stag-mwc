@@ -10,6 +10,7 @@ localrules:
     metaphlan_area_plot,
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
+    metaphlan_outputs,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"]:
@@ -19,8 +20,8 @@ if config["taxonomic_profile"]["metaphlan"]:
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
-        krona=("all_samples","combined_samples"))
+    mpa_outputs=expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
+        taxlvl=("species", "genus", "family", "order")),
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -208,4 +209,27 @@ rule create_metaphlan_krona_plots:
             -o {output.html_all} \
             -c \
             {input}
+        """
+
+rule metaphlan_outputs:
+    """ Separate the metaphlan abundance table into species, genus, family and order levels """
+    input:
+        heatmap=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+        mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
+            krona=("all_samples","combined_samples")),
+        mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
+    output:
+        species=f"{OUTDIR}/metaphlan/levels/species.tsv",
+        genus=f"{OUTDIR}/metaphlan/levels/genus.tsv",
+        family=f"{OUTDIR}/metaphlan/levels/family.tsv",
+        order=f"{OUTDIR}/metaphlan/levels/order.tsv",
+    shell:
+        """
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order} > /dev/null
+
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
         """
