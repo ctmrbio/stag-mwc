@@ -21,8 +21,9 @@ if config["functional_profile"]["humann"]:
         err_message += "If you do not want to run HUMAnN for functional profiling, set functional_profile:humann: False in config.yaml"
         err_message += "If you want to download the HUMAnN databases please see https://github.com/biobakery/humann"
         raise WorkflowError(err_message)
-    if not [Path(h_config["tmpdir"]).is_dir()]:
+    if not Path(config["tmpdir"]).exists():
         err_message = "Please specify a tmpdir, if specified tmpdir does not exist, create it"
+        raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2" # what does this line do??
 
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.tsv",
@@ -57,7 +58,7 @@ rule humann:
         humann=1
     params:
         outdir=f"{OUTDIR}/humann/",
-        tmpdir=f"{h_config['tmpdir']}/{{sample}}/",
+        tmpdir=f"{TMPDIR}/{{sample}}/",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
         extra=h_config["extra"],
