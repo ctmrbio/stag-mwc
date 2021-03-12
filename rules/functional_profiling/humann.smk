@@ -22,7 +22,8 @@ if config["functional_profile"]["humann"]:
         err_message += "If you want to download the HUMAnN databases please see https://github.com/biobakery/humann"
         raise WorkflowError(err_message)
     if not Path(config["tmpdir"]).exists():
-        err_message = "Please specify a tmpdir, if specified tmpdir does not exist, create it"
+        err_message = "Please specify a tmpdir in config.yaml, if specified tmpdir does not exist, create it.\n"
+        err_message += "Do not specify a subdirectory of \"/scratch\" as tmpdir, only specifying \"/scratch\" is sufficient."
         raise WorkflowError(err_message)
     bt2_db_ext = ".1.bt2" # what does this line do??
 
@@ -40,9 +41,9 @@ rule humann:
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
         taxonomic_profile=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
     output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.txt",
-        pathcoverage=f"{OUTDIR}/humann/{{sample}}_pathcoverage.txt",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.txt",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
+        pathcoverage=f"{OUTDIR}/humann/{{sample}}_pathcoverage.tsv",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann.stderr.log",
@@ -54,17 +55,16 @@ rule humann:
         "shub://AroArz/singularity_playground:biobakery"
     threads:
         cluster_config["humann"]["n"] if "humann" in cluster_config else 20
-    resources:
-        humann=1
     params:
         outdir=f"{OUTDIR}/humann/",
-        tmpdir=f"{TMPDIR}/{{sample}}/",
+        tmpdir=f"{TMPDIR}/{{sample}}",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
         extra=h_config["extra"],
     shell:
         """
         cat {input.read1} {input.read2} > concat_input_reads.fq.gz
+        mkdir -p {params.tmpdir}
 
         humann \
             --input concat_input_reads.fq.gz \
@@ -78,18 +78,18 @@ rule humann:
             > {log.stdout} \
             2> {log.stderr}
 
-        mv {params.tmpdir}/{wildcards.sample}*.txt {params.outdir}
+        mv {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
         """
 
 
 rule normalize_humann_tables:
     """Normalize abundance tables from HUMAnN."""
     input:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.txt",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.txt",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies.tsv",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance.tsv",
     output:
-        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.txt",
-        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.txt",
+        genefamilies=f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv",
+        pathabundance=f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv",
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann_sample_{HMN_METHOD}.stderr.log",
@@ -126,8 +126,8 @@ rule normalize_humann_tables:
 rule humann_join_tables:
     """Join normalized abundance tables from HUMAnN."""
     input:
-        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.txt", sample=SAMPLES),
-        pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.txt", sample=SAMPLES),
+        genefamilies=expand(f"{OUTDIR}/humann/{{sample}}_genefamilies_{HMN_METHOD}.tsv", sample=SAMPLES),
+        pathabundance=expand(f"{OUTDIR}/humann/{{sample}}_pathabundance_{HMN_METHOD}.tsv", sample=SAMPLES),
     output:
         genefamilies=report(f"{OUTDIR}/humann/all_samples.humann_genefamilies.txt",
             category="Functional profiling",
