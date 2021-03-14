@@ -43,10 +43,9 @@ jobs:
             - run:
                 name: Placeholder database files
                 command: |
+                    mkdir -pv ~/stag-mwc/tmpdir
                     mkdir -pv ~/stag-mwc/db/hg19
-                    mkdir -pv ~/stag-mwc/db/metaphlan2
-                    mkdir -pv ~/stag-mwc/db/humann/nucleotide_db
-                    mkdir -pv ~/stag-mwc/db/humann/protein_db
+                    mkdir -pv ~/stag-mwc/db/metaphlan
                     touch ~/stag-mwc/db/hg19/taxo.k2d
                     touch ~/stag-mwc/db/metaphlan2/test.1.bt2
             - save_cache:
@@ -80,13 +79,12 @@ jobs:
                     sed -i 's/binning: False/binning: True/' config.yaml
                     sed -i 's|db_path: \"\"|db_path: \"db/hg19\"|' config.yaml
                     sed -i 's|db: \"\"|db: \"db\"|' config.yaml
-                    sed -i 's|bt2_db_dir: \"\"|bt2_db_dir: \"db/metaphlan2\"|' config.yaml
+                    sed -i 's|bt2_db_dir: \"\"|bt2_db_dir: \"db/metaphlan\"|' config.yaml
                     sed -i 's|bt2_index: \"\"|bt2_index: \"test\"|' config.yaml
                     sed -i 's|_db: \"\"|_db: \"db\"|' config.yaml
                     sed -i 's|    index: \"\"|    index: \"db\"|' config.yaml
                     sed -i 's|kmer_distrib: \"\"|kmer_distrib: \"db\"|' config.yaml
-                    sed -i 's|nucleotide_db: \"\"|nucleotide_db: \"db/humann/nucleotide_db\"|' config.yaml
-                    sed -i 's|protein_db: \"\"|protein_db: \"db/humann/protein_db\"|' config.yaml
+                    sed -i 's|tmpdir: \"/scratch\"|tmpdir: \"tmpdir\"|' config.yaml
                     cat config.yaml
                     source activate snakemake
                     snakemake --use-conda --dryrun
