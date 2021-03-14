@@ -47,7 +47,7 @@ jobs:
                     mkdir -pv ~/stag-mwc/db/hg19
                     mkdir -pv ~/stag-mwc/db/metaphlan
                     touch ~/stag-mwc/db/hg19/taxo.k2d
-                    touch ~/stag-mwc/db/metaphlan2/test.1.bt2
+                    touch ~/stag-mwc/db/metaphlan/test.1.bt2
             - save_cache:
                 key: v1-stag-mwc_with_dbs-{{ .Revision }}
                 paths:
