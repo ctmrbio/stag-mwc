@@ -212,7 +212,7 @@ rule create_metaphlan_krona_plots:
         """
 
 rule metaphlan_outputs:
-    """ Separate the metaphlan abundance table into species, genus, family and order levels """
+    """Separate the metaphlan abundance table into species, genus, family and order levels"""
     input:
         heatmap=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
         mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
@@ -226,7 +226,8 @@ rule metaphlan_outputs:
         order=f"{OUTDIR}/metaphlan/levels/order.tsv",
     shell:
         """
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order} > /dev/null
+        set +o pipefail
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order}
 
         sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
         sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}

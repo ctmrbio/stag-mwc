@@ -15,6 +15,10 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message += "Specify relevant paths in the metaphlan section of config.yaml.\n"
         err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set \"metaphlan: False\" and \"strainphlan: false\" in config.yaml"
         raise WorkflowError(err_message)
+    if not spa_config["clade_of_interest"]:
+        err_message = "No clade of interest specified in the strainphlan section of config.yaml.\n"
+        err_message += "e.g. \"s__Bifidobacterium_longum\""
+        raise WorkflowError(err_message)
 
     spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
     spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
@@ -53,9 +57,42 @@ rule consensus_markers:
              2> {log.stderr}
         """
 
-rule extract_markers:
-    """extract marker sequences"""
+rule print_clades:
+    """print a list of available clades"""
     input:
+        consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
+    output:
+       symlink_to_available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
+    log:
+        available_clades=f"{LOGDIR}/strainphlan/available_clades.txt",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/metaphlan.yaml"
+    singularity:
+        "shub://AroArz/singularity_playground:biobakery"
+    threads:
+        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
+    params:
+        out_dir=f"{OUTDIR}/strainphlan",
+        database=f"{mpa_config['bt2_db_dir']}/{mpa_config['bt2_index']}.pkl",
+    shell:
+        """
+        strainphlan \
+             -s {input.consensus_markers} \
+             --print_clades_only \
+             -d {params.database} \
+             -o {params.out_dir} \
+             -n {threads} \
+             2>&1 > {log.available_clades}
+
+        cd {params.out_dir} && ln -s ../logs/strainphlan/available_clades.txt
+        """
+
+rule extract_markers:
+    """extract marker sequences for clade of interest"""
+    input:
+        available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
         consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
     output:
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
@@ -95,7 +132,6 @@ rule strainphlan:
     log:
         stdout=f"{LOGDIR}/strainphlan/alignment.strainphlan.stdout.log",
         stderr=f"{LOGDIR}/strainphlan/alignment.strainphlan.stderr.log",
-        available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
     shadow:
         "shallow"
     conda:
@@ -112,19 +148,7 @@ rule strainphlan:
         extra=spa_config["extra"],  # This is extremely useful if you want to include a reference genome
     shell:
         """
-        strainphlan \
-             -s {input.consensus_markers} \
-             --print_clades_only \
-             -d {params.database} \
-             -o {params.out_dir} \
-             -n {threads} \
-             2>&1 > {log.available_clades}
- 
-        echo "#######################################################################"
-        echo "##  If pipeline failed please edit clade_of_interest in config.yaml  ##" 
-        echo "##      type \\"less {log.available_clades}\\"      ##"
-        echo "##  To see the clades that were identified available for strainphlan ##"
-        echo "#######################################################################"   
+        echo "please compare your clade_of_interest to list of available clades in available_clades.txt" > {log.stderr}
 
         strainphlan \
              -s {input.consensus_markers} \
@@ -137,6 +161,6 @@ rule strainphlan:
              --phylophlan_mode accurate \
              --mutation_rates \
              > {log.stdout} \
-             2> {log.stderr}
+             2>> {log.stderr}
         """
 
