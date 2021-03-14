@@ -13,7 +13,7 @@
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_R{readpair}.fq.gz"
+input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
 tmpdir: "/scratch"            # Specifying a tmpdir is not normally necessary but soom tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
@@ -25,19 +25,19 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 # Pipeline steps included
 #########################
-qc_reads: True
-host_removal: True
+qc_reads: False
+host_removal: False
 naive:
     assess_depth: False
     sketch_compare: False
 taxonomic_profile:
     kaiju: False
     kraken2: False
-    metaphlan: True
+    metaphlan: False
 strain_level_profiling:
-    strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
-    humann: True
+    humann: False
 antibiotic_resistance:
     groot: False
     amrplusplus: False
