@@ -1,6 +1,6 @@
 # Cluster config file for StaG-mwc for use on UPPMAX Rackham
 __default__:
-    account: "snic2020-5-589"
+    account: ""
     partition: "core"
     extra: ""
     time: "03:00:00"
@@ -40,11 +40,11 @@ kraken2:
     n: 10
     time: "02:00:00"
 metaphlan:
-    n: 10
-    time: "00:20:00"
+    n: 8
+    time: "01:30:00"
 strainphlan:
     n: 8
-    time: "00:20:00" 
+    time: "01:00:00" 
 bracken:
     n: 2
     time: "01:00:00"
@@ -54,7 +54,7 @@ bracken:
 #############################
 humann:
     n: 20
-    time: "1:00:00"
+    time: "08:00:00"
 
 #############################
 # Antibiotic resistance
