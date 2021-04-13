@@ -16,7 +16,7 @@ inputdir: "input"
 input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
-tmpdir: "/scratch"            # Specifying a tmpdir is not normally necessary but soom tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
+tmpdir: "/scratch"           # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
 report: "StaG_report-"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
@@ -25,8 +25,8 @@ email: ""                    # Email to send status message after completed/fail
 #########################
 # Pipeline steps included
 #########################
-qc_reads: False
-host_removal: False
+qc_reads: True
+host_removal: True
 naive:
     assess_depth: False
     sketch_compare: False
