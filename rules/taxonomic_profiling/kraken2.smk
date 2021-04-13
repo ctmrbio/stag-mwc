@@ -293,6 +293,7 @@ rule bracken_kreport:
     input:
         kreport=OUTDIR/"kraken2/{sample}.kreport"
     output:
+        bracken=OUTDIR/"kraken2/{sample}.bracken",
         bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.log")
@@ -312,7 +313,8 @@ rule bracken_kreport:
         est_abundance.py \
             --input {input.kreport} \
             --kmer_distr {params.kmer_distrib} \
-            --output {output.bracken_kreport} \
+            --output {output.bracken} \
+            --out-report {output.bracken_kreport} \
             --level S \
             --thresh {params.thresh} \
             2>&1 > {log}
