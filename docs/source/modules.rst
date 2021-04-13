@@ -174,6 +174,10 @@ MetaPhlAn
 :Tool: `MetaPhlAn`_
 :Output folder: ``metaphlan``
 
+Please refer to the official `MetaPhlAn`_ installation instructions on how to
+install the bowtie2 database in a separate directory outside the conda
+environment.
+
 Run `MetaPhlAn`_ on the trimmed and filtered reads to produce a taxonomic profile.
 Outputs four files per sample, plus four summaries for all samples::
 
