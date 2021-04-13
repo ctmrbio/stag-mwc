@@ -20,6 +20,8 @@ situations.
 ### Fixed
 - Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.
 - `preprocessing_summary.py` now parses the correct number of unclassified reads.
+- Rule `bracken_kreport` now correctly produces kreport output file for
+  downstream processing.
 
 ### Changed
 
