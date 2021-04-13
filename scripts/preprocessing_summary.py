@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Summarize read counts from all QC steps"""
 __author__ = "CTMR, Fredrik Boulund"
-__date__ = "2020"
-__version__ = "0.1"
+__date__ = "2021"
+__version__ = "0.2"
 
 from sys import argv, exit
 from pathlib import Path
@@ -44,7 +44,7 @@ def parse_kraken2_logs(logfiles):
         with open(logfile) as f:
             sample_name = Path(logfile).stem.split(".")[0]
             for line in f:
-                if " classified" in line:
+                if " unclassified" in line:
                     yield {"Sample": sample_name, "after_host_removal": int(line.strip().split()[0])}
 
 
