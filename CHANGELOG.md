@@ -18,7 +18,8 @@ situations.
 ### Added
 
 ### Fixed
-- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
+- Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.
+- `preprocessing_summary.py` now parses the correct number of unclassified reads.
 
 ### Changed
 
