@@ -6,4 +6,5 @@ channels:
     - biobakery
 dependencies:
     - metaphlan
+    - tbb =2020.2
     - krona =2.7.1
