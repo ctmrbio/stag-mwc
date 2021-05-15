@@ -16,17 +16,19 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set \"metaphlan: False\" and \"strainphlan: false\" in config.yaml"
         raise WorkflowError(err_message)
     if not spa_config["clade_of_interest"]:
-        err_message = "No clade of interest specified in the strainphlan section of config.yaml.\n"
-        err_message += "e.g. \"s__Bifidobacterium_longum\""
-        raise WorkflowError(err_message)
-
-    spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
-    spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
-    all_outputs.append(spa_alignment)
-    all_outputs.append(spa_tree)
-
-    citations.add(publications["MetaPhlAn"])
-    citations.add(publications["StrainPhlAn"])
+        available_clades=f"{LOGDIR}/strainphlan/available_clades.txt",
+        all_outputs.append(available_clades)
+        print("Clade of interest not specified in strainphlan section of config.yaml.")
+        print("Based on your samples strainphlan will create a list of available clades in output/strainphlan/available_clades.txt")
+        print("If you still want to run strainphlan, please update config.yaml e.g. \"clade_of_interest: s__Bifidobacterium_longum\".")
+    if spa_config["clade_of_interest"]:
+       spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
+       spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
+       all_outputs.append(spa_alignment)
+       all_outputs.append(spa_tree)
+       print("If strainphlan crashes, take a look through output/strainphlan/available_clades.txt to ensure the clade_of_interest you specified is available.")
+       citations.add(publications["MetaPhlAn"])
+       citations.add(publications["StrainPhlAn"])
 
 rule consensus_markers:
     """Generate consensus markers"""
