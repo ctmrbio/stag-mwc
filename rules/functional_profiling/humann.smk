@@ -15,7 +15,7 @@ HMN_UTILITY=h_config["utility_db"]
 
 if config["functional_profile"]["humann"]:
     if (not all([h_config["nucleotide_db"], h_config["protein_db"]]) 
-        or not any([Path(h_config["nucleotide_db"]).is_dir(), Path(h_config["protein_db"]).is_dir()])):
+        or not all([Path(h_config["nucleotide_db"]).is_dir(), Path(h_config["protein_db"]).is_dir()])):
         err_message = "Could not find HUMAnN nucleotide and protein databases at: '{}', '{}'!\n".format(h_config["nucleotide_db"], h_config["protein_db"])
         err_message += "Specify relevant paths in the humann section of config.yaml.\n"
         err_message += "If you do not want to run HUMAnN for functional profiling, set functional_profile:humann: False in config.yaml"
