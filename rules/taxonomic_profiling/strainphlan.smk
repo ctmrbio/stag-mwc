@@ -22,13 +22,13 @@ if config["strain_level_profiling"]["strainphlan"]:
         print("Based on your samples strainphlan will create a list of available clades in output/strainphlan/available_clades.txt")
         print("If you still want to run strainphlan, please update config.yaml e.g. \"clade_of_interest: s__Bifidobacterium_longum\".")
     if spa_config["clade_of_interest"]:
-       spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
-       spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
-       all_outputs.append(spa_alignment)
-       all_outputs.append(spa_tree)
-       print("If strainphlan crashes, take a look through output/strainphlan/available_clades.txt to ensure the clade_of_interest you specified is available.")
-       citations.add(publications["MetaPhlAn"])
-       citations.add(publications["StrainPhlAn"])
+        spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
+        spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
+        all_outputs.append(spa_alignment)
+        all_outputs.append(spa_tree)
+        print("If strainphlan crashes, ensure your clade_of_interest is present in output/strainphlan/available_clades.txt.")
+        citations.add(publications["MetaPhlAn"])
+        citations.add(publications["StrainPhlAn"])
 
 rule consensus_markers:
     """Generate consensus markers"""
@@ -60,13 +60,14 @@ rule consensus_markers:
         """
 
 rule print_clades:
-    """print a list of available clades"""
+    """Print available clades"""
     input:
         consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
     output:
        symlink_to_available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
     log:
-        available_clades=f"{LOGDIR}/strainphlan/available_clades.txt",
+        stdout=f"{LOGDIR}/strainphlan/available_clades.stdout",
+        stderr=f"{LOGDIR}/strainphlan/available_clades.stderr",
     shadow:
         "shallow"
     conda:
@@ -86,13 +87,14 @@ rule print_clades:
              -d {params.database} \
              -o {params.out_dir} \
              -n {threads} \
-             2>&1 > {log.available_clades}
+             > {log.stdout} \
+             2> {log.stderr}
 
         cd {params.out_dir} && ln -s ../logs/strainphlan/available_clades.txt
         """
 
 rule extract_markers:
-    """extract marker sequences for clade of interest"""
+    """Extract marker sequences for clade of interest"""
     input:
         available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
         consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
@@ -124,7 +126,7 @@ rule extract_markers:
         """
 
 rule strainphlan:
-    """generate tree and alignment"""
+    """Generate tree and alignment"""
     input:
         consensus_markers=expand(f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}/{{sample}}.pkl", sample=SAMPLES),
         reference_markers=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.fna",
