@@ -202,7 +202,7 @@ StrainPhlAn
 :Output folder: ``strainphlan``
 
 Run `StrainPhlAn`_ on the ``<sample>.sam.bz2`` output from MetaPhlAn. Generates
-two output files of primary interest::
+these output files of primary interest::
 
     available_clades.txt
     RAxML_bestTree.{clade_of_interest}.StrainPhlAn3.tre
@@ -210,12 +210,14 @@ two output files of primary interest::
 
 ``{clade_of_interest}`` is specified in ``config.yaml``. The outputs are a tree
 and an alignment file. Note that StrainPhlAn uses output generated from MetaPhlan
-and will thus also run MetaPhlAn-associated steps. 
+and will thus also need to run MetaPhlAn-associated steps (even if it is not
+set to ``True`` in ``config.yaml``).
 
-If the pipeline fails the main issue will be that the ``{clade_of_interest}`` cannot
-be detected in sufficient quantities in a sufficient number of samples. Reviwing the 
-fles ``available_clades.txt`` should reveal which clades can be investigated in your
-set of samples. 
+If the pipeline fails the most common issue will be that
+``{clade_of_interest}`` cannot be detected in sufficient quantities in a
+sufficient number of samples. Review the file ``available_clades.txt`` to
+reveal which clades can be investigated in your set of samples. 
+
 
 Functional profiling
 **************
