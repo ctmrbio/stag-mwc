@@ -47,6 +47,7 @@ rule humann:
     log:
         stdout=f"{LOGDIR}/humann/{{sample}}.humann.stdout.log",
         stderr=f"{LOGDIR}/humann/{{sample}}.humann.stderr.log",
+        log=f"{LOGDIR}/humann/{{sample}}.humann.log",
     shadow:
         "shallow"
     conda:
@@ -63,11 +64,12 @@ rule humann:
         extra=h_config["extra"],
     shell:
         """
-        cat {input.read1} {input.read2} > concat_input_reads.fq.gz
-        mkdir -p {params.tmpdir}
+        mkdir -pv {params.tmpdir} >> {log.stdout}
+        mkdir -pv {params.outdir} >> {log.stdout}
+        cat {input.read1} {input.read2} > {params.tmpdir}/concat_input_reads.fq.gz
 
         humann \
-            --input concat_input_reads.fq.gz \
+            --input {params.tmpdir}/concat_input_reads.fq.gz \
             --output {params.tmpdir} \
             --nucleotide-database {params.nucleotide_db} \
             --protein-database {params.protein_db} \
@@ -75,10 +77,12 @@ rule humann:
             --threads {threads} \
             --taxonomic-profile {input.taxonomic_profile} \
             {params.extra} \
-            > {log.stdout} \
+            >> {log.stdout} \
             2> {log.stderr}
 
-        mv {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
+        cp {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
+        cp {params.tmpdir}/{wildcards.sample}_humann_temp/{wildcards.sample}.log {log.log}
+        rm -rfv {params.tmpdir} >> {log.stdout}
         """
 
 
