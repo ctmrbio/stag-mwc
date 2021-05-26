@@ -16,7 +16,7 @@ inputdir: "input"
 input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
-tmpdir: "/scratch"           # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
+tmpdir: "/tmp"           # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
 dbdir: "databases"           # Databases will be downloaded to this dir, if requested
 report: "StaG_report-"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                    # Email to send status message after completed/failed run.
@@ -32,10 +32,10 @@ naive:
     sketch_compare: False
 taxonomic_profile:
     kaiju: False
-    kraken2: False
+    kraken2: True
     metaphlan: False
 strain_level_profiling:
-    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: True        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
     humann: False
 antibiotic_resistance:
@@ -55,7 +55,7 @@ multiqc_report: False
 fastp:
     extra: ""
 remove_host:
-    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+    db_path: "/ceph/db/kraken2/kraken2_GRCh38"              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
     confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
@@ -83,11 +83,11 @@ kaiju:
     value_column: "percent"    # Value column top use in all_samples summary. Options are typically "percent" or "reads"
 
 kraken2:
-    db: ""                   # [Required] Path to Kraken2 DB folder
+    db: "/ceph/db/kraken2/minikraken2_v2_8GB_201904_UPDATE"                   # [Required] Path to Kraken2 DB folder
     confidence: 0.1          # Kraken2 confidence score, float in [0,1]
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
     bracken:
-        kmer_distrib: ""     # [Required for Bracken] Path to kmer_distrib file for Kraken2 DB specified above
+        kmer_distrib: "/ceph/db/kraken2/minikraken2_v2_8GB_201904_UPDATE/database150mers.kmer_distrib"     # [Required for Bracken] Path to kmer_distrib file for Kraken2 DB specified above
         levels: "S G"        # Space-separated list of taxonomic levels to produce tables for (e.g. "F G S" for Family, Genus, Species)
         thresh: 10           # Threshold for minimum number of reads from Kraken
     filter_bracken:          # Arguments to filter_bracken_out.py to include/exclude certain taxa
@@ -95,8 +95,8 @@ kraken2:
         exclude: "--exclude 9605 9606"  # Taxid 9605 and 9606 are (G) Homo and (S) Homo sapiens
 
 metaphlan:
-    bt2_db_dir: ""           # [Required] Path to MetaPhlAn database dir
-    bt2_index: ""            # [Required] Name of MetaPhlAn database index
+    bt2_db_dir: "/ceph/db/metaphlan3/"           # [Required] Path to MetaPhlAn database dir
+    bt2_index: "mpa_v30_CHOCOPhlAn_201901"            # [Required] Name of MetaPhlAn database index
     extra: ""                # Extra command line arguments for MetaPhlAn e.g. "-t rel_ab_w_read_stats"
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
@@ -111,7 +111,7 @@ metaphlan:
 # Strain Level Profiling 
 #########################
 strainphlan:
-    clade_of_interest: "" # [Required] e.g. s__Bifidobacterium_longum
+    clade_of_interest: "s__Bifidobacterium_longum" # [Required] e.g. s__Bifidobacterium_longum
     mode: "accurate"
     extra: ""
 
@@ -119,12 +119,12 @@ strainphlan:
 # Functional profiling
 #########################
 humann:
-    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory.
-    protein_db: ""           # [Required] Path to protein database (typically UniRef90).
+    nucleotide_db: "/ceph/db/humann3/chocophlan"        # [Required] Path to ChocoPhlAn DB directory.
+    protein_db: "/ceph/db/humann3/uniref"  # [Required] Path to protein database (typically UniRef90).
     utility_db: ""           # [Required] Path to utility_mapping database.
-    norm_method: "cpm"     # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
+    norm_method: "cpm"       # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
-    extra: "" # Extra command line arguments for humann e.g. --bypass-translated-search
+    extra: ""                # Extra command line arguments for humann e.g. --bypass-translated-search
 
 #########################
 # Antibiotic Resistance

@@ -13,22 +13,23 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message = "No MetaPhlAn database dir found at: '{}'!\n".format(mpa_config["bt2_db_dir"])
         err_message += "bt2_db_dir and bt2_index are required to run StrainPhlAn as it uses the output from MetaPhlAn as input.\n"
         err_message += "Specify relevant paths in the metaphlan section of config.yaml.\n"
-        err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set \"metaphlan: False\" and \"strainphlan: false\" in config.yaml"
+        err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set 'metaphlan: False' and 'strainphlan: false' in config.yaml"
         raise WorkflowError(err_message)
     if not spa_config["clade_of_interest"]:
         available_clades=f"{LOGDIR}/strainphlan/available_clades.txt",
         all_outputs.append(available_clades)
-        print("Clade of interest not specified in strainphlan section of config.yaml.")
-        print("Based on your samples strainphlan will create a list of available clades in output/strainphlan/available_clades.txt")
-        print("If you still want to run strainphlan, please update config.yaml e.g. \"clade_of_interest: s__Bifidobacterium_longum\".")
+        user_messages.warn("Clade of interest not specified in strainphlan section of config.yaml.")
+        user_messages.warn("Based on your samples strainphlan will create a list of available clades in output/strainphlan/available_clades.txt")
+        user_messages.warn("If you still want to run strainphlan, please update config.yaml e.g. \"clade_of_interest: s__Bifidobacterium_longum\".")
     if spa_config["clade_of_interest"]:
         spa_alignment=f"{OUTDIR}/strainphlan/{spa_config['clade_of_interest']}.StrainPhlAn3_concatenated.aln",
         spa_tree=f"{OUTDIR}/strainphlan/RAxML_bestTree.{spa_config['clade_of_interest']}.StrainPhlAn3.tre",
         all_outputs.append(spa_alignment)
         all_outputs.append(spa_tree)
-        print("If strainphlan crashes, ensure your clade_of_interest is present in output/strainphlan/available_clades.txt.")
+        user_messages.info("If strainphlan failed, ensure your clade_of_interest is present in output/strainphlan/available_clades.txt.")
         citations.add(publications["MetaPhlAn"])
         citations.add(publications["StrainPhlAn"])
+
 
 rule consensus_markers:
     """Generate consensus markers"""
