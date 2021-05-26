@@ -129,6 +129,11 @@ files at the top of the rule file, so users get a fairly clean `WorkflowError`
 output if a required input file is missing. See examples of that in e.g. 
 `rules/mappers/bowtie2.smk`. 
 
+Other types of messages that users might need to see should be added to the
+list of deferred user messages by calling either
+`user_messages.info("message")` or `user_messages.warn("message")`. Messages
+added this way will be printed upon pipeline failure or completion.
+
 ### scripts
 The `scripts` folder contains all scripts required by workflow rules. These
 are typically read summarization or plotting scripts, but anything that is
@@ -166,8 +171,21 @@ matching the `input_fn_pattern` in the `inputdir`, both defined in `config.yaml`
 The Snakefile defines the following variables that are accessible in all rule
 files:
 
-* `config` - Python dict containing all configuration parameters defined in `config.yaml`.
-* `outdir` - Python string with the path to the output directory
-* `all_outputs` - Python list that contains strings with the path to all expected output files
-* `SAMPLES` - Python set containing all sample names identified from the input file names.
+* `config` - Python dict containing all configuration parameters defined in
+  `config.yaml`.
+* `citations` - Python set of publication citation strings loaded from
+  `rules/citatons.py`. 
+* `INPUTDIR` - Python Path object for the input directory
+* `OUTDIR` - Python Path object for the output directory
+* `LOGDIR` - Python Path object for the log directory
+* `TMPDIR` - Python Path object for the temporary directory directory specified
+  in `config.yaml`.
+* `DBDIR` - Python Path object for the database directory specified in
+  `config.yaml`.
+* `user_messages` - A `UserMessages` instance with methods `info` and `warn` to
+  show messages to the user.
+* `all_outputs` - Python list that contains strings with the path to all
+  expected output files
+* `SAMPLES` - Python set containing all sample names identified from the input
+  file names.
 
