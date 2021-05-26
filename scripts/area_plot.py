@@ -45,7 +45,7 @@ mode_dict = {
         'table_drop': [],
         'skip_rows': 0,
     },
-    'metaphlan2': {
+    'metaphlan': {
         'tax_delim': '|',
         'multi_level': True,
         'tax_col': 'clade_name',

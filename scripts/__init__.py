@@ -1,0 +1,1 @@
+# StaG scripts folder

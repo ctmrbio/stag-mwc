@@ -3,22 +3,23 @@
 #     StaG Metagenomic Workflow Collaboration
 #                 configuration file
 #
-# Configuration settings marked with [Required] are only required if the
-# pipeline step for that setting is included. Set which steps to include
-# under the "Pipeline steps included" heading. The default settings are to
-# only run read preprocessing steps.
+# Configuration settings marked with [Required] are required if the pipeline
+# step for that setting is included. Set which steps to include under the
+# "Pipeline steps included" heading. The default settings are to only run read
+# preprocessing steps.
 
 
 #########################
 # Run configuration
 #########################
 inputdir: "input"
-input_fn_pattern: "{sample}_{readpair}.fq.gz" 
+input_fn_pattern: "{sample}_{readpair}.fq.gz"
 outdir: "output_dir"
 logdir: "output_dir/logs"
-dbdir: "databases"           # Databases will be downloaded to this dir, if requested
-report: "StaG_report-"       # Filename prefix for report file ("-{datetime}.html" automatically appended)
-email: ""                    # Email to send status message after completed/failed run.
+tmpdir: "/tmp"            # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
+dbdir: "databases"        # Databases will be downloaded to this dir, if requested
+report: "StaG_report-"    # Filename prefix for report file ("-{datetime}.html" automatically appended)
+email: ""                 # Email to send status message after completed/failed run.
 
 
 #########################
@@ -32,9 +33,11 @@ naive:
 taxonomic_profile:
     kaiju: False
     kraken2: False
-    metaphlan2: False
+    metaphlan: False
+strain_level_profiling:
+    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
-    humann2: False
+    humann: False
 antibiotic_resistance:
     groot: False
     amrplusplus: False
@@ -43,7 +46,7 @@ mappers:
     bowtie2: False
 assembly: False
 binning: False
-multiqc_report: True
+multiqc_report: False
 
 
 #########################
@@ -76,8 +79,8 @@ kaiju:
     nodes: ""                # [Required] Path to Kaiju taxonomy nodes.dmp
     names: ""                # [Required] Path to Kaiju taxonomy names.dmp
     levels: ["species", "genus", "family"]    # Level(s) to summarize Kaiju report to, pick from: superkingdom, phylum, class, order, family, genus, species
-    feature_column: "taxon_name"    # Feature column to use in all_samples summary
-    value_column: "percent"    # Value column top use in all_samples summary. Options are typically "percent" or "reads"
+    feature_column: "taxon_name"   # Feature column to use in all_samples summary
+    value_column: "percent"        # Value column top use in all_samples summary. Options are typically "percent" or "reads"
 
 kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder
@@ -91,10 +94,10 @@ kraken2:
         include: ""
         exclude: "--exclude 9605 9606"  # Taxid 9605 and 9606 are (G) Homo and (S) Homo sapiens
 
-metaphlan2:
-    bt2_db_dir: ""           # [Required] Path to MetaPhlAn2 database dir
-    bt2_index: ""            # [Required] Name of MetaPhlAn2 database index
-    extra: ""                # Extra command line arguments for metaphlan2.py
+metaphlan:
+    bt2_db_dir: ""           # [Required] Path to MetaPhlAn database dir
+    bt2_index: ""            # [Required] Name of MetaPhlAn database index
+    extra: ""                # Extra command line arguments for MetaPhlAn e.g. "-t rel_ab_w_read_stats"
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
         topN: 50                 # Number of top taxa to include in heatmap.
@@ -104,16 +107,24 @@ metaphlan2:
         metric: "braycurtis"     # Distrance metric to use
         extra: ""                # Extra params, mostly to set loglevel to DEBUG in case of problems.
 
+#########################
+# Strain Level Profiling 
+#########################
+strainphlan:
+    clade_of_interest: ""    # [Required] e.g. s__Bifidobacterium_longum
+    mode: "accurate"
+    extra: ""
 
 #########################
 # Functional profiling
 #########################
-humann2:
-    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory
-    protein_db: ""           # [Required] Path to protein database (typically UniRef90)
-    norm_method: "relab"     # Normalization method (HUMAnN2 default is "cpm")
-    norm_mode: "community"   # Normalization mode, "community" or "levelwise"
-
+humann:
+    nucleotide_db: ""        # [Required] Path to ChocoPhlAn DB directory.
+    protein_db: ""           # [Required] Path to protein database directory (typically UniRef90).
+    utility_db: ""           # [Required] Path to utility_mapping database.
+    norm_method: "cpm"       # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
+    norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
+    extra: ""                # Extra command line arguments for humann e.g. --bypass-translated-search
 
 #########################
 # Antibiotic Resistance

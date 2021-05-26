@@ -1,30 +1,24 @@
 Bootstrap: docker
 From: continuumio/miniconda3
 
-%help
-	Singularity image containing the conda environment defined in
-	humann2.yaml.
-
-	To build, run:
-	  sudo singularity build stag-mwc-biobakery.simg Singularity.biobakery
-
-%files
-	humann2.yaml
-
-%labels
-	AUTHOR boulund
-	VERSION 1.0
-	CONDA_ENV /opt/conda/envs/stag-mwc-biobakery
-
-%environment
-    PATH=/opt/conda/envs/stag-mwc-biobakery/bin:/opt/conda/bin:$PATH
-    export PATH
 
 %post
-	# Install stag-mwc-biobakery conda environment
-	/opt/conda/bin/conda env create -f humann2.yaml --force
-	/opt/conda/bin/conda clean --yes --all
+	### Sets correct channels and installs metaphlan3, humann3, strainphlan3 and krona
+
+	PATH=/opt/conda/bin:$PATH
+        export PATH	
+
+	conda config --add channels defaults
+	conda config --add channels bioconda
+	conda config --add channels conda-forge
+	conda config --add channels biobakery
+
+	conda install -c bioconda -c biobakery python=3.7 metaphlan humann krona=2.7.1 -y
+
+
+	humann_databases --download utility_mapping full /opt/humann --update-config yes
+%files
+
 
 %runscript
-    exec echo "$@"
-
+	echo "$@"

@@ -14,8 +14,15 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.4.2] Unreleased
+## [0.4.3] Unreleased
 ### Added
+- Biobakery update: updated MetaPhlAn and HUMAnN to version 3 as well as introducing 
+  StrainPhlAn3 for strain-level genomics.
+- Added $TMPDIR variable which can be specified in config.yaml. It is normally not required
+  to specify $TMPDIR but might be necessary to run HUMAnN due to large intermediary files.
+- New internal StaG feature to better handle user messages and defer them for printing after
+  the workflow finished execution so they don't get lost in the verbose log printout from
+  Snakemake.
 
 ### Fixed
 - Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.

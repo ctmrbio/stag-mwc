@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%help
+	This image contains Snakemake and conda, the purpose of this image is to run StaG on a system where Snakemake is not available. 
+	The pipeline can only be executed with the "--use-conda" directive through this image.
+
+%post
+	### Installs snakemake
+
+	PATH=/opt/conda/bin:$PATH
+        export PATH	
+	conda install -c conda-forge mamba
+	mamba create -c conda-forge -c bioconda -n snakemake snakemake -y
+
+
+	### Creates a bash script to run snakemake	
+
+	echo \#\!/bin/bash > /opt/runscript.sh
+	echo source activate snakemake >> /opt/runscript.sh
+	echo \$\@ >> /opt/runscript.sh
+
+%runscript
+	### Starts runscript.sh, everything you type after "sing run snakemake.sif" is forwarded to the runscript.
+	### e.g. "sing run snakemake.sif snakemake --dryrun" forwards "snakemake --dryrun" to runscript.sh and executes that command. 
+
+	bash /opt/runscript.sh "$@"
+	echo "$@"
