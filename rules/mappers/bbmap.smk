@@ -23,7 +23,7 @@ for bbmap_config in config["bbmap"]:
                 db_name=bbmap_config["db_name"],
                 sample=SAMPLES,
                 output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
-        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.txt"),
+        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                 db_name=bbmap_config["db_name"],
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
@@ -103,7 +103,7 @@ for bbmap_config in config["bbmap"]:
                     db_name=bbmap_config["db_name"],
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.txt"),
+            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                     db_name=bbmap_config["db_name"],
                     column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
             )
