@@ -30,6 +30,7 @@ situations.
 - Rule `bracken_kreport` now correctly produces kreport output file for
   downstream processing.
 - Fixed typo in count summary output filenames for BBMap.
+- Increased time allocations for host removal in `ctmr_gandalf` cluster config.
 
 ### Changed
 
