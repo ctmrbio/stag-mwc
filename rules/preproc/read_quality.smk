@@ -3,17 +3,19 @@
 # TODO: Remove superfluous str conversions of paths in expand and log statements
 #      when Snakemake is pathlib compatible.
 
+fastp_config = config["fastp"]
 if config["qc_reads"]:
     # Add final output files from this module to 'all_outputs' from
     # the main Snakefile scope. SAMPLES is also from the main Snakefile scope.
     trimmed_qc = expand(str(OUTDIR/"fastp/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1, 2])
-    all_outputs.extend(trimmed_qc)
+
+    if fastp_config["keep_output"]:
+        all_outputs.extend(trimmed_qc)
 
     citations.add(publications["fastp"])
 
-    fastp_config = config["fastp"]
     rule fastp:
         input:
             read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
@@ -55,7 +57,9 @@ else:
     trimmed_qc = expand(str(OUTDIR/"fastp/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1, 2])
-    all_outputs.extend(trimmed_qc)
+
+    if fastp_config["keep_output"]:
+        all_outputs.extend(trimmed_qc)
 
     localrules:
         skip_fastp,

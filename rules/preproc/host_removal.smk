@@ -19,7 +19,8 @@ if config["host_removal"]:
             sample=SAMPLES,
             readpair=[1,2])
     host_proportions = str(OUTDIR/"host_removal/host_proportions.txt")
-    all_outputs.extend(filtered_host)
+    if rh_config["keep_fastq"]:
+        all_outputs.extend(filtered_host)
     all_outputs.append(host_proportions)
 
     citations.add(publications["Kraken2"])
