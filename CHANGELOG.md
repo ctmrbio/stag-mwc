@@ -23,6 +23,10 @@ situations.
 - New internal StaG feature to better handle user messages and defer them for printing after
   the workflow finished execution so they don't get lost in the verbose log printout from
   Snakemake.
+- Added new feature to automatically remove intermediaries with the use of
+  `keep_` flags in the config file. Currently available for Quality control
+  (fastp), host removal (kraken2), taxonomic profiling with Kraken2 and
+  MetaPhlAn3.
 
 ### Fixed
 - Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.
