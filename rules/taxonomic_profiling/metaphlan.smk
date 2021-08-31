@@ -13,7 +13,7 @@ localrules:
     metaphlan_outputs,
 
 mpa_config = config["metaphlan"]
-if config["taxonomic_profile"]["metaphlan"]:
+if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["humann"]:
     if not mpa_config["bt2_db_dir"] or not Path(mpa_config["bt2_db_dir"]).exists():
         err_message = "No MetaPhlAn database dir found at: '{}'!\n".format(mpa_config["bt2_db_dir"])
         err_message += "Specify relevant paths in the metaphlan section of config.yaml.\n"
