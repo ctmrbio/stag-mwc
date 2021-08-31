@@ -78,8 +78,8 @@ rule kraken2:
         read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
         read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
-        kraken=OUTDIR/"kraken2/{sample}.kraken",
-        kreport=OUTDIR/"kraken2/{sample}.kreport",
+        kraken=OUTDIR/"kraken2/{sample}.kraken" if kraken2_config["keep_kraken"] else temp(OUTDIR/"kraken2/{sample}.kraken"),
+        kreport=OUTDIR/"kraken2/{sample}.kreport" if kraken2_config["keep_kreport"] else temp(OUTDIR/"kraken2/{sample}.kreport"),
     log:
         str(LOGDIR/"kraken2/{sample}.kraken2.log")
     shadow: 
