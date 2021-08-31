@@ -61,10 +61,9 @@ Make sure you edit the Slurm project account in
 documentation](https://snakemake.readthedocs.io) for further details on how to
 run Snakemake workflows on other types of cluster resources.
 
-Note that in all examples above, `--use-conda` and essentially be replaced
-with `--use-singularity` to run in Singularity containers instead of using a
-locally installed conda. Read more about it under the Running section in the
-docs.
+Note that in all examples above, `--use-conda` can be replaced with
+`--use-singularity` to run in Singularity containers instead of using a locally
+installed conda. Read more about it under the Running section in the docs.
 
 ## Testing
 A very basic continuous integration test is currently in place. It merely
