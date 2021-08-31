@@ -54,12 +54,15 @@ multiqc_report: False
 #########################
 fastp:
     extra: ""
+    keep_output: False       # StaG deletes fastp output files after host removal, set to True to keep them.
 remove_host:
     db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
     confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
-    keep_kreport: False
+    keep_kreport: False      # Keep the kreport files for host removal
+    keep_fastq: True         # Keep the host removed fastq files, set to False to remove them automatically.
+    keep_host_fastq: False   # Keep the host-containing fastq files, set to False to remove them automatically.
 multiqc:
     extra: ""
 
@@ -86,6 +89,8 @@ kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder
     confidence: 0.1          # Kraken2 confidence score, float in [0,1]
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
+    keep_kraken: False       # Keep the kraken output files
+    keep_kreport: True       # Keep the kreport output files
     bracken:
         kmer_distrib: ""     # [Required for Bracken] Path to kmer_distrib file for Kraken2 DB specified above
         levels: "S G"        # Space-separated list of taxonomic levels to produce tables for (e.g. "F G S" for Family, Genus, Species)

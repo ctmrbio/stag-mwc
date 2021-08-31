@@ -33,10 +33,10 @@ if config["host_removal"]:
             read1=OUTDIR/"fastp/{sample}_1.fq.gz",
             read2=OUTDIR/"fastp/{sample}_2.fq.gz",
         output:
-            read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
-            read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
-            host1=OUTDIR/"host_removal/{sample}.host_1.fq.gz",
-            host2=OUTDIR/"host_removal/{sample}.host_2.fq.gz",
+            read1=OUTDIR/"host_removal/{sample}_1.fq.gz" if rh_config["keep_fastq"] else temp(OUTDIR/"host_removal/{sample}_1.fq.gz"),
+            read2=OUTDIR/"host_removal/{sample}_2.fq.gz" if rh_config["keep_fastq"] else temp(OUTDIR/"host_removal/{sample}_2.fq.gz"),
+            host1=OUTDIR/"host_removal/{sample}.host_1.fq.gz" if rh_config["keep_host_fastq"] else temp(OUTDIR/"host_removal/{sample}.host_1.fq.gz"),
+            host2=OUTDIR/"host_removal/{sample}.host_2.fq.gz" if rh_config["keep_host_fastq"] else temp(OUTDIR/"host_removal/{sample}.host_2.fq.gz"),
             kraken=OUTDIR/"host_removal/{sample}.kraken" if rh_config["keep_kraken"] else temp(OUTDIR/"host_removal/{sample}.kraken"),
             kreport=OUTDIR/"host_removal/{sample}.kraken" if rh_config["keep_kreport"] else temp(OUTDIR/"host_removal/{sample}.kreport"),
         log:
