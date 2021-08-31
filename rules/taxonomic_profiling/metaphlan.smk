@@ -34,9 +34,9 @@ rule metaphlan:
         read1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
     output:
-        bt2_out=f"{OUTDIR}/metaphlan/{{sample}}.bowtie2.bz2",
+        bt2_out=f"{OUTDIR}/metaphlan/{{sample}}.bowtie2.bz2" if mpa_config["keep_bt2"] else temp(f"{OUTDIR}/metaphlan/{{sample}}.bowtie2.bz2"),
         mpa_out=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
-        sam_out=f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2",
+        sam_out=f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2" if mpa_config["keep_sam"] else temp(f"{OUTDIR}/metaphlan/{{sample}}.sam.bz2"),
     log:
         stdout=f"{LOGDIR}/metaphlan/{{sample}}.metaphlan.stdout.log",
         stderr=f"{LOGDIR}/metaphlan/{{sample}}.metaphlan.stderr.log",
