@@ -71,7 +71,7 @@ rule metaphlan:
 
 
 rule metaphlan_krona:
-    """Convert MPA2 output to Krona input"""
+    """Convert metaphlan output to Krona input"""
     input:
         mpa_out=f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt",
     output:
