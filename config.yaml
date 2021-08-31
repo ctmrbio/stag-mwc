@@ -103,6 +103,8 @@ metaphlan:
     bt2_db_dir: ""           # [Required] Path to MetaPhlAn database dir
     bt2_index: ""            # [Required] Name of MetaPhlAn database index
     extra: ""                # Extra command line arguments for MetaPhlAn e.g. "-t rel_ab_w_read_stats"
+    keep_bt2: False          # Keep the bowtie2 files
+    keep_sam: False          # Keep the sam files
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
         topN: 50                 # Number of top taxa to include in heatmap.
