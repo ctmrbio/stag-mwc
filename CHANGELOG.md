@@ -35,6 +35,7 @@ situations.
   downstream processing.
 - Fixed typo in count summary output filenames for BBMap.
 - Increased time allocations for host removal in `ctmr_gandalf` cluster config.
+- Limited job allocations to one node in `ctmr_gandalf` cluster config.
 
 ### Changed
 
