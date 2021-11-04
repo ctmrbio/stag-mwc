@@ -13,7 +13,8 @@ jobs:
                   conda config --add channels defaults
                   conda config --add channels conda-forge
                   conda config --add channels bioconda
-                  conda create -q -y -n snakemake python=3.7 snakemake=5.6.0
+                  conda install mamba
+                  mamba create -q -y -n snakemake python=3.7 snakemake=5.6.0
             - save_cache:
                 key: v1-snakemake-5.6.0-{{ .Environment.CIRCLE_SHA1 }}
                 paths: 
