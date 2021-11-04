@@ -14,7 +14,7 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.4.3] Unreleased
+## [0.5.0] Unreleased
 ### Added
 - Biobakery update: updated MetaPhlAn and HUMAnN to version 3 as well as introducing 
   StrainPhlAn3 for strain-level genomics.

@@ -19,7 +19,7 @@ from scripts.common import UserMessages
 
 user_messages = UserMessages()
 
-stag_version = "0.4.3-dev"
+stag_version = "0.5.0"
 
 configfile: "config.yaml"
 report: "report/workflow.rst"
