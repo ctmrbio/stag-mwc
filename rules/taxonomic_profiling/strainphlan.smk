@@ -16,7 +16,7 @@ if config["strain_level_profiling"]["strainphlan"]:
         err_message += "If you do not want to run MetaPhlAn or StrainPhlAn, set 'metaphlan: False' and 'strainphlan: false' in config.yaml"
         raise WorkflowError(err_message)
     if not spa_config["clade_of_interest"]:
-        available_clades=f"{LOGDIR}/strainphlan/available_clades.txt",
+        available_clades=f"{OUTDIR}/strainphlan/available_clades.txt",
         all_outputs.append(available_clades)
         user_messages.warn("Clade of interest not specified in strainphlan section of config.yaml.")
         user_messages.warn("Based on your samples strainphlan will create a list of available clades in output/strainphlan/available_clades.txt")
