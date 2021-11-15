@@ -9,7 +9,7 @@ From: continuumio/miniconda3
 	  sudo singularity build stag-mwc-assembly.simg Singularity.assembly
 
 %files
-	envs/assembly.yaml
+	envs/assembly.yaml assembly.yaml
 
 %labels
 	AUTHOR boulund

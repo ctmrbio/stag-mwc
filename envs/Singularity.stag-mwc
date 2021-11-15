@@ -13,7 +13,7 @@ From: continuumio/miniconda3
 	package giving segfaults.
 
 %files
-	envs/stag-mwc.yaml
+	envs/stag-mwc.yaml stag-mwc.yaml
 
 %labels
 	AUTHOR boulund
