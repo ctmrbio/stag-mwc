@@ -52,4 +52,5 @@ From: debian:jessie-slim
 
 %labels
 	Author meglab-metagenomics
-	version amrplusplus_v2
+	version amrplusplus_v2-StaG-mwc
+    

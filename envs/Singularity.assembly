@@ -13,7 +13,7 @@ From: continuumio/miniconda3
 
 %labels
 	AUTHOR boulund
-	VERSION 1.0
+	VERSION 1.1
 	CONDA_ENV /opt/conda/envs/assembly
 
 %environment

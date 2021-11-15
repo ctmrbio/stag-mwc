@@ -1,6 +1,10 @@
 Bootstrap: docker
 From: continuumio/miniconda3
 
+%labels
+	AUTHOR ctmrbio
+	VERSION 1.0
+
 %help
 	This image contains Snakemake and conda, the purpose of this image is to run StaG on a system where Snakemake is not available. 
 	The pipeline can only be executed with the "--use-conda" directive through this image.

@@ -1,6 +1,9 @@
 Bootstrap: docker
 From: continuumio/miniconda3
 
+%labels
+	AUTHOR ctmrbio
+	VERSION 1.0
 
 %post
 	### Sets correct channels and installs metaphlan3, humann3, strainphlan3 and krona
