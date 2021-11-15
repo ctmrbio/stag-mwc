@@ -1,4 +1,4 @@
-name: Build Singularity containers (with Docker)
+name: Build containers
 on: 
   push:
     branches:
