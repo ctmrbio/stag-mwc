@@ -57,10 +57,10 @@ jobs:
          if [ -f "${{ matrix.changed_file }}" ]; then
             sudo -E singularity build container.sif ${{ matrix.changed_file }}
             tag=$(echo "${recipe/Singularity\./}")
-            tag=$(basename "$tag")
             if [ "$tag" == "Singularity" ]; then
                 tag=latest
             fi
+            tag=$(basename "${tag}-${GITHUB_REF_NAME}")
             # Build the container and name by tag
             echo "Tag is $tag."
             echo "tag=$tag" >> $GITHUB_ENV
