@@ -5,13 +5,6 @@ From: mambaorg/micromamba:0.17.0
 	Singularity image containing the conda environment defined in
 	stag-mwc.yaml.
 
-	To build, run:
-	  sudo singularity build stag-mwc.simg Singularity.stag-mwc
-
-	Note that the Kraken2 package installed through conda is ignored in favor
-	of one built and installed from source, due to issues with the conda
-	package giving segfaults.
-
 %files
 	envs/stag-mwc.yaml stag-mwc.yaml
 
@@ -19,13 +12,8 @@ From: mambaorg/micromamba:0.17.0
 	AUTHOR boulund
 	VERSION 2.0
 
-%environment
-    PATH=/opt/conda/envs/stag-mwc-main/bin:/opt/conda/bin:$PATH
-    export PATH
-
 %post
-	# Install stag-mwc-main conda environment
-	micromamba install -y -n base -f stag-mwc.yaml
+	micromamba install --yes --quiet --name base --file stag-mwc.yaml
 	micromamba clean --yes --all
 
 %runscript

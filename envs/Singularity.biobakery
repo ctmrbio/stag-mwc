@@ -1,27 +1,20 @@
 Bootstrap: docker
-From: continuumio/miniconda3
+From: mambaorg/micromamba:0.17.0
 
 %labels
 	AUTHOR ctmrbio
-	VERSION 1.0
+	VERSION 2.0
 
 %post
-	### Sets correct channels and installs metaphlan3, humann3, strainphlan3 and krona
-
-	PATH=/opt/conda/bin:$PATH
-        export PATH	
-
-	conda config --add channels defaults
-	conda config --add channels bioconda
-	conda config --add channels conda-forge
-	conda config --add channels biobakery
-
-	conda install -c bioconda -c biobakery python=3.7 metaphlan humann krona=2.7.1 -y
-
+	micromamba install --yes --quiet --name base \
+		-c defaults \
+		-c bioconda \
+		-c conda-forge \
+		-c biobakery \
+		python=3.7 metaphlan humann krona=2.7.1
+	micromamba clean --yes --all
 
 	humann_databases --download utility_mapping full /opt/humann --update-config yes
-%files
-
 
 %runscript
 	echo "$@"

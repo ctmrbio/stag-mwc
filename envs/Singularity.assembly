@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: continuumio/miniconda3
+From: mambaorg/micromamba:0.17.0
 
 %help
 	Singularity image containing the conda environment defined in
@@ -13,17 +13,12 @@ From: continuumio/miniconda3
 
 %labels
 	AUTHOR boulund
-	VERSION 1.1
-	CONDA_ENV /opt/conda/envs/assembly
-
-%environment
-    PATH=/opt/conda/envs/stag-mwc-assembly/bin:/opt/conda/bin:$PATH
-    export PATH
+	VERSION 2.0
 
 %post
 	# Install stag-mwc-assembly conda environment
-	/opt/conda/bin/conda env create -f assembly.yaml --force
-	/opt/conda/bin/conda clean --yes --all
+	micromamba install -y -n base -f assembly.yaml
+	micromamba clean --yes --all
 
 %runscript
     exec echo "$@"
