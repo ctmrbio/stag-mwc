@@ -8,64 +8,50 @@ on:
   #pull_request: []
 
 jobs:
-  changes:
-    name: "Changed Singularity Recipes"
-    runs-on: ubuntu-latest
-    outputs:
-      changed_file: ${{ steps.files.outputs.added_modified }}
-    steps:
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-  
   build-test-containers:
-    needs:
-      - changes
     runs-on: ubuntu-latest
     strategy:
       # Keep going on other deployments if anything bloops
       fail-fast: false
       matrix:
-        changed_file: ${{ fromJson(needs.changes.outputs.changed_file) }}
         singularity_version:
           - '3.8.1'
-
+        recipe:
+          - "envs/Singularity.amrplusplus"
+          - "envs/Singularity.assembly"
+          - "envs/Singularity.biobakery"
+          - "envs/Singularity.snakemake"
+          - "envs/Singularity.stag-mwc"
     container:
       image: quay.io/singularity/singularity:v${{ matrix.singularity_version }}
       options: --privileged
 
-    name: Check ${{ matrix.changed_file }}
+    name: Check ${{ matrix.recipe }}
     steps:
 
       - name: Check out code for the container builds
         uses: actions/checkout@v2
 
-      - name: Continue if Singularity Recipe
+      - name: Continue if Singularity Recipe exists
         run: |
-          # Continue if we have a changed Singularity recipe
-          if [[ "${{ matrix.changed_file }}" = *Singularity* ]]; then
+          if [[ -f "${{ matrix.recipe }}" ]]; then
             echo "keepgoing=true" >> $GITHUB_ENV
           fi          
 
       - name: Build Container
         if: ${{ env.keepgoing == 'true' }}
         env:
-          recipe: ${{ matrix.changed_file }}
+          recipe: ${{ matrix.recipe }}
         run: |
          ls 
-         if [ -f "${{ matrix.changed_file }}" ]; then
-            sudo -E singularity build container.sif ${{ matrix.changed_file }}
-            tag=$(echo "${recipe/Singularity\./}")
-            if [ "$tag" == "Singularity" ]; then
-                tag=latest
-            fi
-            tag=$(basename "${tag}-${GITHUB_REF_NAME}")
+         if [ -f "${{ matrix.recipe }}" ]; then
+            sudo -E singularity build container.sif ${{ matrix.recipe }}
+            tag=$(basename "${recipe/Singularity\./}-${GITHUB_REF_NAME}")
             # Build the container and name by tag
             echo "Tag is $tag."
             echo "tag=$tag" >> $GITHUB_ENV
          else
-           echo "${{ matrix.changed_file }} is not found."
+           echo "${{ matrix.recipe }} is not found."
            echo "Present working directory: $PWD"
            ls
          fi
