@@ -5,7 +5,7 @@ on:
       - master
       - develop
   # Do the builds on all pull requests (to test them)
-  pull_request: []
+  #pull_request: []
 
 jobs:
   changes:
