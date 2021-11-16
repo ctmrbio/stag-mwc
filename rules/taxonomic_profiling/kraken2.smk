@@ -93,12 +93,14 @@ rule kraken2:
     params:
         db=kraken2_config["db"],
         confidence=kraken2_config["confidence"],
+        minimum_hit_groups=kraken2_config["minimum_hit_groups"],
         extra=kraken2_config["extra"],
     shell:
         """
         kraken2 \
             --db {params.db} \
             --confidence {params.confidence} \
+            --minimum-hit-groups {params.minimum_hit_groups} \
             --threads {threads} \
             --output {output.kraken} \
             --report {output.kreport} \

@@ -18,8 +18,8 @@ situations.
 ### Added
 - Biobakery update: updated MetaPhlAn and HUMAnN to version 3 as well as introducing 
   StrainPhlAn3 for strain-level genomics.
-- Added $TMPDIR variable which can be specified in config.yaml. It is normally not required
-  to specify $TMPDIR but might be necessary to run HUMAnN due to large intermediary files.
+- Added `$TMPDIR` variable which can be specified in config.yaml. It is normally not required
+  to specify `$TMPDIR` but might be necessary to run HUMAnN due to large intermediary files.
 - New internal StaG feature to better handle user messages and defer them for printing after
   the workflow finished execution so they don't get lost in the verbose log printout from
   Snakemake.
@@ -27,6 +27,8 @@ situations.
   `keep_` flags in the config file. Currently available for Quality control
   (fastp), host removal (kraken2), taxonomic profiling with Kraken2 and
   MetaPhlAn3.
+- Automatic builds of Singularity images using Github actions. Images get uploaded to
+  the Github Package repository at `ghcr.io/ctmrbio/stag-mwc:<tag>-<branch>`.
 
 ### Fixed
 - Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.
@@ -38,6 +40,10 @@ situations.
 - Limited job allocations to one node in `ctmr_gandalf` cluster config.
 
 ### Changed
+- Updated Kraken2 to 2.1.2 and added `--minimum-hit-groups` argument in config file.
+- Updated fastp to 0.23.0.
+- Updated Kaiju to 1.8.2.
+- Updated BBMap to 38.93.
 
 ### Removed
 

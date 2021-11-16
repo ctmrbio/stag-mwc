@@ -5,9 +5,9 @@ channels:
     - defaults
 dependencies:
     - python =3.7
-    - fastp =0.20.0
-    - bbmap =38.68
-    - kaiju =1.7.2
+    - fastp =0.23.0
+    - bbmap =38.93
+    - kaiju =1.8.2
     - kraken2 =2.1.2
     - bracken =2.5
     - krona =2.7
