@@ -31,7 +31,7 @@ if config["naive"]["assess_depth"]:
         conda:
             "../../envs/stag-mwc.yaml",
         singularity:
-            "shub://ctmrbio/stag-mwc:stag-mwc"
+            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
         params:
             interval=config["bbcountunique"]["interval"]
         shell:

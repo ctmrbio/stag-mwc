@@ -33,7 +33,7 @@ if config["qc_reads"]:
         conda:
             "../../envs/stag-mwc.yaml"
         singularity:
-            "shub://ctmrbio/stag-mwc:stag-mwc"
+            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
         threads:
             cluster_config["fastp"]["n"] if "fastp" in cluster_config else 4
         params:

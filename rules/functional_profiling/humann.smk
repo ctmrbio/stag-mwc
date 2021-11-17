@@ -53,7 +53,7 @@ rule humann:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads:
         cluster_config["humann"]["n"] if "humann" in cluster_config else 20
     params:
@@ -102,7 +102,7 @@ rule normalize_humann_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads: 
         1
     params:
@@ -150,7 +150,7 @@ rule humann_join_tables:
     conda:
         "../../envs/humann.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads: 
         1
     params:

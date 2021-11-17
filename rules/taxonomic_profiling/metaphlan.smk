@@ -45,7 +45,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads:
         cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
     params:
@@ -108,7 +108,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads:
         1
     shell:
@@ -130,7 +130,7 @@ rule metaphlan_area_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
     shell:
         """
         scripts/area_plot.py \
@@ -156,7 +156,7 @@ rule plot_metaphlan_heatmap:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
     threads:
         1
     params:
@@ -196,7 +196,7 @@ rule create_metaphlan_krona_plots:
     conda:
         "../../envs/metaphlan.yaml"
     singularity:
-        "shub://AroArz/singularity_playground:biobakery"
+        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_build
     threads:
         1
     shell:

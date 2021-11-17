@@ -30,7 +30,7 @@ rule sketch:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
     threads:
         cluster_config["sketch"]["n"] if "sketch" in cluster_config else 4
     shell:
@@ -57,7 +57,7 @@ rule compare_sketches:
     conda: 
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
     shell:
         """
         comparesketch.sh \
@@ -84,7 +84,7 @@ rule plot_sample_similarity:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
     shell:
         """
         scripts/plot_sketch_comparison_heatmap.py \
