@@ -35,7 +35,7 @@ rule preprocessing_summary:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
     shell:

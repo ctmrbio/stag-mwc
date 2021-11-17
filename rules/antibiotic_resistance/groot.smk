@@ -38,7 +38,7 @@ rule create_groot_index:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     params:
         dbdir=DBDIR/"groot/",
         db=groot_config["db"],
@@ -79,7 +79,7 @@ rule groot_align:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         cluster_config["groot_align"]["n"] if "groot_align" in cluster_config else 8
     params:
@@ -120,7 +120,7 @@ rule groot_report:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_build
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
     params:
