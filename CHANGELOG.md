@@ -44,6 +44,7 @@ situations.
 - Updated fastp to 0.23.0.
 - Updated Kaiju to 1.8.2.
 - Updated BBMap to 38.93.
+- Updated MultiQC to 1.11.
 
 ### Removed
 
