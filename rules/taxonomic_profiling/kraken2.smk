@@ -25,7 +25,7 @@ localrules:
 
 kraken2_config = config["kraken2"]
 if config["taxonomic_profile"]["kraken2"]:
-    if not Path(kraken2_config["db"]).exists():
+    if not (kraken2_config["db"] and Path(kraken2_config["db"]).exists()):
         err_message = "No Kraken2 database folder at: '{}'!\n".format(kraken2_config["db"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
         err_message += "Run 'snakemake download_minikraken2' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
