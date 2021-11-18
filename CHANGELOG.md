@@ -14,7 +14,17 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.5.0] Unreleased
+## [0.5.1] Unreleased
+### Added
+
+### Fixed
+
+### Changed
+
+### Removed
+
+
+## [0.5.0] 2021-11-18
 ### Added
 - Biobakery update: updated MetaPhlAn and HUMAnN to version 3 as well as introducing 
   StrainPhlAn3 for strain-level genomics.
@@ -41,7 +51,7 @@ situations.
 - Fixed bug where unspecified kraken2 database did not raise expected WorkflowError.
 
 ### Changed
-- Updated Kraken2 to 2.1.2 and added `--minimum-hit-groups` argument in config file.
+- Updated Kraken2 to 2.1.2 and added `--minimum-hit-groups` setting in config file.
 - Updated fastp to 0.23.0.
 - Updated Kaiju to 1.8.2.
 - Updated BBMap to 38.93.
