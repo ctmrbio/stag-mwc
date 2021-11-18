@@ -38,12 +38,14 @@ situations.
 - Fixed typo in count summary output filenames for BBMap.
 - Increased time allocations for host removal in `ctmr_gandalf` cluster config.
 - Limited job allocations to one node in `ctmr_gandalf` cluster config.
+- Fixed bug where unspecified kraken2 database did not raise expected WorkflowError.
 
 ### Changed
 - Updated Kraken2 to 2.1.2 and added `--minimum-hit-groups` argument in config file.
 - Updated fastp to 0.23.0.
 - Updated Kaiju to 1.8.2.
 - Updated BBMap to 38.93.
+- Updated MultiQC to 1.11.
 
 ### Removed
 
