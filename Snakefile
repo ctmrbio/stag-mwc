@@ -2,7 +2,7 @@
 #
 #    StaG Metagenomic Workflow Collaboration
 #                 StaG-mwc
-#         Copyright (c) 2018-2020
+#         Copyright (c) 2018-2021
 #
 # Full documentation available at:
 # https://stag-mwc.readthedocs.org
@@ -15,8 +15,25 @@ from snakemake.utils import min_version
 min_version("5.5.4")
 
 from rules.publications import publications
+from scripts.common import UserMessages
 
-stag_version = "0.4.2-dev"
+user_messages = UserMessages()
+
+stag_version = "0.5.0"
+singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
+
+configfile: "config.yaml"
+report: "report/workflow.rst"
+citations = {publications["StaG"], publications["Snakemake"]}
+
+INPUTDIR = Path(config["inputdir"])
+OUTDIR = Path(config["outdir"])
+LOGDIR = Path(config["logdir"])
+TMPDIR = Path(config["tmpdir"])
+DBDIR = Path(config["dbdir"])
+all_outputs = []
+
+SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
 
 onstart:
     print("\n".join([
@@ -28,23 +45,11 @@ onstart:
         ])
     )
 
-configfile: "config.yaml"
+    if len(SAMPLES) < 1:
+        raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
+    else:
+        print(f"Found the following samples in inputdir using input filename pattern '{config['input_fn_pattern']}':\n{SAMPLES}")
 
-INPUTDIR = Path(config["inputdir"])
-OUTDIR = Path(config["outdir"])
-LOGDIR = Path(config["logdir"])
-DBDIR = Path(config["dbdir"])
-all_outputs = []
-
-citations = {publications["StaG"], publications["Snakemake"]}
-
-SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
-if len(SAMPLES) < 1:
-    raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
-else:
-    print(f"Found the following samples in inputdir using input filename pattern '{config['input_fn_pattern']}':\n{SAMPLES}")
-
-report: "report/workflow.rst"
 
 #############################
 # Pre-processing
@@ -64,12 +69,17 @@ include: "rules/naive/bbcountunique.smk"
 #############################
 include: "rules/taxonomic_profiling/kaiju.smk"
 include: "rules/taxonomic_profiling/kraken2.smk"
-include: "rules/taxonomic_profiling/metaphlan2.smk"
+include: "rules/taxonomic_profiling/metaphlan.smk"
+
+#############################
+# Strain level profiling
+#############################
+include: "rules/taxonomic_profiling/strainphlan.smk"
 
 #############################
 # Functional profiling
 #############################
-include: "rules/functional_profiling/humann2.smk"
+include: "rules/functional_profiling/humann.smk"
 
 #############################
 # Antibiotic resistance
@@ -109,7 +119,15 @@ onerror:
         stag_version.center(60),
         "",
         "There was an error executing the workflow!".center(60),
-        "Check log output to see error, then rerun workflow.".center(60),
+        "",
+        ])
+    )
+
+    user_messages.print_messages()
+
+    print("\n".join([
+        "",
+        "Check log output, fix issues, then rerun workflow.".center(60),
         "="*60,
         ])
     )
@@ -125,12 +143,14 @@ onsuccess:
         "StaG-mwc".center(60),
         stag_version.center(60),
         "",
-        "Workflow completed successfully".center(60),
         ])
     )
 
+    user_messages.print_messages()
+
     print("\n".join([
         "",
+        "Workflow completed successfully".center(60),
         "="*60,
         ])
     )

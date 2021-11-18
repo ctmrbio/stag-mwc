@@ -33,16 +33,10 @@ correct versions of any remaining dependencies will be automatically downloaded
 and installed when you run the workflow the first time.
 
 If you have a newly installed `miniconda3`_ environment, do not forget to add
-the following channels before installing snakemake::
+the following channels::
 
     conda config --add channels conda-forge
     conda config --add channels bioconda
-
-You create new environment and activate environment or deactivate environment with::
-
-    conda create --name stag-mwc
-    source activate stag-mwc
-    source deactivate
 
 
 Download the workflow code

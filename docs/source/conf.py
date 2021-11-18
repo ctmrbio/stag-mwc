@@ -48,7 +48,7 @@ master_doc = 'index'
 # General information about the project.
 full_name = 'StaG-mwc'
 project = 'mwc'
-copyright = '2018-2020 (c) Fredrik Boulund'
+copyright = '2018-2021 (c) Fredrik Boulund and authors'
 author = 'Fredrik Boulund'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -56,9 +56,9 @@ author = 'Fredrik Boulund'
 # built documents.
 #
 # The short X.Y version.
-version = '0.4.1'
+version = '0.5.0'
 # The full version, including alpha/beta/rc tags.
-release = '0.4.1'
+release = '0.5.0'
 
 # reStructuredText prolog contains a string of reStructuredText that will be
 # included at the beginning of every source file that is read.

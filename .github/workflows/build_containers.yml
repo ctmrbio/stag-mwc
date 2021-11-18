@@ -1,0 +1,67 @@
+name: Build containers
+on: 
+  push:
+    branches:
+      - master
+      - develop
+  # Do the builds on all pull requests (to test them)
+  #pull_request: []
+
+jobs:
+  build-test-containers:
+    runs-on: ubuntu-latest
+    strategy:
+      # Keep going on other deployments if anything bloops
+      fail-fast: false
+      matrix:
+        singularity_version:
+          - '3.8.1'
+        recipe:
+          - "envs/Singularity.amrplusplus"
+          - "envs/Singularity.assembly"
+          - "envs/Singularity.biobakery"
+          - "envs/Singularity.snakemake"
+          - "envs/Singularity.stag-mwc"
+    container:
+      image: quay.io/singularity/singularity:v${{ matrix.singularity_version }}
+      options: --privileged
+
+    name: Check ${{ matrix.recipe }}
+    steps:
+
+      - name: Check out code for the container builds
+        uses: actions/checkout@v2
+
+      - name: Continue if Singularity Recipe exists
+        run: |
+          if [[ -f "${{ matrix.recipe }}" ]]; then
+            echo "keepgoing=true" >> $GITHUB_ENV
+          fi          
+
+      - name: Build Container
+        if: ${{ env.keepgoing == 'true' }}
+        env:
+          recipe: ${{ matrix.recipe }}
+        run: |
+         ls 
+         if [ -f "${{ matrix.recipe }}" ]; then
+            sudo -E singularity build container.sif ${{ matrix.recipe }}
+            tag=$(basename "${recipe/Singularity\./}-${GITHUB_REF_NAME}")
+            # Build the container and name by tag
+            echo "Tag is $tag."
+            echo "tag=$tag" >> $GITHUB_ENV
+         else
+           echo "${{ matrix.recipe }} is not found."
+           echo "Present working directory: $PWD"
+           ls
+         fi
+
+      - name: Login and Deploy Container
+        if: (github.event_name != 'pull_request')
+        env:
+          keepgoing: ${{ env.keepgoing }}
+        run: |         
+            if [[ "${keepgoing}" == "true" ]]; then
+                echo ${{ secrets.GITHUB_TOKEN }} | singularity remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
+                singularity push container.sif oras://ghcr.io/${GITHUB_REPOSITORY}:${tag}
+            fi

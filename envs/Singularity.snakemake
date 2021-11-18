@@ -1,0 +1,30 @@
+Bootstrap: docker
+From: mambaorg/micromamba:0.17.0
+
+%labels
+	AUTHOR ctmrbio
+	VERSION 2.0
+
+%help
+	This image contains Snakemake and conda, the purpose of this image is to
+	run StaG on a system where Snakemake is not available. The pipeline can
+	only be executed with the "--use-conda" directive through this image.
+
+%post
+	micromamba install --yes --quiet --name base \
+		-c default -c conda-forge -c bioconda snakemake
+	micromamba clean --yes --all
+
+	# Create a bash script to run snakemake	
+	echo '#!/bin/bash' > /opt/runscript.sh
+	echo 'source activate snakemake' >> /opt/runscript.sh
+	echo '$@' >> /opt/runscript.sh
+
+%runscript
+	# Calls /opt/runscript.sh. Everything you type after "singularity run snakemake.sif"
+	# is forwarded to the runscript, e.g.:
+	#    "sing run snakemake.sif snakemake --dryrun" 
+	# forwards "snakemake --dryrun" to runscript.sh and executes that command. 
+
+	bash /opt/runscript.sh "$@"
+	echo "$@"

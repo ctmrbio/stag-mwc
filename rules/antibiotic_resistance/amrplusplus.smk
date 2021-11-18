@@ -46,7 +46,7 @@ rule get_local_megares:
     shadow:
         "shallow"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}"
     shell:
@@ -73,7 +73,7 @@ rule build_amr_index:
     conda:
         "../../envs/amrplusplus.yaml"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     shell:
         """
         bwa index {input.megares_db} \
@@ -101,7 +101,7 @@ rule align_to_amr:
     conda:
         "../../envs/amrplusplus.yaml"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     threads:
         cluster_config["align_to_amr"]["n"] if "align_to_amr" in cluster_config else 10
     params:
@@ -134,7 +134,7 @@ rule run_resistome:
     conda:
         "../../envs/amrplusplus.yaml"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         script="scripts/amrplusplus/resistome",
         threshold=amrplusplus_config["resistome"]["threshold"],
@@ -174,7 +174,7 @@ rule run_rarefaction:
     conda:
         "../../envs/amrplusplus.yaml"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}",
         megares_annot=amrplusplus_config["megares"]["annotation"] or f"{MEGARES_ANNOT}",
@@ -219,7 +219,7 @@ rule resistome_results:
     conda:
         "../../envs/amrplusplus.yaml"
     singularity:
-        "shub://meglab-metagenomics/amrplusplus_v2"
+        "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         script="scripts/amrplusplus/amr_long_to_wide.py"
     shell:

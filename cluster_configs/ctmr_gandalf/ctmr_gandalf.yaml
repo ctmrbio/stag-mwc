@@ -1,10 +1,10 @@
-# Cluster config file for StaG-mwc for use on CTMR UCP
+# Cluster config file for StaG-mwc for use on CTMR Gandalf
 __default__:
     account: "bio"
     partition: "ctmr"
     extra: ""
     time: "03:00:00"
-    n: 2
+    n: 4
     stderr: "slurm_logs/slurm-{rule}-{wildcards}.stderr"
     stdout: "slurm_logs/slurm-{rule}-{wildcards}.stdout"
     jobname: "[{rule}]: {wildcards}"
@@ -14,34 +14,37 @@ __default__:
 # Pre-processing
 #############################
 fastp:
-    n: 8
-    time: "01:00:00"
+    n: 10
+    time: "02:00:00"
 remove_host:
-    n: 8
-    time: "01:00:00"
-bbcountunique:
-    n: 4
-    time: "00:45:00"
+    n: 10
+    time: "03:00:00"
 
 #############################
 # Naive comparisons
 #############################
+bbcountunique:
+    n: 4
+    time: "01:00:00"
 sketch:
     n: 8
-    time: "00:20:00"
+    time: "01:00:00"
 
 #############################
 # Taxonomic profiling
 #############################
 kaiju:
-    n: 10
-    time: "02:00:00"
+    n: 16
+    time: "03:00:00"
 kraken2:
-    n: 10
-    time: "02:00:00"
-metaphlan2:
+    n: 16
+    time: "03:00:00"
+metaphlan:
+    n: 16
+    time: "03:00:00"
+strainphlan:
     n: 8
-    time: "01:30:00"
+    time: "02:00:00"
 bracken:
     n: 2
     time: "01:00:00"
@@ -49,29 +52,29 @@ bracken:
 #############################
 # Functional profiling
 #############################
-humann2:
-    n: 12
-    time: "12:00:00"
+humann:
+    n: 30
+    time: "10:00:00"
 
 #############################
 # Antibiotic resistance
 #############################
 groot_align:
-    n: 8
-    time: "01:00:00"
+    n: 12
+    time: "02:00:00"
 align_to_amr:
-    n: 10
+    n: 16
     time: "04:00:00"
 
 #############################
 # Mappers
 #############################
 bbmap:
-    n: 10
-    time: "02:00:00"
+    n: 16
+    time: "04:00:00"
 bowtie2:
-    n: 10
-    time: "02:00:00"
+    n: 16
+    time: "04:00:00"
 
 #############################
 # Assembly

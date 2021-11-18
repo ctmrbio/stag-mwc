@@ -74,7 +74,7 @@ rule kaiju:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -115,7 +115,7 @@ rule kaiju2krona:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         kaiju2krona \
@@ -136,7 +136,7 @@ rule create_kaiju_krona_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         ktImportText \
@@ -159,7 +159,7 @@ rule kaiju_report:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         kaiju2table \
@@ -190,7 +190,7 @@ rule join_kaiju_reports:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         scripts/join_tables.py \
@@ -214,7 +214,7 @@ rule kaiju_area_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     singularity:
-        "shub://ctmrbio/stag-mwc:stag-mwc"
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         scripts/area_plot.py \

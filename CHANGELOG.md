@@ -14,13 +14,48 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.4.2] Unreleased
+## [0.5.1] Unreleased
 ### Added
 
 ### Fixed
-- Updated pandas to 1.2.1 to fix issue with `processing_summary.py` failing.
 
 ### Changed
+
+### Removed
+
+
+## [0.5.0] 2021-11-18
+### Added
+- Biobakery update: updated MetaPhlAn and HUMAnN to version 3 as well as introducing 
+  StrainPhlAn3 for strain-level genomics.
+- Added `$TMPDIR` variable which can be specified in config.yaml. It is normally not required
+  to specify `$TMPDIR` but might be necessary to run HUMAnN due to large intermediary files.
+- New internal StaG feature to better handle user messages and defer them for printing after
+  the workflow finished execution so they don't get lost in the verbose log printout from
+  Snakemake.
+- Added new feature to automatically remove intermediaries with the use of
+  `keep_` flags in the config file. Currently available for Quality control
+  (fastp), host removal (kraken2), taxonomic profiling with Kraken2 and
+  MetaPhlAn3.
+- Automatic builds of Singularity images using Github actions. Images get uploaded to
+  the Github Package repository at `ghcr.io/ctmrbio/stag-mwc:<tag>-<branch>`.
+
+### Fixed
+- Updated pandas to 1.2.1 to fix issue with `preprocessing_summary.py` failing.
+- `preprocessing_summary.py` now parses the correct number of unclassified reads.
+- Rule `bracken_kreport` now correctly produces kreport output file for
+  downstream processing.
+- Fixed typo in count summary output filenames for BBMap.
+- Increased time allocations for host removal in `ctmr_gandalf` cluster config.
+- Limited job allocations to one node in `ctmr_gandalf` cluster config.
+- Fixed bug where unspecified kraken2 database did not raise expected WorkflowError.
+
+### Changed
+- Updated Kraken2 to 2.1.2 and added `--minimum-hit-groups` setting in config file.
+- Updated fastp to 0.23.0.
+- Updated Kaiju to 1.8.2.
+- Updated BBMap to 38.93.
+- Updated MultiQC to 1.11.
 
 ### Removed
 

@@ -27,3 +27,11 @@ False`` in the configuration file then |full_name| will put symlinks to the
 "tricks" Snakemake into thinking that host removal actually occured, enabling
 it to complete the dependency graph to process the data in downstream steps.
 
+Pipeline stopped unexpectedly
+*****************************
+If pipeline ends with error or if the session is locked after being
+unexpectedly disconnected and the pipeline needs to be restarted, you can try
+to remove slurm metadadata files before restarting pipeline using::
+
+    (base)$ rm -rfv .snakemake/metadata
+
