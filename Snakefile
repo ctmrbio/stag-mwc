@@ -19,7 +19,7 @@ from scripts.common import UserMessages
 
 user_messages = UserMessages()
 
-stag_version = "0.5.0"
+stag_version = "0.5.1-dev"
 singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
 
 configfile: "config.yaml"
