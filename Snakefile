@@ -20,7 +20,7 @@ from scripts.common import UserMessages
 user_messages = UserMessages()
 
 stag_version = "0.5.1-dev"
-singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
+singularity_branch_tag = "-develop"  # Replace with "-master" before publishing new version
 
 configfile: "config.yaml"
 report: "report/workflow.rst"
