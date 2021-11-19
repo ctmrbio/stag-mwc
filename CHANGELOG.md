@@ -18,6 +18,7 @@ situations.
 ### Added
 
 ### Fixed
+- Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
 
 ### Changed
 

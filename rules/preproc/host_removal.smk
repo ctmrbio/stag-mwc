@@ -39,7 +39,7 @@ if config["host_removal"]:
             host1=OUTDIR/"host_removal/{sample}.host_1.fq.gz" if rh_config["keep_host_fastq"] else temp(OUTDIR/"host_removal/{sample}.host_1.fq.gz"),
             host2=OUTDIR/"host_removal/{sample}.host_2.fq.gz" if rh_config["keep_host_fastq"] else temp(OUTDIR/"host_removal/{sample}.host_2.fq.gz"),
             kraken=OUTDIR/"host_removal/{sample}.kraken" if rh_config["keep_kraken"] else temp(OUTDIR/"host_removal/{sample}.kraken"),
-            kreport=OUTDIR/"host_removal/{sample}.kraken" if rh_config["keep_kreport"] else temp(OUTDIR/"host_removal/{sample}.kreport"),
+            kreport=OUTDIR/"host_removal/{sample}.kreport" if rh_config["keep_kreport"] else temp(OUTDIR/"host_removal/{sample}.kreport"),
         log:
             stderr=str(LOGDIR/"host_removal/{sample}.kraken2.log"),
         shadow:
