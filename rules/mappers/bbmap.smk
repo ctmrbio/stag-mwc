@@ -68,7 +68,7 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             cluster_config["bbmap"]["n"] if "bbmap" in cluster_config else 8
@@ -115,7 +115,7 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             1
@@ -153,7 +153,7 @@ for bbmap_config in config["bbmap"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             4

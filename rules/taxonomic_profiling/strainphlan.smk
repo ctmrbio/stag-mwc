@@ -44,7 +44,7 @@ rule consensus_markers:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
@@ -73,7 +73,7 @@ rule print_clades:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
@@ -108,7 +108,7 @@ rule extract_markers:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
@@ -141,7 +141,7 @@ rule strainphlan:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads:
         cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8

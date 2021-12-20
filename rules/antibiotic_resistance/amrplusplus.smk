@@ -45,7 +45,7 @@ rule get_local_megares:
         stderr=f"{LOGDIR}/amrplusplus/get_local_megares.stderr.log",
     shadow:
         "shallow"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}"
@@ -72,7 +72,7 @@ rule build_amr_index:
         "shallow"
     conda:
         "../../envs/amrplusplus.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     shell:
         """
@@ -100,7 +100,7 @@ rule align_to_amr:
         "shallow"
     conda:
         "../../envs/amrplusplus.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     threads:
         cluster_config["align_to_amr"]["n"] if "align_to_amr" in cluster_config else 10
@@ -133,7 +133,7 @@ rule run_resistome:
         "shallow"
     conda:
         "../../envs/amrplusplus.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         script="scripts/amrplusplus/resistome",
@@ -173,7 +173,7 @@ rule run_rarefaction:
         "shallow"
     conda:
         "../../envs/amrplusplus.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}",
@@ -218,7 +218,7 @@ rule resistome_results:
         "shallow"
     conda:
         "../../envs/amrplusplus.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
         script="scripts/amrplusplus/amr_long_to_wide.py"

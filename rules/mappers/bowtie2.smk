@@ -87,7 +87,7 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         shell:
             """
@@ -122,7 +122,7 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             1
@@ -160,7 +160,7 @@ for bt2_config in config["bowtie2"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             4

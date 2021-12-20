@@ -46,7 +46,7 @@ if config["host_removal"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             cluster_config["remove_host"]["n"] if "remove_host" in cluster_config else 8
@@ -100,7 +100,7 @@ if config["host_removal"]:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         threads:
             1

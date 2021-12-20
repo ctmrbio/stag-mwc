@@ -29,7 +29,7 @@ rule sketch:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         cluster_config["sketch"]["n"] if "sketch" in cluster_config else 4
@@ -56,7 +56,7 @@ rule compare_sketches:
         "shallow"
     conda: 
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -83,7 +83,7 @@ rule plot_sample_similarity:
         stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """

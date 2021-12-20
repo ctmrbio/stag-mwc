@@ -73,7 +73,7 @@ rule kaiju:
         cluster_config["kaiju"]["n"] if "kaiju" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     params:
         db=kaiju_config["db"],
@@ -114,7 +114,7 @@ rule kaiju2krona:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -135,7 +135,7 @@ rule create_kaiju_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -158,7 +158,7 @@ rule kaiju_report:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -189,7 +189,7 @@ rule join_kaiju_reports:
         value_column=kaiju_config["value_column"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -213,7 +213,7 @@ rule kaiju_area_plot:
         str(LOGDIR/"kaiju/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """

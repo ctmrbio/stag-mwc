@@ -30,7 +30,7 @@ if config["naive"]["assess_depth"]:
             cluster_config["bbcountunique"]["n"] if "bbcountunique" in cluster_config else 2
         conda:
             "../../envs/stag-mwc.yaml",
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         params:
             interval=config["bbcountunique"]["interval"]

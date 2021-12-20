@@ -46,7 +46,7 @@ rule assembly:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
     threads:
         cluster_config["assembly"]["n"] if "assembly" in cluster_config else 20
@@ -85,7 +85,7 @@ rule binning:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
     threads:
         cluster_config["binning"]["n"] if "binning" in cluster_config else 20
@@ -126,7 +126,7 @@ rule consolidate_bins:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
     threads:
         cluster_config["consolidate_bins"]["n"] if "consolidate_bins" in cluster_config else 20
@@ -164,7 +164,7 @@ rule blobology:
         "shallow"
     conda:
         "../../envs/assembly.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
     threads:
         cluster_config["blobology"]["n"] if "blobology" in cluster_config else 20

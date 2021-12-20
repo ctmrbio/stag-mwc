@@ -34,7 +34,7 @@ rule preprocessing_summary:
         stderr=str(LOGDIR/"preprocessing_summary.log"),
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
