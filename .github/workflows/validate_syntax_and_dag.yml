@@ -1,0 +1,73 @@
+name: Validate syntax and DAG
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request: []  # Do it on all PRs
+
+jobs:
+  validate-syntax-and-dag:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container_branch:
+          - 'develop'
+    container:
+      image: oras://ghcr.io/ctmrbio/stag-mwc:singularity-${{ matrix.container_branch }}
+  
+    name: Validate syntax and DAG
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Create empty input files
+        run: |
+         ls
+         touch input/test1_1.fq.gz input/test1_2.fq.gz
+         touch input/test2_1.fq.gz input/test2_2.fq.gz
+
+      - name: Create placeholder db files
+        run: |
+         ls 
+         mkdir -pv tmpdir
+         mkdir -pv db/hg19
+         mkdir -pv db/metaphlan
+         touch db/hg19/taxo.k2d
+         touch db/metaphlan/test.1.bt2
+      
+      - name: Modify config.yaml
+        run: |
+         ls
+         sed -i 's/assess_depth: False/assess_depth: True/' config.yaml
+         sed -i 's/sketch_compare: False/sketch_compare: True/' config.yaml
+         sed -i 's/kaiju: False/kaiju: True/' config.yaml
+         sed -i 's/kraken2: False/kraken2: True/' config.yaml
+         sed -i 's/metaphlan: False/metaphlan: True/' config.yaml
+         sed -i 's/humann: False/humann: True/' config.yaml
+         sed -i 's/strainphlan: False/strainphlan: True/' config.yaml
+         sed -i 's/groot: False/groot: True/' config.yaml
+         sed -i 's/amrplusplus: False/amrplusplus: True/' config.yaml
+         sed -i 's/assembly: False/assembly: True/' config.yaml
+         sed -i 's/binning: False/binning: True/' config.yaml
+         sed -i 's|db_path: \"\"|db_path: \"db/hg19\"|' config.yaml
+         sed -i 's|db: \"\"|db: \"db\"|' config.yaml
+         sed -i 's|bt2_db_dir: \"\"|bt2_db_dir: \"db/metaphlan\"|' config.yaml
+         sed -i 's|bt2_index: \"\"|bt2_index: \"test\"|' config.yaml
+         sed -i 's|_db: \"\"|_db: \"db\"|' config.yaml
+         sed -i 's|    index: \"\"|    index: \"db\"|' config.yaml
+         sed -i 's|kmer_distrib: \"\"|kmer_distrib: \"db\"|' config.yaml
+         sed -i 's|tmpdir: \"/scratch\"|tmpdir: \"tmpdir\"|' config.yaml
+         cat config.yaml
+      
+      - name: Run Snakemake
+        run: |
+         ls
+         source activate snakemake
+         snakemake --use-conda --dryrun
+        
+
+
+
+
