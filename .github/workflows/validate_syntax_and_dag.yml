@@ -12,10 +12,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container_branch:
-          - 'develop'
+        docker_tag:
+          - 'stable'
     container:
-      image: oras://ghcr.io/ctmrbio/stag-mwc:singularity-${{ matrix.container_branch }}
+      image: snakemake/snakemake:${{ matrix.docker_tag }}
   
     name: Validate syntax and DAG
     steps:
