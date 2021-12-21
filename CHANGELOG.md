@@ -21,6 +21,7 @@ situations.
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
 
 ### Changed
+- Replaced CircleCI automatic testing workflow with one implemented with Github actions.
 
 ### Removed
 
