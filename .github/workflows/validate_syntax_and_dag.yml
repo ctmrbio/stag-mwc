@@ -65,8 +65,7 @@ jobs:
       - name: Run Snakemake
         run: |
          ls
-         source activate snakemake
-         snakemake --use-conda --dryrun
+         snakemake --dryrun
         
 
 
