@@ -25,6 +25,7 @@ jobs:
       - name: Create empty input files
         run: |
          ls
+         mkdir -pv input
          touch input/test1_1.fq.gz input/test1_2.fq.gz
          touch input/test2_1.fq.gz input/test2_2.fq.gz
 
