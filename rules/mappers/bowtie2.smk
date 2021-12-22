@@ -24,7 +24,7 @@ for bt2_config in config["bowtie2"]:
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
+        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
                 db_name=bt2_db_name,
                 column=map(str.strip, bt2_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
@@ -110,7 +110,7 @@ for bt2_config in config["bowtie2"]:
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.txt"),
+            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
                     db_name=bt2_db_name,
                     column=map(str.strip, bt2_config["counts_table"]["columns"].split(","))
             )

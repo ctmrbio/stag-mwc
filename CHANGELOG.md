@@ -19,6 +19,8 @@ situations.
 
 ### Fixed
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
+- Corrected typo in bowtie2 annotation counts output files leading to workflow
+  complaining about missing output files.
 
 ### Changed
 - Replaced CircleCI automatic testing workflow with one implemented with Github actions.
