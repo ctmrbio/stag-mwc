@@ -3,10 +3,10 @@ From: mambaorg/micromamba:0.17.0
 
 %help
 	Singularity image containing the conda environment defined in
-	assembly.yaml.
+	envs/assembly.yaml.
 
 	To build, run:
-	  sudo singularity build stag-mwc-assembly.simg Singularity.assembly
+	  sudo singularity build stag-mwc-assembly.simg envs/Singularity.assembly
 
 %files
 	envs/assembly.yaml assembly.yaml
@@ -19,6 +19,19 @@ From: mambaorg/micromamba:0.17.0
 	# Install stag-mwc-assembly conda environment
 	micromamba install -y -n base -f assembly.yaml
 	micromamba clean --yes --all
+
+	mkdir -pv /opt/checkm
+	wget \
+	  --output-document /opt/checkm/checkm_data.tar.gz \
+	  https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
+	cd /opt/checkm
+	tar -xf checkm_data.tar.gz
+
+	# Pipe checkm root path into unavoidable checkM interactive prompt
+	echo /opt/checkm | /opt/conda/bin/checkm data setRoot /opt/checkm
+
+	rm -fv /opt/checkm/checkm_data.tar.gz
+
 
 %runscript
     exec echo "$@"

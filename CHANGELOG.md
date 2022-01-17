@@ -21,9 +21,12 @@ situations.
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
 - Corrected typo in bowtie2 annotation counts output files leading to workflow
   complaining about missing output files.
+- Fixed CheckM installation in assembly singularity file so assembled bin consolidation
+  from MetaWRAP now works as intended.
 
 ### Changed
 - Replaced CircleCI automatic testing workflow with one implemented with Github actions.
+- Updated MetaWRAP to 1.3.2.
 
 ### Removed
 
