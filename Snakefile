@@ -177,7 +177,7 @@ onsuccess:
             snakemake_call=argv[0],
             report=config["report"],
             datetime=report_datetime,
-            ))
+        ))
         shell("{snakemake_call} --report {report}-{datetime}.zip".format(
             snakemake_call=argv[0],
             report=config["report"],
