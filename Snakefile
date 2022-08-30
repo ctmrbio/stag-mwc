@@ -182,4 +182,4 @@ onsuccess:
             snakemake_call=argv[0],
             report=config["report"],
             datetime=report_datetime,
-            ))
+        ))
