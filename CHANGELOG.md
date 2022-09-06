@@ -16,6 +16,8 @@ situations.
 
 ## [0.5.1] Unreleased
 ### Added
+- Produce Snakemake report in zip format as well as HTML due to the HTML report being
+  broken in the later versions of Snakemake.
 
 ### Fixed
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
