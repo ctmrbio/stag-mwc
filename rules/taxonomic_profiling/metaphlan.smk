@@ -20,8 +20,16 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    mpa_outputs=expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
-        taxlvl=("species", "genus", "family", "order")),
+    heatmap = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+    mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+    krona_plots = expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
+        krona=("all_samples","combined_samples"))
+    mpa_outputs = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
+        taxlvl=("species", "genus", "family", "order"))
+
+    all_outputs.append(heatmap)
+    all_outputs.append(mpa_area_plot)
+    all_outputs.append(krona_plots)
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -203,21 +211,19 @@ rule create_metaphlan_krona_plots:
         """
         ktImportText \
             -o {output.html_samples} \
-            {input}
+            {input} \
+            > {log}
 
         ktImportText \
             -o {output.html_all} \
             -c \
-            {input}
+            {input} \
+            >> {log}
         """
 
 rule metaphlan_outputs:
     """Separate the metaphlan abundance table into species, genus, family and order levels"""
     input:
-        heatmap=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
-        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
-        mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
-            krona=("all_samples","combined_samples")),
         mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
         species=f"{OUTDIR}/metaphlan/levels/species.tsv",
