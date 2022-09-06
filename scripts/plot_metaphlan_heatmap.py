@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Plot MetaPhlAn2 heatmap"""
+"""Plot MetaPhlAn heatmap"""
 __author__ = "Fredrik Boulund"
-__date__ = "2019"
-__version__ = "0.3"
+__date__ = "2022"
+__version__ = "0.4"
 
 from sys import argv, exit
 from collections import defaultdict
@@ -10,6 +10,7 @@ from pathlib import Path
 import argparse
 import logging
 
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -28,7 +29,7 @@ def parse_args():
     desc = f"{__doc__} v{__version__}. {__author__} (c) {__date__}."
     parser = argparse.ArgumentParser(description=desc, epilog="Version "+__version__)
     parser.add_argument("mpa_table",
-            help="MetaPhlAn2 TSV table to plot.")
+            help="MetaPhlAn TSV table to plot.")
     parser.add_argument("-o", "--outfile-prefix", dest="outfile_prefix",
             default="mpa_heatmap",
             help="Outfile name [%(default)s]. "
@@ -73,33 +74,21 @@ def parse_args():
 
 
 def parse_mpa_table(mpa_tsv):
-    """Read joined MetaPhlAn2 tables into a Pandas DataFrame.
+    """Read joined MetaPhlAn tables into a Pandas DataFrame.
 
     * Convert ranks from first column into hierarchical MultiIndex
-    * Drop NCBI_tax_id column
     """
     with open(mpa_tsv) as f:
-        firstline = f.readline()
-        if firstline.startswith("#mpa"):
-            second_line = f.readline()
-            third_line = f.readline()
-            if third_line.startswith("#SampleID"):
-                skiprows = 3
-            else:
-                skiprows = 1
-            dropcols = ["clade_name", "NCBI_tax_id"]
-        elif firstline.startswith("#clade_name"):
-            skiprows = 0
-            dropcols = ["#clade_name", "NCBI_tax_id"]
-        elif firstline.startswith("clade_name"):
-            skiprows = 0
-            dropcols = ["clade_name", "NCBI_tax_id"]
-        elif firstline.startswith("ID"):
-            skiprows = 0
-            dropcols = ["ID"]
-        else:
-            logger.error(f"Don't know how to handle table with first line: {firstline}")
-            exit(3)
+        for lineno, line in enumerate(f):
+            if line.startswith("#"):
+                continue
+            elif line.startswith("clade_name"):
+                skiprows = lineno
+                dropcols = ["clade_name"]
+                break
+            elif not line.startswith("#"):
+                logger.error(f"Don't know how to process table")
+                exit(3)
 
     df = pd.read_csv(mpa_tsv, sep="\t", skiprows=skiprows)
 
@@ -158,7 +147,7 @@ def plot_clustermap(mpa_table, topN, pseudocount, colormap, method, metric):
 
     sns.set("notebook")
     clustergrid = sns.clustermap(
-            mpa_topN.apply(lambda x: pd.np.log10(x+pseudocount)),
+            mpa_topN.apply(lambda x: np.log10(x+pseudocount)),
             figsize=(figwidth, figheight),
             method=method,
             metric=metric,

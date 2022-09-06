@@ -20,8 +20,16 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    mpa_outputs=expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
-        taxlvl=("species", "genus", "family", "order")),
+    heatmap = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+    mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+    krona_plots = expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
+        krona=("all_samples","combined_samples"))
+    mpa_outputs = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
+        taxlvl=("species", "genus", "family", "order"))
+
+    all_outputs.append(heatmap)
+    all_outputs.append(mpa_area_plot)
+    all_outputs.append(krona_plots)
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -113,7 +121,7 @@ rule combine_metaphlan_tables:
         1
     shell:
         """
-        merge_metaphlan_tables.py {input} > {output.txt}
+        merge_metaphlan_tables.py {input} > {output.txt} 2> {log}
         sed --in-place 's/\.metaphlan//g' {output.txt} 
         """
 
@@ -136,7 +144,7 @@ rule metaphlan_area_plot:
         scripts/area_plot.py \
             --table {input} \
             --output {output} \
-            --mode metaphlan \
+            --mode metaphlan4 \
             2>&1 > {log}
         """
 
@@ -191,6 +199,8 @@ rule create_metaphlan_krona_plots:
         html_all=report(f"{OUTDIR}/metaphlan/combined_samples.metaphlan.krona.html",
             category="Taxonomic profiling",
             caption="../../report/metaphlan_krona.rst"),
+    log:
+        f"{LOGDIR}/metaphlan/create_metaphlan_krona_plots.log",
     shadow:
         "shallow"
     conda:
@@ -203,21 +213,19 @@ rule create_metaphlan_krona_plots:
         """
         ktImportText \
             -o {output.html_samples} \
-            {input}
+            {input} \
+            > {log}
 
         ktImportText \
             -o {output.html_all} \
             -c \
-            {input}
+            {input} \
+            >> {log}
         """
 
 rule metaphlan_outputs:
     """Separate the metaphlan abundance table into species, genus, family and order levels"""
     input:
-        heatmap=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
-        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
-        mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
-            krona=("all_samples","combined_samples")),
         mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
         species=f"{OUTDIR}/metaphlan/levels/species.tsv",
@@ -227,10 +235,11 @@ rule metaphlan_outputs:
     shell:
         """
         set +o pipefail
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order} > /dev/null
 
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
         """
+

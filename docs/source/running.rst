@@ -24,7 +24,7 @@ other workflow steps depend on.
 .. note:: 
 
     You can create several copies of ``config.yaml``, named whatever you want,
-    in order to manage several analysis from the same |full_name| directory.
+    in order to manage several analyses from the same |full_name| directory.
     If you create a copy called e.g. ``microbime_analysis.yaml``, you can easily
     run the workflow with this configuration file by using the ``--configfile``
     commandline argument when running the workflow.
@@ -105,16 +105,17 @@ The above example assumes you have entered paths to your databases in
 ``config.yaml`` with a base path like the one shown in the above command
 (e.g. ``/home/username/databases/kraken2/kraken2_human/``).
 
+
 Running on cluster resources
 ****************************
 In order to run |full_name| on a cluster, you need a special cluster
 configuration file.  |full_name| ships with a pre-made configuration profile
-for use on UPPMAX's Rackham cluster.  Find all available cluster configuration
-profiles in the ``cluster_configs`` directory in the repository. The cluster
-configuration profiles specify which cluster scheduler account to use (e.g.
-Slurm project account), as well as the number of CPUs, time, and memory
-requirements for each individual step. Snakemake uses this information when
-submitting jobs to the cluster scheduler.
+for use on CTMR's Gandalf cluster and UPPMAX's Rackham cluster.  Find all
+available cluster configuration profiles in the ``cluster_configs`` directory
+in the repository. The cluster configuration profiles specify which cluster
+scheduler account to use (e.g.  Slurm project account), as well as the number
+of CPUs, time, and memory requirements for each individual step. Snakemake uses
+this information when submitting jobs to the cluster scheduler.
 
 When running on a cluster it will likely work best if you run StaG using
 Singularity. The workflow comes preconfigured to download and use containers
@@ -140,21 +141,21 @@ from Singularity hub. To use Singularity launch Snakemake with the
     correct from inside the Singularity container. Read more about specifying
     bind paths in the official Singularity docs: specifying-bind-paths_. 
 
-To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
+To run |full_name| on e.g. CTMR's Gandalf, run the following command from
 inside the workflow repository directory::
 
-    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --singularity-args "-B /proj/uppstore2017086/db" --profile cluster_configs/rackham 
+    snakemake --use-singularity --singularity-prefix /ceph/db/sing --singularity-args "-B /ceph" --profile cluster_configs/ctmr_gandalf
 
 This will make Snakemake submit each workflow step as a separate cluster job
-using the CPU and time requirements specified in ``rackham.yaml`` inside the
+using the CPU and time requirements specified in ``ctmr_gandalf.yaml`` inside the
 Rackham profile folder. The above command assumes you are using the default
 ``config.yaml`` configuration file. If you are using a custom configuration
 file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 
 .. note::
 
-    Make sure you edit ``cluster_configs/rackham/rackham.yaml`` to specify
-    the Slurm project name to use for Slurm job submissions.
+    Make sure you edit ``cluster_configs/ctmr_gandalf/ctmr_gandalf.yaml`` to
+    specify the Slurm project name to use for Slurm job submissions.
 
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
@@ -165,41 +166,5 @@ Execution report
 ****************
 Snakemake provides facilites to produce an HTML report of the execution of the
 workflow. An HTML report is automatically created when the workflow finishes.
-It is currently very simple, but will be expanded in the future.
 
-
-Downloading databases (deprecated in v0.4)
-*********************
-.. note::
-    Since version 0.4 this section is considered outdated and no longer supported.
-    Some of the rules mentioned in this section still exist in the codebase, but 
-    the functionality provided by them should not be relied upon.
-
-Several of the tools used in |full_name| need special databases to work. Fortunately,
-|full_name| makes it easy to download and prepare the required databases. The first
-database you will need is the ``hg19`` reference database for use in the ``remove_host``
-read processing step. If you do not have it available before using |full_name|, run
-the following command to download and index the database for you::
-
-    snakemake index_hg19
-
-This will automatically download and index the BBMap masked hg19 file for you. The
-database will be downloaded to the ``dbdir`` parameter specified in ``config.yaml``.
-Note that creating the hg19 index requires at least 16GB of RAM, so it is typically
-not recommended to do this on a laptop.
-
-|full_name| can download several databases by typing ``snakemake <rule_name>``
-using any of the following rules::
-
-    build_metaphlan2_index
-    create_megares_index
-    download_humann2_databases
-    download_kaiju_database
-    download_minikraken2
-    index_hg19  (already shown above) 
-
-.. note::
-
-    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
-    you have downloaded.
 
