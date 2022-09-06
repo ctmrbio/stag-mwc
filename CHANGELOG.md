@@ -21,9 +21,15 @@ situations.
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
 - Corrected typo in bowtie2 annotation counts output files leading to workflow
   complaining about missing output files.
+- Removed unintended stdout printouts from various helper scripts and some
+  MetaPhlAn related rules.
 
 ### Changed
 - Replaced CircleCI automatic testing workflow with one implemented with Github actions.
+- Updated MetaPhlAn to version 4.0.0.
+- Modified area and MetaPhlAn heatmap plotting scripts to better deal
+  with MetaPhlAn 4 output formats.
+- Updated the documentation to reflect recent changes in StaG.
 
 ### Removed
 

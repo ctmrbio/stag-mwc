@@ -6,8 +6,8 @@
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _Bracken: https://ccb.jhu.edu/software/bracken/
 .. _groot: https://groot-documentation.readthedocs.io
-.. _MetaPhlAn: https://github.com/biobakery/biobakery/wiki/metaphlan3
-.. _StrainpPlAn: https://github.com/biobakery/biobakery/wiki/strainphlan3
+.. _MetaPhlAn: https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
+.. _StrainpPlAn: https://github.com/biobakery/MetaPhlAn/wiki/StrainPhlAn-4
 .. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 .. _HUMAnN: https://github.com/biobakery/biobakery/wiki/humann3
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
@@ -243,12 +243,17 @@ Outputs five files per sample, plus three summaries for all samples::
 ``{unit}`` refers to the normalization method specified in ``config.yaml``, 
 the default unit is counts per million (cpm).
 
-Note that HUMAnN uses the taxonomic profiles produced by MetaPhlAn as input,
-so all MetaPhlAn-associated steps are run regardless of whether it is actually
-enabled in ``config.yaml`` or not.
+.. note::
+
+   HUMAnN uses the taxonomic profiles produced by MetaPhlAn as input,
+   so all MetaPhlAn-associated steps are run regardless of whether it is actually
+   enabled in ``config.yaml`` or not. It is important to use a MetaPhlAn database
+   compatible with HUMAnN3, e.g. mpa_v30_CHOCOPhlAn_201901 (run the metaphlan
+   step with the extra ``--mpa3`` flag in the StaG config file).
 
 Due to temporary disk space issues with running HUMAnN it is now a requirement
-to specify a $TMPDIR in ``config.yaml``, an excellent example is ``/scratch``.
+to specify a $TMPDIR in ``config.yaml``, e.g. ``/scratch`` or ``/tmp`` depending 
+on your system's configuration.
 
 
 Antibiotic resistance
