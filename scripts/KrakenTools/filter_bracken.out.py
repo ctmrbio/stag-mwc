@@ -1,29 +1,21 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 #################################################################
 #filter_bracken_out.py allows users to filter Bracken output files 
-#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
+#This file is part of Kraken-Tools.
+#Kraken-Tools is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 3 of the license, or
+#(at your option) any later version.
 #
-#Copyright 2019 Jennifer Lu
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of 
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#GNU General Public License for more details.
 #
-#Permission is hereby granted, free of charge, to any person obtaining a copy of
-#this software and associated documentation files (the "Software"), to deal in
-#the Software without restriction, including without limitation the rights to
-#use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-#of the Software, and to permit persons to whom the Software is furnished to do
-#so, subject to the following conditions:
-#
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-#
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-#
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################
 #Jennifer Lu, jlu26@jhmi.edu
@@ -65,13 +57,13 @@ def main():
     if len(args.t_include) == 0 and len(args.t_exclude) == 0:
         sys.stderr.write("User must include at least one taxonomy ID to include or exclude\n")
         sys.stderr.write("Please specify either --include or --exclude\n")
-        exit(1)
+        sys.exit(1)
     #CHECK#2: if both are specified, make sure none exists in both lists
     if len(args.t_include) > 0 and len(args.t_exclude) > 0:
         for val in args.t_include:
             if val in args.t_exclude:
                 sys.stderr.write("%s cannot be in include AND exclude lists\n" % val)
-                exit(1)
+                sys.exit(1)
     include = False
     exclude = False
     if len(args.t_include) > 0:
@@ -93,7 +85,7 @@ def main():
         if first:
             if line.split("\t") != ["name","taxonomy_id","taxonomy_lvl","kraken_assigned_reads","added_reads","new_est_reads","fraction_total_reads"]:
                 sys.stderr.write("\t%s not in Bracken output format\n" % args.in_file)
-                exit(1)
+                sys.exit(1)
             first = False
             firstline = line + "\n"
             continue

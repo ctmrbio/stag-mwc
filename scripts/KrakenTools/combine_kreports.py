@@ -1,29 +1,23 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ################################################################
 #combine_kreports.py takes multiple kraken-style reports and combines
 #them into a single report file
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
-#Copyright 2019 Jennifer Lu
+#This file is part of KrakenTools
+#KrakenTools is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 3 of the license, or 
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of 
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+#GNU General Public License for more details.
 #
-#Permission is hereby granted, free of charge, to any person obtaining a copy of
-#this software and associated documentation files (the "Software"), to deal in
-#the Software without restriction, including without limitation the rights to
-#use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-#of the Software, and to permit persons to whom the Software is furnished to do
-#so, subject to the following conditions:
-#
-#The above copyright notice and this permission notice shall be included in all
-#copies or substantial portions of the Software.
-#
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-#SOFTWARE.
-#
-#
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, see <http://www.gnu.org/licenses/>.
+
 #################################################################
 #Jennifer Lu, jlu26@jhmi.edu
 #Updated: 05/16/2019
@@ -115,6 +109,8 @@ class Tree(object):
 #   - reads classified only at this level
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 5:
+        return []
     try:
         int(split_str[1])
     except ValueError:
@@ -122,8 +118,8 @@ def process_kraken_report(curr_str):
     #Extract relevant information
     all_reads =  int(split_str[1])
     level_reads = int(split_str[2])
-    level_type = split_str[3]
-    taxid = split_str[4] 
+    level_type = split_str[-3]
+    taxid = split_str[-2] 
     #Get name and spaces
     spaces = 0
     name = split_str[-1]
