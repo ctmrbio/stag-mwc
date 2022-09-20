@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Join per sample feature tables into a large combined table."""
 __author__ = "Fredrik Boulund"
-__date__ = "2020"
-__version__ = "1.0"
+__date__ = "2020-2022"
+__version__ = "1.1"
 
 from sys import argv, exit
 from functools import reduce, partial
@@ -33,6 +33,11 @@ def parse_args():
             default=0.0,
             type=float,
             help="Fill NA values in merged table with FLOAT [%(default)s].")
+    parser.add_argument("-s", "--skiplines", dest="skiplines", metavar="N",
+            default=0,
+            type=int,
+            help="Skip N lines before parsing header (e.g. for files "
+                 "containing comments before the real header) [%(default)s].")
     
     if len(argv) < 2:
         parser.print_help()
@@ -41,14 +46,14 @@ def parse_args():
     return parser.parse_args()
 
 
-def main(table_files, feature_column, value_column, outfile, fillna):
+def main(table_files, feature_column, value_column, outfile, fillna, skiplines):
     feature_columns = feature_column.split(",")
 
     tables = []
     for table_file in table_files:
         sample_name = Path(table_file).name.split(".")[0]
         tables\
-            .append(pd.read_csv(table_file, sep="\t")\
+            .append(pd.read_csv(table_file, sep="\t", skiprows=skiplines)\
             .set_index(feature_columns)\
             .rename(columns={value_column: sample_name})\
             .loc[:, [sample_name]])  # Ugly hack to get a single-column DataFrame
@@ -66,4 +71,4 @@ if __name__ == "__main__":
     if len(args.TABLE) < 2:
         print("Need at least two tables to merge!")
         exit(1)
-    main(args.TABLE, args.feature_column, args.value_column, args.outfile, args.fillna)
+    main(args.TABLE, args.feature_column, args.value_column, args.outfile, args.fillna, args.skiplines)
