@@ -1,3 +1,11 @@
+# Kraken Tools in StaG-mwc
+Fredrik Boulund has on 2019-10-02 been granted permission to redistribute
+KrakenTools under the MIT license in StaG-mwc.
+
+The scripts included in StaG-mwc are copied from the offical Github repository
+(https://github.com/jenniferlu717/KrakenTools) on 2022-09-20 with their
+embedded GPLv3 license text removed and replaced with the MIT license.
+
 # Kraken Tools
 For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
