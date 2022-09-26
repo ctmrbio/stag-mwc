@@ -15,7 +15,7 @@ from snakemake.utils import min_version
 min_version("5.5.4")
 
 from rules.publications import publications
-from scripts.common import UserMessages
+from scripts.common import UserMessages, SampleSheet
 
 user_messages = UserMessages()
 
@@ -33,7 +33,15 @@ TMPDIR = Path(config["tmpdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
 
-SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
+if config["samplesheet"]:
+    samplesheet = SampleSheet(config["samplesheet"], endpoint_url=config["s3_endpoint_url"])
+    SAMPLES = samplesheet.samples
+    INPUT_read1 = lambda w: samplesheet.sample_info[w.sample]["read1"]
+    INPUT_read2 = lambda w: samplesheet.sample_info[w.sample]["read2"]
+else:
+    SAMPLES = set(glob_wildcards(INPUTDIR/config["input_fn_pattern"]).sample)
+    INPUT_read1 = INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
+    INPUT_read2 = INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
 
 onstart:
     print("\n".join([

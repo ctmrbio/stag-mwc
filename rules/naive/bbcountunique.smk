@@ -15,7 +15,7 @@ if config["naive"]["assess_depth"]:
     rule bbcountunique:
         """Assess sequencing depth using BBCountUnique."""
         input:
-            INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
+            INPUT_read1,
         output:
             txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
             pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
