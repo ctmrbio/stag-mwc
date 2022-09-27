@@ -56,6 +56,10 @@ storage systems like S3.
    file |full_name| will ignore the ``inputdir`` and ``input_fn_pattern``
    settings.
 
+   When using remote input files on S3 the access and secret keys must be
+   available in environment variables ``AWS_ACCESS_KEY_ID`` and
+   ``AWS_SECRET_ACCESS_KEY``.
+
 It is possible to keep a local copy of remote input files in the repository
 folder after the run by setting ``keep_local: True`` in the config file.
 
