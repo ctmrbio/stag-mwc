@@ -44,7 +44,7 @@ class SampleSheet():
     UniqueSampleName1\tinput/sample1_1.fq.gz\tinput/sample1_2.fq.gz
     OtherSample2\ts3://bucket/QWERTY12345_1.fq.gz\ts3://bucket/QWERTY12345_2.fq.gz
     """
-    def __init__(self, samplesheet, endpoint_url="http://s3.amazonaws.com"):
+    def __init__(self, samplesheet, keep_local=False, endpoint_url="http://s3.amazonaws.com"):
         self.sample_info = {}
         self.S3 = S3RemoteProvider(host=endpoint_url)
         self.required_columns = ("sample_id", "fastq_1", "fastq_2")
@@ -62,10 +62,10 @@ class SampleSheet():
 
                 try:
                     if fq1.startswith("s3://"):
-                        fq1 = self.S3.remote(fq1.lstrip("s3://"))
+                        fq1 = self.S3.remote(fq1.lstrip("s3://"), keep_local=keep_local)
                         fq1_source = "S3"
                     if fq2.startswith("s3://"):
-                        fq2 = self.S3.remote(fq2.lstrip("s3://"))
+                        fq2 = self.S3.remote(fq2.lstrip("s3://"), keep_local=keep_local)
                         fq2_source = "S3"
                 except AttributeError as e:
                     raise ValueError(f"Cannot parse line {line} in {samplesheet}")

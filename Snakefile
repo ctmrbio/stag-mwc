@@ -34,7 +34,7 @@ DBDIR = Path(config["dbdir"])
 all_outputs = []
 
 if config["samplesheet"]:
-    samplesheet = SampleSheet(config["samplesheet"], endpoint_url=config["s3_endpoint_url"])
+    samplesheet = SampleSheet(config["samplesheet"], keep_local=config["keep_local"], endpoint_url=config["s3_endpoint_url"])
     SAMPLES = samplesheet.samples
     INPUT_read1 = lambda w: samplesheet.sample_info[w.sample]["read1"]
     INPUT_read2 = lambda w: samplesheet.sample_info[w.sample]["read2"]

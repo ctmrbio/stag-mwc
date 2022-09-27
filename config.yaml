@@ -27,6 +27,7 @@ email: ""                 # Email to send status message after completed/failed 
 # Remote services
 #########################
 s3_endpoint_url: "https://s3.ki.se"  # Use https://s3.amazonaws.com for Amazon S3
+keep_local: False                    # Keep local copies of remote input files, default False.
 
 
 #########################
