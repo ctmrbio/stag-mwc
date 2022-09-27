@@ -19,6 +19,8 @@ situations.
 - Produce Snakemake report in zip format as well as HTML due to the HTML report being
   broken in the later versions of Snakemake.
 - Added samplesheet as alternative input file selection method.
+- Added `run_krona` setting for taxonomic profilers to make it possible to disable Krona
+  table and plot creation.
 
 ### Fixed
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
