@@ -29,11 +29,13 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
 
     all_outputs.append(heatmap)
     all_outputs.append(mpa_area_plot)
-    all_outputs.append(krona_plots)
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
-    citations.add(publications["Krona"])
+
+    if mpa_config["run_krona"]:
+        all_outputs.append(krona_plots)
+        citations.add(publications["Krona"])
 
 
 rule metaphlan:

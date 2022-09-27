@@ -31,14 +31,17 @@ if config["taxonomic_profile"]["kaiju"]:
     kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
     kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
     kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf"))
+
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
-    all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
     #all_outputs.append(kaiju_area_plot)  # Buggy in stag 4.1
 
     citations.add(publications["Kaiju"])
-    citations.add(publications["Krona"])
+
+    if kaiju_config["run_krona"]:
+        all_outputs.append(kaiju_krona)
+        citations.add(publications["Krona"])
 
 
 rule download_kaiju_database:
