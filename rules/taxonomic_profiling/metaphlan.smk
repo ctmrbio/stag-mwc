@@ -55,7 +55,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        "docker://quay.io/biocontainers/metaphlan:4.0.2--pyhca03a8a_0"
     threads:
         cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
     params:
@@ -118,7 +118,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        "docker://quay.io/biocontainers/metaphlan:4.0.2--pyhca03a8a_0"
     threads:
         1
     shell:
@@ -208,7 +208,7 @@ rule create_metaphlan_krona_plots:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
     shell:
