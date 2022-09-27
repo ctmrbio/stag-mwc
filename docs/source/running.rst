@@ -4,13 +4,55 @@ You need to configure a workflow before you can run |full_name|. The code
 you downloaded in the previous ``git clone`` step includes a file called 
 ``config.yaml``, which is used to configure the workflow. 
 
-Open ``config.yaml`` in your favorite editor and change the settings under the
-``Run configuration`` heading: the input directory, the input filename pattern,
-and the output directory, are the most important ones. They can be declared
-using absolute or relative filenames (relative to the |full_name| repository
-directory). Input and output directories can be located anywhere, i.e. their
-locations are not restricted to the repository folder.
+Selecting input files
+*********************
+There are two ways to define which files |full_name| should run on: either
+by specifying an input directory and a filename pattern, or by providing
+a sample sheet. The two ways are exclusive and cannot be combined, so you have
+to pick the one that suits you best. 
 
+Input directory
+---------------
+If your input FASTQ files are all in the same folder and they all follow the
+same filename pattern, the input directory option is often the most convenient.
+
+Open ``config.yaml`` in your favorite editor and change input file settings
+under the ``Run configuration`` heading: the input directory, the input
+filename pattern. They can be declared using absolute or relative filenames
+(relative to the |full_name| repository directory). Input and output
+directories can technically be located anywhere, i.e. their locations are not
+restricted to the repository folder, but it is recommended to keep them in the
+repository directory. A common practice is to put symlinks to the files you
+want to analyze in a folder called ``input`` in the repository folder.
+
+Samplesheet
+-----------
+If your input FASTQ files are spread across several filesystem locations or
+potentially exist in remote locations (e.g. S3), or your input FASTQ filenames
+do not follow a common filename pattern, the samplesheet option is the most
+convenient. The samplesheet input option also allows you to specify custom
+sample names that are not derived from a substring of the input filenames.
+
+The format of the samplesheet is tab-separated text and it must contain a
+header line with at least the following three columns: ``sample_id``,
+``fastq_1``, and ``fastq_2``. An example file could look like this (columns are
+separated by TAB characters)::
+
+   sample_id  fastq_1                           fastq_2
+   ABC123     /path/to/sample1_1.fq.gz          /path/to/sample1_2.fq.gz
+   DEF456     s3://bucketname/sample_R1.fq.gz   s3://bucketname/sample_R2.fq.gz
+
+Open ``config.yaml`` in your favorite editor and enter the path to a
+samplesheet TSV file that you have prepared in advance in the ``samplesheet``
+filed under the ``Run configuration`` heading: They paths can be declared using
+absolute or relative filenames (relative to the |full_name| repository
+directory). Input files can be located anywhere, i.e. their locations are not
+restricted to the repository folder and they can even be located in remote
+storage systems like S3.
+
+
+Configuring which tools to run
+******************************
 Next, configure the settings under the ``Pipeline steps included`` heading.
 This is where you define what steps should be included in your workflow. Simply
 assign ``True`` or ``False`` to the steps you want to include. Note that the
