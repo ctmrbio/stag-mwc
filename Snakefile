@@ -54,9 +54,12 @@ onstart:
     )
 
     if len(SAMPLES) < 1:
-        raise WorkflowError("Found no samples! Check input file pattern and path in config.yaml")
+        raise WorkflowError("Found no samples! Check input file options in config.yaml")
     else:
-        print(f"Found the following samples in inputdir using input filename pattern '{config['input_fn_pattern']}':\n{SAMPLES}")
+        if config["samplesheet"]:
+            print(f"Found these samples in '{config['samplesheet']}':\n{SAMPLES}")
+        else:
+            print(f"Found these samples in '{config['inputdir']}' using input filename pattern '{config['input_fn_pattern']}':\n{SAMPLES}")
 
 
 #############################
