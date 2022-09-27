@@ -44,8 +44,8 @@ separated by TAB characters)::
 
 Open ``config.yaml`` in your favorite editor and enter the path to a
 samplesheet TSV file that you have prepared in advance in the ``samplesheet``
-filed under the ``Run configuration`` heading: They paths can be declared using
-absolute or relative filenames (relative to the |full_name| repository
+field under the ``Run configuration`` heading. The FASTQ paths can be declared
+using absolute or relative filenames (relative to the |full_name| repository
 directory). Input files can be located anywhere, i.e. their locations are not
 restricted to the repository folder and they can even be located in remote
 storage systems like S3.
