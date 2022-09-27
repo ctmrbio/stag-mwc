@@ -18,8 +18,8 @@ if config["qc_reads"]:
 
     rule fastp:
         input:
-            read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
-            read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
+            read1=INPUT_read1,
+            read2=INPUT_read2,
         output:
             read1=OUTDIR/"fastp/{sample}_1.fq.gz" if fastp_config["keep_output"] else temp(OUTDIR/"fastp/{sample}_1.fq.gz"),
             read2=OUTDIR/"fastp/{sample}_2.fq.gz" if fastp_config["keep_output"] else temp(OUTDIR/"fastp/{sample}_2.fq.gz"),
@@ -66,8 +66,8 @@ else:
 
     rule skip_fastp:
         input:
-            read1=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1"),
-            read2=INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="2")
+            read1=INPUT_read1,
+            read2=INPUT_read2,
         output:
             read1=OUTDIR/"fastp/{sample}_1.fq.gz",
             read2=OUTDIR/"fastp/{sample}_2.fq.gz",

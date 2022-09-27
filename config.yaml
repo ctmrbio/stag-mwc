@@ -14,12 +14,20 @@
 #########################
 inputdir: "input"
 input_fn_pattern: "{sample}_{readpair}.fq.gz"
+samplesheet: ""           # Three-column samplesheet with sample_id,fastq_1,fastq_2 columns. Used instead of inputdir
 outdir: "output_dir"
 logdir: "output_dir/logs"
 tmpdir: "/tmp"            # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
 dbdir: "databases"        # Databases will be downloaded to this dir, if requested
 report: "StaG_report-"    # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                 # Email to send status message after completed/failed run.
+
+
+#########################
+# Remote services
+#########################
+s3_endpoint_url: "https://s3.ki.se"  # Use https://s3.amazonaws.com for Amazon S3
+keep_local: False                    # Keep local copies of remote input files, default False.
 
 
 #########################
@@ -36,9 +44,9 @@ taxonomic_profile:
     krakenuniq: False
     metaphlan: False
 strain_level_profiling:
-    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: False    # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
-    humann: False
+    humann: False         # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 antibiotic_resistance:
     groot: False
     amrplusplus: False
@@ -85,6 +93,7 @@ kaiju:
     levels: ["species", "genus", "family"]    # Level(s) to summarize Kaiju report to, pick from: superkingdom, phylum, class, order, family, genus, species
     feature_column: "taxon_name"   # Feature column to use in all_samples summary
     value_column: "percent"        # Value column top use in all_samples summary. Options are typically "percent" or "reads"
+    run_krona: True
 
 kraken2:
     db: ""                   # [Required] Path to Kraken2 DB folder
@@ -93,6 +102,7 @@ kraken2:
     extra: ""                # Extra command line arguments for kraken2 (do not add/change output files)
     keep_kraken: False       # Keep the kraken output files
     keep_kreport: True       # Keep the kreport output files
+    run_krona: True
     bracken:
         kmer_distrib: ""     # [Required for Bracken] Path to kmer_distrib file for Kraken2 DB specified above
         levels: "S G"        # Space-separated list of taxonomic levels to produce tables for (e.g. "F G S" for Family, Genus, Species)
@@ -113,6 +123,7 @@ metaphlan:
     extra: ""                # Extra command line arguments for MetaPhlAn e.g. "-t rel_ab_w_read_stats"
     keep_bt2: False          # Keep the bowtie2 files
     keep_sam: False          # Keep the sam files, set this to True if you want to run StrainPhlAn.
+    run_krona: True
     heatmap:
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
         topN: 50                 # Number of top taxa to include in heatmap.
@@ -201,3 +212,4 @@ metawrap:
     universal: "--universal"  # Use universal marker genes
     minimum_completion: 70
     maximum_contamination: 10
+

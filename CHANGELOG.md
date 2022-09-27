@@ -20,6 +20,9 @@ situations.
   broken in the later versions of Snakemake.
 - Add KrakenUniq as taxonomic profiler as an alternative with lower false
   positive rate than Kraken2.
+- Added samplesheet as alternative input file selection method.
+- Added `run_krona` setting for taxonomic profilers to make it possible to disable Krona
+  table and plot creation.
 
 ### Fixed
 - Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
