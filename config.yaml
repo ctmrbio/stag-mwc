@@ -21,7 +21,12 @@ tmpdir: "/tmp"            # Specifying a tmpdir is not normally necessary but so
 dbdir: "databases"        # Databases will be downloaded to this dir, if requested
 report: "StaG_report-"    # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                 # Email to send status message after completed/failed run.
-s3_endpoint_url: "https://s3.ki.se"
+
+
+#########################
+# Remote services
+#########################
+s3_endpoint_url: "https://s3.ki.se"  # Use https://s3.amazonaws.com for Amazon S3
 
 
 #########################
@@ -37,9 +42,9 @@ taxonomic_profile:
     kraken2: False
     metaphlan: False
 strain_level_profiling:
-    strainphlan: False        # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
+    strainphlan: False    # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
-    humann: False
+    humann: False         # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 antibiotic_resistance:
     groot: False
     amrplusplus: False
@@ -58,7 +63,7 @@ fastp:
     extra: ""
     keep_output: False       # StaG deletes fastp output files after host removal, set to True to keep them.
 remove_host:
-    db_path: "/ceph/db/kraken2/kraken2_GRCh38"              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
     confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
     extra: "--quick"         # Additional command line arguments to kraken2
     keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
@@ -196,3 +201,4 @@ metawrap:
     universal: "--universal"  # Use universal marker genes
     minimum_completion: 70
     maximum_contamination: 10
+
