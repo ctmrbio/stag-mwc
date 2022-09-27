@@ -56,6 +56,9 @@ storage systems like S3.
    file |full_name| will ignore the ``inputdir`` and ``input_fn_pattern``
    settings.
 
+It is possible to keep a local copy of remote input files in the repository
+folder after the run by setting ``keep_local: True`` in the config file.
+
 
 Configuring which tools to run
 ******************************
