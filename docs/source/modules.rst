@@ -4,6 +4,7 @@
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
+.. _KrakenUniq: https://github.com/fbreitwieser/krakenuniq
 .. _Bracken: https://ccb.jhu.edu/software/bracken/
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn: https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
@@ -168,6 +169,17 @@ each sample::
     all_samples.<taxonomic_level>.filtered.bracken.txt
     all_samples.bracken.mpa_style.txt
     
+KrakenUniq
+----------
+:Tool: `KrakenUniq`_
+:Output folder: ``krakenuniq``
+
+Run `KrakenUniq`_ on the trimmed and filtered reads to produce a taxonomic profile.
+The KrakenUniq module produces the following output files::
+
+   <sample>.kraken.gz
+   <sample>.kreport
+   all_samples.krakenuniq.txt
 
 MetaPhlAn
 ----------

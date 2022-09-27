@@ -18,6 +18,8 @@ situations.
 ### Added
 - Produce Snakemake report in zip format as well as HTML due to the HTML report being
   broken in the later versions of Snakemake.
+- Add KrakenUniq as taxonomic profiler as an alternative with lower false
+  positive rate than Kraken2.
 - Added samplesheet as alternative input file selection method.
 - Added `run_krona` setting for taxonomic profilers to make it possible to disable Krona
   table and plot creation.
@@ -35,6 +37,9 @@ situations.
 - Modified area and MetaPhlAn heatmap plotting scripts to better deal
   with MetaPhlAn 4 output formats.
 - Updated the documentation to reflect recent changes in StaG.
+- Updated KrakenTools to v1.2
+- Updated `scripts/join_tables.py` to v1.1, which includes support for skipping lines
+  before the header.
 
 ### Removed
 
