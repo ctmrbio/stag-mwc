@@ -45,7 +45,7 @@ rule krakenuniq:
     conda:
         "../../envs/krakenuniq.yaml"
     container:
-        "docker://quay.io/biocontainers/krakenuniq:0.7.3--pl5321h19e8d03_0"
+        "docker://quay.io/biocontainers/krakenuniq:1.0.0--pl5321h19e8d03_0"
     params:
         db=krakenuniq_config["db"],
         extra=krakenuniq_config["extra"],
