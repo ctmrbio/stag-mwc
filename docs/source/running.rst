@@ -50,6 +50,12 @@ directory). Input files can be located anywhere, i.e. their locations are not
 restricted to the repository folder and they can even be located in remote
 storage systems like S3.
 
+.. note::
+
+   When the path to a samplesheet TSV file has been specified in the config
+   file |full_name| will ignore the ``inputdir`` and ``input_fn_pattern``
+   settings.
+
 
 Configuring which tools to run
 ******************************
