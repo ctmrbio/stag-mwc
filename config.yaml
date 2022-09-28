@@ -156,7 +156,6 @@ humann:
 # Antibiotic Resistance
 #########################
 groot:
-    db: "arg-annot"          # Used when downloading and indexing DB with "create_groot_index" rule
     index: ""                # [Required] Path to groot index
     minlength: 110           # Minlength for groot index
     maxlength: 125           # Maxlength for groot index
