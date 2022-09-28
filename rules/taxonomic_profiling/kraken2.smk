@@ -12,7 +12,6 @@ localrules:
     bracken_all_levels,
     combine_kreports,
     create_kraken2_krona_plot,
-    download_minikraken2,
     filter_bracken,
     join_bracken,
     join_bracken_filtered,
@@ -54,27 +53,6 @@ if config["taxonomic_profile"]["kraken2"]:
         all_outputs.append(kraken_area_plot)
         citations.add(publications["Krona"])
     
-
-
-rule download_minikraken2:
-    output:
-        db=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/hash.k2d",
-        names=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/opts.k2d",
-        nodes=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/taxo.k2d",
-        kmer_distrib=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE/database150mers.kmer_distrib",
-    log:
-        str(LOGDIR/"kraken2/download_minikraken2.log")
-    shadow:
-        "shallow"
-    params:
-        dbdir=DBDIR/"kraken2/minikraken2_v2_8GB_201904_UPDATE"
-    shell:
-        """
-        wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz > {log}
-        tar -vxf minikraken2_v2_8GB_201904_UPDATE.tgz  >> {log}
-        mv -v *k2d *kmer_distrib {params.dbdir} >> {log}
-        """
-
 
 rule kraken2:
     input:

@@ -10,7 +10,7 @@ localrules:
     metaphlan_area_plot,
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
-    metaphlan_outputs,
+    separate_metaphlan_outputs,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["humann"]:
@@ -225,7 +225,7 @@ rule create_metaphlan_krona_plots:
             >> {log}
         """
 
-rule metaphlan_outputs:
+rule separate_metaphlan_outputs:
     """Separate the metaphlan abundance table into species, genus, family and order levels"""
     input:
         mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",

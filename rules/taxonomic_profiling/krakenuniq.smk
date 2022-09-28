@@ -88,3 +88,4 @@ rule combine_krakenuniq_reports:
             {input.kreports} \
             2> {log}
         """
+

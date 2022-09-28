@@ -44,24 +44,6 @@ if config["taxonomic_profile"]["kaiju"]:
         citations.add(publications["Krona"])
 
 
-rule download_kaiju_database:
-    output:
-        db=DBDIR/"kaiju/kaiju_db.fmi",
-        names=DBDIR/"kaiju/names.dmp",
-        nodes=DBDIR/"kaiju/nodes.dmp"
-    shadow:
-        "shallow"
-    params:
-        dbdir=DBDIR/"kaiju"
-    shell:
-        """
-        wget http://kaiju.binf.ku.dk/database/kaiju_index_pg.tgz \
-        && \
-        tar -xf kaiju_index_pg.tgz \
-        && \
-        mv kaiju_db.fmi names.dmp nodes.dmp {params.dbdir}
-        """
-
 rule kaiju:
     input:
         read1=OUTDIR/"host_removal/{sample}_1.fq.gz",

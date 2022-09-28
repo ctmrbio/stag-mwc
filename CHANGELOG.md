@@ -42,6 +42,7 @@ situations.
   before the header.
 
 ### Removed
+- Removed old unmaintaineed DB download rules for groot, kaiju, kraken2. 
 
 
 ## [0.5.0] 2021-11-18
