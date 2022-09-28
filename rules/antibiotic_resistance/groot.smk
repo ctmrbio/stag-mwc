@@ -26,40 +26,6 @@ if config["antibiotic_resistance"]["groot"]:
     citations.add(publications["GROOT"])
 
 groot_config = config["groot"]
-rule create_groot_index:
-    """Create groot index."""
-    output:
-        dbdir=DBDIR/"groot/{}".format(groot_config["db"]),
-        index=DBDIR/"groot/{db}_index".format(db=groot_config["db"]),
-    log:
-        str(LOGDIR/"groot/groot.get_index.log")
-    shadow:
-        "shallow"
-    conda:
-        "../../envs/stag-mwc.yaml"
-    container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    params:
-        dbdir=DBDIR/"groot/",
-        db=groot_config["db"],
-        read_length=125,
-    threads:
-        4
-    shell:
-        """
-        groot get \
-            --database {params.db} \
-            --out {params.dbdir}/{params.db} \
-            --processors {threads} \
-            --logFile {log}
-        groot index \
-            --msaDir {params.dbdir}/{params.db} \
-            --readLength {params.read_length} \
-            --outDir {output.index} \
-            --processors {threads} \
-            --logFile {log}
-        """
-
 
 rule groot_align:
     """Align reads to groot index."""
@@ -138,3 +104,4 @@ rule groot_report:
             > {output.report}
         mv groot-plots {output.plots}
         """
+
