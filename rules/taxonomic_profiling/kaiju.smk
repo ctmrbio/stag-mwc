@@ -6,7 +6,6 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_kaiju_database,
     create_kaiju_krona_plot,
     kaiju2krona,
     kaiju_report,

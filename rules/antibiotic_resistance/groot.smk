@@ -5,7 +5,6 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    create_groot_index,
     groot_report
 
 
