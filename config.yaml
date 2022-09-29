@@ -113,6 +113,7 @@ kraken2:
 
 krakenuniq:
     db: ""                   # [Required] Path to KrakenUniq DB folder
+    preload_size: "128G"     # Max amount of RAM to use when loading database (will automatically chunk DB to fit)
     extra: ""                # Extra command line arguments for krakenuniq (do not add/change output files)
     keep_kraken: False       # Keep the kraken output files
     keep_kreport: True       # Keep the kreport output files

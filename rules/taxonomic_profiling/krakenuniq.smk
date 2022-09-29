@@ -48,6 +48,7 @@ rule krakenuniq:
         "docker://quay.io/biocontainers/krakenuniq:1.0.0--pl5321h19e8d03_0"
     params:
         db=krakenuniq_config["db"],
+        preload_size=krakenuniq_config["preload_size"],
         extra=krakenuniq_config["extra"],
     shell:
         """
@@ -56,6 +57,7 @@ rule krakenuniq:
             --threads {threads} \
             --output {output.kraken} \
             --report-file {output.kreport} \
+            --preload-size {params.preload_size} \
             --paired \
             {input.read1} {input.read2} \
             {params.extra} \
