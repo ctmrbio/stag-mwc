@@ -8,6 +8,8 @@
 # https://stag-mwc.readthedocs.org
 
 from pathlib import Path
+import copy
+import subprocess
 import textwrap
 
 from snakemake.exceptions import WorkflowError
@@ -185,10 +187,35 @@ onsuccess:
             Path("citations.rst").unlink()
         Path("citations.rst").symlink_to(citation_filename)
 
-        shell("{snakemake_call} --unlock".format(snakemake_call=argv[0]))
-        shell("{snakemake_call} --report {report}-{datetime}.zip".format(
-            snakemake_call=argv[0],
-            report=config["report"],
-            datetime=report_datetime,
-        ))
+        unlock_call = copy.deepcopy(argv)
+        unlock_call.append("--unlock")
+
+        report_args = copy.deepcopy(argv)
+        report_args.extend(["--report", f"{config['report']}-{report_datetime}.zip"])
+
+        # Report generation doesn't work if --jobs 
+        # or --use-singularity are specified,
+        # so we strip all args related to these from argv
+        # for report generation call
+        skip = False
+        report_call = []
+        for arg in report_args:
+            if arg == "--use-singularity":
+                continue
+            if arg == "--singularity-args":
+                skip = True
+                continue
+            if arg == "--singularity-prefix":
+                skip = True
+                continue
+            if arg == "--jobs":
+                skip = True
+                continue
+            if skip:
+                skip = False
+                continue
+            report_call.append(arg)
+
+        subprocess.run(unlock_call)
+        subprocess.run(report_call)
 
