@@ -38,8 +38,11 @@ situations.
   with MetaPhlAn 4 output formats.
 - Updated the documentation to reflect recent changes in StaG.
 - Updated KrakenTools to v1.2
-- Updated `scripts/join_tables.py` to v1.1, which includes support for skipping lines
-  before the header.
+- Updated `scripts/join_tables.py` to v1.1, which includes support for skipping
+  lines before the header.
+- Improved automatic report generation code in main Snakefile to be more
+  robust. Now works well also when --use-singularity or --jobs are used
+  simultaneously with --report.
 
 ### Removed
 - Removed old unmaintaineed DB download rules for groot, kaiju, kraken2. 
