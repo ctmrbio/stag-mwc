@@ -30,6 +30,7 @@ situations.
   complaining about missing output files.
 - Removed unintended stdout printouts from various helper scripts and some
   MetaPhlAn related rules.
+- Removed outdated mentions of MetaPhlAn2 in report.
 
 ### Changed
 - Replaced CircleCI automatic testing workflow with one implemented with Github actions.
