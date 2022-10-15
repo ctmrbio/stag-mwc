@@ -1,0 +1,5 @@
+identifier,sample_id,read,suffix
+1,test1,1,fq.gz
+2,test1,2,fq.gz
+3,test2,1,fq.gz
+4,test2,2,fq.gz
