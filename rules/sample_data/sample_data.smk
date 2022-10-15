@@ -6,8 +6,8 @@ import os
 
 sampledatadir = ".input"
 samples_ = []
-if os.path.exists('.input/sample_data.csv'):
-    with open('.input/sample_data.csv', 'r') as csvfile:
+if os.path.exists(f"{sampledatadir}/sample_data.csv"):
+    with open(f"{sampledatadir}/sample_data.csv", "r") as csvfile:
         csvreader = csv.DictReader(csvfile)
         for row in csvreader:
             sample_ = "_".join([row["sample_id"], row["read"]]) + "." + row["suffix"]
@@ -18,7 +18,7 @@ if os.path.exists('.input/sample_data.csv'):
             samples_
 
     rule curl_sampledata:
-        input: ".input/sample_data.csv",
+        input: f"{sampledatadir}/sample_data.csv",
         output: samples_,
         shell:
             """
@@ -30,4 +30,4 @@ if os.path.exists('.input/sample_data.csv'):
             """
 
 else:
-        print(f"no sample data sheet in ./input")
+        print(f"no sample data sheet in {sampledatadir}")
