@@ -30,7 +30,7 @@ jobs:
     steps:
 
       - name: Check out code for the container builds
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Continue if Singularity Recipe exists
         run: |
