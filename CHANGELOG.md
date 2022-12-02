@@ -20,7 +20,10 @@ situations.
   broken in the later versions of Snakemake.
 - Add KrakenUniq as taxonomic profiler as an alternative with lower false
   positive rate than Kraken2.
-- Added samplesheet as alternative input file selection method.
+- Added samplesheet as alternative input file selection method, this also
+  enables providing custom sample names that are not based on pattern in input
+  filenames.
+- Samplesheet can be used to specify remote input files from S3 or HTTP/HTTPS sources.
 - Added `run_krona` setting for taxonomic profilers to make it possible to disable Krona
   table and plot creation.
 
@@ -34,7 +37,8 @@ situations.
 
 ### Changed
 - Replaced CircleCI automatic testing workflow with one implemented with Github actions.
-- Updated MetaPhlAn to version 4.0.0.
+- Updated MetaPhlAn to version 4.0.3.
+- Updated HUMAnN to version 3.6.
 - Modified area and MetaPhlAn heatmap plotting scripts to better deal
   with MetaPhlAn 4 output formats.
 - Updated the documentation to reflect recent changes in StaG.
