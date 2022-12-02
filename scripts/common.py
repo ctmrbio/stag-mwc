@@ -19,14 +19,6 @@ class UserMessages():
             for message in messages:
                 print(level.upper()+":", message)
 
-    def print_info(self):
-        for message in self.info:
-            print(level.upper()+":", message)
-
-    def print_warnings(self):
-        for message in self.warn:
-            print(level.upper()+":", message)
-
     def info(self, message):
         self.messages["info"].add(message)
 
