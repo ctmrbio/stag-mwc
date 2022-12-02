@@ -1,0 +1,3 @@
+sample_id	fastq_1	fastq_2
+test1	https://github.com/boulund/stag-mwc_test_data/raw/master/test1_1.fq.gz	https://github.com/boulund/stag-mwc_test_data/raw/master/test1_2.fq.gz
+test2	https://github.com/boulund/stag-mwc_test_data/raw/master/test2_1.fq.gz	https://github.com/boulund/stag-mwc_test_data/raw/master/test2_2.fq.gz

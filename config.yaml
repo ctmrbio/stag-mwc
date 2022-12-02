@@ -35,6 +35,7 @@ keep_local: False                    # Keep local copies of remote input files, 
 #########################
 qc_reads: True
 host_removal: True
+multiqc_report: True
 naive:
     assess_depth: False
     sketch_compare: False
@@ -55,7 +56,6 @@ mappers:
     bowtie2: False
 assembly: False
 binning: False
-multiqc_report: False
 
 
 #########################
