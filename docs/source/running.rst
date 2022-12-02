@@ -38,9 +38,10 @@ header line with at least the following three columns: ``sample_id``,
 ``fastq_1``, and ``fastq_2``. An example file could look like this (columns are
 separated by TAB characters)::
 
-   sample_id  fastq_1                           fastq_2
-   ABC123     /path/to/sample1_1.fq.gz          /path/to/sample1_2.fq.gz
-   DEF456     s3://bucketname/sample_R1.fq.gz   s3://bucketname/sample_R2.fq.gz
+   sample_id  fastq_1                             fastq_2
+   ABC123     /path/to/sample1_1.fq.gz            /path/to/sample1_2.fq.gz
+   DEF456     s3://bucketname/sample_R1.fq.gz     s3://bucketname/sample_R2.fq.gz
+   GHI789     http://domain.com/sample_R1.fq.gz   http://domain.com/sample_R2.fq.gz
 
 Open ``config.yaml`` in your favorite editor and enter the path to a
 samplesheet TSV file that you have prepared in advance in the ``samplesheet``
@@ -60,8 +61,14 @@ storage systems like S3.
    available in environment variables ``AWS_ACCESS_KEY_ID`` and
    ``AWS_SECRET_ACCESS_KEY``.
 
+   Using remote files is also possible from http:// and https:// sources.
+
 It is possible to keep a local copy of remote input files in the repository
 folder after the run by setting ``keep_local: True`` in the config file.
+
+The samplesheet can be specified on the command line by utilizing Snakemake's
+built-in functionality for modifying configuration settings via the command line
+directive ``--config samplesheet=samplesheet.tsv``. 
 
 
 Configuring which tools to run
