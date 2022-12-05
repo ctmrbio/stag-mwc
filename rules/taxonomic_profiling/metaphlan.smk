@@ -118,7 +118,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.2--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
     threads:
         1
     shell:
