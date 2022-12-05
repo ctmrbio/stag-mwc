@@ -55,7 +55,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.2--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
     threads:
         cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
     params:
