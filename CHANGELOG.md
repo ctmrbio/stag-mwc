@@ -16,7 +16,7 @@ situations.
 
 ## [0.5.1] Unreleased
 ### Added
-- Produce Snakemake report in zip format as well as HTML due to the HTML report being
+- Produce Snakemake report in zip format instead of HTML due to the HTML report being
   broken in the later versions of Snakemake.
 - Add KrakenUniq as taxonomic profiler as an alternative with lower false
   positive rate than Kraken2.
