@@ -14,7 +14,7 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.5.1] Unreleased
+## [0.5.1] 2022-12-06
 ### Added
 - Produce Snakemake report in zip format instead of HTML due to the HTML report being
   broken in the later versions of Snakemake.
@@ -50,7 +50,7 @@ situations.
   simultaneously with --report.
 
 ### Removed
-- Removed old unmaintaineed DB download rules for groot, kaiju, kraken2. 
+- Removed old unmaintained DB download rules for groot, kaiju, kraken2. 
 
 
 ## [0.5.0] 2021-11-18
