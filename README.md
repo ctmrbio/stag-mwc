@@ -82,8 +82,7 @@ request.
 
 ## Citing
 If you find StaG-mwc useful in your research, please cite the Zenodo DOI:
-https://zenodo.org/record/1483891
-
+https://zenodo.org/badge/latestdoi/125840716
 
 # Logo attribution
 <a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>
