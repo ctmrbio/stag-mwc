@@ -1,10 +1,10 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ####################################################################
 #kreport2krona.py converts a Kraken-style report into Krona-compatible format
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
+
 #This file is part of KrakenTools.
-#
-#Copyright 2019 Jennifer Lu
-#
+
 #Permission is hereby granted, free of charge, to any person obtaining a copy of
 #this software and associated documentation files (the "Software"), to deal in
 #the Software without restriction, including without limitation the rights to
@@ -22,7 +22,7 @@
 #LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
-#
+
 ####################################################################
 #Jennifer Lu, jlu26@jhmi.edu
 #Updated: 05/30/2019
@@ -70,13 +70,23 @@ import os, sys, argparse
 #   - reads classified at this level and below in the tree
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 2:
+        return []
     try:
         int(split_str[1])
     except ValueError:
         return []
     all_reads = int(split_str[1])
     lvl_reads = int(split_str[2])
-    level_type = split_str[3]
+    level_type = split_str[-3]
+    type2main = {'superkingdom':'D','phylum':'P',
+        'class':'C','order':'O','family':'F',
+        'genus':'G','species':'S'} 
+    if len(level_type) > 1:
+        if level_type in type2main:
+            level_type = type2main[level_type]
+        else:
+            level_type = '-'
     #Get name and spaces 
     spaces = 0
     name = split_str[-1]
@@ -86,6 +96,7 @@ def process_kraken_report(curr_str):
             spaces += 1
         else:
             break
+    name = name.replace(' ','_')
     #Determine level based on number of spaces
     level_num = spaces/2
     return [name, level_num, level_type, lvl_reads]
@@ -168,8 +179,8 @@ def kreport2krona_main(report_file, out_file):
         #Get relevant information from the line 
         [name, level_num, level_type, lvl_reads] = report_vals
         if level_type == 'U':
-            num2path[line_num] = ["u_Unclassified"]
-            path2reads["u_Unclassified"] = lvl_reads 
+            num2path[line_num] = ["Unclassified"]
+            path2reads["Unclassified"] = lvl_reads 
             continue
         #########################################
         #Create level name 
@@ -224,10 +235,13 @@ def kreport2krona_main(report_file, out_file):
     o_file = open(out_file, 'w')
     for i in range(0,line_num):
         #Get values
+        if i not in num2path:
+            continue
         curr_path = num2path[i] 
         if len(curr_path) > 0:
             curr_reads = path2reads[curr_path[-1]] 
-            o_file.write("%i" % curr_reads)
+            if curr_path[-1][0] != "x":
+                o_file.write("%i" % curr_reads)
             for name in curr_path:
                 if name[0] != "r" and name[0] != "x":
                     o_file.write("\t%s" % name)

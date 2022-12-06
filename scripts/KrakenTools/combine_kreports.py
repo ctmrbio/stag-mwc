@@ -1,10 +1,11 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ################################################################
 #combine_kreports.py takes multiple kraken-style reports and combines
 #them into a single report file
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
-#Copyright 2019 Jennifer Lu
-#
+#This file is part of KrakenTools
+
 #Permission is hereby granted, free of charge, to any person obtaining a copy of
 #this software and associated documentation files (the "Software"), to deal in
 #the Software without restriction, including without limitation the rights to
@@ -22,8 +23,7 @@
 #LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
-#
-#
+
 #################################################################
 #Jennifer Lu, jlu26@jhmi.edu
 #Updated: 05/16/2019
@@ -115,6 +115,8 @@ class Tree(object):
 #   - reads classified only at this level
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 5:
+        return []
     try:
         int(split_str[1])
     except ValueError:
@@ -122,8 +124,8 @@ def process_kraken_report(curr_str):
     #Extract relevant information
     all_reads =  int(split_str[1])
     level_reads = int(split_str[2])
-    level_type = split_str[3]
-    taxid = split_str[4] 
+    level_type = split_str[-3]
+    taxid = split_str[-2] 
     #Get name and spaces
     spaces = 0
     name = split_str[-1]

@@ -52,7 +52,7 @@ rule humann:
         "shallow"
     conda:
         "../../envs/humann.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads:
         cluster_config["humann"]["n"] if "humann" in cluster_config else 20
@@ -101,7 +101,7 @@ rule normalize_humann_tables:
         "shallow"
     conda:
         "../../envs/humann.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads: 
         1
@@ -149,7 +149,7 @@ rule humann_join_tables:
         "shallow"
     conda:
         "../../envs/humann.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
     threads: 
         1

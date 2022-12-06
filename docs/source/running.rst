@@ -4,13 +4,75 @@ You need to configure a workflow before you can run |full_name|. The code
 you downloaded in the previous ``git clone`` step includes a file called 
 ``config.yaml``, which is used to configure the workflow. 
 
-Open ``config.yaml`` in your favorite editor and change the settings under the
-``Run configuration`` heading: the input directory, the input filename pattern,
-and the output directory, are the most important ones. They can be declared
-using absolute or relative filenames (relative to the |full_name| repository
-directory). Input and output directories can be located anywhere, i.e. their
-locations are not restricted to the repository folder.
+Selecting input files
+*********************
+There are two ways to define which files |full_name| should run on: either
+by specifying an input directory and a filename pattern, or by providing
+a sample sheet. The two ways are exclusive and cannot be combined, so you have
+to pick the one that suits you best. 
 
+Input directory
+---------------
+If your input FASTQ files are all in the same folder and they all follow the
+same filename pattern, the input directory option is often the most convenient.
+
+Open ``config.yaml`` in your favorite editor and change input file settings
+under the ``Run configuration`` heading: the input directory, the input
+filename pattern. They can be declared using absolute or relative filenames
+(relative to the |full_name| repository directory). Input and output
+directories can technically be located anywhere, i.e. their locations are not
+restricted to the repository folder, but it is recommended to keep them in the
+repository directory. A common practice is to put symlinks to the files you
+want to analyze in a folder called ``input`` in the repository folder.
+
+Samplesheet
+-----------
+If your input FASTQ files are spread across several filesystem locations or
+potentially exist in remote locations (e.g. S3), or your input FASTQ filenames
+do not follow a common filename pattern, the samplesheet option is the most
+convenient. The samplesheet input option also allows you to specify custom
+sample names that are not derived from a substring of the input filenames.
+
+The format of the samplesheet is tab-separated text and it must contain a
+header line with at least the following three columns: ``sample_id``,
+``fastq_1``, and ``fastq_2``. An example file could look like this (columns are
+separated by TAB characters)::
+
+   sample_id  fastq_1                             fastq_2
+   ABC123     /path/to/sample1_1.fq.gz            /path/to/sample1_2.fq.gz
+   DEF456     s3://bucketname/sample_R1.fq.gz     s3://bucketname/sample_R2.fq.gz
+   GHI789     http://domain.com/sample_R1.fq.gz   http://domain.com/sample_R2.fq.gz
+
+Open ``config.yaml`` in your favorite editor and enter the path to a
+samplesheet TSV file that you have prepared in advance in the ``samplesheet``
+field under the ``Run configuration`` heading. The FASTQ paths can be declared
+using absolute or relative filenames (relative to the |full_name| repository
+directory). Input files can be located anywhere, i.e. their locations are not
+restricted to the repository folder and they can even be located in remote
+storage systems like S3.
+
+.. note::
+
+   When the path to a samplesheet TSV file has been specified in the config
+   file |full_name| will ignore the ``inputdir`` and ``input_fn_pattern``
+   settings.
+
+   When using remote input files on S3 the access and secret keys must be
+   available in environment variables ``AWS_ACCESS_KEY_ID`` and
+   ``AWS_SECRET_ACCESS_KEY``.
+
+   Using remote files is also possible from http:// and https:// sources.
+
+It is possible to keep a local copy of remote input files in the repository
+folder after the run by setting ``keep_local: True`` in the config file.
+
+The samplesheet can be specified on the command line by utilizing Snakemake's
+built-in functionality for modifying configuration settings via the command line
+directive ``--config samplesheet=samplesheet.tsv``. 
+
+
+Configuring which tools to run
+******************************
 Next, configure the settings under the ``Pipeline steps included`` heading.
 This is where you define what steps should be included in your workflow. Simply
 assign ``True`` or ``False`` to the steps you want to include. Note that the
@@ -24,7 +86,7 @@ other workflow steps depend on.
 .. note:: 
 
     You can create several copies of ``config.yaml``, named whatever you want,
-    in order to manage several analysis from the same |full_name| directory.
+    in order to manage several analyses from the same |full_name| directory.
     If you create a copy called e.g. ``microbime_analysis.yaml``, you can easily
     run the workflow with this configuration file by using the ``--configfile``
     commandline argument when running the workflow.
@@ -105,16 +167,17 @@ The above example assumes you have entered paths to your databases in
 ``config.yaml`` with a base path like the one shown in the above command
 (e.g. ``/home/username/databases/kraken2/kraken2_human/``).
 
+
 Running on cluster resources
 ****************************
 In order to run |full_name| on a cluster, you need a special cluster
 configuration file.  |full_name| ships with a pre-made configuration profile
-for use on UPPMAX's Rackham cluster.  Find all available cluster configuration
-profiles in the ``cluster_configs`` directory in the repository. The cluster
-configuration profiles specify which cluster scheduler account to use (e.g.
-Slurm project account), as well as the number of CPUs, time, and memory
-requirements for each individual step. Snakemake uses this information when
-submitting jobs to the cluster scheduler.
+for use on CTMR's Gandalf cluster and UPPMAX's Rackham cluster.  Find all
+available cluster configuration profiles in the ``cluster_configs`` directory
+in the repository. The cluster configuration profiles specify which cluster
+scheduler account to use (e.g.  Slurm project account), as well as the number
+of CPUs, time, and memory requirements for each individual step. Snakemake uses
+this information when submitting jobs to the cluster scheduler.
 
 When running on a cluster it will likely work best if you run StaG using
 Singularity. The workflow comes preconfigured to download and use containers
@@ -140,21 +203,21 @@ from Singularity hub. To use Singularity launch Snakemake with the
     correct from inside the Singularity container. Read more about specifying
     bind paths in the official Singularity docs: specifying-bind-paths_. 
 
-To run |full_name| on e.g. UPPMAX's Rackham, run the following command from
+To run |full_name| on e.g. CTMR's Gandalf, run the following command from
 inside the workflow repository directory::
 
-    snakemake --use-singularity --singularity-prefix /path/to/prefix/folder --singularity-args "-B /proj/uppstore2017086/db" --profile cluster_configs/rackham 
+    snakemake --use-singularity --singularity-prefix /ceph/db/sing --singularity-args "-B /ceph" --profile cluster_configs/ctmr_gandalf
 
 This will make Snakemake submit each workflow step as a separate cluster job
-using the CPU and time requirements specified in ``rackham.yaml`` inside the
+using the CPU and time requirements specified in ``ctmr_gandalf.yaml`` inside the
 Rackham profile folder. The above command assumes you are using the default
 ``config.yaml`` configuration file. If you are using a custom configuration
 file, just add ``--configfile <name_of_your_config_file>`` to the command line.
 
 .. note::
 
-    Make sure you edit ``cluster_configs/rackham/rackham.yaml`` to specify
-    the Slurm project name to use for Slurm job submissions.
+    Make sure you edit ``cluster_configs/ctmr_gandalf/ctmr_gandalf.yaml`` to
+    specify the Slurm project name to use for Slurm job submissions.
 
 Some very lightweight rules will run on the submitting node (typically directly
 on the login node), but the number of concurrent local jobs is limited to 1 in
@@ -165,41 +228,5 @@ Execution report
 ****************
 Snakemake provides facilites to produce an HTML report of the execution of the
 workflow. An HTML report is automatically created when the workflow finishes.
-It is currently very simple, but will be expanded in the future.
 
-
-Downloading databases (deprecated in v0.4)
-*********************
-.. note::
-    Since version 0.4 this section is considered outdated and no longer supported.
-    Some of the rules mentioned in this section still exist in the codebase, but 
-    the functionality provided by them should not be relied upon.
-
-Several of the tools used in |full_name| need special databases to work. Fortunately,
-|full_name| makes it easy to download and prepare the required databases. The first
-database you will need is the ``hg19`` reference database for use in the ``remove_host``
-read processing step. If you do not have it available before using |full_name|, run
-the following command to download and index the database for you::
-
-    snakemake index_hg19
-
-This will automatically download and index the BBMap masked hg19 file for you. The
-database will be downloaded to the ``dbdir`` parameter specified in ``config.yaml``.
-Note that creating the hg19 index requires at least 16GB of RAM, so it is typically
-not recommended to do this on a laptop.
-
-|full_name| can download several databases by typing ``snakemake <rule_name>``
-using any of the following rules::
-
-    build_metaphlan2_index
-    create_megares_index
-    download_humann2_databases
-    download_kaiju_database
-    download_minikraken2
-    index_hg19  (already shown above) 
-
-.. note::
-
-    Make sure to update your ``config.yaml`` to reflect the location of the database(s)
-    you have downloaded.
 
