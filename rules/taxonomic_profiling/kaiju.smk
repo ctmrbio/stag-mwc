@@ -6,7 +6,6 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    download_kaiju_database,
     create_kaiju_krona_plot,
     kaiju2krona,
     kaiju_report,
@@ -31,33 +30,18 @@ if config["taxonomic_profile"]["kaiju"]:
     kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
     kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
     kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf"))
+
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
-    all_outputs.append(kaiju_krona)
     all_outputs.append(kaiju_joined_table)
     #all_outputs.append(kaiju_area_plot)  # Buggy in stag 4.1
 
     citations.add(publications["Kaiju"])
-    citations.add(publications["Krona"])
 
+    if kaiju_config["run_krona"]:
+        all_outputs.append(kaiju_krona)
+        citations.add(publications["Krona"])
 
-rule download_kaiju_database:
-    output:
-        db=DBDIR/"kaiju/kaiju_db.fmi",
-        names=DBDIR/"kaiju/names.dmp",
-        nodes=DBDIR/"kaiju/nodes.dmp"
-    shadow:
-        "shallow"
-    params:
-        dbdir=DBDIR/"kaiju"
-    shell:
-        """
-        wget http://kaiju.binf.ku.dk/database/kaiju_index_pg.tgz \
-        && \
-        tar -xf kaiju_index_pg.tgz \
-        && \
-        mv kaiju_db.fmi names.dmp nodes.dmp {params.dbdir}
-        """
 
 rule kaiju:
     input:
@@ -73,7 +57,7 @@ rule kaiju:
         cluster_config["kaiju"]["n"] if "kaiju" in cluster_config else 4
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     params:
         db=kaiju_config["db"],
@@ -114,7 +98,7 @@ rule kaiju2krona:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -135,7 +119,7 @@ rule create_kaiju_krona_plot:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -158,7 +142,7 @@ rule kaiju_report:
         names=kaiju_config["names"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -189,7 +173,7 @@ rule join_kaiju_reports:
         value_column=kaiju_config["value_column"],
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
@@ -213,7 +197,7 @@ rule kaiju_area_plot:
         str(LOGDIR/"kaiju/area_plot.log")
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """

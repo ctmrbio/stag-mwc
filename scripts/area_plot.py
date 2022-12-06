@@ -16,7 +16,7 @@ Generates a pretty areaplot from a collapsed feature table.
 
 __author__ = 'JW Debelius'
 __date__ = '2020-02'
-__version__ = "0.1"
+__version__ = "0.2"
 
 # Sets up the matplotlib parameters so that we can save to be edited in 
 # illustator if a direct conversion is required. Because it just makes life
@@ -50,6 +50,13 @@ mode_dict = {
         'multi_level': True,
         'tax_col': 'clade_name',
         'table_drop': ['NCBI_tax_id'],
+        'skip_rows': 1,
+    },
+    'metaphlan4': {
+        'tax_delim': '|',
+        'multi_level': True,
+        'tax_col': 'clade_name',
+        'table_drop': [],
         'skip_rows': 1,
     },
     'marker': {
@@ -334,7 +341,7 @@ def plot_area(upper_, lower_, colors, sample_interval=5):
     # Sets up x-axis without numeric labels
     ax1.set_xticklabels([])
     ax1.set_xticks(np.arange(0, x.max(), sample_interval))
-    ax1.set_xlim((0, x.max() - 1))
+    ax1.set_xlim((0, x.max() - 0.99))  # Subtract less than 1 to avoid singularity if xmin=xmax=0
     ax1.set_xlabel('Samples', size=13)
 
     return fig_

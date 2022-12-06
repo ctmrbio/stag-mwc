@@ -10,7 +10,7 @@ localrules:
     metaphlan_area_plot,
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
-    metaphlan_outputs,
+    separate_metaphlan_outputs,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["humann"]:
@@ -20,12 +20,22 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
         err_message += "If you do not want to run MetaPhlAn for taxonomic profiling, set metaphlan: False in config.yaml"
         raise WorkflowError(err_message)
 
-    mpa_outputs=expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
-        taxlvl=("species", "genus", "family", "order")),
+    heatmap = f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
+    mpa_area_plot = f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
+    krona_plots = expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
+        krona=("all_samples","combined_samples"))
+    mpa_outputs = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
+        taxlvl=("species", "genus", "family", "order"))
+
+    all_outputs.append(heatmap)
+    all_outputs.append(mpa_area_plot)
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
-    citations.add(publications["Krona"])
+
+    if mpa_config["run_krona"]:
+        all_outputs.append(krona_plots)
+        citations.add(publications["Krona"])
 
 
 rule metaphlan:
@@ -44,8 +54,8 @@ rule metaphlan:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+    container:
+        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
     threads:
         cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
     params:
@@ -107,13 +117,13 @@ rule combine_metaphlan_tables:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+    container:
+        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
     threads:
         1
     shell:
         """
-        merge_metaphlan_tables.py {input} > {output.txt}
+        merge_metaphlan_tables.py {input} > {output.txt} 2> {log}
         sed --in-place 's/\.metaphlan//g' {output.txt} 
         """
 
@@ -129,14 +139,14 @@ rule metaphlan_area_plot:
         f"{LOGDIR}/metaphlan/area_plot.log"
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
         scripts/area_plot.py \
             --table {input} \
             --output {output} \
-            --mode metaphlan \
+            --mode metaphlan4 \
             2>&1 > {log}
         """
 
@@ -155,7 +165,7 @@ rule plot_metaphlan_heatmap:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
-    singularity:
+    container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
@@ -191,33 +201,33 @@ rule create_metaphlan_krona_plots:
         html_all=report(f"{OUTDIR}/metaphlan/combined_samples.metaphlan.krona.html",
             category="Taxonomic profiling",
             caption="../../report/metaphlan_krona.rst"),
+    log:
+        f"{LOGDIR}/metaphlan/create_metaphlan_krona_plots.log",
     shadow:
         "shallow"
     conda:
         "../../envs/metaphlan.yaml"
-    singularity:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     threads:
         1
     shell:
         """
         ktImportText \
             -o {output.html_samples} \
-            {input}
+            {input} \
+            > {log}
 
         ktImportText \
             -o {output.html_all} \
             -c \
-            {input}
+            {input} \
+            >> {log}
         """
 
-rule metaphlan_outputs:
+rule separate_metaphlan_outputs:
     """Separate the metaphlan abundance table into species, genus, family and order levels"""
     input:
-        heatmap=f"{OUTDIR}/metaphlan/all_samples.{mpa_config['heatmap']['level']}_top{mpa_config['heatmap']['topN']}.pdf",
-        mpa_area_plot=f"{OUTDIR}/metaphlan/area_plot.metaphlan.pdf",
-        mpa_outputs=expand(f"{OUTDIR}/metaphlan/{{krona}}.metaphlan.krona.html",
-            krona=("all_samples","combined_samples")),
         mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
         species=f"{OUTDIR}/metaphlan/levels/species.tsv",
@@ -227,10 +237,11 @@ rule metaphlan_outputs:
     shell:
         """
         set +o pipefail
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order} > /dev/null
 
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1,3- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
         """
+

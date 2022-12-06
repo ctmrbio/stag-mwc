@@ -15,7 +15,7 @@ if config["naive"]["assess_depth"]:
     rule bbcountunique:
         """Assess sequencing depth using BBCountUnique."""
         input:
-            INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
+            INPUT_read1,
         output:
             txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
             pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
@@ -30,7 +30,7 @@ if config["naive"]["assess_depth"]:
             cluster_config["bbcountunique"]["n"] if "bbcountunique" in cluster_config else 2
         conda:
             "../../envs/stag-mwc.yaml",
-        singularity:
+        container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
         params:
             interval=config["bbcountunique"]["interval"]

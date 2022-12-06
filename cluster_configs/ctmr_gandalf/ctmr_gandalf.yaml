@@ -39,6 +39,9 @@ kaiju:
 kraken2:
     n: 16
     time: "03:00:00"
+krakenuniq:
+    n: 24
+    time: "04:00:00"
 metaphlan:
     n: 16
     time: "03:00:00"
