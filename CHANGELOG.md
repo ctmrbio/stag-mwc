@@ -14,6 +14,16 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
+## [0.5.2] Unreleased
+### Added
+
+### Fixed
+
+### Changed
+
+### Removed
+
+
 ## [0.5.1] 2022-12-06
 ### Added
 - Produce Snakemake report in zip format instead of HTML due to the HTML report being
