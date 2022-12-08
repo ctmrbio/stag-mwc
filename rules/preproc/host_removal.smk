@@ -115,6 +115,13 @@ if config["host_removal"]:
             """
 
 else:
+
+    if not config["fastp"]["keep_output"]:
+        err_message = "Set fastp keep_output in config.yaml to True in order to skip host removal.\n"
+        err_message += "If you want to run host removal set remove_host in config.yaml to True"
+        raise WorkflowError(err_message)
+        
+    
     filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
