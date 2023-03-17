@@ -14,13 +14,10 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.5.1] Unreleased
+## [0.5.2] Unreleased
 ### Added
 
 ### Fixed
-- Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
-- Corrected typo in bowtie2 annotation counts output files leading to workflow
-  complaining about missing output files.
 - Fixed CheckM installation in assembly singularity file so assembled bin consolidation
   from MetaWRAP now works as intended.
 
@@ -29,6 +26,45 @@ situations.
 - Updated MetaWRAP to 1.3.2.
 
 ### Removed
+
+
+## [0.5.1] 2022-12-06
+### Added
+- Produce Snakemake report in zip format instead of HTML due to the HTML report being
+  broken in the later versions of Snakemake.
+- Add KrakenUniq as taxonomic profiler as an alternative with lower false
+  positive rate than Kraken2.
+- Added samplesheet as alternative input file selection method, this also
+  enables providing custom sample names that are not based on pattern in input
+  filenames.
+- Samplesheet can be used to specify remote input files from S3 or HTTP/HTTPS sources.
+- Added `run_krona` setting for taxonomic profilers to make it possible to disable Krona
+  table and plot creation.
+
+### Fixed
+- Corrected typo in `host_removal` rule concerning `keep_kreport` config flag.
+- Corrected typo in bowtie2 annotation counts output files leading to workflow
+  complaining about missing output files.
+- Removed unintended stdout printouts from various helper scripts and some
+  MetaPhlAn related rules.
+- Removed outdated mentions of MetaPhlAn2 in report.
+
+### Changed
+- Replaced CircleCI automatic testing workflow with one implemented with Github actions.
+- Updated MetaPhlAn to version 4.0.3.
+- Updated HUMAnN to version 3.6.
+- Modified area and MetaPhlAn heatmap plotting scripts to better deal
+  with MetaPhlAn 4 output formats.
+- Updated the documentation to reflect recent changes in StaG.
+- Updated KrakenTools to v1.2
+- Updated `scripts/join_tables.py` to v1.1, which includes support for skipping
+  lines before the header.
+- Improved automatic report generation code in main Snakefile to be more
+  robust. Now works well also when --use-singularity or --jobs are used
+  simultaneously with --report.
+
+### Removed
+- Removed old unmaintained DB download rules for groot, kaiju, kraken2. 
 
 
 ## [0.5.0] 2021-11-18

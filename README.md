@@ -2,16 +2,15 @@
 
 [![DOI](https://zenodo.org/badge/125840716.svg)](https://zenodo.org/badge/latestdoi/125840716)
 [![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![CircleCI](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master.svg?style=svg)](https://circleci.com/gh/ctmrbio/stag-mwc/tree/master)
 
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
-This repo contains the code for a Snakemake workflow of the StaG Metagenomic
-Workflow Collaboration (mwc). Currently, the project focus is a barebones
-metagenomics analysis workflow to produce primary output files from several
-different metagenomic analysis tools. 
+This repo contains the StaG Metagenomic Workflow Collaboration (mwc) Snakemake
+workflow. The project focuses on providing a metagenomics analysis workflow to
+produce primary output files from several different metagenomic analysis tools. 
 
 Go to https://stag-mwc.readthedocs.org for the full documentation.
+
 
 ## Usage
 
@@ -23,8 +22,9 @@ StaG-mwc. Most people would probably want to install
 base environment. When running StaG with the `--use-conda` or
 `--use-singularity` flags, all dependencies are managed automatically. If
 using conda it will automatically install the required versions of all tools
-required to run StaG-mwc. There is no need to combine the flags: the
-Singularity images already contain all required dependencies.
+required to run StaG-mwc. There is no need to combine the conda and singularity
+flags: the Singularity images used by the workflow already contain all required
+dependencies.
 
 ### Step 1: Clone workflow
 To use StaG-mwc, you need a local copy of the workflow repository. Start by
@@ -40,7 +40,7 @@ cite the publications of the other tools used in your workflow.
 Configure the workflow according to your needs by editing the file
 `config.yaml`. The most common changes include setting the paths to input and
 output folders, and configuring what steps of the workflow should be included
-when running the workflow.
+when running the workflow. 
 
 ### Step 3: Execute workflow
 Test your configuration by performing a dry-run via
@@ -65,6 +65,7 @@ Note that in all examples above, `--use-conda` can be replaced with
 `--use-singularity` to run in Singularity containers instead of using a locally
 installed conda. Read more about it under the Running section in the docs.
 
+
 ## Testing
 A very basic continuous integration test is currently in place. It merely
 validates the syntax by trying to let Snakemake build the dependency graph if
@@ -80,10 +81,10 @@ If you intend to modify or further develop this workflow, you are welcome to
 fork this reposity. Please consider sharing potential improvements via a pull
 request.
 
+
 ## Citing
 If you find StaG-mwc useful in your research, please cite the Zenodo DOI:
-https://zenodo.org/record/1483891
-
+https://zenodo.org/badge/latestdoi/125840716
 
 # Logo attribution
 <a href="https://www.freepik.com/free-photos-vectors/animal">Animal vector created by Patrickss - Freepik.com</a>

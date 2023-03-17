@@ -20,7 +20,7 @@ rule sketch:
     """Create MinHash sketches of samples using BBMap's sketch.sh.
     Uses only the first readpair of each sample."""
     input:
-        INPUTDIR/config["input_fn_pattern"].format(sample="{sample}", readpair="1")
+        INPUT_read1,
     output:
         sketch=OUTDIR/"sketch_compare/{sample}.sketch.gz",
     log:
