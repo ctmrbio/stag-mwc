@@ -114,7 +114,9 @@ rule create_kaiju_krona_plot:
     input:
         expand(str(OUTDIR/"kaiju/{sample}.krona"), sample=SAMPLES)
     output:
-        krona_html=OUTDIR/"kaiju/all_samples.kaiju.krona.html",
+        krona_html=report(OUTDIR/"kaiju/all_samples.kaiju.krona.html",
+            category="Taxonomic profiling",
+            caption="../../report/kaiju_krona.rst")
     shadow:
         "shallow"
     conda:
