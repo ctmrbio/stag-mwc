@@ -16,8 +16,10 @@ situations.
 
 ## [0.5.2] Unreleased
 ### Added
+- Added a new optimized profile for use on CTMR Gandalf.
 
 ### Fixed
+- Updated entire workflow to utilize modern Snakemake resource allocation features.
 
 ### Changed
 
