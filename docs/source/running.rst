@@ -175,10 +175,10 @@ In order to run |full_name| on a cluster, you need a cluster profile.
 Slurm cluster. The profile can be adapter to use on other Slurm systems if
 needed. The profile is distributed together with the |full_name| workflow code
 and is available in the ``profiles`` directory in the repository. The cluster
-profile specifies which cluster scheduler account to use (i.e.  Slurm project
-account and partition), as well as the number of CPUs, time, and memory
-requirements for each individual step. Snakemake uses this information when
-submitting jobs to the cluster scheduler.
+profile specifies which cluster account to use (i.e.  Slurm project account and
+partition), as well as the number of CPUs, time, and memory requirements for
+each individual step. Snakemake uses this information when submitting jobs to
+the cluster scheduler.
 
 When running on a cluster it will likely work best if you run StaG using
 Singularity. The workflow comes preconfigured to automatically download and use
