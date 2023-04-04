@@ -14,7 +14,7 @@ import textwrap
 
 from snakemake.exceptions import WorkflowError
 from snakemake.utils import min_version
-min_version("5.5.4")
+min_version("7.24.0")
 
 from rules.publications import publications
 from scripts.common import UserMessages, SampleSheet

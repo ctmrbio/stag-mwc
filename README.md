@@ -1,7 +1,7 @@
 # StaG Metagenomic Workflow Collaboration (mwc)
 
 [![DOI](https://zenodo.org/badge/125840716.svg)](https://zenodo.org/badge/latestdoi/125840716)
-[![Snakemake](https://img.shields.io/badge/snakemake-≥4.8.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥7.24.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
