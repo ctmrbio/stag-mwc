@@ -129,12 +129,12 @@ equivalent.
     If several people are running StaG-mwc on a shared server or on a shared
     file system, it can be useful to use the
     ``--singularity-prefix``/``--conda-prefix`` parameter to use a common
-    folder to store the conda environments created by StaG-mwc, so they can be
+    folder to store the conda environments created by |full_name|, so they can be
     re-used between different people or analyses. This reduces the risk of
     producing several copies of the same conda environment in different
-    folders. This is also often necessary when running on cluster systems where
-    paths are usually very deep. Then for example create a folder in your home
-    directory and use that with the
+    folders. This is can also be necessary when running on cluster systems
+    where paths are usually very deep. Then for example create a folder in your
+    home directory and use that with the
     ``--singularity-prefix``/``--conda-prefix`` option.
 
 If you want to keep your customized ``config.yaml`` in a separate file, let's 
@@ -144,7 +144,7 @@ file with the ``--configfile my_config.yaml`` command line argument.
 Another useful command line argument to snakemake is ``--keep-going``. This will 
 instruct snakemake to keep going even if a job should fail, e.g. maybe the
 taxonomic profiling step will fail for a sample if the sample contains no assignable
-reads after quality filtering (extreme example).
+reads after quality filtering.
 
 If you are having trouble running |full_name| with conda, try with Singularity
 (assuming you have Singularity installed on your system). There are pre-built
@@ -170,19 +170,20 @@ The above example assumes you have entered paths to your databases in
 
 Running on cluster resources
 ****************************
-In order to run |full_name| on a cluster, you need a special cluster
-configuration file.  |full_name| ships with a pre-made configuration profile
-for use on CTMR's Gandalf cluster and UPPMAX's Rackham cluster.  Find all
-available cluster configuration profiles in the ``cluster_configs`` directory
-in the repository. The cluster configuration profiles specify which cluster
-scheduler account to use (e.g.  Slurm project account), as well as the number
-of CPUs, time, and memory requirements for each individual step. Snakemake uses
-this information when submitting jobs to the cluster scheduler.
+In order to run |full_name| on a cluster, you need a cluster profile.
+|full_name| ships with a pre-made cluster profile for use on CTMR's Gandalf
+Slurm cluster. The profile can be adapter to use on other Slurm systems if
+needed. The profile is distributed together with the |full_name| workflow code
+and is available in the ``profiles`` directory in the repository. The cluster
+profile specifies which cluster account to use (i.e.  Slurm project account and
+partition), as well as the number of CPUs, time, and memory requirements for
+each individual step. Snakemake uses this information when submitting jobs to
+the cluster scheduler.
 
 When running on a cluster it will likely work best if you run StaG using
-Singularity. The workflow comes preconfigured to download and use containers
-from Singularity hub. To use Singularity launch Snakemake with the
-``--use-singularity`` argument. 
+Singularity. The workflow comes preconfigured to automatically download and use
+containers from various sources for the different workflow steps. The CTMR
+Gandalf Slurm profile is preconfigured to use Singularity by default.
 
 .. _specifying-bind-paths: https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html#specifying-bind-paths
 
@@ -198,35 +199,37 @@ from Singularity hub. To use Singularity launch Snakemake with the
     Paths to databases need to be located so that they are accessible from
     inside the Singularity containers. It's easiest if they are all available
     from the same folder, so you can bind the main database folder into the
-    Singularity container with e.g. ``--singularity-args "-B /db"``. Note that
-    database paths need to specified in the config file so that the paths are
-    correct from inside the Singularity container. Read more about specifying
-    bind paths in the official Singularity docs: specifying-bind-paths_. 
+    Singularity container with e.g. ``--singularity-args "-B /path/to/db"``.
+    Note that database paths need to specified in the config file so that the
+    paths are correct from inside the Singularity container. Read more about
+    specifying bind paths in the official Singularity docs:
+    specifying-bind-paths_. 
 
-To run |full_name| on e.g. CTMR's Gandalf, run the following command from
+To run |full_name| on CTMR's Gandalf cluster, run the following command from
 inside the workflow repository directory::
 
-    snakemake --use-singularity --singularity-prefix /ceph/db/sing --singularity-args "-B /ceph" --profile cluster_configs/ctmr_gandalf
+    snakemake --profile profiles/ctmr_gandalf
 
 This will make Snakemake submit each workflow step as a separate cluster job
-using the CPU and time requirements specified in ``ctmr_gandalf.yaml`` inside the
-Rackham profile folder. The above command assumes you are using the default
-``config.yaml`` configuration file. If you are using a custom configuration
-file, just add ``--configfile <name_of_your_config_file>`` to the command line.
+using the CPU and time requirements specified in the profile.  The above
+command assumes you are using the default ``config.yaml`` configuration file.
+If you are using a custom configuration file, just add ``--configfile
+<name_of_your_config_file>`` to the command line.
 
 .. note::
 
-    Make sure you edit ``cluster_configs/ctmr_gandalf/ctmr_gandalf.yaml`` to
-    specify the Slurm project name to use for Slurm job submissions.
+    Have a look in the ``profiles/ctmr_gandalf/config.yaml`` to see how to
+    modify the resource configurations used for the Slurm job submissions.
 
 Some very lightweight rules will run on the submitting node (typically directly
-on the login node), but the number of concurrent local jobs is limited to 1 in
+on the login node), but the number of concurrent local jobs is limited to 2 in
 the default profiles.
 
 
 Execution report
 ****************
 Snakemake provides facilites to produce an HTML report of the execution of the
-workflow. An HTML report is automatically created when the workflow finishes.
+workflow. A zipped HTML report is automatically created when the workflow
+finishes.
 
 
