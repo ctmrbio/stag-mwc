@@ -1,0 +1,12 @@
+# configuration of display in snakemake workflow catalog: https://snakemake.github.io/snakemake-workflow-catalog
+
+usage:
+  mandatory-flags: # optional definition of additional flags
+    desc: The StaG Metagenomic Workflow Collaboration (mwc) focuses on providing a metagenomics analysis workflow suitable for use with microbiome research.
+    flags: snakemake, microbiome, taxonomic profiling, functional profiling, antibotic resistance
+  software-stack-deployment: # definition of software deployment method (at least one of conda, singularity, or singularity+conda)
+    conda: true # whether pipeline works with --use-conda
+    singularity: true # whether pipeline works with --use-singularity
+    singularity+conda: false # whether pipeline works with --use-singularity --use-conda
+  report: true # add this to confirm that the workflow allows to use 'snakemake --report report.zip' to generate a report containing all results and explanations
+
