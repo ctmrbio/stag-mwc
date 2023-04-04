@@ -20,6 +20,7 @@ situations.
 
 ### Fixed
 - Updated entire workflow to utilize modern Snakemake resource allocation features.
+- Added interactive Kaiju Krona plots for all samples to report.
 
 ### Changed
 
