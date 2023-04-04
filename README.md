@@ -5,11 +5,11 @@
 
 ![StaG mwc logo](docs/source/img/stag_head_text.png "StaG mwc")
 
-This repo contains the StaG Metagenomic Workflow Collaboration (mwc) Snakemake
-workflow. The project focuses on providing a metagenomics analysis workflow to
-produce primary output files from several different metagenomic analysis tools. 
+The StaG Metagenomic Workflow Collaboration (mwc) project focuses on providing
+a metagenomics analysis workflow suitable for microbiome research and general
+metagenomics analyses. 
 
-Go to https://stag-mwc.readthedocs.org for the full documentation.
+Please visit https://stag-mwc.readthedocs.org for the full documentation.
 
 
 ## Usage
