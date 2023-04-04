@@ -18,6 +18,7 @@ situations.
 ### Added
 
 ### Fixed
+- Added interactive Kaiju Krona plots for all samples to report.
 
 ### Changed
 
