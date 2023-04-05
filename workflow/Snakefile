@@ -25,7 +25,7 @@ stag_version = "0.6.0"
 singularity_branch_tag = "-develop"  # Replace with "-master" before publishing new version
 
 configfile: "config/config.yaml"
-report: "workflow/report/workflow.rst"
+report: "report/workflow.rst"
 citations = {publications["StaG"], publications["Snakemake"]}
 
 INPUTDIR = Path(config["inputdir"])
