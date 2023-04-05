@@ -29,6 +29,10 @@ situations.
 - Hardcoded default thread values for all rules used during local execution
   without profile. Intended to be overridden by profile.
 
+### Deprecated
+- Older Slurm profiles for CTMR Gandalf and UPPMAX are now considered
+  deprecated and will be removed in a future release.
+
 ### Removed
 
 
