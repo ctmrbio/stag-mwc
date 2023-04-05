@@ -25,7 +25,6 @@ if config["functional_profile"]["humann"]:
         err_message = "Please specify a tmpdir in config.yaml, if specified tmpdir does not exist, create it.\n"
         err_message += "Do not specify a subdirectory of \"/scratch\" as tmpdir, only specifying \"/scratch\" is sufficient."
         raise WorkflowError(err_message)
-    bt2_db_ext = ".1.bt2" # what does this line do??
 
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.txt",
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
