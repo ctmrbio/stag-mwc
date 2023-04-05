@@ -24,8 +24,8 @@ user_messages = UserMessages()
 stag_version = "0.5.2"
 singularity_branch_tag = "-develop"  # Replace with "-master" before publishing new version
 
-configfile: "config.yaml"
-report: "report/workflow.rst"
+configfile: "config/config.yaml"
+report: "workflow/report/workflow.rst"
 citations = {publications["StaG"], publications["Snakemake"]}
 
 INPUTDIR = Path(config["inputdir"])

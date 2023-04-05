@@ -4,7 +4,7 @@
 #######################################
 # General Snakemake settings
 #######################################
-configfile: config.yaml
+configfile: config/config.yaml
 keep-going: False
 rerun-incomplete: True
 printshellcmds: True
