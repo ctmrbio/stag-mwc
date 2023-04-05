@@ -48,8 +48,8 @@ default-resources:
   - time="01:00:00"
 #  - mem_mb=10240  # Auto-assigned to 500G/96*threads on Gandalf
 set-threads:
-  - fastp=40
-  - remove_host=10
+  - fastp=20
+  - remove_host=20
   - bbcountunique=4
   - sketch=8
   - kaiju=32
