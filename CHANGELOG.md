@@ -26,6 +26,8 @@ situations.
 ### Changed
 - Restructured repo to conform to modern Snakemake best practices. This also
   includes updates to documentation where needed.
+- Hardcoded default thread values for all rules used during local execution
+  without profile. Intended to be overridden by profile.
 
 ### Removed
 
