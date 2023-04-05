@@ -8,12 +8,13 @@
 !docs/source/img
 !docs/source/img/*
 !.editorconfig
-!workflow
-!workflow/*
 !.gitattributes
 !.gitignore
+!CONTRIBUTING.md
+!CHANGELOG.md
 !LICENSE.md
 !README.md
-workflow/scripts/.snakemake*
 !.test
-!.travis.yml
+!workflow
+!workflow/*
+workflow/scripts/.snakemake*
