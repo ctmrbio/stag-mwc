@@ -9,7 +9,7 @@ The StaG Metagenomic Workflow Collaboration (mwc) project focuses on providing
 a metagenomics analysis workflow suitable for microbiome research and general
 metagenomics analyses. 
 
-Please visit https://stag-mwc.readthedocs.org for the full documentation.
+Please visit https://stag-mwc.readthedocs.io for the full documentation.
 
 
 ## Usage
@@ -38,9 +38,9 @@ cite the publications of the other tools used in your workflow.
 
 ### Step 2: Configure workflow
 Configure the workflow according to your needs by editing the file
-`config.yaml`. The most common changes include setting the paths to input and
-output folders, and configuring what steps of the workflow should be included
-when running the workflow. 
+`config/config.yaml`. The most common changes include setting the paths to
+input and output folders, and configuring what steps of the workflow should be
+included when running the workflow. 
 
 ### Step 3: Execute workflow
 Test your configuration by performing a dry-run via
@@ -52,12 +52,13 @@ Execute the workflow locally via
     snakemake --use-conda --cores N
 
 This will run the workflow locally using `N` cores. It is also possible to run
-it in a Slurm-managed cluster environment, e.g. on UPPMAX Rackham:
+it in a cluster environment by using one of the available profiles, or creating
+your own, e.g. to run on CTMR's Gandalf cluster:
 
-    snakemake --use-conda --profile cluster_configs/rackham
+    snakemake --profile profiles/ctmr_gandalf
 
-Make sure you edit the Slurm project account in
-`cluster_configs/rackham/rackham.yaml`. Refer to the official [Snakemake
+Make sure you specify the Slurm account and partition in
+`profiles/ctmr_gandalf/config.yaml`. Refer to the official [Snakemake
 documentation](https://snakemake.readthedocs.io) for further details on how to
 run Snakemake workflows on other types of cluster resources.
 
