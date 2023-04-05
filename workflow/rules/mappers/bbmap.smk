@@ -70,8 +70,7 @@ for bbmap_config in config["bbmap"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            cluster_config["bbmap"]["n"] if "bbmap" in cluster_config else 8
+        threads: 8
         params:
             db_path=bbmap_config["db_path"],
             min_id=bbmap_config["min_id"],
@@ -117,8 +116,7 @@ for bbmap_config in config["bbmap"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            1
+        threads: 1
         params:
             annotations=bbmap_config["counts_table"]["annotations"],
             columns=bbmap_config["counts_table"]["columns"],
@@ -155,8 +153,7 @@ for bbmap_config in config["bbmap"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            4
+        threads: 4
         params:
             annotations=fc_config["annotations"],
             feature_type=lambda _: fc_config["feature_type"] if fc_config["feature_type"] else "gene",

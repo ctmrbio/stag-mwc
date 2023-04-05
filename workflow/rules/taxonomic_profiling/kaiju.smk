@@ -53,8 +53,7 @@ rule kaiju:
         str(LOGDIR/"kaiju/{sample}.kaiju.log")
     shadow: 
         "shallow"
-    threads:
-        cluster_config["kaiju"]["n"] if "kaiju" in cluster_config else 4
+    threads: 8
     conda:
         "../../envs/stag-mwc.yaml"
     container:

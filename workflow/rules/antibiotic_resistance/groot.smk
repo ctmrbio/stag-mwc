@@ -45,8 +45,7 @@ rule groot_align:
         "../../envs/stag-mwc.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        cluster_config["groot_align"]["n"] if "groot_align" in cluster_config else 8
+    threads: 8
     params:
         index=groot_config["index"],
         minlength=groot_config["minlength"],
@@ -86,8 +85,7 @@ rule groot_report:
         "../../envs/stag-mwc.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        1
+    threads: 1
     params:
         covcutoff=groot_config["covcutoff"],
         lowcov=lambda _: "--lowCov" if groot_config["lowcov"] else ""

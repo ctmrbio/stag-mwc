@@ -65,8 +65,7 @@ rule kraken2:
         str(LOGDIR/"kraken2/{sample}.kraken2.log")
     shadow: 
         "shallow"
-    threads:
-        cluster_config["kraken2"]["n"] if "kraken2" in cluster_config else 4
+    threads: 8
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -100,8 +99,7 @@ rule kraken_mpa_style:
         txt=OUTDIR/"kraken2/{sample}.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.mpa_style.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -126,8 +124,7 @@ rule join_kraken2_mpa:
                caption="../../report/kraken2_table_mpa.rst"),
     log:
         str(LOGDIR/"kraken2/join_kraken2_mpa_tables.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -203,8 +200,7 @@ rule kreport2krona:
         str(LOGDIR/"kraken2/{sample}.kreport2krona.log")
     shadow: 
         "shallow"
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -280,8 +276,7 @@ rule bracken_kreport:
         bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.log")
-    threads:
-        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
+    threads: 2
     shadow:
         "shallow"
     conda:
@@ -314,8 +309,7 @@ rule bracken_all_levels:
         str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
     shadow:         # shadow required because est_abundance.py always creates the
         "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
-    threads:
-        cluster_config["bracken"]["n"] if "bracken" in cluster_config else 2
+    threads: 2
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -342,8 +336,7 @@ rule bracken_mpa_style:
         txt=OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -368,8 +361,7 @@ rule join_bracken_mpa:
                caption="../../report/bracken_table_mpa.rst"),
     log:
         str(LOGDIR/"kraken2/join_bracken_mpa_tables.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -420,8 +412,7 @@ rule join_bracken:
                caption="../../report/bracken_table.rst"),
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -447,8 +438,7 @@ rule bracken2krona:
         bracken_krona=OUTDIR/"kraken2/{sample}.bracken.krona",
     log:
         str(LOGDIR/"kraken2/{sample}.bracken2krona.log")
-    threads:
-        1
+    threads: 1
     shadow:
         "shallow"
     conda:
@@ -492,8 +482,7 @@ rule filter_bracken:
         filtered=OUTDIR/"kraken2/{sample}.{level,[DPOCFGS]}.filtered.bracken",  
     log:
         str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
@@ -522,8 +511,7 @@ rule join_bracken_filtered:
                caption="../../report/bracken_table_filtered.rst"),
     log:
         str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:

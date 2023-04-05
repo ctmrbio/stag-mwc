@@ -40,8 +40,7 @@ rule krakenuniq:
         LOGDIR/"krakenuniq/{sample}.krakenuniq.log"
     shadow: 
         "shallow"
-    threads:
-        cluster_config["krakenuniq"]["n"] if "krakenuniq" in cluster_config else 4
+    threads: 8
     conda:
         "../../envs/krakenuniq.yaml"
     container:
@@ -74,8 +73,7 @@ rule combine_krakenuniq_reports:
         LOGDIR/"krakenuniq/all_samples.krakenuniq.log"
     shadow: 
         "shallow"
-    threads:
-        1
+    threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:

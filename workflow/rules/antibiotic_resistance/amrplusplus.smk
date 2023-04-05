@@ -102,8 +102,7 @@ rule align_to_amr:
         "../../envs/amrplusplus.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
-    threads:
-        cluster_config["align_to_amr"]["n"] if "align_to_amr" in cluster_config else 10
+    threads: 10
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}"
     shell:

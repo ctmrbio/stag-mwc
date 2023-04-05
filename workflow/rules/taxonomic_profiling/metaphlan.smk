@@ -56,8 +56,7 @@ rule metaphlan:
         "../../envs/metaphlan.yaml"
     container:
         "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
-    threads:
-        cluster_config["metaphlan"]["n"] if "metaphlan" in cluster_config else 5
+    threads: 8
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
         bt2_index=mpa_config["bt2_index"],
@@ -119,8 +118,7 @@ rule combine_metaphlan_tables:
         "../../envs/metaphlan.yaml"
     container:
         "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
-    threads:
-        1
+    threads: 1
     shell:
         """
         merge_metaphlan_tables.py {input} > {output.txt} 2> {log}
@@ -167,8 +165,7 @@ rule plot_metaphlan_heatmap:
         "../../envs/stag-mwc.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        1
+    threads: 1
     params:
         outfile_prefix=lambda w: f"{OUTDIR}/metaphlan/all_samples",
         pseudocount=mpa_config["heatmap"]["pseudocount"],
@@ -209,8 +206,7 @@ rule create_metaphlan_krona_plots:
         "../../envs/metaphlan.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        1
+    threads: 1
     shell:
         """
         ktImportText \

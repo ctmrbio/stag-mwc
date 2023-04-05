@@ -36,8 +36,7 @@ rule preprocessing_summary:
         "../../envs/stag-mwc.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        1
+    threads: 1
     shell:
         """
         workflow/scripts/preprocessing_summary.py \

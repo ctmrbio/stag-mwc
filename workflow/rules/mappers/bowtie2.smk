@@ -66,8 +66,7 @@ for bt2_config in config["bowtie2"]:
         params:
             index=bt2_config["db_prefix"],
             extra=bt2_config["extra"],
-        threads:
-            cluster_config["bowtie2"]["n"] if "bowtie2" in cluster_config else 8
+        threads: 8
         wrapper:
             "0.23.1/bio/bowtie2/align"
 
@@ -124,8 +123,7 @@ for bt2_config in config["bowtie2"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            1
+        threads: 1
         params:
             annotations=bt2_config["counts_table"]["annotations"],
             columns=bt2_config["counts_table"]["columns"],
@@ -162,8 +160,7 @@ for bt2_config in config["bowtie2"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            4
+        threads: 4
         params:
             annotations=fc_config["annotations"],
             feature_type=lambda x: fc_config["feature_type"] if fc_config["feature_type"] else "gene",

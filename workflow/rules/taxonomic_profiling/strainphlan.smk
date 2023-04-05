@@ -46,8 +46,7 @@ rule consensus_markers:
         "../../envs/metaphlan.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
+    threads: 8
     params:
         output_dir=f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}"
     shell:
@@ -75,8 +74,7 @@ rule print_clades:
         "../../envs/metaphlan.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
+    threads: 8
     params:
         out_dir=f"{OUTDIR}/strainphlan",
         database=f"{mpa_config['bt2_db_dir']}/{mpa_config['bt2_index']}.pkl",
@@ -110,8 +108,7 @@ rule extract_markers:
         "../../envs/metaphlan.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
+    threads: 8
     params:
         clade=spa_config["clade_of_interest"],
         out_dir=f"{OUTDIR}/strainphlan/",
@@ -143,8 +140,7 @@ rule strainphlan:
         "../../envs/metaphlan.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads:
-        cluster_config["strainphlan"]["n"] if "strainphlan" in cluster_config else 8
+    threads: 8
     params:
         clade=spa_config["clade_of_interest"],
         out_dir=f"{OUTDIR}/strainphlan",

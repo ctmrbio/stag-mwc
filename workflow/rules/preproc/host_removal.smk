@@ -48,8 +48,7 @@ if config["host_removal"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            cluster_config["remove_host"]["n"] if "remove_host" in cluster_config else 8
+        threads: 8
         params:
             db=rh_config["db_path"],
             confidence=rh_config["confidence"],
@@ -102,8 +101,7 @@ if config["host_removal"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            1
+        threads: 1
         shell:
             """
             workflow/scripts/plot_proportion_kraken2.py \

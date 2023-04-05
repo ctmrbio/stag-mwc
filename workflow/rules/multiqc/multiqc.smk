@@ -20,8 +20,7 @@ if config["multiqc_report"]:
             "../../envs/stag-mwc.yaml"
         container:
             "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-        threads:
-            1
+        threads: 1
         params:
             extra=mqc_config["extra"],
         shell:

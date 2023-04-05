@@ -26,8 +26,7 @@ if config["naive"]["assess_depth"]:
             stderr=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log"),
         shadow: 
             "shallow"
-        threads:
-            cluster_config["bbcountunique"]["n"] if "bbcountunique" in cluster_config else 2
+        threads: 2
         conda:
             "../../envs/stag-mwc.yaml",
         container:

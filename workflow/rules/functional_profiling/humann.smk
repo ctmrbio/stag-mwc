@@ -53,8 +53,7 @@ rule humann:
         "../../envs/humann.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads:
-        cluster_config["humann"]["n"] if "humann" in cluster_config else 20
+    threads: 20
     params:
         outdir=f"{OUTDIR}/humann/",
         tmpdir=f"{TMPDIR}/{{sample}}",
@@ -102,8 +101,7 @@ rule normalize_humann_tables:
         "../../envs/humann.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
-    threads: 
-        1
+    threads: 1
     params:
         method=h_config["norm_method"],
         mode=h_config["norm_mode"],

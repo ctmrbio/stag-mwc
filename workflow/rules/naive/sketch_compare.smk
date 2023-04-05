@@ -31,8 +31,7 @@ rule sketch:
         "../../envs/stag-mwc.yaml"
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
-    threads:
-        cluster_config["sketch"]["n"] if "sketch" in cluster_config else 4
+    threads: 4
     shell:
         """
         sketch.sh \
