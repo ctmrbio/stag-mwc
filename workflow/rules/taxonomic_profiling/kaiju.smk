@@ -62,24 +62,13 @@ rule kaiju:
         nodes=kaiju_config["nodes"],
     shell:
         """
-        if [[ "{input.read1}" == *.gz ]]
-        then
-            kaiju \
-                -z {threads} \
-                -t {params.nodes} \
-                -f {params.db} \
-                -i <(gunzip -c {input.read1}) \
-                -j <(gunzip -c {input.read2}) \
-                -o {output.kaiju} > {log}
-        else 
-            kaiju \
-                -z {threads} \
-                -t {params.nodes} \
-                -f {params.db} \
-                -i {input.read1} \
-                -j {input.read2} \
-                -o {output.kaiju} > {log}
-        fi
+        kaiju \
+            -z {threads} \
+            -t {params.nodes} \
+            -f {params.db} \
+            -i {input.read1} \
+            -j {input.read2} \
+            -o {output.kaiju} > {log}
         """
 
 
