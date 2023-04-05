@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Taxonomic classification of metagenomic reads using Kaiju
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
@@ -25,11 +24,11 @@ if config["taxonomic_profile"]["kaiju"]:
 
     # Add Kaiju output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
-    kaiju = expand(str(OUTDIR/"kaiju/{sample}.kaiju"), sample=SAMPLES)
-    kaiju_krona = str(OUTDIR/"kaiju/all_samples.kaiju.krona.html")
-    kaiju_reports = expand(str(OUTDIR/"kaiju/{sample}.kaiju.report_{level}.txt"), sample=SAMPLES, level=kaiju_config["levels"])
-    kaiju_joined_table = expand(str(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt"), level=kaiju_config["levels"])
-    kaiju_area_plot = expand(str(OUTDIR/"kaiju/area_plot.kaiju.pdf"))
+    kaiju = expand(OUTDIR/"kaiju/{sample}.kaiju", sample=SAMPLES)
+    kaiju_krona = OUTDIR/"kaiju/all_samples.kaiju.krona.html"
+    kaiju_reports = expand(OUTDIR/"kaiju/{sample}.kaiju.report_{level}.txt", sample=SAMPLES, level=kaiju_config["levels"])
+    kaiju_joined_table = expand(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt", level=kaiju_config["levels"])
+    kaiju_area_plot = expand(OUTDIR/"kaiju/area_plot.kaiju.pdf")
 
     all_outputs.extend(kaiju)
     all_outputs.extend(kaiju_reports)
@@ -50,7 +49,7 @@ rule kaiju:
     output:
         kaiju=OUTDIR/"kaiju/{sample}.kaiju",
     log:
-        str(LOGDIR/"kaiju/{sample}.kaiju.log")
+        LOGDIR/"kaiju/{sample}.kaiju.log",
     shadow: 
         "shallow"
     threads: 8
@@ -111,7 +110,7 @@ rule kaiju2krona:
 
 rule create_kaiju_krona_plot:
     input:
-        expand(str(OUTDIR/"kaiju/{sample}.krona"), sample=SAMPLES)
+        expand(OUTDIR/"kaiju/{sample}.krona", sample=SAMPLES)
     output:
         krona_html=report(OUTDIR/"kaiju/all_samples.kaiju.krona.html",
             category="Taxonomic profiling",
@@ -135,7 +134,7 @@ rule kaiju_report:
     output:
         OUTDIR/"kaiju/{sample}.kaiju.report_{level}.txt",
     log:
-        str(LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log")
+        LOGDIR/"kaiju/kaiju2table.{sample}.{level}.log",
     shadow: 
         "shallow"
     params:
@@ -160,13 +159,13 @@ rule kaiju_report:
 
 rule join_kaiju_reports:
     input:
-        expand(str(OUTDIR/"kaiju/{sample}.kaiju.report_{{level}}.txt"), sample=SAMPLES),
+        expand(OUTDIR/"kaiju/{sample}.kaiju.report_{{level}}.txt", sample=SAMPLES),
     output:
         report(OUTDIR/"kaiju/all_samples.kaiju.{level}.txt",
             category="Taxonomic profiling",
             caption="../../report/kaiju_table.rst")
     log:
-        str(LOGDIR/"kaiju/join_kaiju_reports.{level}.log")
+        LOGDIR/"kaiju/join_kaiju_reports.{level}.log",
     shadow: 
         "shallow"
     params:
@@ -195,7 +194,7 @@ rule kaiju_area_plot:
             category="Taxonomic profiling",
             caption="../../report/area_plot.rst")
     log:
-        str(LOGDIR/"kaiju/area_plot.log")
+        LOGDIR/"kaiju/area_plot.log",
     conda:
         "../../envs/stag-mwc.yaml"
     container:
