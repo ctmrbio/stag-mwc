@@ -136,7 +136,7 @@ rule run_resistome:
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
-        script="scripts/amrplusplus/resistome",
+        script="workflow/scripts/amrplusplus/resistome",
         threshold=amrplusplus_config["resistome"]["threshold"],
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}",
         megares_annot=amrplusplus_config["megares"]["annotation"] or f"{MEGARES_ANNOT}",
@@ -178,7 +178,7 @@ rule run_rarefaction:
     params:
         megares_db=amrplusplus_config["megares"]["fasta"] or f"{MEGARES_FASTA}",
         megares_annot=amrplusplus_config["megares"]["annotation"] or f"{MEGARES_ANNOT}",
-        script="scripts/amrplusplus/rarefaction",
+        script="workflow/scripts/amrplusplus/rarefaction",
         min=amrplusplus_config["rarefaction"]["min"],
         max=amrplusplus_config["rarefaction"]["max"],
         skip=amrplusplus_config["rarefaction"]["skip"],
@@ -221,7 +221,7 @@ rule resistome_results:
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:amrplusplus"+singularity_branch_tag
     params:
-        script="scripts/amrplusplus/amr_long_to_wide.py"
+        script="workflow/scripts/amrplusplus/amr_long_to_wide.py"
     shell:
         """
         python3 {params.script} \

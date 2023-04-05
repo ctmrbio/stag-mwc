@@ -137,7 +137,7 @@ rule join_kraken2_mpa:
         feature_column="taxon_name",
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
@@ -161,7 +161,7 @@ rule kraken2_area_plot:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/area_plot.py \
+        workflow/scripts/area_plot.py \
             --table {input} \
             --output {output} \
             --mode kraken2 \
@@ -186,7 +186,7 @@ rule combine_kreports:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/KrakenTools/combine_kreports.py \
+        workflow/scripts/KrakenTools/combine_kreports.py \
             --output {output} \
             --report-files {input.kreports} \
             2>> {log} \
@@ -211,7 +211,7 @@ rule kreport2krona:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/KrakenTools/kreport2krona.py \
+        workflow/scripts/KrakenTools/kreport2krona.py \
             --report-file {input.kreport} \
             --output {output} \
             2> {log}
@@ -379,7 +379,7 @@ rule join_bracken_mpa:
         feature_column="taxon_name",
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
@@ -403,7 +403,7 @@ rule bracken_area_plot:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/area_plot.py \
+        workflow/scripts/area_plot.py \
             --table {input} \
             --output {output} \
             --mode kraken2 \
@@ -431,7 +431,7 @@ rule join_bracken:
         feature_column="name",
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \
@@ -457,7 +457,7 @@ rule bracken2krona:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/KrakenTools/kreport2krona.py \
+        workflow/scripts/KrakenTools/kreport2krona.py \
             --report-file {input.bracken_kreport} \
             --output {output.bracken_krona} \
             2>&1 > {log}
@@ -499,7 +499,7 @@ rule filter_bracken:
     container:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     params:
-        filter_bracken="scripts/KrakenTools/filter_bracken.out.py",
+        filter_bracken="workflow/scripts/KrakenTools/filter_bracken.out.py",
         include=kraken2_config["filter_bracken"]["include"],
         exclude=kraken2_config["filter_bracken"]["exclude"],
     shell:
@@ -533,7 +533,7 @@ rule join_bracken_filtered:
         feature_column="name",
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
             --feature-column {params.feature_column} \

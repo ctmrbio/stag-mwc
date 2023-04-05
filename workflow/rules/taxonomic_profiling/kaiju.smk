@@ -179,7 +179,7 @@ rule join_kaiju_reports:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --feature-column {params.feature_column} \
             --value-column {params.value_column} \
             --outfile {output} \
@@ -203,7 +203,7 @@ rule kaiju_area_plot:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/area_plot.py \
+        workflow/scripts/area_plot.py \
             --table {input} \
             --output {output} \
             --mode kaiju \

@@ -106,7 +106,7 @@ if config["host_removal"]:
             1
         shell:
             """
-            scripts/plot_proportion_kraken2.py \
+            workflow/scripts/plot_proportion_kraken2.py \
                 {input} \
                 --histogram {output.histogram} \
                 --barplot {output.barplot} \

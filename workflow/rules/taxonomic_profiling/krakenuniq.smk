@@ -82,7 +82,7 @@ rule combine_krakenuniq_reports:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/join_tables.py \
+        workflow/scripts/join_tables.py \
             --feature-column rank,taxName \
             --value-column taxReads \
             --outfile {output.combined} \

@@ -143,7 +143,7 @@ rule metaphlan_area_plot:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/area_plot.py \
+        workflow/scripts/area_plot.py \
             --table {input} \
             --output {output} \
             --mode metaphlan4 \
@@ -178,7 +178,7 @@ rule plot_metaphlan_heatmap:
         extra=mpa_config["heatmap"]["extra"],
     shell:
         """
-        scripts/plot_metaphlan_heatmap.py \
+        workflow/scripts/plot_metaphlan_heatmap.py \
             --outfile-prefix {params.outfile_prefix} \
             --level {wildcards.level} \
             --topN {wildcards.topN} \

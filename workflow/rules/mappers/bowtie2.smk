@@ -132,7 +132,7 @@ for bt2_config in config["bowtie2"]:
             outdir=OUTDIR/"bowtie2/{db_name}/".format(db_name=bt2_db_name),
         shell:
             """
-            scripts/make_count_table.py \
+            workflow/scripts/make_count_table.py \
                 --annotation-file {params.annotations} \
                 --columns {params.columns} \
                 --outdir {params.outdir} \

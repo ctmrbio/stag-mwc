@@ -40,7 +40,7 @@ rule preprocessing_summary:
         1
     shell:
         """
-        scripts/preprocessing_summary.py \
+        workflow/scripts/preprocessing_summary.py \
             --fastp {input.fastp} \
             --kraken2 {input.kraken2} \
             --output-table {output.table} \

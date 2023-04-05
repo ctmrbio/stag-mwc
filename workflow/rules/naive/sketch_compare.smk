@@ -87,7 +87,7 @@ rule plot_sample_similarity:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        scripts/plot_sketch_comparison_heatmap.py \
+        workflow/scripts/plot_sketch_comparison_heatmap.py \
             --outfile {output.heatmap} \
             --clustered {output.clustered} \
             {input} \

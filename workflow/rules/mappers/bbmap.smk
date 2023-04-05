@@ -125,7 +125,7 @@ for bbmap_config in config["bbmap"]:
             outdir=OUTDIR/"bbmap/{db_name}/".format(db_name=bbmap_config["db_name"]),
         shell:
             """
-            scripts/make_count_table.py \
+            workflow/scripts/make_count_table.py \
                 --annotation-file {params.annotations} \
                 --columns {params.columns} \
                 --outdir {params.outdir} \
