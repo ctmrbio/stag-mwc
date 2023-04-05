@@ -44,6 +44,14 @@ anywhere, i.e. their locations are not restricted to the repository folder and
 they can even be located in remote storage systems like S3 or a public HTTP
 URL.
 
+If the samplesheet setting is configured in the `config/config.yaml` file, or
+provided on the command line when running by utilizing Snakemake’s built-in
+functionality for modifying configuration settings via the command line
+directive `--config samplesheet=path/to/samplesheet.tsv`, it will override any
+input folder settings configured in the `config/config.yaml` file. 
+
+
+
 ## Select which tools to run
 Next, configure the settings under the `Pipeline steps included` heading. This
 is where you define what steps should be included in your workflow. Simply
