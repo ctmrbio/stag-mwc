@@ -14,15 +14,18 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.5.2] Unreleased
+## [0.6.0] Unreleased
 ### Added
-- Added a new optimized profile for use on CTMR Gandalf.
+- Added a new Slurm profile for use on CTMR Gandalf, also intended to be useful
+  as a starting point for creating custom Slurm profiles.
+- Added a README with basic instructions for how to configure the workflow.
 
 ### Fixed
-- Updated entire workflow to utilize modern Snakemake resource allocation features.
-- Added interactive Kaiju Krona plots for all samples to report.
+- Fixed missing interactive Kaiju Krona plots for all samples in final report.
 
 ### Changed
+- Restructured repo to conform to modern Snakemake best practices. This also
+  includes updates to documentation where needed.
 
 ### Removed
 
