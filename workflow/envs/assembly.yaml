@@ -1,8 +1,8 @@
 name: stag-mwc-assembly
 channels:
     - ursky
-    - bioconda
     - conda-forge
+    - bioconda
     - defaults
 dependencies:
     - metawrap-mg =1.2.3
