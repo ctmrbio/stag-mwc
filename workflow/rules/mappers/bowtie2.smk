@@ -54,6 +54,7 @@ for bt2_config in config["bowtie2"]:
 
     rule:
         """Align reads using Bowtie2."""
+        name: f"bowtie2_{bt2_db_name}"
         input:
             sample=[OUTDIR/"host_removal/{sample}_1.fq.gz",
                     OUTDIR/"host_removal/{sample}_2.fq.gz"]
@@ -67,12 +68,17 @@ for bt2_config in config["bowtie2"]:
             index=bt2_config["db_prefix"],
             extra=bt2_config["extra"],
         threads: 8
+        conda:
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
         wrapper:
             "0.23.1/bio/bowtie2/align"
 
 
     rule:
         """Summarize bowtie2 mapping statistics."""
+        name: f"bowtie2_stats_{bt2_db_name}"
         input:
             bam=OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)
         output:
@@ -104,6 +110,7 @@ for bt2_config in config["bowtie2"]:
 
     rule:
         """Create count table for Bowtie2 mappings."""
+        name: f"bowtie2_count_table_{bt2_db_name}"
         input:
             rpkms=expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.rpkm.txt"),
                     db_name=bt2_db_name,
@@ -142,6 +149,7 @@ for bt2_config in config["bowtie2"]:
     fc_config = bt2_config["featureCounts"]
     rule:
         """Summarize featureCounts for Bowtie2 mappings."""
+        name: f"bowtie2_feature_counts_{bt2_db_name}"
         input:
             bams=expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.bam"),
                     db_name=bt2_db_name,

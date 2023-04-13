@@ -6,8 +6,9 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 for bbmap_config in config["bbmap"]:
-    bbmap_output_folder = OUTDIR/"bbmap/{db_name}".format(db_name=bbmap_config["db_name"])
-    bbmap_logdir = LOGDIR/"bbmap/{db_name}".format(db_name=bbmap_config["db_name"])
+    db_name = bbmap_config["db_name"]
+    bbmap_output_folder = OUTDIR/"bbmap/{db_name}".format(db_name=db_name)
+    bbmap_logdir = LOGDIR/"bbmap/{db_name}".format(db_name=db_name)
 
     db_path = Path(bbmap_config["db_path"])
     if config["mappers"]["bbmap"]:
@@ -20,14 +21,14 @@ for bbmap_config in config["bbmap"]:
         # Add final output files from this module to 'all_outputs' from the main
         # Snakefile scope. SAMPLES is also from the main Snakefile scope.
         bbmap_alignments = expand(str(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}"),
-                db_name=bbmap_config["db_name"],
+                db_name=db_name,
                 sample=SAMPLES,
                 output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
         counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
-                db_name=bbmap_config["db_name"],
+                db_name=db_name,
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
         featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
-                db_name=bbmap_config["db_name"],
+                db_name=db_name,
                 sample=SAMPLES,
                 output_type=["", ".summary", ".table.txt"])
         all_outputs.extend(bbmap_alignments)
@@ -51,7 +52,8 @@ for bbmap_config in config["bbmap"]:
         citations.add(publications["BBMap"])
 
     rule:
-        """BBMap to {db_name}"""
+        f"""BBMap reads to {db_name}"""
+        name: f"bbmap_{db_name}"
         input:
             read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
             read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
@@ -63,7 +65,7 @@ for bbmap_config in config["bbmap"]:
             stdout=str(bbmap_logdir/"{sample}.bbmap.stdout.log"),
             stderr=str(bbmap_logdir/"{sample}.bbmap.statsfile.txt"),
         message:
-            "Mapping {{wildcards.sample}} to {db_name} using BBMap".format(db_name=bbmap_config["db_name"])
+            "Mapping {{wildcards.sample}} to {db_name} using BBMap".format(db_name=db_name)
         shadow:
             "shallow"
         conda:
@@ -96,20 +98,21 @@ for bbmap_config in config["bbmap"]:
         raise WorkflowError("Must define annotation column(s) for count table production!")
 
     rule:
-        """Summarize read counts for {db_name}"""
+        f"""Summarize read counts for {db_name}"""
+        name: f"bbmap_counts_{db_name}"
         input:
             rpkms=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.rpkm.txt"),
-                    db_name=bbmap_config["db_name"],
+                    db_name=db_name,
                     sample=SAMPLES)
         output:
             expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
-                    db_name=bbmap_config["db_name"],
+                    db_name=db_name,
                     column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
             )
         log:
             str(bbmap_logdir/"counts.log")
         message:
-            "Summarizing read counts for {db_name}".format(db_name=bbmap_config["db_name"])
+            "Summarizing read counts for {db_name}".format(db_name=db_name)
         shadow:
             "shallow"
         conda:
@@ -120,7 +123,7 @@ for bbmap_config in config["bbmap"]:
         params:
             annotations=bbmap_config["counts_table"]["annotations"],
             columns=bbmap_config["counts_table"]["columns"],
-            outdir=OUTDIR/"bbmap/{db_name}/".format(db_name=bbmap_config["db_name"]),
+            outdir=OUTDIR/"bbmap/{db_name}/".format(db_name=db_name),
         shell:
             """
             workflow/scripts/make_count_table.py \
@@ -134,19 +137,20 @@ for bbmap_config in config["bbmap"]:
 
     fc_config = bbmap_config["featureCounts"]
     rule:
-        """Summarize feature counts for {db_name}"""
+        f"""Summarize feature counts for {db_name}"""
+        name: f"bbmap_feature_counts_{db_name}"
         input:
             bams=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.sam.gz"),
-                    db_name=bbmap_config["db_name"],
+                    db_name=db_name,
                     sample=SAMPLES)
         output:
-            counts=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts".format(db_name=bbmap_config["db_name"]),
-            counts_table=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.table.txt".format(db_name=bbmap_config["db_name"]),
-            summary=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.summary".format(db_name=bbmap_config["db_name"]),
+            counts=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts".format(db_name=db_name),
+            counts_table=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.table.txt".format(db_name=db_name),
+            summary=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.summary".format(db_name=db_name),
         log:
             str(bbmap_logdir/"all_samples.featureCounts.log")
         message:
-            "Summarizing feature counts for {db_name}".format(db_name=bbmap_config["db_name"])
+            "Summarizing feature counts for {db_name}".format(db_name=db_name)
         shadow:
             "shallow"
         conda:
@@ -159,7 +163,7 @@ for bbmap_config in config["bbmap"]:
             feature_type=lambda _: fc_config["feature_type"] if fc_config["feature_type"] else "gene",
             attribute_type=lambda _: fc_config["attribute_type"] if fc_config["attribute_type"] else "gene_id",
             extra=fc_config["extra"],
-            dbname=bbmap_config["db_name"],
+            dbname=db_name,
         shell:
             """
             featureCounts \
