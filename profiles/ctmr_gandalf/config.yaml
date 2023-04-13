@@ -9,7 +9,7 @@ keep-going: False
 rerun-incomplete: True
 printshellcmds: True
 scheduler: greedy
-use-conda: False
+#use-conda: True
 use-singularity: True
 singularity-prefix: /ceph/db/sing
 singularity-args: "-B /ceph"
@@ -46,7 +46,7 @@ default-resources:
   - account=bio
   - partition=ctmr
   - time="01:00:00"
-#  - mem_mb=10240  # Auto-assigned to 500G/96*threads on Gandalf
+  - mem_mb=10240
 set-threads:
   - fastp=20
   - remove_host=20
