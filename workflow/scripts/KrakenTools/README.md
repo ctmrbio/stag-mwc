@@ -3,17 +3,32 @@ Fredrik Boulund has on 2019-10-02 been granted permission to redistribute
 KrakenTools under the MIT license in StaG-mwc.
 
 The scripts included in StaG-mwc are copied from the offical Github repository
-(https://github.com/jenniferlu717/KrakenTools) on 2022-09-20 with their
+(https://github.com/jenniferlu717/KrakenTools) on 2023-04-13 with their
 embedded GPLv3 license text removed and replaced with the MIT license.
 
+A minor change was introduced in kraken2mpa.py: the output header was modified
+to `taxon_name\treads` instead of the original header which was dynamically set
+depending on the sample filename.
+
 # Kraken Tools
-For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
+KrakenTools is a suite of scripts to be used alongside the Kraken, KrakenUniq,
+Kraken 2, or Bracken programs. These scripts are designed to help Kraken users
+with downstream analysis of Kraken results. 
 
-KrakenTools is a suite of scripts to be used for post-analysis of 
-Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
-if using KrakenTools with any of the listed programs. 
+For news and updates, refer to the github page:
+https://github.com/jenniferlu717/KrakenTools/
 
-## Links to Kraken github pages
+## Citation 
+KrakenTools has been published on September 28, 2022 as part of a protocol
+paper for using the Kraken software suite. Please cite the following when using
+any KrakenTools script: 
+
+[Lu J, Rincon N, Wood D E, Breitwieser F P, Pockrandt C, Langmead B, Salzberg S
+L, Steinegger M. Metagenome analysis using the Kraken software suite. Nature
+Protocols, doi: 10.1038/s41596-022-00738-y (2022)]
+(https://www.nature.com/articles/s41596-022-00738-y)
+
+Please also cite the relevant paper for usage of KrakenTools with any of the listed programs. 
 1. [Kraken 1](https://github.com/DerrickWood/kraken)
 2. [Kraken 2](https://github.com/DerrickWood/kraken2)
 3. [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
@@ -34,6 +49,8 @@ This github repository is dedicated to only the scripts provided here.
 7. [fix\_unmapped.py](#fix\_unmappedpy)
 8. [make\_ktaxonomy.py](#make\_ktaxonomypy)
 9. [make\_kreport.py](#make\_kreportpy)
+10. alpha\_diversity.py (see Diversity/README.md)
+11. beta\_diversity.py (see Diversity/README.md)
 
 # Running Scripts:
 No installation required. 

@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 ####################################################################
 #kreport2krona.py converts a Kraken-style report into Krona-compatible format
-#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
-
-#This file is part of KrakenTools.
-
+#Copyright 2019-2020 Jennifer Lu
+#
 #Permission is hereby granted, free of charge, to any person obtaining a copy of
 #this software and associated documentation files (the "Software"), to deal in
 #the Software without restriction, including without limitation the rights to
@@ -22,7 +20,6 @@
 #LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
-
 ####################################################################
 #Jennifer Lu, jlu26@jhmi.edu
 #Updated: 05/30/2019
@@ -233,7 +230,7 @@ def kreport2krona_main(report_file, out_file):
     
     #WRITE OUTPUT FILE
     o_file = open(out_file, 'w')
-    for i in range(0,line_num):
+    for i in range(0,line_num+1):
         #Get values
         if i not in num2path:
             continue
