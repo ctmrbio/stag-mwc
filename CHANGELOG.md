@@ -22,15 +22,19 @@ situations.
 
 ### Fixed
 - Fixed missing interactive Kaiju Krona plots for all samples in final report.
+- Now using metaphlan conda environment and biobakery container for running
+  bowtie2 mapping rule to ensure a consistent execution environment for that rule.
 
 ### Changed
 - Restructured repo to conform to modern Snakemake best practices. This also
   includes updates to documentation where needed.
 - Hardcoded default thread values for all rules used during local execution
   without profile. Intended to be overridden by profile.
+- Updated KrakenTools to its latest version (1.2), with a minor custom modification
+  of `kreport2mpa.py`, changing output column names to `taxon_name` and `reads`.
 
 ### Deprecated
-- Older Slurm profiles for CTMR Gandalf and UPPMAX are now considered
+- Older Slurm profiles for CTMR Gandalf and UPPMAX Rackham are now considered
   deprecated and will be removed in a future release.
 
 ### Removed
