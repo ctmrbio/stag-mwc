@@ -5,7 +5,7 @@ import argparse
 import warnings
 
 from matplotlib import rcParams
-from matplotlib import cm
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -258,7 +258,7 @@ def define_single_cmap(cmap, top_taxa):
 
     """
     # Gets the colormap object
-    map_ = cm.cmap_d[cmap]
+    map_ = mpl.colormaps[cmap]
     # Gets the taxonomic object
     return {tax: map_(i) for i, tax in enumerate(top_taxa.index)}
 
@@ -272,7 +272,7 @@ def define_join_cmap(table):
 
     rough_order = grouping['rough'].unique()
 
-    rough_map = {group: cm.cmap_d[cmap] 
+    rough_map = {group: mpl.colormaps[cmap] 
                  for (group,cmap) in zip(*(rough_order, colors_order))} 
     pooled_map = dict([])
     for rough_, fine_ in grouping.groupby('rough')['fine']:

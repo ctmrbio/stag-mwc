@@ -66,15 +66,16 @@ if __name__ == "__main__":
     ax.set_ylabel("Frequency")
     fig.savefig(options.histogram, bbox_inches="tight")
 
-
-    fig2_width = max(5, max(len(s) for s in df.index.str) * 0.4)
+    length_longest_sample_name = max([s for s in df.index.str.len()])
+    fig2_width = max(5, length_longest_sample_name * 0.4)
     fig2_height = max(3, df.shape[0] * 0.25)
+
     fig2, ax2 = plt.subplots(figsize=(fig2_width, fig2_height))
     df.plot(kind="barh", ax=ax2, legend=None)
     ax2.set_title(f"Proportion {action} reads")
     ax2.set_xlabel(f"Proportion {action} reads")
     ax2.set_ylabel("Sample")
-    fig2.savefig(options.barplot, bbox_index="tight")
+    fig2.savefig(options.barplot, bbox_inches="tight")
 
     df.to_csv(options.table, sep="\t")
 
