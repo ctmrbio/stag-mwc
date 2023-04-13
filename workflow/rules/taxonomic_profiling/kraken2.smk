@@ -106,7 +106,7 @@ rule kraken_mpa_style:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        kreport2mpa.py \
+        workflow/scripts/KrakenTools/kreport2mpa.py \
             --report-file {input.kreport} \
             --output {output.txt} \
             --display-header \
@@ -137,7 +137,7 @@ rule join_kraken2_mpa:
         workflow/scripts/join_tables.py \
             --outfile {output.table} \
             --value-column {params.value_column} \
-            --feature-column {params.feature_column} \
+            --feature-column '{params.feature_column}' \
             {input.txt} \
             2>&1 > {log}
         """
@@ -343,7 +343,7 @@ rule bracken_mpa_style:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        kreport2mpa.py \
+        workflow/scripts/KrakenTools/kreport2mpa.py \
             --report-file {input.kreport} \
             --output {output.txt} \
             --display-header \
