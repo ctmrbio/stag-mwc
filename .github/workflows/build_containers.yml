@@ -17,12 +17,12 @@ jobs:
         singularity_version:
           - '3.8.1'
         recipe:
-          - "envs/Singularity.amrplusplus"
-          - "envs/Singularity.assembly"
-          - "envs/Singularity.biobakery"
-          - "envs/Singularity.krakenuniq"
-          - "envs/Singularity.snakemake"
-          - "envs/Singularity.stag-mwc"
+          - "workflow/envs/Singularity.amrplusplus"
+          - "workflow/envs/Singularity.assembly"
+          - "workflow/envs/Singularity.biobakery"
+          - "workflow/envs/Singularity.krakenuniq"
+          - "workflow/envs/Singularity.snakemake"
+          - "workflow/envs/Singularity.stag-mwc"
     container:
       image: quay.io/singularity/singularity:v${{ matrix.singularity_version }}
       options: --privileged
