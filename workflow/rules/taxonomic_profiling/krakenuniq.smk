@@ -21,8 +21,11 @@ if config["taxonomic_profile"]["krakenuniq"]:
     krakens = expand(OUTDIR/"krakenuniq/{sample}.kraken.gz", sample=SAMPLES)
     kreports = expand(OUTDIR/"krakenuniq/{sample}.kreport", sample=SAMPLES)
     combined_kreport = expand(OUTDIR/"krakenuniq/all_samples.krakenuniq.txt", sample=SAMPLES)
-    all_outputs.extend(krakens)
-    all_outputs.extend(kreports)
+
+    if krakenuniq_config["keep_kraken"]:
+        all_outputs.extend(krakens)
+    if krakenuniq_config["keep_kreport"]:
+        all_outputs.extend(kreports)
     all_outputs.append(combined_kreport)
     
     citations.add(publications["KrakenUniq"])
@@ -44,7 +47,7 @@ rule krakenuniq:
     conda:
         "../../envs/krakenuniq.yaml"
     container:
-        "docker://quay.io/biocontainers/krakenuniq:1.0.0--pl5321h19e8d03_0"
+        "oras://ghcr.io/ctmrbio/stag-mwc:krakenuniq"+singularity_branch_tag
     params:
         db=krakenuniq_config["db"],
         preload_size=krakenuniq_config["preload_size"],
@@ -84,7 +87,7 @@ rule combine_krakenuniq_reports:
             --feature-column rank,taxName \
             --value-column taxReads \
             --outfile {output.combined} \
-            --skiplines 3 \
+            --skiplines 2 \
             {input.kreports} \
             2> {log}
         """

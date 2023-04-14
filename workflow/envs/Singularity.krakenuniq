@@ -1,0 +1,38 @@
+Bootstrap: docker
+From: debian:11
+
+%help
+    Singularity image with KrakenUniq for use in StaG-mwc.
+
+%labels
+    AUTHOR boulund
+    VERSION 1.0
+
+%post
+    apt-get update && \
+	apt-get install -y \
+      bash \
+      perl \
+      make \
+      g++ \
+      libbz2-dev \
+      zlib1g-dev \
+	  file \
+	  wget
+    
+    mkdir -pv /opt/krakenuniq /opt/krakenuniq-src
+    
+    cd /opt/krakenuniq-src
+    wget https://github.com/fbreitwieser/krakenuniq/archive/refs/tags/v1.0.3.tar.gz
+    
+    tar -xf v1.0.3.tar.gz
+    cd krakenuniq-1.0.3
+
+	./install_krakenuniq.sh -l /usr/local/bin /opt/krakenuniq
+
+	rm -fv /opt/krakenuniq-src/v1.0.3.tar.gz
+
+
+%runscript
+    exec krakenuniq
+

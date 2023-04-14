@@ -26,6 +26,11 @@ situations.
 - Fixed missing interactive Kaiju Krona plots for all samples in final report.
 - Now reusing metaphlan conda environment and biobakery container for running
   bowtie2 mapping rule to ensure a consistent execution environment for bowtie2.
+- KrakenUniq now works in Singularity, thanks to new custom Singularity image.
+- KrakenUniq rule is now correctly not rerun if `keep_kraken` or `keep_kreport`
+  settings are set to false when executing the workflow a second time.
+- Kraken2 rule is now correctly not rerun if `keep_kraken` or `keep_kreport`
+  settings are set to false when executing the workflow a second time.
 
 ### Changed
 - Restructured repo to conform to modern Snakemake best practices. This also
