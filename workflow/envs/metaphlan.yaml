@@ -1,0 +1,9 @@
+name: stag-mwc-metaphlan
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+    - biobakery
+dependencies:
+    - metaphlan =4.0.3
+    - krona =2.8.1

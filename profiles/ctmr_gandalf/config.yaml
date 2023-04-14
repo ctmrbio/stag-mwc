@@ -4,12 +4,12 @@
 #######################################
 # General Snakemake settings
 #######################################
-configfile: config.yaml
+configfile: config/config.yaml
 keep-going: False
 rerun-incomplete: True
 printshellcmds: True
 scheduler: greedy
-use-conda: False
+#use-conda: True
 use-singularity: True
 singularity-prefix: /ceph/db/sing
 singularity-args: "-B /ceph"
@@ -46,10 +46,10 @@ default-resources:
   - account=bio
   - partition=ctmr
   - time="01:00:00"
-#  - mem_mb=10240  # Auto-assigned to 500G/96*threads on Gandalf
+  - mem_mb=10240
 set-threads:
-  - fastp=40
-  - remove_host=10
+  - fastp=20
+  - remove_host=20
   - bbcountunique=4
   - sketch=8
   - kaiju=32
