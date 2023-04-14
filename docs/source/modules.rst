@@ -9,7 +9,7 @@
 .. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn: https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
 .. _StrainpPlAn: https://github.com/biobakery/MetaPhlAn/wiki/StrainPhlAn-4
-.. _featureCounts: http://bioinf.wehi.edu.au/featureCounts/
+.. _featureCounts: https://subread.sourceforge.net/featureCounts.html
 .. _HUMAnN: https://github.com/biobakery/biobakery/wiki/humann3
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
 .. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
@@ -431,10 +431,10 @@ make_count_table.py
 :Tool: ``make_count_table.py``
 :Output folder: ``<mapper>/<database_name>``
 
-A custom Python script produces tab-separated count tables with one row per
-annotation, and one column per sample. The input is an annotation file that
+A custom Python script that produces tab-separated count tables with one row
+per annotation, and one column per sample. The input is an annotation file that
 consists of at least two tab-separated columns. The first line is a header line
-with column names (must not contain spaces and avoid strange characters). Here 
+with column names (must not contain spaces and avoid strange characters). Here
 is an example of column names:: 
 
     Reference
@@ -454,7 +454,7 @@ used or if the annotation file contains entire headers or only the truncated
 headers, as long as the bit up until the first space in each reference header
 is unique. The script sums counts for each annotation for each sample. 
 
-One parameter for the count summarization is which columns in the annoation
+One parameter for the count summarization is which columns in the annotation
 file to summarize on. The column names need to be assigned as a string of
 comma-separated column names. They must match exactly to the column names
 defined in the annotation file. This is configured in ``config.yaml``. The
@@ -474,17 +474,17 @@ featureCounts
 :Tool: `featureCounts`_
 :Output folder: ``<mapper>/<database_name>``
 
-This uses the well-known `featureCounts`_ to summarize read counts per
-annotation and sample. The input is a file in `GTF format`_ (or `SAF format`_,
-read more below). `featureCounts`_ can summarize read counts on any feature (or
-meta-feature) that is defined in your GTF file. Use the featureCounts
-``attribute_type`` to summarize read counts for any attribute defined in your
-GTF file. To use `featureCounts`_ to summarize read counts, enter an annotation
-filename in the configuration file, e.g.::
+This uses `featureCounts`_ to summarize read counts per annotation and sample.
+The input is a file in `GTF format`_ (or `SAF format`_, read more below).
+`featureCounts`_ can summarize read counts on any feature (or meta-feature)
+that is defined in your GTF file. Use the featureCounts ``attribute_type`` to
+summarize read counts for any attribute defined in your GTF file. To use
+`featureCounts`_ to summarize read counts, enter an annotation filename in the
+configuration file, e.g.::
 
     bowtie2:
         featureCounts:
-            annotations: "path/to/annotations.tab"
+            annotations: "path/to/annotations.gtf"
 
 The featureCounts module outputs several files::
 
