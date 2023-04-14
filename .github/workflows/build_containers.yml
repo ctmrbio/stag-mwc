@@ -20,6 +20,7 @@ jobs:
           - "envs/Singularity.amrplusplus"
           - "envs/Singularity.assembly"
           - "envs/Singularity.biobakery"
+          - "envs/Singularity.krakenuniq"
           - "envs/Singularity.snakemake"
           - "envs/Singularity.stag-mwc"
     container:
