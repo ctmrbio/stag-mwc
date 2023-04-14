@@ -41,8 +41,10 @@ if config["taxonomic_profile"]["kraken2"]:
     kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
     kraken_area_plot = str(OUTDIR/"kraken2/area_plot.kraken2.pdf")
 
-    all_outputs.extend(krakens)
-    all_outputs.extend(kreports)
+    if kraken2_config["keep_kraken"]:
+        all_outputs.extend(krakens)
+    if kraken2_config["keep_kreport"]:
+        all_outputs.extend(kreports)
     all_outputs.extend(kreports_mpa_style)
     all_outputs.append(joined_kreport_mpa_style)
     all_outputs.append(combined_kreport)
