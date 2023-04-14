@@ -6,7 +6,7 @@ From: mambaorg/micromamba:0.17.0
 	stag-mwc.yaml.
 
 %files
-	envs/stag-mwc.yaml stag-mwc.yaml
+	workflow/envs/stag-mwc.yaml stag-mwc.yaml
 
 %labels
 	AUTHOR boulund

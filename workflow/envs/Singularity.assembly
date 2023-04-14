@@ -9,7 +9,7 @@ From: mambaorg/micromamba:0.17.0
 	  sudo singularity build stag-mwc-assembly.simg Singularity.assembly
 
 %files
-	envs/assembly.yaml assembly.yaml
+	workflow/envs/assembly.yaml assembly.yaml
 
 %labels
 	AUTHOR boulund
