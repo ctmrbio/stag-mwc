@@ -27,7 +27,8 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
     mpa_outputs = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
         taxlvl=("species", "genus", "family", "order"))
 
-    all_outputs.append(heatmap)
+    if mpa_config["heatmap"]["create_plot"]:
+        all_outputs.append(heatmap)
     all_outputs.append(mpa_area_plot)
     all_outputs.append(mpa_outputs)
 

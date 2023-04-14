@@ -126,6 +126,7 @@ metaphlan:
     keep_sam: False          # Keep the sam files, set this to True if you want to run StrainPhlAn.
     run_krona: True
     heatmap:
+        create_plot: True        # Whether to create the MetaPhlAn heatmap plot, set to False to disable
         level: "Species"         # Taxononomic level: Kingdom, Phylum, Class, Order, Family, Genus, Species, or Strain
         topN: 50                 # Number of top taxa to include in heatmap.
         pseudocount: -1          # Negative value means to autocompute pseudocount

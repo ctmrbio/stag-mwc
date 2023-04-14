@@ -19,6 +19,8 @@ situations.
 - Added a new Slurm profile for use on CTMR Gandalf, also intended to be useful
   as a starting point for creating custom Slurm profiles.
 - Added a README with basic instructions for how to configure the workflow.
+- Added function to disable MetaPhlAn heatmap plots, which may be useful when
+  processing very large numbers of samples.
 
 ### Fixed
 - Fixed missing interactive Kaiju Krona plots for all samples in final report.
