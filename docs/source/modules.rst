@@ -278,17 +278,23 @@ Groot
 
 Run `groot`_ to align reads to an antibiotic resistance gene database to
 produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
-containing two files and two subfolders::
+containing two files and one subfolder::
 
     <sample>/<sample>.groot_aligned.bam
     <sample>/<sample>.groot_report.txt
     <sample>/<sample>/groot-graphs
-    <sample>/<sample>/groot-plots
 
 The ``<sample>.groot.bam`` file contains mapping results against all resistance
 gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
-observed antibiotic resistance genes in the sample. The two subfolders contain 
-all mapped graphs and coverage plots of all detected antibiotic resistance genes.
+observed antibiotic resistance genes in the sample. The subfolder contains all
+mapped graphs of all detected antibiotic resistance genes.
+
+.. note::
+
+   GROOT used to be able to output coverage plots via the ``--plotCov``
+   argument but it was removed in version 1.0 due to a conda packaging issue.
+   The feature may reintroduced in future versions of GROOT but is not
+   available in StaG now.
 
 The read lengths input to `groot`_ must conform to the settings used during
 `groot`_ database construction. The length window can be configured in the

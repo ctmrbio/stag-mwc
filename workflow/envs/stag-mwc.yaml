@@ -18,7 +18,7 @@ dependencies:
     - subread =2.0.3
     - sambamba =1.0
     - samtools =1.6
-    - groot =0.8.4
+    - groot =1.1.2
     - pigz =2.6
     - pip
     - pip:

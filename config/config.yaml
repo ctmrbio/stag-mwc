@@ -157,7 +157,7 @@ humann:
 # Antibiotic Resistance
 #########################
 groot:
-    index: ""                # [Required] Path to groot index
+    index_dir: ""            # [Required] Path to groot indexDir
     minlength: 110           # Minlength for groot index
     maxlength: 125           # Maxlength for groot index
     covcutoff: 0.97          # Coverage cutoff for groot report

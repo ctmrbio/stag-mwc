@@ -8,12 +8,11 @@ localrules:
     groot_report
 
 
-groot_db_path = Path(config["groot"]["index"])
+groot_db_path = Path(config["groot"]["index_dir"])
 if config["antibiotic_resistance"]["groot"]:
     if not Path(groot_db_path).exists():
         err_message = "No groot database found at: '{}'!\n".format(groot_db_path)
         err_message += "Specify the DB path in the groot section of config.yaml.\n"
-        err_message += "Run 'snakemake create_groot_index' to download and build a groot index in '{dbdir}'\n".format(dbdir=DBDIR/"groot")
         err_message += "If you do not want to run groot to create antibiotic resistance profiles, set antibiotic_resistance: False in config.yaml"
         raise WorkflowError(err_message)
 
@@ -32,8 +31,6 @@ rule groot_align:
         read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
         read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
     output:
-        read1=temp(OUTDIR/"groot/{sample}/{sample}_1.size_window.fq.gz"),
-        read2=temp(OUTDIR/"groot/{sample}/{sample}_2.size_window.fq.gz"),
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
         graphs=directory(OUTDIR/"groot/{sample}/groot-graphs"),
     log:
@@ -44,29 +41,20 @@ rule groot_align:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        "docker://quay.io/biocontainers/groot:1.1.2--hc0beb16_0"
     threads: 8
     params:
-        index=groot_config["index"],
+        index_dir=groot_config["index_dir"],
         minlength=groot_config["minlength"],
         maxlength=groot_config["maxlength"],
     shell:
         """
-        reformat.sh \
-            in1={input.read1} \
-            in2={input.read2} \
-            out1={output.read1} \
-            out2={output.read2} \
-            minlength={params.minlength} \
-            maxlength={params.maxlength} \
-            tossbrokenreads \
-            2> {log.reformat}
         groot align \
-            --fastq {output.read1},{output.read2} \
+            --fastq {input.read1},{input.read2} \
             --graphDir {output.graphs} \
-            --indexDir {params.index} \
+            --indexDir {params.index_dir} \
             --processors {threads} \
-            --logFile {log.align} \
+            --log {log.align} \
             > {output.bam}
         """
 
@@ -76,7 +64,6 @@ rule groot_report:
         bam=OUTDIR/"groot/{sample}/{sample}.groot_aligned.bam",
     output:
         report=OUTDIR/"groot/{sample}/{sample}.groot_report.txt",
-        plots=directory(OUTDIR/"groot/{sample}/groot-plots"),
     log:
         report=str(LOGDIR/"groot/{sample}.groot_report.log"),
     shadow:
@@ -84,7 +71,7 @@ rule groot_report:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        "docker://quay.io/biocontainers/groot:1.1.2--hc0beb16_0"
     threads: 1
     params:
         covcutoff=groot_config["covcutoff"],
@@ -95,10 +82,8 @@ rule groot_report:
             --bamFile {input.bam} \
             --covCutoff {params.covcutoff} \
             {params.lowcov} \
-            --plotCov \
             --processors {threads} \
-            --logFile {log.report} \
+            --log {log.report} \
             > {output.report}
-        mv groot-plots {output.plots}
         """
 
