@@ -14,6 +14,52 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
+## [0.6.0] Unreleased
+### Added
+- Added a new Slurm profile for use on CTMR Gandalf, also intended to be useful
+  as a starting point for creating custom Slurm profiles.
+- Added a README with basic instructions for how to configure the workflow.
+- Added function to disable MetaPhlAn heatmap plots, which may be useful when
+  processing very large numbers of samples.
+- Added MetaPhlAn-style output tables for KrakenUniq.
+- Added Krona plot output for KrakenUniq.
+
+### Fixed
+- Fixed missing interactive Kaiju Krona plots for all samples in final report.
+- Now reusing metaphlan conda environment and biobakery container for running
+  bowtie2 mapping rule to ensure a consistent execution environment for bowtie2.
+- KrakenUniq now works in Singularity, thanks to new custom Singularity image.
+- KrakenUniq rule is now correctly not rerun if `keep_kraken` or `keep_kreport`
+  settings are set to false when executing the workflow a second time.
+- Kraken2 rule is now correctly not rerun if `keep_kraken` or `keep_kreport`
+  settings are set to false when executing the workflow a second time.
+
+### Changed
+- Restructured repo to conform to modern Snakemake best practices. This also
+  includes updates to documentation where needed.
+- Hardcoded default thread values for all rules used during local execution
+  without profile. Intended to be overridden by profile.
+- Updated KrakenTools to its latest version (1.2), with a minor custom modification
+  of `kreport2mpa.py`, changing output column names to `taxon_name` and `reads`.
+- Updated all Python packages in the main stag-mwc conda environment to their
+  latest version.
+- Some minor scripts affected by Pandas and Matplotlib updates were modified to
+  work with the latest versions of those libraries.
+- Updated groot to 1.1.2 that brings many performance improvements, but removed
+  the built-in plotting functionality so the groot module no longer produces
+  any plots. Removed size window filtering with BBMap from groot alignment rule,
+  and renamed the groot config variable `index` to `index_dir` to better map to
+  `--indexDir` used in groot CLI.
+
+### Deprecated
+- Older Slurm profiles for CTMR Gandalf and UPPMAX Rackham are now considered
+  deprecated and will be removed in a future release.
+- MetaWRAP support is considered deprecated and will eventually be replaced by
+  another solution for metagenome assembly in a future release of StaG.
+
+### Removed
+
+
 ## [0.5.1] 2022-12-06
 ### Added
 - Produce Snakemake report in zip format instead of HTML due to the HTML report being

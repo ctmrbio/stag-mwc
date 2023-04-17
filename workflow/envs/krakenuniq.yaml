@@ -1,0 +1,7 @@
+name: stag-krakenuniq
+channels:
+    - conda-forge
+    - bioconda
+    - defaults
+dependencies:
+    - krakenuniq =1.0.3

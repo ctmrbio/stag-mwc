@@ -1,0 +1,25 @@
+Bootstrap: docker
+From: mambaorg/micromamba:0.17.0
+
+%help
+	Singularity image containing the conda environment defined in
+	assembly.yaml.
+
+	To build, run:
+	  sudo singularity build stag-mwc-assembly.simg Singularity.assembly
+
+%files
+	workflow/envs/assembly.yaml assembly.yaml
+
+%labels
+	AUTHOR boulund
+	VERSION 2.0
+
+%post
+	# Install stag-mwc-assembly conda environment
+	micromamba install -y -n base -f assembly.yaml
+	micromamba clean --yes --all
+
+%runscript
+    exec echo "$@"
+

@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: mambaorg/micromamba:0.17.0 
+
+%help
+	Singularity image containing the conda environment defined in
+	stag-mwc.yaml.
+
+%files
+	workflow/envs/stag-mwc.yaml stag-mwc.yaml
+
+%labels
+	AUTHOR boulund
+	VERSION 2.2
+
+%post
+	micromamba install --yes --quiet --name base --file stag-mwc.yaml
+	micromamba clean --yes --all
+
+%runscript
+    exec echo "$@"
+
