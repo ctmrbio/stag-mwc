@@ -7,9 +7,9 @@ from snakemake.exceptions import WorkflowError
 localrules:
     combine_krakenuniq_reports,
     krakenuniq_mpa_style,
-    join_krakenuniq_mpa
-
-
+    join_krakenuniq_mpa,
+    create_krakenuniq_krona_plot,
+    krakenuniq_kreport2krona,
 
 
 krakenuniq_config = config["krakenuniq"]
@@ -26,11 +26,14 @@ if config["taxonomic_profile"]["krakenuniq"]:
     kreports = expand(OUTDIR/"krakenuniq/{sample}.kreport", sample=SAMPLES)
     combined_kreport = expand(OUTDIR/"krakenuniq/all_samples.krakenuniq.txt", sample=SAMPLES)
     mpa_table = OUTDIR/"krakenuniq/all_samples.krakenuniq.mpa_style.txt"
+    krona_html = OUTDIR/"krakenuniq/all_samples.krakenuniq.krona.html"
 
     if krakenuniq_config["keep_kraken"]:
         all_outputs.extend(krakens)
     if krakenuniq_config["keep_kreport"]:
         all_outputs.extend(kreports)
+    if krakenuniq_config["run_krona"]:
+        all_outputs.append(krona_html)
     all_outputs.append(combined_kreport)
     all_outputs.append(mpa_table)
     
@@ -152,4 +155,52 @@ rule join_krakenuniq_mpa:
             {input.txt} \
             > {log.stdout} \
             2> {log.stderr}
+        """
+
+
+rule krakenuniq_kreport2krona:
+    input:
+        kreport=OUTDIR/"krakenuniq/{sample}.mpa_style.txt",
+    output:
+        OUTDIR/"krakenuniq/{sample}.krona"
+    log:
+        stdout=LOGDIR/"krakenuniq/{sample}.kreport2krona.stdout",
+        stderr=LOGDIR/"krakenuniq/{sample}.kreport2krona.stderr",
+    shadow:
+        "shallow"
+    threads: 1
+    conda:
+        "../../envs/stag-mwc.yaml"
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+    shell:
+        """
+        awk -v OFS='\\t' '{{
+          gsub("\\\\|","\\t",$1);
+          print $2,$1;
+          }}' {input.kreport} \
+          > {output} \
+          2> {log.stderr}
+        """
+
+
+rule create_krakenuniq_krona_plot:
+    input:
+        expand(OUTDIR/"krakenuniq/{sample}.krona", sample=SAMPLES),
+    output:
+        krona_html=report(OUTDIR/"krakenuniq/all_samples.krakenuniq.krona.html",
+                          category="Taxonomic profiling",
+                          caption="../../report/krakenuniq_krona.rst"),
+    shadow:
+        "shallow"
+    threads: 1
+    conda:
+        "../../envs/stag-mwc.yaml"
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+    shell:
+        """
+		ktImportText \
+			-o {output.krona_html} \
+			{input}
         """
