@@ -9,6 +9,7 @@ assumes you already have `git`_ installed.
 .. _Snakemake: https://snakemake.readthedocs.io
 .. _Conda: https://conda.io/docs/
 .. _miniconda3: https://conda.io/miniconda.html
+.. _Bioconda: https://bioconda.github.io/
 .. _git: https://git-scm.com/
 
 
@@ -22,6 +23,7 @@ The first two things you need to install are:
 The recommended way to get started using |full_name| is to download and install
 `Conda`_. A good starting point is a clean `miniconda3`_ installation.
 Miniconda3 is quick to install and does not require administrator permissions.
+Please also consider setting up your environment for `Bioconda`_.
 
 After installing `Conda`_ and activating the base environment, install
 snakemake into your base environment::
@@ -31,12 +33,6 @@ snakemake into your base environment::
 These are the only external dependencies you need to install manually. The
 correct versions of any remaining dependencies will be automatically downloaded
 and installed when you run the workflow the first time.
-
-If you have a newly installed `miniconda3`_ environment, do not forget to add
-the following channels::
-
-    conda config --add channels conda-forge
-    conda config --add channels bioconda
 
 
 Download the workflow code
