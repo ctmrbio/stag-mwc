@@ -71,7 +71,9 @@ rule combine_krakenuniq_reports:
     input:
         kreports=expand(OUTDIR/"krakenuniq/{sample}.kreport", sample=SAMPLES)
     output:
-        combined=OUTDIR/"krakenuniq/all_samples.krakenuniq.txt"
+        combined=report(OUTDIR/"krakenuniq/all_samples.krakenuniq.txt",
+                category="Taxonomic profiling",
+                caption="../../report/krakenuniq_table.rst"),
     log:
         LOGDIR/"krakenuniq/all_samples.krakenuniq.log"
     shadow: 
