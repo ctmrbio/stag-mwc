@@ -73,7 +73,11 @@ that all dependencies should be included in the main `stag-mwc.yaml`
 environment, unless they have incompatible dependencies, to reduce the amount
 of conda environments in total. It is absolutely preferable if all tools used
 in the workflow are available via conda (either default channels, or bioconda,
-conda-forge, etc.).
+conda-forge, etc.), and Singularity. In cases where no official container images
+are available, we build custom Singularity images using Singularity definition
+files stored in the same folder. In most cases the same conda environment
+specification can simply be installed in the container. Containers are
+automatically built using a Github Action.
 
 
 ### Rules
