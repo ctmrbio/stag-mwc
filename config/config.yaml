@@ -117,6 +117,8 @@ krakenuniq:
     extra: ""                # Extra command line arguments for krakenuniq (do not add/change output files)
     keep_kraken: False       # Keep the kraken output files
     keep_kreport: True       # Keep the kreport output files
+    run_krona: True
+
 
 metaphlan:
     bt2_db_dir: ""           # [Required] Path to MetaPhlAn database dir
