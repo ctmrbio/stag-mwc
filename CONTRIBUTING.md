@@ -47,30 +47,18 @@ changes in the staging branch are present in develop.
 
 
 ## Code organization
-The workflow code is organized in the following folder structure inside the
-git repository:
-
-    cluster_configs     # Dir containing Snakemake profiles for clusters
-	docs                # Sphinx documentation, only sources!
-	envs                # Conda environment files
-	rules               # The actual Snakemake rules that make up the workflow
-	scripts             # Scripts used in workflow rules
-	utils               # Auxiliary scripts, not used in workflow
-	config.yaml         # The default config file
-	CONTRIBUTING.md     # This document
-	LICENSE             # LICENSE
-	README.md           # The README shown in the github repo
-	Snakefile           # The main workflow script
+The repo aims to follow the established Snakemake "best practices" for [code
+organization](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#distribution-and-reproducibility).
 
 
-### cluster_configs
-The `cluster_configs` directory should contain either:
+### Profiles
+The `profiles` directory should contain folders representing [Snakemake
+profiles](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles)
+suitable for use with commonly encountered cluster scheduling systems (e.g.
+Slurm).
 
-1. Folders representing entire [Snakemake cluster profiles](https://snakemake.readthedocs.io/en/stable/executable.html#profiles).
-2. Single `yaml` or `json` [cluster config files](http://snakemake.readthedocs.io/en/stable/snakefiles/configuration.html?highlight=cluster-config#cluster-configuration).
 
-
-### docs 
+### Docs 
 The documentation for the project is built automatically by
 [readthedocs](www.readthedocs.org) upon every commit. The HTML documentation is
 available at https://stag-mwc.readthedocs.org. Feel free to improve the
@@ -79,7 +67,7 @@ The documentation is written using Sphinx, so all documentation sources are
 written in [reStructuredText](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html).
 
 
-### envs
+### Envs
 The `envs` folder contains conda environments for the workflow. The ambition is
 that all dependencies should be included in the main `stag-mwc.yaml`
 environment, unless they have incompatible dependencies, to reduce the amount
@@ -88,7 +76,7 @@ in the workflow are available via conda (either default channels, or bioconda,
 conda-forge, etc.).
 
 
-### rules
+### Rules
 All workflow rules are organized in the `rules` folder. It contains a directory
 hierarchy organized by overall function in the workflow, e.g., the subfolder
 `taxonomic_profiling` contains rules for all taxonomic profiling tools. It is
@@ -134,13 +122,13 @@ list of deferred user messages by calling either
 `user_messages.info("message")` or `user_messages.warn("message")`. Messages
 added this way will be printed upon pipeline failure or completion.
 
-### scripts
+### Scripts
 The `scripts` folder contains all scripts required by workflow rules. These
 are typically read summarization or plotting scripts, but anything that is
 used by rules that aren't specifically rules themselves should go in here.
 
 
-### utils
+### Utils
 The `utils` folder contains auxiliary scripts or tools that are useful in the
 context of StaG-mwc, but are not necessarily used directly by the workflow.
 
@@ -171,21 +159,21 @@ matching the `input_fn_pattern` in the `inputdir`, both defined in `config.yaml`
 The Snakefile defines the following variables that are accessible in all rule
 files:
 
-* `config` - Python dict containing all configuration parameters defined in
+* `config` - Python `dict` containing all configuration parameters defined in
   `config.yaml`.
-* `citations` - Python set of publication citation strings loaded from
+* `citations` - Python `set` of publication citation strings loaded from
   `rules/citatons.py`. 
-* `INPUTDIR` - Python Path object for the input directory
-* `OUTDIR` - Python Path object for the output directory
-* `LOGDIR` - Python Path object for the log directory
-* `TMPDIR` - Python Path object for the temporary directory directory specified
+* `INPUTDIR` - Python `pathlib.Path` object for the input directory
+* `OUTDIR` - Python `pathlib.Path` object for the output directory
+* `LOGDIR` - Python `pathlib.Path` object for the log directory
+* `TMPDIR` - Python `pathlib.Path` object for the temporary directory directory specified
   in `config.yaml`.
-* `DBDIR` - Python Path object for the database directory specified in
+* `DBDIR` - Python `pathlib.Path` object for the database directory specified in
   `config.yaml`.
 * `user_messages` - A `UserMessages` instance with methods `info` and `warn` to
   show messages to the user.
-* `all_outputs` - Python list that contains strings with the path to all
+* `all_outputs` - Python `list` that contains strings with the path to all
   expected output files
-* `SAMPLES` - Python set containing all sample names identified from the input
+* `SAMPLES` - Python `set` containing all sample names identified from the input
   file names.
 
