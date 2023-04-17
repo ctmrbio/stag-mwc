@@ -14,7 +14,19 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.6.0] Unreleased
+## [0.6.1] Unreleased
+### Added
+
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+
+## [0.6.0] 2023-04-17
 ### Added
 - Added a new Slurm profile for use on CTMR Gandalf, also intended to be useful
   as a starting point for creating custom Slurm profiles.
