@@ -12,7 +12,7 @@
 .. _featureCounts: https://subread.sourceforge.net/featureCounts.html
 .. _HUMAnN: https://github.com/biobakery/biobakery/wiki/humann3
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
-.. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
+.. _SAF format: https://subread.sourceforge.net/featureCounts.html
 .. _MEGAHIT: https://github.com/voutcn/megahit
 .. _MultiQC: https://multiqc.info/
 .. _amrplusplus: https://megares.meglab.org/amrplusplus/latest/html/what_AMR++_produces.html
