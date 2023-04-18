@@ -108,9 +108,10 @@ include: "rules/mappers/bbmap.smk"
 include: "rules/mappers/bowtie2.smk"
 
 #############################
-# Assembly
+# Assembly and binning
 #############################
-include: "rules/assembly/metawrap.smk"
+include: "rules/assembly/assembly.smk"
+include: "rules/assembly/binning.smk"
 
 #############################
 # MultiQC

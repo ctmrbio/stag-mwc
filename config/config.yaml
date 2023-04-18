@@ -54,8 +54,9 @@ antibiotic_resistance:
 mappers:
     bbmap: False
     bowtie2: False
-assembly: False
-binning: False
+assembly: 
+    assemble: False
+    binning: False
 
 
 #########################
@@ -208,9 +209,13 @@ bowtie2:
 #########################
 # Assembly
 #########################
-metawrap:
-    assembler: "megahit"      # Use "megahit" or "spades"
-    universal: "--universal"  # Use universal marker genes
-    minimum_completion: 70
-    maximum_contamination: 10
+assembly_:
+    assembler: "megahit"       # Use "megahit"
+    min_contig_length: 200     # Minimum contig length
+    extra: ""                  # Extra command line parameters for the chosen assembler
+binning_:
+    minfasta: 200000           # Minimum bin size for FASTA output, leave empty to disable FASTA output
+    extra: ""                  # Extra command line parameters for vamb
+
+
 
