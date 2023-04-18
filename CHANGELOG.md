@@ -24,6 +24,8 @@ situations.
 ### Deprecated
 
 ### Removed
+- Groot: Removed settings related to read length window as that feature was
+  removed in a previous StaG release.
 
 
 ## [0.6.0] 2023-04-17

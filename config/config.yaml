@@ -161,8 +161,6 @@ humann:
 #########################
 groot:
     index_dir: ""            # [Required] Path to groot indexDir
-    minlength: 110           # Minlength for groot index
-    maxlength: 125           # Maxlength for groot index
     covcutoff: 0.97          # Coverage cutoff for groot report
     lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
 

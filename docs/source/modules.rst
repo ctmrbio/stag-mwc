@@ -294,9 +294,8 @@ mapped graphs of all detected antibiotic resistance genes.
    The feature may reintroduced in future versions of GROOT but is not
    available in StaG now.
 
-The read lengths input to `groot`_ must conform to the settings used during
-`groot`_ database construction. The length window can be configured in the
-config file.
+The read lengths used with `groot`_ should preferably conform to the settings
+used during `groot`_ database construction.
 
 AMRPlusPlus_v2
 -------

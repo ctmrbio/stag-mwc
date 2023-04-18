@@ -45,8 +45,6 @@ rule groot_align:
     threads: 8
     params:
         index_dir=groot_config["index_dir"],
-        minlength=groot_config["minlength"],
-        maxlength=groot_config["maxlength"],
     shell:
         """
         groot align \
