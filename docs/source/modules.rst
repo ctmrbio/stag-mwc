@@ -259,9 +259,7 @@ the default unit is counts per million (cpm).
 
    HUMAnN uses the taxonomic profiles produced by MetaPhlAn as input,
    so all MetaPhlAn-associated steps are run regardless of whether it is actually
-   enabled in ``config.yaml`` or not. It is important to use a MetaPhlAn database
-   compatible with HUMAnN3, e.g. mpa_v30_CHOCOPhlAn_201901 (run the metaphlan
-   step with the extra ``--mpa3`` flag in the StaG config file).
+   enabled in ``config.yaml`` or not.
 
 Due to temporary disk space issues with running HUMAnN it is now a requirement
 to specify a $TMPDIR in ``config.yaml``, e.g. ``/scratch`` or ``/tmp`` depending 
