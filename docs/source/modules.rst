@@ -350,10 +350,11 @@ BBMap
 :Tool: `BBMap`_
 :Output folder: ``bbmap/<database_name>``
 
-This module maps read using `BBMap`_. The output is in gzipped SAM format. It
-is possible to configure the mapping settings almost entirely according to
-preference, with the exception of changing the output format from gzipped SAM.
-Use the configuration parameter ``bbmap:extra`` to add any standard BBMap
+This module maps read using `BBMap`_. The output is in sorted and indexed BAM
+format (with an option to keep the intermediary SAM file used to create the
+BAM). It is possible to configure the mapping settings almost entirely
+according to preference, with the exception of changing the output format. Use
+the configuration parameter ``bbmap:extra`` to add any standard BBMap
 commandline parameter you want.
 
 Bowtie2
@@ -378,6 +379,8 @@ signifies a list)::
         - db_name: ""
           db_path: ""
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: ""
@@ -397,6 +400,8 @@ configuration options, but with different settings. For example, to map against
         - db_name: "db1"
           db_path: "/path/to/db1"
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: ""
@@ -409,6 +414,8 @@ configuration options, but with different settings. For example, to map against
         - db_name: "db2"
           db_path: "/path/to/db2"
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: "/path/to/db2/annotations.txt"

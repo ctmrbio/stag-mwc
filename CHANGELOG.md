@@ -16,6 +16,8 @@ situations.
 
 ## [0.6.1] Unreleased
 ### Added
+- BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.
+- Bowtie2: added option `keep_bam`.
 
 ### Fixed
 - KrakenUniq: environment variable `LC_ALL` has been added to Singularity image
