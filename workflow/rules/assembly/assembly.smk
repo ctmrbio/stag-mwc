@@ -11,7 +11,7 @@ localrules:
 
 
 if config["assembly"]["assemble"]:
-    assemblies = expand(f"{OUTDIR}/assembly/{a_conf['assembler']}/{{sample}}/final_assembly.fasta", sample=SAMPLES)
+    assemblies = expand(f"{OUTDIR}/assembly/{a_conf['assembler']}/{{sample}}/{{sample}}.contigs.fa", sample=SAMPLES)
     all_outputs.extend(assemblies)
 
     citations.add(publications["MEGAHIT"])
@@ -23,7 +23,7 @@ rule megahit:
         read1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
     output:
-        contigs=f"{OUTDIR}/assembly/megahit/{{sample}}/{sample}.contigs.fa",
+        contigs=f"{OUTDIR}/assembly/megahit/{{sample}}/{{sample}}.contigs.fa",
     log:
         stdout=f"{LOGDIR}/megahit/{{sample}}.stdout.log",
         stderr=f"{LOGDIR}/megahit/{{sample}}.stderr.log",
@@ -39,6 +39,7 @@ rule megahit:
         min_contig_length=a_conf["min_contig_length"],
     shell:
         """
+        rm -rfv {params.outdir}
         megahit \
             -1 {input.read1} \
             -2 {input.read2} \

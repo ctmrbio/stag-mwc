@@ -63,9 +63,7 @@ set-threads:
   - align_to_amr=16
   - bbmap=16
   - bowtie2=16
-  - assembly=20
-  - consolidate_bins=20
-  - blobology=20
+  - megahit=40
 set-resources:
   - fastp:mem_mb=20240
   - fastp:time="02:00:00"
@@ -91,4 +89,6 @@ set-resources:
   - bbmap:time="04:00:00"
   - bowtie2:mem_mb=10240
   - bowtie2:time="04:00:00"
+  - megahit:mem_mb=25600
+  - megahit:time="10:00:00"
 
