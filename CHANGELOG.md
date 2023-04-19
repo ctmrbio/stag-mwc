@@ -20,6 +20,9 @@ situations.
 ### Fixed
 - KrakenUniq: environment variable `LC_ALL` has been added to Singularity image
   to prevent unnecessary warning messages related to it being undefined.
+- KrakenUniq: now able to run when host removal is skipped, solved by adding
+  `krakenuniq_merge_reads` rule to create a temporary merged fasta file with
+  input data for KrakenUniq to avoid giving KrakenUniq symlinks as input.
 
 ### Changed
 
