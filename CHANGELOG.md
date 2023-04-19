@@ -18,6 +18,8 @@ situations.
 ### Added
 
 ### Fixed
+- KrakenUniq: environment variable `LC_ALL` has been added to Singularity image
+  to prevent unnecessary warning messages related to it being undefined.
 
 ### Changed
 

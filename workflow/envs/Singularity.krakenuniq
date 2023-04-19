@@ -8,17 +8,20 @@ From: debian:11
     AUTHOR boulund
     VERSION 1.0
 
+%environment
+    export LC_ALL="C"
+
 %post
     apt-get update && \
-	apt-get install -y \
+    apt-get install -y \
       bash \
       perl \
       make \
       g++ \
       libbz2-dev \
       zlib1g-dev \
-	  file \
-	  wget
+      file \
+      wget
     
     mkdir -pv /opt/krakenuniq /opt/krakenuniq-src
     
@@ -28,9 +31,9 @@ From: debian:11
     tar -xf v1.0.3.tar.gz
     cd krakenuniq-1.0.3
 
-	./install_krakenuniq.sh -l /usr/local/bin /opt/krakenuniq
+    ./install_krakenuniq.sh -l /usr/local/bin /opt/krakenuniq
 
-	rm -fv /opt/krakenuniq-src/v1.0.3.tar.gz
+    rm -fv /opt/krakenuniq-src/v1.0.3.tar.gz
 
 
 %runscript
