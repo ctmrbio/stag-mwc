@@ -23,7 +23,7 @@ for bbmap_config in config["bbmap"]:
         bbmap_alignments = expand(str(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}"),
                 db_name=db_name,
                 sample=SAMPLES,
-                output_type=("sam.gz", "covstats.txt", "rpkm.txt"))
+                output_type=("bam", "covstats.txt", "rpkm.txt"))
         counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                 db_name=db_name,
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
@@ -58,9 +58,11 @@ for bbmap_config in config["bbmap"]:
             read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
             read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
         output:
-            sam=bbmap_output_folder/"{sample}.sam.gz",
+            sam=bbmap_output_folder/"{sample}.sam.gz" if bbmap_config["keep_sam"] else temp(bbmap_output_folder/"{sample}.sam.gz"),
             covstats=bbmap_output_folder/"{sample}.covstats.txt",
             rpkm=bbmap_output_folder/"{sample}.rpkm.txt",
+            bamscript=temp(bbmap_output_folder/"{sample}.bamscript.sh"),
+            bamfile=bbmap_output_folder/"{sample}.bam" if bbmap_config["keep_bam"] else temp(bbmap_output_folder/"{sample}.bam"),
         log:
             stdout=str(bbmap_logdir/"{sample}.bbmap.stdout.log"),
             stderr=str(bbmap_logdir/"{sample}.bbmap.statsfile.txt"),
@@ -88,9 +90,14 @@ for bbmap_config in config["bbmap"]:
                 out={output.sam} \
                 covstats={output.covstats} \
                 rpkm={output.rpkm} \
+                bamscript={output.bamscript} \
                 {params.extra} \
                 > {log.stdout} \
                 2> {log.stderr}
+
+            sed -i 's/_sorted//g' {output.bamscript}
+
+            ./{output.bamscript} 2>> {log.stderr} >> {log.stdout}
             """
 
 
@@ -140,7 +147,7 @@ for bbmap_config in config["bbmap"]:
         f"""Summarize feature counts for {db_name}"""
         name: f"bbmap_feature_counts_{db_name}"
         input:
-            bams=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.sam.gz"),
+            bams=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.bam"),
                     db_name=db_name,
                     sample=SAMPLES)
         output:
