@@ -34,6 +34,8 @@ rule megahit:
     container:
         "docker://vout/megahit:release-v1.2.9"
     threads: 20
+    resources:
+        mem_mb=10240,
     params:
         outdir=lambda w: f"{OUTDIR}/assembly/megahit/{w.sample}",
         min_contig_length=a_conf["min_contig_length"],
