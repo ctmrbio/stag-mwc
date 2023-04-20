@@ -11,25 +11,99 @@ localrules:
 
 
 if config["assembly"]["binning"]:
-    bins = expand(f"{OUTDIR}/binning/{a_conf['assembler']}/{{sample}}/vamb", sample=SAMPLES)
+    concatenated_contigs = f"{OUTDIR}/assembly/{a_conf['assembler']}/concatenated_contigs.fa.gz"
+    bam_files = expand(f"{OUTDIR}/binning/{{sample}}.bam", sample=SAMPLES)
+    bins = expand(f"{OUTDIR}/binning/{{sample}}/bins", sample=SAMPLES)
 
+    all_outputs.append(concatenated_contigs)
+    all_outputs.extend(bam_files)
     all_outputs.extend(bins)
 
+    citations.add(publications["BBMap"])
     citations.add(publications["Vamb"])
 
-rule binning:
-    """Metagenomic binning using Vamb."""
+
+rule concatenate_index_contigs:
+    """Concatenate and index contigs before mapping and binning."""
     input:
-        contigs=f"{OUTDIR}/metawrap/assembly/{mw_config['assembler']}/{{sample}}/final_assembly.fasta",
+        contigs=expand(f"{OUTDIR}/assembly/{a_conf['assembler']}/{{sample}}/{{sample}}.contigs.fa", sample=SAMPLES),
+    output:
+        concatenated=f"{OUTDIR}/assembly/{a_conf['assembler']}/concatenated_contigs.fa.gz",
+    log:
+        stdout=f"{LOGDIR}/binning/concatenate_and_index.stdout",
+        stderr=f"{LOGDIR}/binning/concatenate_and_index.stderr",
+    conda:
+        "../../envs/assembly.yaml"
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
+    threads: 8
+    params:
+        min_contig_length=b_conf["min_contig_length"],
+        index_dir=f"{OUTDIR}/assembly/{a_conf['assembler']}/",
+    shell:
+        """
+        concatenate.py \
+            -m {params.min_contig_length} \
+            {output.concatenated} \
+            {input.contigs} \
+            > {log.stdout} \
+            2> {log.stderr}
+
+        bbmap.sh \
+            ref={output.concatenated} \
+            path={params.index_dir} \
+            >> {log.stdout} \
+            2>> {log.stderr}
+        """
+
+
+rule map_to_contigs:
+    """Map reads to concatenated contigs."""
+    input:
         read1=f"{OUTDIR}/host_removal/{{sample}}_1.fq.gz",
         read2=f"{OUTDIR}/host_removal/{{sample}}_2.fq.gz",
+        contigs=rules.concatenate_index_contigs.output.concatenated,
     output:
-        concoct_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/concoct_bins",
-        #maxbin2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/maxbin2_bins",
-        metabat2_bins=f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{{sample}}/metabat2_bins",
+        sam=f"{OUTDIR}/binning/{{sample}}.sam.gz",
+        bamscript=f"{OUTDIR}/binning/{{sample}}.bamscript.sh",
+        bam=f"{OUTDIR}/binning/{{sample}}.bam",
     log:
-        stdout=f"{LOGDIR}/metawrap/{{sample}}.binning.stdout.log",
-        stderr=f"{LOGDIR}/metawrap/{{sample}}.binning.stderr.log",
+        stdout=f"{LOGDIR}/binning/{{sample}}.bbmap.stdout",
+        stderr=f"{LOGDIR}/binning/{{sample}}.bbmap.stderr",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/assembly.yaml"
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
+    threads: 20
+    shell:
+        """
+        bbmap.sh \
+            in1={input.read1} \
+            in2={input.read2} \
+            path=$(dirname {input.contigs}) \
+            out={output.sam} \
+            bamscript={output.bamscript} \
+            > {log.stdout} \
+            2> {log.stdout} 
+
+        sed -i 's/_sorted//g' {output.bamscript}
+
+        ./{output.bamscript} >> {log.stdout} 2>> {log.stderr}
+        """
+
+
+rule vamb:
+    """Metagenomic binning.""" 
+    input:
+        contigs=rules.concatenate_index_contigs.output.concatenated,
+        bam_files=expand(f"{OUTDIR}/binning/{{sample}}.bam", sample=SAMPLES),
+    output:
+        bins=directory(f"{OUTDIR}/binning/{{sample}}/bins"),
+    log:
+        stdout=f"{LOGDIR}/binning/{{sample}}.vamb.stdout",
+        stderr=f"{LOGDIR}/binning/{{sample}}.vamb.stderr",
     shadow:
         "shallow"
     conda:
@@ -38,23 +112,15 @@ rule binning:
         "oras://ghcr.io/ctmrbio/stag-mwc:assembly"+singularity_branch_tag
     threads: 20
     params:
-        outdir=lambda w: f"{OUTDIR}/metawrap/binning/{mw_config['assembler']}/{w.sample}",
-        universal=mw_config["universal"],
+        minfasta=b_conf["minfasta"],
     shell:
         """
-        gunzip -c {input.read1} > reads_1.fastq
-        gunzip -c {input.read2} > reads_2.fastq
-        metawrap binning \
-            -a {input.contigs} \
-            -o {params.outdir} \
-            -t {threads} \
-            -m 32 \
-            --concoct \
-            --metabat2 \
-            --run-checkm \
-            {params.universal} \
-           reads_1.fastq reads_2.fastq \
-            2> {log.stderr} \
-            > {log.stdout}
+        vamb \
+            -o C \
+            --outdir {output.bins} \
+            --fasta {input.contigs} \
+            --bamfiles {input.bam_files} \
+            > {log.stdout} \
+            2> {log.stderr}
         """
 

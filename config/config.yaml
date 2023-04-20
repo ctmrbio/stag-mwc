@@ -214,6 +214,7 @@ assembly_:
     min_contig_length: 200     # Minimum contig length
     extra: ""                  # Extra command line parameters for the chosen assembler
 binning_:
+    min_contig_length: 2000    # Minimum contig length
     minfasta: 200000           # Minimum bin size for FASTA output, leave empty to disable FASTA output
     extra: ""                  # Extra command line parameters for vamb
 

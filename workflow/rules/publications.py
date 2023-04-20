@@ -1,12 +1,12 @@
 # vim: syntax=python expandtab
 # Publications/citations to tools used on StaG-mwc.
 publications = {
+    "AMRPlusPlus2": "Doster E, Lakin S, Dean C, Wlfe C, Young J, Boucher C et al. (2019). MEGAREs 2.0: a database for classification of antimicrobial drug, biocide and metal resistance determinants in metagenomic sequence data. Nucleic Acids Research, Volume 48, Issue D1, 08 January 2020, Pages D561–D569, https://doi.org/10.1093/nar/gkz1010",
     "BBMap": "Bushnell, B. (2016). BBMap short read aligner. University of California, Berkeley, California. Available online at: http://sourceforge.net/projects/bbmap.",
     "Bowtie2": "Langmead B, Salzberg S (2012). Fast gapped-read alignment with Bowtie 2. Nature Methods. 2012, 9:357-359. https://doi.org/10.1038/nmeth.1923",
     "Bracken": "Lu J, Breitwieser FP, Thielen P, Salzberg SL (2017). Bracken: estimating species abundance in metagenomics data. PeerJ Computer Science 3:e104. https://doi.org/10.7717/peerj-cs.104",
     "CONCOCT": "Alneberg, J., Bjarnason, B.S., de Bruijn, I., Schirmer, M., Quick, J., Ijaz, U.Z., Lahti, L., Loman, N.J, Andersson, A.F, Quince, C. (2014). Binning metagenomic contigs by coverage and composition. Nature Methods, https://doi.org/10.1038/nmeth.3103",
     "GROOT": "Rowe WPM, Winn MD (2018). Indexed variation graphs for efficient and accurate resistome profiling. Bioinformatics, Volume 34, Issue 21. https://doi.org/10.1093/bioinformatics/bty387",
-    "AMRPlusPlus2": "Doster E, Lakin S, Dean C, Wlfe C, Young J, Boucher C et al. (2019). MEGAREs 2.0: a database for classification of antimicrobial drug, biocide and metal resistance determinants in metagenomic sequence data. Nucleic Acids Research, Volume 48, Issue D1, 08 January 2020, Pages D561–D569, https://doi.org/10.1093/nar/gkz1010",
     "HUMAnN": "Franzosa EA*, McIver LJ*, et al. (2018). Species-level functional profiling of metagenomes and metatranscriptomes. Nat Methods 15: 962-968. https://doi.org/10.1038/s41592-018-0176-y",
     "Kaiju": "Menzel, P., Ng, K. L., & Krogh, A. (2016). Fast and sensitive taxonomic classification for metagenomics with Kaiju. Nature communications, 7, 11257. Available online at: https://github.com/bioinformatics-centre/kaiju",
     "Kraken2": "Wood, D.E., Lu, J., & Langmead, B. (2019). Improved metagenomic analysis with Kraken 2. Genome biology, 20, 257. https://doi.org/10.1186/s13059-019-1891-0",
@@ -21,6 +21,7 @@ publications = {
     "Snakemake": "Köster, Johannes and Rahmann, Sven (2012). Snakemake - A scalable bioinformatics workflow engine. Bioinformatics, Volume 28, Issue 19. https://doi.org/10.1093/bioinformatics/bts480",
     "StaG": "Boulund et al. (2018). StaG-mwc: metagenomic workflow collaboration. https://doi.org/10.5281/zenodo.1483891",
     "StrainPhlAn": "Beghini et al. (2020). Integrating taxonomic, functional, and strain-level profiling of diverse microbial communities with bioBakery 3. bioRxiv preprint. 2020 Nov 21. https://doi.org/10.1101/2020.11.19.388223",
+    "Vamb": "Nissen, J.N., Johansen, J., Allesøe, R.L. et al. Improved metagenome binning and assembly using deep variational autoencoders. Nat Biotechnol 39, 555–560 (2021). https://doi.org/10.1038/s41587-020-00777-4",
     "fastp": "Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu (2018). fastp: an ultra-fast all-in-one FASTQ preprocessor. Bioinformatics, Volume 34, Issue 17, 01 September 2018, Pages i884–i890. https://doi.org/10.1093/bioinformatics/bty560",
     "featureCount": "Yang Liao, Gordon K. Smyth, Wei Shi (2014). featureCounts: an efficient general purpose program for assigning sequence reads to genomic features, Bioinformatics, Volume 30, Issue 7, 1 April 2014, Pages 923–930, https://doi.org/10.1093/bioinformatics/btt656",
 }
