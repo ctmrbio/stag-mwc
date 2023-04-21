@@ -25,6 +25,12 @@ situations.
   input data for KrakenUniq to avoid giving KrakenUniq symlinks as input.
 
 ### Changed
+- The default tmpdir has been set to `$TMPDIR` which should evaluate to a
+  suitable temporary directory on most systems, including when executing with
+  Slurm. This is mainly to prevent HUMAnN from creating large temporary
+  directories outside of Slurm job folders so that they cannot be automatically
+  cleaned up if the Slurm job times out or fails before HUMAnN can clean up
+  after itself.
 
 ### Deprecated
 
