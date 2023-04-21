@@ -17,8 +17,8 @@ input_fn_pattern: "{sample}_{readpair}.fq.gz"
 samplesheet: ""           # Three-column samplesheet with sample_id,fastq_1,fastq_2 columns. Used instead of inputdir
 outdir: "output_dir"
 logdir: "output_dir/logs"
-tmpdir: "/tmp"            # Specifying a tmpdir is not normally necessary but some tools like HUMAnN requires it. If required please enter path to a temp directory e.g. /scratch
-dbdir: "databases"        # Databases will be downloaded to this dir, if requested
+tmpdir: "$TMPDIR"         # Specifying tmpdir is normally not required but tools like HUMAnN requires it. Please enter path to a temp directory e.g. /tmp or /scratch
+dbdir: "databases"        # Databases will be downloaded to this dir
 report: "StaG_report-"    # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                 # Email to send status message after completed/failed run.
 
