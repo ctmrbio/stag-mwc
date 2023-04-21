@@ -57,10 +57,12 @@ rule krakenuniq_merge_reads:
         "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
     shell:
         """
-        reformat.sh \
+        fuse.sh \
             in1={input.read1} \
             in2={input.read2} \
             out={output.fasta} \
+            pad=1 \
+            fusepairs=t \
             2> {log}
         """
 
