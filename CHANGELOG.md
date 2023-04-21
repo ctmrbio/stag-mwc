@@ -31,6 +31,9 @@ situations.
   directories outside of Slurm job folders so that they cannot be automatically
   cleaned up if the Slurm job times out or fails before HUMAnN can clean up
   after itself.
+- KrakenUniq: Concatenate reads with BBMap's `fuse.sh` with a padding of one
+  `N` instead of interleaving the paired inputs into a single FASTA to avoid
+  KrakenUniq treating paired reads independently.
 
 ### Deprecated
 
