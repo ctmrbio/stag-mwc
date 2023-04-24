@@ -42,7 +42,7 @@ rule concatenate_index_contigs:
         index_dir=f"{OUTDIR}/assembly/{a_conf['assembler']}/",
     shell:
         """
-        concatenate.py \
+        workflow/scripts/concatenate.py \
             -m {params.min_contig_length} \
             {output.concatenated} \
             {input.contigs} \

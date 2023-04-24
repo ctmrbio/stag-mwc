@@ -7,4 +7,6 @@ dependencies:
     - megahit =1.2.9
     - bbmap =39.01
     - samtools =1.6
-    - vamb =3.0.2
+    - pip
+    - pip:
+        - vamb==4.1.0
