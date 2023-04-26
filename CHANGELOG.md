@@ -27,12 +27,11 @@ situations.
   input data for KrakenUniq to avoid giving KrakenUniq symlinks as input.
 
 ### Changed
-- The default tmpdir has been set to `$TMPDIR` which should evaluate to a
-  suitable temporary directory on most systems, including when executing with
-  Slurm. This is mainly to prevent HUMAnN from creating large temporary
-  directories outside of Slurm job folders so that they cannot be automatically
-  cleaned up if the Slurm job times out or fails before HUMAnN can clean up
-  after itself.
+- HUMAnN3: Changed the way the temporary directory is resolved, using
+  Snakemake's built-in `resources.tmpdir`. This should prevent HUMAnN from
+  creating large temporary directories outside of Slurm job folders so that
+  they cannot be automatically cleaned up if the Slurm job times out or fails
+  before HUMAnN can clean up after itself.
 - KrakenUniq: Concatenate reads with BBMap's `fuse.sh` with a padding of one
   `N` instead of interleaving the paired inputs into a single FASTA to avoid
   KrakenUniq treating paired reads independently.

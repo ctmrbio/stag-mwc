@@ -261,9 +261,11 @@ the default unit is counts per million (cpm).
    so all MetaPhlAn-associated steps are run regardless of whether it is actually
    enabled in ``config.yaml`` or not.
 
-Due to temporary disk space issues with running HUMAnN it is now a requirement
-to specify a $TMPDIR in ``config.yaml``, e.g. ``/scratch`` or ``/tmp`` depending 
-on your system's configuration.
+HUMAnN requires large amounts of temporary disk space when processing a sample
+and will automatically use a suitable temporary directory from system
+environment variable ``$TMPDIR``, using Snakemake's resources feature to
+evaluate the variable at runtime (which means it can utilize node-local
+temporary disk if executing on a compute cluster).
 
 
 Antibiotic resistance
