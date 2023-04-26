@@ -1,5 +1,6 @@
 name: stag-mwc-biobakery
 channels:
+    - biobakery
     - conda-forge
     - bioconda
     - defaults
