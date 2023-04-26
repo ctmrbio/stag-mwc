@@ -56,7 +56,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
     threads: 8
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
@@ -118,7 +118,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
     threads: 1
     shell:
         """

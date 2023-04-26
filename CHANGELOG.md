@@ -27,7 +27,9 @@ situations.
   input data for KrakenUniq to avoid giving KrakenUniq symlinks as input.
 
 ### Changed
-- HUMAnN3: Changed the way the temporary directory is resolved, using
+- MetaPhlAn: Updated to v4.0.6
+- HUMAnN3: Updated to v3.7
+- HUMAnN3: Changed the way the temporary directory is resolved, now using
   Snakemake's built-in `resources.tmpdir`. This should prevent HUMAnN from
   creating large temporary directories outside of Slurm job folders so that
   they cannot be automatically cleaned up if the Slurm job times out or fails

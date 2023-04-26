@@ -11,7 +11,7 @@ From: mambaorg/micromamba:0.17.0
 		-c bioconda \
 		-c conda-forge \
 		-c biobakery \
-		python=3.7 metaphlan=4.0.3 humann=3.6 krona=2.8.1
+		python=3.7 metaphlan=4.0.6 humann=3.7 krona=2.8.1
 	micromamba clean --yes --all
 
 	humann_databases --download utility_mapping full /opt/humann --update-config yes
