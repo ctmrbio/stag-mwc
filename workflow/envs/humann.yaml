@@ -5,4 +5,4 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - humann=3.6
+    - humann=3.7

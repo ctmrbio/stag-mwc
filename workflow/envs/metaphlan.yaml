@@ -3,7 +3,6 @@ channels:
     - conda-forge
     - bioconda
     - defaults
-    - biobakery
 dependencies:
-    - metaphlan =4.0.3
+    - metaphlan =4.0.6
     - krona =2.8.1

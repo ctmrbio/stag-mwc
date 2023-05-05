@@ -21,10 +21,6 @@ if config["functional_profile"]["humann"]:
         err_message += "If you do not want to run HUMAnN for functional profiling, set functional_profile:humann: False in config.yaml"
         err_message += "If you want to download the HUMAnN databases please see https://github.com/biobakery/humann"
         raise WorkflowError(err_message)
-    if not Path(config["tmpdir"]).exists():
-        err_message = "Please specify a tmpdir in config.yaml, if specified tmpdir does not exist, create it.\n"
-        err_message += "Do not specify a subdirectory of \"/scratch\" as tmpdir, only specifying \"/scratch\" is sufficient."
-        raise WorkflowError(err_message)
 
     merged_humann_tables = expand(f"{OUTDIR}/humann/all_samples.humann_{{output_type}}.txt",
             output_type=("genefamilies", "pathcoverage", "pathabundance"))
@@ -56,19 +52,18 @@ rule humann:
     threads: 20
     params:
         outdir=f"{OUTDIR}/humann/",
-        tmpdir=f"{TMPDIR}/{{sample}}",
         nucleotide_db=h_config["nucleotide_db"],
         protein_db=h_config["protein_db"],
         extra=h_config["extra"],
     shell:
         """
-        mkdir -pv {params.tmpdir} >> {log.stdout}
+        mkdir -pv {resources.tmpdir} >> {log.stdout}
         mkdir -pv {params.outdir} >> {log.stdout}
-        cat {input.read1} {input.read2} > {params.tmpdir}/concat_input_reads.fq.gz
+        cat {input.read1} {input.read2} > {resources.tmpdir}/concat_input_reads.fq.gz
 
         humann \
-            --input {params.tmpdir}/concat_input_reads.fq.gz \
-            --output {params.tmpdir} \
+            --input {resources.tmpdir}/concat_input_reads.fq.gz \
+            --output {resources.tmpdir} \
             --nucleotide-database {params.nucleotide_db} \
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
@@ -78,9 +73,9 @@ rule humann:
             >> {log.stdout} \
             2> {log.stderr}
 
-        cp {params.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
-        cp {params.tmpdir}/{wildcards.sample}_humann_temp/{wildcards.sample}.log {log.log}
-        rm -rfv {params.tmpdir} >> {log.stdout}
+        cp {resources.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
+        cp {resources.tmpdir}/{wildcards.sample}_humann_temp/{wildcards.sample}.log {log.log}
+        rm -rfv {resources.tmpdir} >> {log.stdout}
         """
 
 
