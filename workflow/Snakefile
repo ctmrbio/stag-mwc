@@ -95,12 +95,6 @@ include: "rules/taxonomic_profiling/strainphlan.smk"
 include: "rules/functional_profiling/humann.smk"
 
 #############################
-# Antibiotic resistance
-#############################
-include: "rules/antibiotic_resistance/groot.smk"
-include: "rules/antibiotic_resistance/amrplusplus.smk"
-
-#############################
 # Mappers
 #############################
 include: "rules/mappers/bbmap.smk"
