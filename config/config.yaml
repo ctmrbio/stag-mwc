@@ -47,9 +47,6 @@ strain_level_profiling:
     strainphlan: False    # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
 functional_profile:
     humann: False         # Will also run metaphlan. Please make sure you've added bt2_db_dir and bt2_index under metaphlan settings.
-antibiotic_resistance:
-    groot: False
-    amrplusplus: False
 mappers:
     bbmap: False
     bowtie2: False
@@ -154,26 +151,6 @@ humann:
     norm_method: "cpm"       # Normalization scheme: copies per million [cpm], relative abundance [relab]; default=[cpm].
     norm_mode: "community"   # Normalization mode, Normalize all levels by [community] total or [levelwise] totals; default=[community].
     extra: ""                # Extra command line arguments for humann e.g. --bypass-translated-search
-
-#########################
-# Antibiotic Resistance
-#########################
-groot:
-    index_dir: ""            # [Required] Path to groot indexDir
-    covcutoff: 0.97          # Coverage cutoff for groot report
-    lowcov: False            # Report ARGs with no 5' or 3' coverage. Overrides covcutoff.
-
-amrplusplus:
-    megares:
-        fasta: ""            # Leave as "" to run with megares_modified_database_v2.00.fasta or specify database path
-        annotation: ""       # Leave as "" to run with megares_modified_annotations_v2.00.csv or specify annotations path
-    rarefaction:
-        min: "5"             # Starting rarefaction level
-        max: "100"           # Ending rarefaction level
-        skip: "5"            # Number of levels to skip
-        samples: "1"         # Number of iterations to sample at
-    resistome:
-        threshold: "80"      # Resistome threshold
 
 #########################
 # Mappers
