@@ -14,7 +14,7 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.6.1] Unreleased
+## [0.7.0] Unreleased
 ### Added
 - BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.
 - Bowtie2: added option `keep_bam`.
@@ -45,8 +45,11 @@ situations.
   for potential manual use if desired.
 
 ### Removed
-- Groot: Removed settings related to read length window as that feature was
-  removed in a previous StaG release.
+- AMR++, Groot: All tools for antibiotic resistance gene profiling have been
+  removed entirely because they were out of date and few users. Users wanting to
+  perform antibiotic resistance gene profiling are suggested to use the mapper
+  modules with a suitable reference database or run the latest version of AMR++
+  separately.
 
 
 ## [0.6.0] 2023-04-17
