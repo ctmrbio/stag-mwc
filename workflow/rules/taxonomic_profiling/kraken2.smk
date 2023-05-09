@@ -48,11 +48,11 @@ if config["taxonomic_profile"]["kraken2"]:
     all_outputs.extend(kreports_mpa_style)
     all_outputs.append(joined_kreport_mpa_style)
     all_outputs.append(combined_kreport)
+    #all_outputs.append(kraken_area_plot)  # Deprecated in 6.1
     citations.add(publications["Kraken2"])
 
     if kraken2_config["run_krona"]:
         all_outputs.append(kraken_krona)
-        all_outputs.append(kraken_area_plot)
         citations.add(publications["Krona"])
     
 

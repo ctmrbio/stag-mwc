@@ -39,6 +39,10 @@ situations.
   KrakenUniq treating paired reads independently.
 
 ### Deprecated
+- Kaiju, Kraken2, MetaPhlAn: area plot removed due to repeatedly leading to
+  failed runs in cached Singularity containers. The script still works as
+  intended in newer matplotlib versions and will remain in the scripts folder
+  for potential manual use if desired.
 
 ### Removed
 - Groot: Removed settings related to read length window as that feature was

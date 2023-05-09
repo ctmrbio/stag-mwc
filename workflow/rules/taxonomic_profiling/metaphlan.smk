@@ -29,7 +29,7 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
 
     if mpa_config["heatmap"]["create_plot"]:
         all_outputs.append(heatmap)
-    all_outputs.append(mpa_area_plot)
+    #all_outputs.append(mpa_area_plot)  # Deprecated in 6.1
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
