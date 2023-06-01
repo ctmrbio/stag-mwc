@@ -59,7 +59,7 @@ for bt2_config in config["bowtie2"]:
             sample=[OUTDIR/"host_removal/{sample}_1.fq.gz",
                     OUTDIR/"host_removal/{sample}_2.fq.gz"]
         output:
-            OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)
+            OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name) if bt2_config["keep_bam"] else temp(OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)),
         log:
             str(LOGDIR/"bowtie2/{db_name}/{{sample}}.log".format(db_name=bt2_db_name))
         message:

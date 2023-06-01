@@ -5,10 +5,10 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 localrules:
-    combine_krakenuniq_reports,
+    krakenuniq_combine_reports,
     krakenuniq_mpa_style,
-    join_krakenuniq_mpa,
-    create_krakenuniq_krona_plot,
+    krakenuniq_join_mpa,
+    krakenuniq_krona_plot,
     krakenuniq_kreport2krona,
 
 
@@ -40,17 +40,41 @@ if config["taxonomic_profile"]["krakenuniq"]:
     citations.add(publications["KrakenUniq"])
     citations.add(publications["Krona"])
 
-
-rule krakenuniq:
+rule krakenuniq_merge_reads:
     input:
         read1=OUTDIR/"host_removal/{sample}_1.fq.gz",
         read2=OUTDIR/"host_removal/{sample}_2.fq.gz",
+    output:
+        fasta=temp(OUTDIR/"krakenuniq/{sample}.tmp.fa.gz"),
+    log:
+        LOGDIR/"krakenuniq/{sample}.read_merge.log"
+    shadow:
+        "shallow"
+    threads: 4
+    conda:
+        "../../envs/stag-mwc.yaml"
+    container:
+        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+    shell:
+        """
+        fuse.sh \
+            in1={input.read1} \
+            in2={input.read2} \
+            out={output.fasta} \
+            pad=1 \
+            fusepairs=t \
+            2> {log}
+        """
+
+rule krakenuniq:
+    input:
+        fasta=OUTDIR/"krakenuniq/{sample}.tmp.fa.gz",
     output:
         kraken=OUTDIR/"krakenuniq/{sample}.kraken.gz" if krakenuniq_config["keep_kraken"] else temp(OUTDIR/"krakenuniq/{sample}.kraken.gz"),
         kreport=OUTDIR/"krakenuniq/{sample}.kreport" if krakenuniq_config["keep_kreport"] else temp(OUTDIR/"krakenuniq/{sample}.kreport"),
     log:
         LOGDIR/"krakenuniq/{sample}.krakenuniq.log"
-    shadow: 
+    shadow:
         "shallow"
     threads: 8
     conda:
@@ -69,14 +93,13 @@ rule krakenuniq:
             --output {output.kraken} \
             --report-file {output.kreport} \
             --preload-size {params.preload_size} \
-            --paired \
-            {input.read1} {input.read2} \
+            {input.fasta} \
             {params.extra} \
             2> {log}
         """
 
 
-rule combine_krakenuniq_reports:
+rule krakenuniq_combine_reports:
     input:
         kreports=expand(OUTDIR/"krakenuniq/{sample}.kreport", sample=SAMPLES)
     output:
@@ -128,7 +151,7 @@ rule krakenuniq_mpa_style:
         """
 
 
-rule join_krakenuniq_mpa:
+rule krakenuniq_join_mpa:
     input:
         txt=expand(OUTDIR/"krakenuniq/{sample}.mpa_style.txt", sample=SAMPLES),
     output:
@@ -184,7 +207,7 @@ rule krakenuniq_kreport2krona:
         """
 
 
-rule create_krakenuniq_krona_plot:
+rule krakenuniq_krona_plot:
     input:
         expand(OUTDIR/"krakenuniq/{sample}.krona", sample=SAMPLES),
     output:

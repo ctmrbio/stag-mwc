@@ -14,16 +14,39 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.6.1] Unreleased
+## [0.6.1] 2023-06-01
 ### Added
+- BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.
+- Bowtie2: added option `keep_bam`.
 
 ### Fixed
+- KrakenUniq: environment variable `LC_ALL` has been added to Singularity image
+  to prevent unnecessary warning messages related to it being undefined.
+- KrakenUniq: now able to run when host removal is skipped, solved by adding
+  `krakenuniq_merge_reads` rule to create a temporary merged fasta file with
+  input data for KrakenUniq to avoid giving KrakenUniq symlinks as input.
 
 ### Changed
+- MetaPhlAn: Updated to v4.0.6
+- HUMAnN3: Updated to v3.7
+- HUMAnN3: Changed the way the temporary directory is resolved, now using
+  Snakemake's built-in `resources.tmpdir`. This should prevent HUMAnN from
+  creating large temporary directories outside of Slurm job folders so that
+  they cannot be automatically cleaned up if the Slurm job times out or fails
+  before HUMAnN can clean up after itself.
+- KrakenUniq: Concatenate reads with BBMap's `fuse.sh` with a padding of one
+  `N` instead of interleaving the paired inputs into a single FASTA to avoid
+  KrakenUniq treating paired reads independently.
 
 ### Deprecated
+- Kaiju, Kraken2, MetaPhlAn: area plot removed due to repeatedly leading to
+  failed runs in cached Singularity containers. The script still works as
+  intended in newer matplotlib versions and will remain in the scripts folder
+  for potential manual use if desired.
 
 ### Removed
+- Groot: Removed settings related to read length window as that feature was
+  removed in a previous StaG release.
 
 
 ## [0.6.0] 2023-04-17

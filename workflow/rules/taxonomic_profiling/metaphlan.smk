@@ -29,7 +29,7 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
 
     if mpa_config["heatmap"]["create_plot"]:
         all_outputs.append(heatmap)
-    all_outputs.append(mpa_area_plot)
+    #all_outputs.append(mpa_area_plot)  # Deprecated in 6.1
     all_outputs.append(mpa_outputs)
 
     citations.add(publications["MetaPhlAn"])
@@ -56,7 +56,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
     threads: 8
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
@@ -118,7 +118,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
     threads: 1
     shell:
         """

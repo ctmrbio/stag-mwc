@@ -12,7 +12,7 @@
 .. _featureCounts: https://subread.sourceforge.net/featureCounts.html
 .. _HUMAnN: https://github.com/biobakery/biobakery/wiki/humann3
 .. _GTF format: https://genome.ucsc.edu/FAQ/FAQformat.html#format4
-.. _SAF format: http://bioinf.wehi.edu.au/featureCounts/
+.. _SAF format: https://subread.sourceforge.net/featureCounts.html
 .. _MEGAHIT: https://github.com/voutcn/megahit
 .. _MultiQC: https://multiqc.info/
 .. _amrplusplus: https://megares.meglab.org/amrplusplus/latest/html/what_AMR++_produces.html
@@ -259,13 +259,13 @@ the default unit is counts per million (cpm).
 
    HUMAnN uses the taxonomic profiles produced by MetaPhlAn as input,
    so all MetaPhlAn-associated steps are run regardless of whether it is actually
-   enabled in ``config.yaml`` or not. It is important to use a MetaPhlAn database
-   compatible with HUMAnN3, e.g. mpa_v30_CHOCOPhlAn_201901 (run the metaphlan
-   step with the extra ``--mpa3`` flag in the StaG config file).
+   enabled in ``config.yaml`` or not.
 
-Due to temporary disk space issues with running HUMAnN it is now a requirement
-to specify a $TMPDIR in ``config.yaml``, e.g. ``/scratch`` or ``/tmp`` depending 
-on your system's configuration.
+HUMAnN requires large amounts of temporary disk space when processing a sample
+and will automatically use a suitable temporary directory from system
+environment variable ``$TMPDIR``, using Snakemake's resources feature to
+evaluate the variable at runtime (which means it can utilize node-local
+temporary disk if executing on a compute cluster).
 
 
 Antibiotic resistance
@@ -296,9 +296,8 @@ mapped graphs of all detected antibiotic resistance genes.
    The feature may reintroduced in future versions of GROOT but is not
    available in StaG now.
 
-The read lengths input to `groot`_ must conform to the settings used during
-`groot`_ database construction. The length window can be configured in the
-config file.
+The read lengths used with `groot`_ should preferably conform to the settings
+used during `groot`_ database construction.
 
 AMRPlusPlus_v2
 -------
@@ -353,10 +352,11 @@ BBMap
 :Tool: `BBMap`_
 :Output folder: ``bbmap/<database_name>``
 
-This module maps read using `BBMap`_. The output is in gzipped SAM format. It
-is possible to configure the mapping settings almost entirely according to
-preference, with the exception of changing the output format from gzipped SAM.
-Use the configuration parameter ``bbmap:extra`` to add any standard BBMap
+This module maps read using `BBMap`_. The output is in sorted and indexed BAM
+format (with an option to keep the intermediary SAM file used to create the
+BAM). It is possible to configure the mapping settings almost entirely
+according to preference, with the exception of changing the output format. Use
+the configuration parameter ``bbmap:extra`` to add any standard BBMap
 commandline parameter you want.
 
 Bowtie2
@@ -381,6 +381,8 @@ signifies a list)::
         - db_name: ""
           db_path: ""
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: ""
@@ -400,6 +402,8 @@ configuration options, but with different settings. For example, to map against
         - db_name: "db1"
           db_path: "/path/to/db1"
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: ""
@@ -412,6 +416,8 @@ configuration options, but with different settings. For example, to map against
         - db_name: "db2"
           db_path: "/path/to/db2"
           min_id: 0.76
+          keep_sam: False
+          keep_bam: True
           extra: ""
           counts_table:
               annotations: "/path/to/db2/annotations.txt"

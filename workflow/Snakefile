@@ -21,7 +21,7 @@ from scripts.common import UserMessages, SampleSheet
 
 user_messages = UserMessages()
 
-stag_version = "0.6.0"
+stag_version = "0.6.1"
 singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
 
 configfile: "config/config.yaml"
@@ -31,7 +31,6 @@ citations = {publications["StaG"], publications["Snakemake"]}
 INPUTDIR = Path(config["inputdir"])
 OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
-TMPDIR = Path(config["tmpdir"])
 DBDIR = Path(config["dbdir"])
 all_outputs = []
 
