@@ -14,7 +14,7 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
-## [0.6.1] Unreleased
+## [0.6.1] 2023-06-01
 ### Added
 - BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.
 - Bowtie2: added option `keep_bam`.
