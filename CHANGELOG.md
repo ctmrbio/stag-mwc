@@ -14,6 +14,18 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
+## [0.7.0] Unreleased
+### Added
+
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+
 ## [0.6.1] 2023-06-01
 ### Added
 - BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.
