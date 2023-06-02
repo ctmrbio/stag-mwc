@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Rules to filter host sequences from metagenomic reads
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path 
 
 from snakemake.exceptions import WorkflowError
@@ -26,7 +25,7 @@ if config["host_removal"]["kraken2"]:
     filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
             sample=SAMPLES,
             readpair=[1,2])
-    host_proportions = str(OUTDIR/"host_removal/host_proportions.txt")
+    host_proportions = OUTDIR/"host_removal/host_proportions.txt"
     if rh_kraken2["keep_fastq"]:
         all_outputs.extend(filtered_host)
     all_outputs.append(host_proportions)
@@ -49,7 +48,7 @@ if config["host_removal"]["kraken2"]:
             kraken=OUTDIR/"host_removal/{sample}.kraken" if rh_kraken2["keep_kraken"] else temp(OUTDIR/"host_removal/{sample}.kraken"),
             kreport=OUTDIR/"host_removal/{sample}.kreport" if rh_kraken2["keep_kreport"] else temp(OUTDIR/"host_removal/{sample}.kreport"),
         log:
-            stderr=str(LOGDIR/"host_removal/{sample}.kraken2.log"),
+            stderr=LOGDIR/"host_removal/{sample}.kraken2.log",
         shadow:
             "shallow"
         conda:
@@ -90,7 +89,7 @@ if config["host_removal"]["kraken2"]:
     rule plot_proportion_host:
         """Plot proportion of reads that matched the host DB."""
         input:
-            expand(str(LOGDIR/"host_removal/{sample}.kraken2.log"), sample=SAMPLES)
+            expand(LOGDIR/"host_removal/{sample}.kraken2.log", sample=SAMPLES)
         output:
             histogram=report(OUTDIR/"host_removal/host_histogram.pdf",
                        category="Preprocessing",
@@ -102,7 +101,7 @@ if config["host_removal"]["kraken2"]:
                        category="Preprocessing",
                        caption="../../report/host_proportions.rst"),
         log:
-            str(LOGDIR/"host_removal/proportion_host.log")
+            LOGDIR/"host_removal/proportion_host.log",
         shadow:
             "shallow"
         conda:
@@ -143,7 +142,9 @@ if config["host_removal"]["bowtie2"]:
             db_path="/ceph/db/bowtie2/GRCh38_noalt_as/GRCh38_noalt_as",
         shell:
             """
-            bowtie2 -p 8 -x {params.db_path} \
+            bowtie2 \
+                --threads {threads} \
+                -x {params.db_path} \
                 -1 {input.read1} \
                 -2 {input.read2} \
                 -S {output.file} \
