@@ -8,7 +8,7 @@ from snakemake.exceptions import WorkflowError
 localrules:
     preprocessing_summary
 
-if config["qc_reads"] and config["host_removal"]:
+if config["qc_reads"] and config["host_removal"]["kraken2"]:
     # Add final output files from this module to 'all_outputs' from the main
     # Snakefile scope. SAMPLES is also from the main Snakefile scope.
     read_counts = str(OUTDIR/"preprocessing_read_counts.txt")

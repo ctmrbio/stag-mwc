@@ -69,11 +69,12 @@ remove_host:
         extra: "--quick"         # Additional command line arguments to kraken2
         keep_kraken: False       # Keep the kraken files for host removal, set to False to remove them automatically.
         keep_kreport: False      # Keep the kreport files for host removal, set to False to remove them automatically.
-        keep_fastq: True         # Keep the host removed fastq files, set to False to remove them automatically.
+        keep_fastq: True         # Keep the host-removed fastq files, set to False to remove them automatically.
         keep_host_fastq: False   # Keep the host-containing fastq files, set to False to remove them automatically.
     bowtie2:
-        db_path: ""              # [Required] Path to bowtie2 database to use for host removal
+        db_path: ""              # [Required] Path to bowtie2 database to use for host removal, including database filename prefix (no .1.bt2 etc)
         extra: "--sensitive"
+        keep_fastq: True         # Keep the host-removed fastq files, set to False to remove them automatically.
 multiqc:
     extra: ""
 

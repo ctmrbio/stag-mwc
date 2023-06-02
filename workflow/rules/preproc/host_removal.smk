@@ -22,20 +22,20 @@ if config["host_removal"]["kraken2"]:
 
     # Add final output files from this module to 'all_outputs' from the main
     # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
+    k2_filtered = expand(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz",
             sample=SAMPLES,
             readpair=[1,2])
     host_proportions = OUTDIR/"host_removal/host_proportions.txt"
     if rh_kraken2["keep_fastq"]:
-        all_outputs.extend(filtered_host)
+        all_outputs.extend(k2_filtered)
     all_outputs.append(host_proportions)
 
     citations.add(publications["Kraken2"])
 
     localrules:
-        plot_proportion_host
+        plot_proportion_host_kraken2
 
-    rule remove_host:
+    rule kraken2_host_removal:
         """Filter reads matching host database using Kraken2."""
         input:
             read1=OUTDIR/"fastp/{sample}_1.fq.gz",
@@ -86,7 +86,7 @@ if config["host_removal"]["kraken2"]:
             """
 
 
-    rule plot_proportion_host:
+    rule plot_proportion_host_kraken2:
         """Plot proportion of reads that matched the host DB."""
         input:
             expand(LOGDIR/"host_removal/{sample}.kraken2.log", sample=SAMPLES)
@@ -124,6 +124,20 @@ if config["host_removal"]["kraken2"]:
 #########################################
 rh_bowtie2 = config["remove_host"]["bowtie2"]
 if config["host_removal"]["bowtie2"]:
+    bt2_db_path = Path(rh_bowtie2["db_path"])
+    #if not Path(db_path).is_file():
+    #    err_message = "Cannot find Bowtie2 database for host sequence removal at: '{}'!\n".format(db_path)
+    #    err_message += "Specify path to folder containing Bowtie2 database for host removal in config.yaml.\n"
+    #    raise WorkflowError(err_message)
+
+    bt2_filtered = expand(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz",
+            sample=SAMPLES,
+            readpair=[1,2])
+    all_outputs.extend(bt2_filtered)
+
+    citations.add(publications["Bowtie2"])
+
+
     rule bowtie2_host_removal:
         """Map reads against host sequence database."""
         input:
@@ -132,14 +146,16 @@ if config["host_removal"]["bowtie2"]:
         output:
             sam=temp(OUTDIR/"host_removal/{sample}.sam"),
         log:
-            stdout=OUTDIR/"logs/host_removal/{sample}.bowtie2.stdout",
-            stderr=OUTDIR/"logs/host_removal/{sample}.bowtie2.stderr",
+            stderr=LOGDIR/"host_removal/{sample}.bowtie2.stderr",
         threads:
-            10
+            12
         conda:
-            "envs/conda.yaml"
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
         params:
-            db_path="/ceph/db/bowtie2/GRCh38_noalt_as/GRCh38_noalt_as",
+            db_path=rh_bowtie2["db_path"],
+            extra=rh_bowtie2["extra"],
         shell:
             """
             bowtie2 \
@@ -147,8 +163,7 @@ if config["host_removal"]["bowtie2"]:
                 -x {params.db_path} \
                 -1 {input.read1} \
                 -2 {input.read2} \
-                -S {output.file} \
-                > {log.stdout} \
+                -S {output.sam} \
                 2> {log.stderr}
             """
 
@@ -157,35 +172,49 @@ if config["host_removal"]["bowtie2"]:
         input:
             sam=rules.bowtie2_host_removal.output.sam,
         output:
-            bam=temp("output/host_removal/{sample}.bam"),
+            bam=temp(OUTDIR/"host_removal/{sample}.bam"),
+        log:
+            stderr=LOGDIR/"host_removal/{sample}.sam2bam.stderr",
         threads:
-            10
+            4
         conda:
-            "envs/conda.yaml"
-        shell:
-            """
-            samtools view \
-                -bS {input.sam} \
-                -o {output.bam}
-            """
-
-    rule bt2_get_unmapped_pairs:
-        """SAM-flag filter: get unmapped pairs (both reads R1 and R2 unmapped)."""
-        input:
-            bam2=rules.bt2_sam2bam.output.bam,
-        output:
-            unmapped=temp("output/host_removal/{sample}_unmapped.bam"),
-        threads:
-            10
-        conda:
-            "envs/conda.yaml"
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
         shell:
             """
             samtools view \
                 -b \
-                -f 12 \
-                -F 256 {input.bam2} \
-                -o {output.unmapped}
+                --threads {threads} \
+                {input.sam} \
+                -o {output.bam} \
+                2> {log.stderr}
+            """
+
+    rule bt2_get_unmapped_pairs:
+        """SAM-flag filter: get unmapped pairs."""
+        input:
+            bam2=rules.bt2_sam2bam.output.bam,
+        output:
+            unmapped=temp(OUTDIR/"host_removal/{sample}_unmapped.bam"),
+        log:
+            stderr=LOGDIR/"host_removal/{sample}.unmapped.stderr",
+        threads:
+            4
+        conda:
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+        shell:
+            """
+            samtools view \
+                -b \
+                -f 13 \
+                -F 256 \
+                --threads {threads} \
+                {input.bam2} \
+                -o {output.unmapped} \
+                2> {log.stderr}
             """
 
     rule bt2_sort_bam_files:
@@ -193,18 +222,24 @@ if config["host_removal"]["bowtie2"]:
         input:
             pairs=rules.bt2_get_unmapped_pairs.output.unmapped,
         output:
-            sorted=temp("output/sam_files/{sample}_unmapped.sorted.bam"),
+            sorted=temp(OUTDIR/"host_removal/{sample}_unmapped.sorted.bam"),
+        log:
+            stderr=LOGDIR/"host_removal/{sample}.sort.stderr",
         threads:
-            10
+            4
         conda:
-            "envs/conda.yaml"
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
         shell: 
             """
             samtools sort \
                 -n \
                 -m 5G \
-                -@ 2 {input.pairs} \
-                -o {output.sorted}
+                --threads {threads} \
+                {input.pairs} \
+                -o {output.sorted} \
+                2> {log.stderr}
             """
 
     rule bt2_get_read_pairs:
@@ -212,34 +247,39 @@ if config["host_removal"]["bowtie2"]:
         input:
             sorted_pairs=rules.bt2_sort_bam_files.output.sorted,
         output:
-            pair1="output/{sample}_host_removed_1.fq.gz",
-            pair2="output/{sample}_host_removed_2.fq.gz",
+            read1=OUTDIR/"host_removal/{sample}_1.fq.gz" if rh_bowtie2["keep_fastq"] else temp(OUTDIR/"host_removal/{sample}_1.fq.gz"),
+            read2=OUTDIR/"host_removal/{sample}_2.fq.gz" if rh_bowtie2["keep_fastq"] else temp(OUTDIR/"host_removal/{sample}_2.fq.gz"),
         log:
-            stderr="output/logs/{sample}.log",
+            stderr=LOGDIR/"host_removal/{sample}.samtools.fastq.log",
         threads:
-            10
+            4
         conda:
-            "envs/conda.yaml"
+            "../../envs/metaphlan.yaml"
+        container:
+            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
         shell: 
             """
             samtools fastq \
-                -@ 8 {input.sorted_pairs} \
-                -1 {output.pair1} \
-                -2 {output.pair2} \
-                -0 /dev/null -s /dev/null -n \
+                --threads {threads} \
+                -1 {output.read1} \
+                -2 {output.read2} \
+                -0 /dev/null \
+                -s /dev/null \
+                -n \
+                {input.sorted_pairs} \
                 2> {log.stderr}
             """
 
 #########################################
 #           skip host removal
 #########################################
-if not config["host_removal"]["kraken2"] or config["host_removal"]["bowtie2"]:
+if not any(config["host_removal"].values()):
     if not config["fastp"]["keep_output"]:
         err_message = "Set fastp keep_output in config.yaml to True in order to skip host removal.\n"
         err_message += "If you want to run host removal set remove_host in config.yaml to True"
         raise WorkflowError(err_message)
     
-    filtered_host = expand(str(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz"),
+    filtered_host = expand(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz",
             sample=SAMPLES,
             readpair=[1,2])
     all_outputs.extend(filtered_host)
