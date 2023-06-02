@@ -14,6 +14,23 @@ committed to the master branch that does not trigger any of the aforementioned
 situations.
 
 
+## [0.7.0] Unreleased
+### Added
+
+### Fixed
+
+### Changed
+
+### Deprecated
+
+### Removed
+- AMR++, Groot: All tools for antibiotic resistance gene profiling have been
+  removed entirely because they were out of date and had few active users.
+  Users wanting to perform antibiotic resistance gene profiling are suggested
+  to use the mapper modules with a suitable reference database or run the
+  latest version of AMR++ separately.
+
+
 ## [0.6.1] 2023-06-01
 ### Added
 - BBMap: now outputs sorted BAM file, added options `keep_sam` and `keep_bam`.

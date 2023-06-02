@@ -21,8 +21,8 @@ from scripts.common import UserMessages, SampleSheet
 
 user_messages = UserMessages()
 
-stag_version = "0.6.1"
-singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
+stag_version = "0.7.0"
+singularity_branch_tag = "-develop"  # Replace with "-master" before publishing new version
 
 configfile: "config/config.yaml"
 report: "report/workflow.rst"
@@ -93,12 +93,6 @@ include: "rules/taxonomic_profiling/strainphlan.smk"
 # Functional profiling
 #############################
 include: "rules/functional_profiling/humann.smk"
-
-#############################
-# Antibiotic resistance
-#############################
-include: "rules/antibiotic_resistance/groot.smk"
-include: "rules/antibiotic_resistance/amrplusplus.smk"
 
 #############################
 # Mappers

@@ -17,8 +17,6 @@ jobs:
         singularity_version:
           - '3.8.1'
         recipe:
-          - "workflow/envs/Singularity.amrplusplus"
-          - "workflow/envs/Singularity.assembly"
           - "workflow/envs/Singularity.biobakery"
           - "workflow/envs/Singularity.krakenuniq"
           - "workflow/envs/Singularity.snakemake"

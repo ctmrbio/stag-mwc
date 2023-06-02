@@ -3,7 +3,7 @@ From: mambaorg/micromamba:0.17.0
 
 %labels
 	AUTHOR ctmrbio
-	VERSION 2.0
+	VERSION 7.0
 
 %help
 	This image contains Snakemake and conda, the purpose of this image is to

@@ -6,7 +6,6 @@
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _KrakenUniq: https://github.com/fbreitwieser/krakenuniq
 .. _Bracken: https://ccb.jhu.edu/software/bracken/
-.. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn: https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
 .. _StrainpPlAn: https://github.com/biobakery/MetaPhlAn/wiki/StrainPhlAn-4
 .. _featureCounts: https://subread.sourceforge.net/featureCounts.html
@@ -15,7 +14,6 @@
 .. _SAF format: https://subread.sourceforge.net/featureCounts.html
 .. _MEGAHIT: https://github.com/voutcn/megahit
 .. _MultiQC: https://multiqc.info/
-.. _amrplusplus: https://megares.meglab.org/amrplusplus/latest/html/what_AMR++_produces.html
 .. _megares: https://megares.meglab.org/
 
 Modules
@@ -268,67 +266,6 @@ evaluate the variable at runtime (which means it can utilize node-local
 temporary disk if executing on a compute cluster).
 
 
-Antibiotic resistance
-*********************
-
-Groot
--------
-:Tool: `groot`_
-:Output folder: ``groot``
-
-Run `groot`_ to align reads to an antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
-containing two files and one subfolder::
-
-    <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.txt
-    <sample>/<sample>/groot-graphs
-
-The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
-observed antibiotic resistance genes in the sample. The subfolder contains all
-mapped graphs of all detected antibiotic resistance genes.
-
-.. note::
-
-   GROOT used to be able to output coverage plots via the ``--plotCov``
-   argument but it was removed in version 1.0 due to a conda packaging issue.
-   The feature may reintroduced in future versions of GROOT but is not
-   available in StaG now.
-
-The read lengths used with `groot`_ should preferably conform to the settings
-used during `groot`_ database construction.
-
-AMRPlusPlus_v2
--------
-:Tool: `amrplusplus`_
-:Output folder: ``amrplusplus``
-
-`amrplusplus`_ will align reads to `megares`_ antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Output is structured as::
-
-        ├ AlignToAMR
-        │   └ <sample>.amr.alignment.sam
-        ├ RunResistome
-        │   ├ <sample>.class.tsv
-        │   ├ <sample>.gene.tsv
-        │   ├ <sample>.group.tsv
-        │   └ <sample>.mech.tsv
-        ├ ResistomeResults
-        │   └ AMR_analytic_matrix.csv
-        ├ RunRarefaction
-        │   ├ <sample>.class.tsv
-        │   ├ <sample>.gene.tsv
-        │   ├ <sample>.group.tsv
-        │   └ <sample>.mech.tsv
-
-``AMR_analytic_matrix.csv`` contains aggregated results of gene counts for all samples 
-aligned against `megares`_, based on the threshold set in ``config.yaml``. Pasting a gene name 
-or accession number into the database will provide detailed information and links to 
-published papers.
-
-`amrplusplus`_ can be executed with either ``--use-singularity`` or ``--use-conda`` settings.
-
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
@@ -346,6 +283,11 @@ number 2 is more flexible and fairly fast for typical annotation scenarios, but
 might not work when the number of unique features is much lower than the number
 of reference sequences. Read more about these alternatives in :ref:`Summarizing
 read counts` below.
+
+.. note::
+   The mapper modules are great for mapping reads to databases with e.g.
+   antibiotic resistance genes (like `megares`_) or other functionally
+   annotated genes of interest.
 
 BBMap
 -----
