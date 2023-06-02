@@ -29,6 +29,8 @@ situations.
   Users wanting to perform antibiotic resistance gene profiling are suggested
   to use the mapper modules with a suitable reference database or run the
   latest version of AMR++ separately.
+- Assembly: The MetaWRAP-based assembly parts of the workflow have been removed
+  entirely.
 
 
 ## [0.6.1] 2023-06-01

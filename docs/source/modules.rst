@@ -455,14 +455,4 @@ featureCounts ``extra`` configuration setting, e.g.::
 Assembly
 ********
 
-MEGAHIT
--------
-:Tool: `MEGAHIT`_
-:Output folder: ``assembly/megahit``
-
-Run MEGAHIT to assembly each sample. Outputs one subfolder per sample, containing
-contigs and several log and intermediate files::
-
-    assembly/megahit/<sample>/<sample>.contigs.fa
-
-Assembly is the primary step required before binning the assembled contigs.
+StaG does not offer an assembly workflow at this time.

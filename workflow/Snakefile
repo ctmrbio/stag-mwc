@@ -103,7 +103,6 @@ include: "rules/mappers/bowtie2.smk"
 #############################
 # Assembly
 #############################
-include: "rules/assembly/metawrap.smk"
 
 #############################
 # MultiQC
