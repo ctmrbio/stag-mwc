@@ -16,6 +16,7 @@ situations.
 
 ## [0.7.0] Unreleased
 ### Added
+- Host removal: Bowtie2 now available as an option for host removal.
 
 ### Fixed
 
