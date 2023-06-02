@@ -265,7 +265,7 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
     all_outputs.extend(brackens_mpa_style)
     all_outputs.append(bracken_krona)
     all_outputs.append(all_table_mpa)
-    all_outputs.append(bracken_area_plot)
+    #all_outputs.append(bracken_area_plot)  # Deprecated in 6.1
 
 
 rule bracken_kreport:
