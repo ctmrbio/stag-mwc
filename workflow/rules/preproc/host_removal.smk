@@ -5,7 +5,9 @@ from pathlib import Path
 from snakemake.exceptions import WorkflowError
 
 
-if config["host_removal"]["kraken2"] and config["host_removal"]["bowtie2"]:
+run_k2_and_bt2 = config["host_removal"]["kraken2"] and config["host_removal"]["bowtie2"]
+
+if run_k2_and_bt2:
     err_message = "Running both Kraken2 and Bowtie2 for host removal is not supported"
     raise WorkflowError(err_message)
 
@@ -153,7 +155,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            "docker://quay.io/biocontainers/bowtie2:2.5.1--py38he00c5e5_2"
         params:
             db_path=rh_bowtie2["db_path"],
             extra=rh_bowtie2["extra"],
@@ -181,7 +183,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
         shell:
             """
             samtools view \
@@ -205,7 +207,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
         shell:
             """
             samtools view \
@@ -231,7 +233,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
         shell: 
             """
             samtools sort \
@@ -257,7 +259,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
         shell: 
             """
             samtools fastq \
