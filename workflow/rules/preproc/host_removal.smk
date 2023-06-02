@@ -14,9 +14,9 @@ if config["host_removal"]["kraken2"] and config["host_removal"]["bowtie2"]:
 #########################################
 rh_kraken2 = config["remove_host"]["kraken2"]
 if config["host_removal"]["kraken2"]:
-    db_path = Path(rh_kraken2["db_path"])
-    if not Path(db_path/"taxo.k2d").is_file():
-        err_message = "Cannot find Kraken2 database for host sequence removal at: '{}/*.k2d'!\n".format(db_path)
+    k2_db_path = Path(rh_kraken2["db_path"])
+    if not Path(k2_db_path/"taxo.k2d").is_file():
+        err_message = "Cannot find Kraken2 database for host sequence removal at: '{}/*.k2d'!\n".format(k2_db_path)
         err_message += "Specify path to folder containing Kraken2 database for host removal in config.yaml.\n"
         raise WorkflowError(err_message)
 
@@ -125,10 +125,11 @@ if config["host_removal"]["kraken2"]:
 rh_bowtie2 = config["remove_host"]["bowtie2"]
 if config["host_removal"]["bowtie2"]:
     bt2_db_path = Path(rh_bowtie2["db_path"])
-    #if not Path(db_path).is_file():
-    #    err_message = "Cannot find Bowtie2 database for host sequence removal at: '{}'!\n".format(db_path)
-    #    err_message += "Specify path to folder containing Bowtie2 database for host removal in config.yaml.\n"
-    #    raise WorkflowError(err_message)
+    if not list(bt2_db_path.parent.glob(bt2_db_path.name+".1.bt2*")):
+        err_message = "Cannot find Bowtie2 database for host sequence removal at: '{}/'!\n".format(bt2_db_path)
+        err_message += "Specify path to folder containing Bowtie2 database for host removal in config.yaml.\n"
+        err_message += "Note that the path should not contain the '.1.bt2' suffix."
+        raise WorkflowError(err_message)
 
     bt2_filtered = expand(OUTDIR/"host_removal/{sample}_{readpair}.fq.gz",
             sample=SAMPLES,
