@@ -33,7 +33,9 @@ keep_local: False                    # Keep local copies of remote input files, 
 # Pipeline steps included
 #########################
 qc_reads: True
-host_removal: True
+host_removal: 
+    kraken2: True
+    bowtie2: False
 multiqc_report: True
 naive:
     assess_depth: False
@@ -61,13 +63,17 @@ fastp:
     extra: ""
     keep_output: False       # StaG deletes fastp output files after host removal, set to True to keep them.
 remove_host:
-    db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
-    confidence: 0.1          # Kraken2 confidence parameter, normally set to 0.1
-    extra: "--quick"         # Additional command line arguments to kraken2
-    keep_kraken: False       # StaG deletes the kraken and kreport output files by default, set to True to keep them.
-    keep_kreport: False      # Keep the kreport files for host removal
-    keep_fastq: True         # Keep the host removed fastq files, set to False to remove them automatically.
-    keep_host_fastq: False   # Keep the host-containing fastq files, set to False to remove them automatically.
+    kraken2:
+        db_path: ""              # [Required] Path to folder containing a Kraken2 database with host sequences (taxo.k2d, etc.)
+        confidence: 0.1          # Kraken2 confidence score, float in [0,1]
+        extra: "--quick"         # Additional command line arguments to kraken2
+        keep_kraken: False       # Keep the kraken files for host removal, set to False to remove them automatically.
+        keep_kreport: False      # Keep the kreport files for host removal, set to False to remove them automatically.
+        keep_fastq: True         # Keep the host removed fastq files, set to False to remove them automatically.
+        keep_host_fastq: False   # Keep the host-containing fastq files, set to False to remove them automatically.
+    bowtie2:
+        db_path: ""              # [Required] Path to bowtie2 database to use for host removal
+        extra: "--sensitive"
 multiqc:
     extra: ""
 
