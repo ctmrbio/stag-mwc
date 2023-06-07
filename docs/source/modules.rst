@@ -91,9 +91,8 @@ The output from Bowtie2 is a set of paired-end FASTQ files::
 preprocessing_summary
 ---------------------
 This module summarize the number of reads passing through each preprocessing
-step and produces a summary table and a basic line plot showing the proportions
-of reads after each step. For more detailed information about read QC please
-refer to the MulitQC report.
+step and produces a summary table showing the number of reads after each step.
+For more detailed information about read QC please refer to the MulitQC report.
 
 
 multiqc
