@@ -21,7 +21,10 @@ situations.
 ### Fixed
 
 ### Changed
-
+- Preprocessing summary: Preprocessing summary script can now output a table of
+  read counts regardless of which combination of read QC and host removal is
+  used.
+  
 ### Deprecated
 
 ### Removed
