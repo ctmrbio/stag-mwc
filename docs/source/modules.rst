@@ -1,5 +1,6 @@
 .. _BBCountUnique: https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/calcuniqueness-guide/
 .. _FastP:  https://github.com/OpenGene/fastp
+.. _Bowtie2: https://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 .. _BBMap: https://sourceforge.net/projects/bbmap/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
@@ -21,8 +22,8 @@ Modules
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
 sequencing reads (using `FastP`_), followed by host sequence removal (using
-`Kraken2`_). This section of the documentation aims to describe useful details
-about the separate tools that are used in |full_name|.
+`Kraken2`_ or `Bowtie2`_). This section of the documentation aims to describe
+useful details about the separate tools that are used in |full_name|.
 
 The following subsections describe the function of each module included in
 |full_name|.  Each tool produces output in a separate subfolder inside the
@@ -52,22 +53,9 @@ reads are output into ``fastp``. Output filenames are::
 
 remove_host
 --------------
-:Tool: `Kraken2`_
-:Output folder: ``host_removal``
-
-The ``remove_host`` module uses `Kraken2`_ to classify reads against a database
-of host sequences to remove reads matching to non-desired host genomes. The
-output are two sets of pairs of paired-end FASTQ files, and optionally one
-Kraken2 classification file and one Kraken2 summary report.  In addition, two
-PDF files with 1) a basic histogram plot of the proportion of host reads
-detected in each sample, and 2) a barplot of the same. A TSV table with the raw
-proportion data is also provided::
-
-    <sample>_{1,2}.fq.gz
-    <sample>.host_{1,2}.fq.gz
-    host_barplot.pdf
-    host_histogram.pdf
-    host_proportions.txt
+The ``remove_host`` module can use either `Kraken2`_ or `Bowtie2`_ to classify
+reads against a database of host sequences to remove reads matching to
+non-desired host genomes.
 
 .. note::
 
@@ -75,12 +63,36 @@ proportion data is also provided::
     with symlinks to the fastp output files.
 
 
+:Tool: `Kraken2`_
+:Output folder: ``host_removal``
+
+The output from Kraken2 are two sets of pairs of paired-end FASTQ files, and
+optionally one Kraken2 classification file and one Kraken2 summary report.  In
+addition, two PDF files with 1) a basic histogram plot of the proportion of
+host reads detected in each sample, and 2) a barplot of the same. A TSV table
+with the raw proportion data is also provided::
+
+    <sample>_{1,2}.fq.gz
+    <sample>.host_{1,2}.fq.gz
+    host_barplot.pdf
+    host_histogram.pdf
+    host_proportions.txt
+
+
+:Tool: `Bowtie2`_
+:Output folder: ``host_removal``
+
+The output from Bowtie2 is a set of paired-end FASTQ files::
+
+    <sample>_{1,2}.fq.gz
+
+
+
 preprocessing_summary
 ---------------------
 This module summarize the number of reads passing through each preprocessing
-step and produces a summary table and a basic line plot showing the proportions
-of reads after each step. For more detailed information about read QC please
-refer to the MulitQC report.
+step and produces a summary table showing the number of reads after each step.
+For more detailed information about read QC please refer to the MulitQC report.
 
 
 multiqc

@@ -16,11 +16,15 @@ situations.
 
 ## [0.7.0] Unreleased
 ### Added
+- Host removal: Bowtie2 now available as an option for host removal.
 
 ### Fixed
 
 ### Changed
-
+- Preprocessing summary: Preprocessing summary script can now output a table of
+  read counts regardless of which combination of read QC and host removal is
+  used.
+  
 ### Deprecated
 
 ### Removed
