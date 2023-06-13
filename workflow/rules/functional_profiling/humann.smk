@@ -57,13 +57,14 @@ rule humann:
         extra=h_config["extra"],
     shell:
         """
-        mkdir -pv {resources.tmpdir} >> {log.stdout}
+        TEMPDIR="{resources.tmpdir}/{wildcards.sample}"
+        mkdir -pv $TEMPDIR >> {log.stdout}
         mkdir -pv {params.outdir} >> {log.stdout}
-        cat {input.read1} {input.read2} > {resources.tmpdir}/concat_input_reads.fq.gz
+        cat {input.read1} {input.read2} > $TEMPDIR/{wildcards.sample}_concat.fq.gz
 
         humann \
-            --input {resources.tmpdir}/concat_input_reads.fq.gz \
-            --output {resources.tmpdir} \
+            --input $TEMPDIR/{wildcards.sample}_concat.fq.gz \
+            --output $TEMPDIR \
             --nucleotide-database {params.nucleotide_db} \
             --protein-database {params.protein_db} \
             --output-basename {wildcards.sample} \
@@ -73,9 +74,9 @@ rule humann:
             >> {log.stdout} \
             2> {log.stderr}
 
-        cp {resources.tmpdir}/{wildcards.sample}*.tsv {params.outdir}
-        cp {resources.tmpdir}/{wildcards.sample}_humann_temp/{wildcards.sample}.log {log.log}
-        rm -rfv {resources.tmpdir} >> {log.stdout}
+        cp $TEMPDIR/{wildcards.sample}*.tsv {params.outdir}
+        cp $TEMPDIR/{wildcards.sample}_humann_temp/{wildcards.sample}.log {log.log}
+        rm -rfv $TEMPDIR >> {log.stdout}
         """
 
 

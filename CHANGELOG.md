@@ -19,6 +19,12 @@ situations.
 - Host removal: Bowtie2 now available as an option for host removal.
 
 ### Fixed
+- HUMAnN3: Fixed critical bug leading to entire system-wide temporary directory
+  being emptied after successfull HUMAnN run.
+- Singularity: All Singularity definition files should from now on get version
+  bumps in the description labels when conda environments built inside them are
+  updated to reduce the risk of Singularity reusing old cached copies of images
+  instead of download the latest version.
 
 ### Changed
 - Preprocessing summary: Preprocessing summary script can now output a table of
