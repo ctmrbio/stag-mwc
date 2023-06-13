@@ -58,7 +58,7 @@ author = 'Fredrik Boulund'
 # The short X.Y version.
 version = '0.7.0'
 # The full version, including alpha/beta/rc tags.
-release = '0.7.0-dev'
+release = '0.7.0'
 
 # reStructuredText prolog contains a string of reStructuredText that will be
 # included at the beginning of every source file that is read.

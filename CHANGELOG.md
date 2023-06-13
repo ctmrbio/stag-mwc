@@ -13,8 +13,19 @@ files), and the patch version is typically incremented for any set of changes
 committed to the master branch that does not trigger any of the aforementioned
 situations.
 
+## [0.7.1] Unreleased
+### Added
 
-## [0.7.0] Unreleased
+### Fixed
+
+### Changed
+  
+### Deprecated
+
+### Removed
+
+
+## [0.7.0] 2023-06-13
 ### Added
 - Host removal: Bowtie2 now available as an option for host removal.
 
