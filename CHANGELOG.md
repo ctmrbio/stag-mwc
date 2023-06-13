@@ -23,6 +23,7 @@ situations.
 ### Deprecated
 
 ### Removed
+- Removed mentions of assembly workflow from docs.
 
 
 ## [0.7.0] 2023-06-13

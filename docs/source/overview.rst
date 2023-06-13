@@ -15,6 +15,3 @@ The following image shows a simplified graph of the workflow of |full_name|:
     :alt: StaG mwc
     :align: left
 
-Note that several parts of the workflow are not yet implemented, most notably
-the structure of the sections performing metagenomic assembly are not yet
-finalized.
