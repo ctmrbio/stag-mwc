@@ -31,7 +31,7 @@ situations.
 
 ### Fixed
 - HUMAnN3: Fixed critical bug leading to entire system-wide temporary directory
-  being emptied after successfull HUMAnN run.
+  being emptied after successful HUMAnN run.
 - Singularity: All Singularity definition files should from now on get version
   bumps in the description labels when conda environments built inside them are
   updated to reduce the risk of Singularity reusing old cached copies of images
