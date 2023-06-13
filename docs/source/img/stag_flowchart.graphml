@@ -1,918 +1,2368 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.20.1-->
-  <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
-  <key for="port" id="d1" yfiles.type="portgraphics"/>
-  <key for="port" id="d2" yfiles.type="portgeometry"/>
-  <key for="port" id="d3" yfiles.type="portuserdata"/>
-  <key attr.name="url" attr.type="string" for="node" id="d4"/>
-  <key attr.name="description" attr.type="string" for="node" id="d5"/>
-  <key for="node" id="d6" yfiles.type="nodegraphics"/>
-  <key for="graphml" id="d7" yfiles.type="resources"/>
-  <key attr.name="url" attr.type="string" for="edge" id="d8"/>
-  <key attr.name="description" attr.type="string" for="edge" id="d9"/>
-  <key for="edge" id="d10" yfiles.type="edgegraphics"/>
-  <graph edgedefault="directed" id="G">
-    <data key="d0" xml:space="preserve"/>
-    <node id="n0">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="952.0" y="90.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="69.37613105773926" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="154.73629760742188" x="32.63185119628906" xml:space="preserve" y="12.311934471130371">Adapter trimming
+<!--Created by yFiles for HTML 2.6-EAP8-->
+<graphml xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml.html/2.0/ygraphml.xsd " xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:demostyle2="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/2.0" xmlns:demostyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoStyle/1.0" xmlns:icon-style="http://www.yworks.com/yed-live/icon-style/1.0" xmlns:bpmn="http://www.yworks.com/xml/yfiles-bpmn/2.0" xmlns:demotablestyle="http://www.yworks.com/yFilesHTML/demos/FlatDemoTableStyle/1.0" xmlns:uml="http://www.yworks.com/yFilesHTML/demos/UMLDemoStyle/1.0" xmlns:GraphvizNodeStyle="http://www.yworks.com/yFilesHTML/graphviz-node-style/1.0" xmlns:VuejsNodeStyle="http://www.yworks.com/demos/yfiles-vuejs-node-style/1.0" xmlns:explorer-style="http://www.yworks.com/data-explorer/1.0" xmlns:y="http://www.yworks.com/xml/yfiles-common/3.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/3.0" xmlns:yjs="http://www.yworks.com/xml/yfiles-for-html/2.0/xaml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<key id="d0" for="node" attr.type="int" attr.name="zOrder" y:attr.uri="http://www.yworks.com/xml/yfiles-z-order/1.0/zOrder"/>
+	<key id="d1" for="node" attr.type="boolean" attr.name="Expanded" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/Expanded">
+		<default>true</default>
+	</key>
+	<key id="d2" for="node" attr.type="string" attr.name="url"/>
+	<key id="d3" for="node" attr.type="string" attr.name="description"/>
+	<key id="d4" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels"/>
+	<key id="d5" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry"/>
+	<key id="d6" for="all" attr.name="UserTags" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/UserTags"/>
+	<key id="d7" for="node" attr.name="NodeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeStyle"/>
+	<key id="d8" for="node" attr.name="NodeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/NodeViewState"/>
+	<key id="d9" for="edge" attr.type="string" attr.name="url"/>
+	<key id="d10" for="edge" attr.type="string" attr.name="description"/>
+	<key id="d11" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels"/>
+	<key id="d12" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry"/>
+	<key id="d13" for="edge" attr.name="EdgeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeStyle"/>
+	<key id="d14" for="edge" attr.name="EdgeViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/EdgeViewState"/>
+	<key id="d15" for="port" attr.name="PortLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLabels"/>
+	<key id="d16" for="port" attr.name="PortLocationParameter" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLocationParameter">
+		<default>
+			<x:Static Member="y:FreeNodePortLocationModel.NodeCenterAnchored"/>
+		</default>
+	</key>
+	<key id="d17" for="port" attr.name="PortStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortStyle">
+		<default>
+			<x:Static Member="y:VoidPortStyle.Instance"/>
+		</default>
+	</key>
+	<key id="d18" for="port" attr.name="PortViewState" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/folding/1.1/PortViewState"/>
+	<key id="d19" attr.name="SharedData" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/SharedData"/>
+	<data key="d19">
+		<y:SharedData>
+			<yjs:Color x:Key="1" value="#FFE8EEF7"/>
+			<yjs:Color x:Key="2" value="#FFB7C9E3"/>
+			<y:RatioAnchoredLabelModelParameter x:Key="3" LayoutOffset="35.75183868408203,25.207956314086914"/>
+			<yjs:SolidColorFill x:Key="4" color="Black"/>
+			<yjs:Font x:Key="5" fontSize="16"/>
+			<yjs:Stroke x:Key="6" fill="#FF000000" miterLimit="1.45"/>
+			<yjs:LinearGradient x:Key="7" spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+				<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+				<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+			</yjs:LinearGradient>
+			<yjs:SolidColorFill x:Key="8" color="Black"/>
+			<yjs:SolidColorFill x:Key="9" color="Black"/>
+			<yjs:Arrow x:Key="10" type="NONE"/>
+			<yjs:SolidColorFill x:Key="11" color="Black"/>
+			<yjs:SolidColorFill x:Key="12" color="Black"/>
+			<yjs:SolidColorFill x:Key="13" color="Black"/>
+			<yjs:SolidColorFill x:Key="14" color="Black"/>
+			<yjs:SolidColorFill x:Key="15" color="Black"/>
+			<yjs:SolidColorFill x:Key="16" color="Black"/>
+			<yjs:SolidColorFill x:Key="17" color="Black"/>
+			<yjs:SolidColorFill x:Key="18" color="Black"/>
+			<yjs:SolidColorFill x:Key="19" color="Black"/>
+			<yjs:SolidColorFill x:Key="20" color="Black"/>
+			<yjs:SolidColorFill x:Key="21" color="Black"/>
+			<yjs:SolidColorFill x:Key="22" color="Black"/>
+			<yjs:SolidColorFill x:Key="23" color="Black"/>
+			<yjs:SolidColorFill x:Key="24" color="Black"/>
+			<yjs:SolidColorFill x:Key="25" color="Black"/>
+			<yjs:SolidColorFill x:Key="26" color="Black"/>
+			<yjs:SolidColorFill x:Key="27" color="Black"/>
+			<yjs:SolidColorFill x:Key="28" color="Black"/>
+			<yjs:SolidColorFill x:Key="29" color="Black"/>
+			<yjs:SolidColorFill x:Key="30" color="Black"/>
+			<yjs:SolidColorFill x:Key="31" color="Black"/>
+			<yjs:SolidColorFill x:Key="32" color="Black"/>
+			<yjs:SolidColorFill x:Key="33" color="Black"/>
+			<yjs:SolidColorFill x:Key="34" color="Black"/>
+			<yjs:SolidColorFill x:Key="35" color="Black"/>
+			<yjs:SolidColorFill x:Key="36" color="Black"/>
+			<yjs:SolidColorFill x:Key="37" color="Black"/>
+			<yjs:SolidColorFill x:Key="38" color="Black"/>
+			<yjs:SolidColorFill x:Key="39" color="Black"/>
+			<yjs:SolidColorFill x:Key="40" color="Black"/>
+			<yjs:SolidColorFill x:Key="41" color="Black"/>
+			<yjs:SolidColorFill x:Key="42" color="Black"/>
+			<yjs:SolidColorFill x:Key="43" color="Black"/>
+			<yjs:Stroke x:Key="44" fill="{y:GraphMLReference 8}" miterLimit="1.45"/>
+			<yjs:Arrow x:Key="45" stroke="#FF000000" fill="{y:GraphMLReference 8}"/>
+			<yjs:PolylineEdgeStyle x:Key="46" stroke="{y:GraphMLReference 44}" targetArrow="{y:GraphMLReference 45}" sourceArrow="{y:GraphMLReference 10}"/>
+		</y:SharedData>
+	</data>
+	<graph id="G" edgedefault="directed">
+		<data key="d6">
+			<y:Json>{"version":"2.0.0","origin":"yed-live","theme":{"name":"light","version":"1.0.0"},"layout":"layout-hierarchic","config":{"p_useDrawingAsSketch":false,"p_selectedElementsIncrementally":false,"p_nodeToNodeDistance":30,"p_automaticEdgeGroupingEnabled":false,"p_considerNodeLabels":true,"p_edgeLabeling":1,"p_orientation":0,"p_edgeRouting":0}}</y:Json>
+		</data>
+		<node id="n0">
+			<data key="d0">0</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Adapter trimming
 and Quality Control:
-FastP<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n1">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.data">
-          <y:Geometry height="59.0" width="127.0" x="1248.5" y="0.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="25.792043685913086" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.70408630371094" x="37.14795684814453" xml:space="preserve" y="16.603978157043457">FASTQ<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n2">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="812.5" y="215.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="25.792043685913086" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="96.09620666503906" x="20.45189666748047" xml:space="preserve" y="27.603978157043457">FastP report<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n3">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1021.0" y="316.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="152.49632263183594" x="33.75183868408203" xml:space="preserve" y="23.207956314086914">Remove host reads:
-Kraken2<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n4">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1452.0" y="90.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="197.74440002441406" x="11.127799987792969" xml:space="preserve" y="23.207956314086914">Assess sequencing depth:
-BBCountUnique<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n5">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1202.0" y="90.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="168.46432495117188" x="25.767837524414062" xml:space="preserve" y="23.207956314086914">MinHash comparison:
-sketch_compare<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n6">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1062.5" y="215.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="118.68824768066406" x="9.155876159667969" xml:space="preserve" y="16.707956314086914">Trimmed reads
-(FASTQ)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n7">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1062.5" y="430.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="107.10421752929688" x="14.947891235351562" xml:space="preserve" y="16.707956314086914">Filtered reads
-(FASTQ)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n8">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1243.5" y="215.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="76.06414794921875" x="30.467926025390625" xml:space="preserve" y="16.707956314086914">Clustered
-heatmap<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n9">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1493.5" y="215.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="80.17616271972656" x="28.41191864013672" xml:space="preserve" y="16.707956314086914">Seq depth
-plot<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n10">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="20.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="164.01632690429688" x="27.991836547851562" xml:space="preserve" y="23.207956314086914">Map to reference DB:
-BBMap<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n11">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="270.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="164.01632690429688" x="27.991836547851562" xml:space="preserve" y="23.207956314086914">Map to reference DB:
-Bowtie2<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n12">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="520.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="158.54432678222656" x="30.72783660888672" xml:space="preserve" y="23.207956314086914">Taxonomic profiling:
-Kaiju<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n13">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="771.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="158.54432678222656" x="30.72783660888672" xml:space="preserve" y="23.207956314086914">Taxonomic profiling:
-MetaPhlAn<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n14">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="645.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="86.09614562988281" x="25.451927185058594" xml:space="preserve" y="16.707956314086914">MetaPhlAn
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n15">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1021.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="154.52830505371094" x="32.73584747314453" xml:space="preserve" y="23.207956314086914">Functional profiling:
-HUMAnN<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n16">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1146.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="86.49615478515625" x="25.251922607421875" xml:space="preserve" y="16.707956314086914">Functional 
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n17">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1271.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="158.54432678222656" x="30.72783660888672" xml:space="preserve" y="23.207956314086914">Taxonomic profiling:
-KrakenUniq<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n18">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1313.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="92.49618530273438" x="22.251907348632812" xml:space="preserve" y="16.707956314086914">KrakenUniq
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n19">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="771.0" y="316.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="174.81634521484375" x="22.591827392578125" xml:space="preserve" y="23.207956314086914">Summarize QC results:
-MultiQC<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n20">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="311.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.30422973632812" x="12.347885131835938" xml:space="preserve" y="16.707956314086914">Mapped reads
-(SAM)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n21">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="20.0" y="816.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="113.53622436523438" x="53.23188781738281" xml:space="preserve" y="23.207956314086914">Calculate
-feature counts<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n22">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="61.5" y="941.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="116.33622741699219" x="10.331886291503906" xml:space="preserve" y="16.707956314086914">Feature counts
-table<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n23">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="812.5" y="430.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.04011535644531" x="35.979942321777344" xml:space="preserve" y="16.707956314086914">MultiQC
-report<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n24">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="61.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.30422973632812" x="12.347885131835938" xml:space="preserve" y="16.707956314086914">Mapped reads
-(SAM)<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n25">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1521.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="158.54432678222656" x="30.72783660888672" xml:space="preserve" y="23.207956314086914">Taxonomic profiling:
-Kraken2<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n26">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="478.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="52.912109375" x="42.0439453125" xml:space="preserve" y="16.707956314086914">Kaiju
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n27">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="812.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="86.09614562988281" x="25.451927185058594" xml:space="preserve" y="16.707956314086914">MetaPhlAn
-heatmap<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n28">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1480.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.09613037109375" x="35.451934814453125" xml:space="preserve" y="16.707956314086914">Kraken2
-Krona<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n29">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="979.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="86.09614562988281" x="25.451927185058594" xml:space="preserve" y="16.707956314086914">MetaPhlAn
-Krona<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n30">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1606.0" y="816.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="158.54432678222656" x="30.72783660888672" xml:space="preserve" y="23.207956314086914">Taxonomic profiling:
-Bracken<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n31">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1535.5" y="941.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.12013244628906" x="35.93993377685547" xml:space="preserve" y="16.707956314086914">Bracken
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n32">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1702.5" y="941.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="69.37613105773926" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="65.12013244628906" x="35.93993377685547" xml:space="preserve" y="5.811934471130371">Filtered
+FastP]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="34.63185119628906,14.311934471130371"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="612.25" Y="89" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.25,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.75,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n1">
+			<data key="d0">1</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text>FASTQ</y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="39.14795684814453,18.603978157043457"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="908.75" Y="0" Width="127" Height="59"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="data">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.16666666666666638,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.8333333333333336,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n2">
+			<data key="d0">2</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[FastP report]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="22.45189666748047,29.603978157043457"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="452.5" Y="213" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0.875"/>
+				</data>
+			</port>
+		</node>
+		<node id="n3">
+			<data key="d0">3</data>
+			<data key="d4">
+				<x:List>
+					<y:Label LayoutParameter="{y:GraphMLReference 3}">
+						<y:Label.Text><![CDATA[Remove host reads:
+Kraken2]]></y:Label.Text>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 5}" autoFlip="false" textFill="{y:GraphMLReference 4}" textSize="16"/>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="661" Y="324" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process" stroke="{y:GraphMLReference 6}" fill="{y:GraphMLReference 7}"/>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n4">
+			<data key="d0">4</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Assess sequencing depth:
+BBCountUnique]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="13.127799987792969,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1112.25" Y="89" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n5">
+			<data key="d0">5</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[MinHash comparison:
+sketch_compare]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="27.767837524414062,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="862.25" Y="89" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n6">
+			<data key="d0">6</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Trimmed reads
+(FASTQ)]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="11.155876159667969,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="736.75" Y="213" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.25,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.75,0.7499999778376556"/>
+				</data>
+			</port>
+		</node>
+		<node id="n7">
+			<data key="d0">7</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Filtered reads
+(FASTQ)]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="16.947891235351562,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="827.5" Y="448" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.25,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.07142857142857179,0.9358258845052753"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.21428571428571452,0.997209781866688"/>
+				</data>
+			</port>
+			<port name="p3">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.35714285714285726,0.9765624430847213"/>
+				</data>
+			</port>
+			<port name="p4">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0.875"/>
+				</data>
+			</port>
+			<port name="p5">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.6428571428571428,0.7734374439715438"/>
+				</data>
+			</port>
+			<port name="p6">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.7857142857142855,0.7527901421737447"/>
+				</data>
+			</port>
+			<port name="p7">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.9285714285714283,0.8141741015569767"/>
+				</data>
+			</port>
+			<port name="p8">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.8333333333333339,1"/>
+				</data>
+			</port>
+			<port name="p9">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.9444444444444446,1"/>
+				</data>
+			</port>
+			<port name="p10">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.75,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n8">
+			<data key="d0">8</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Clustered
+heatmap]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.467926025390625,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="903.75" Y="213" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n9">
+			<data key="d0">9</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Seq depth
+plot]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="30.41191864013672,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1153.75" Y="213" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n10">
+			<data key="d0">10</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Map to reference DB:
+BBMap]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="29.991836547851562,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="35" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n11">
+			<data key="d0">11</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Map to reference DB:
+Bowtie2]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="29.991836547851562,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="285" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n12">
+			<data key="d0">12</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Taxonomic profiling:
+Kaiju]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.72783660888672,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="535" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n13">
+			<data key="d0">13</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Taxonomic profiling:
+MetaPhlAn]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.72783660888672,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="786" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.1666666666666665,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.8333333333333335,1"/>
+				</data>
+			</port>
+			<port name="p3">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n14">
+			<data key="d0">14</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[MetaPhlAn
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="27.451927185058594,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="660.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n15">
+			<data key="d0">15</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Functional profiling:
+HUMAnN]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="34.73584747314453,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1036" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n16">
+			<data key="d0">16</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Functional 
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="27.251922607421875,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1161.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n17">
+			<data key="d0">17</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Taxonomic profiling:
+KrakenUniq]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.72783660888672,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1286" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n18">
+			<data key="d0">18</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[KrakenUniq
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="24.251907348632812,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1328.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n19">
+			<data key="d0">19</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Summarize QC results:
+MultiQC]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="24.591827392578125,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="411" Y="324" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n20">
+			<data key="d0">20</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Mapped reads
+(SAM)]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="14.347885131835938,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="326.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0.875"/>
+				</data>
+			</port>
+		</node>
+		<node id="n21">
+			<data key="d0">21</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Calculate
+feature counts]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="55.23188781738281,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="35" Y="814" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n22">
+			<data key="d0">22</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Feature counts
+table]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="12.331886291503906,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="76.5" Y="938" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n23">
+			<data key="d0">23</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[MultiQC
+report]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="37.979942321777344,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="452.5" Y="448" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n24">
+			<data key="d0">24</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Mapped reads
+(SAM)]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="14.347885131835938,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="76.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0.875"/>
+				</data>
+			</port>
+		</node>
+		<node id="n25">
+			<data key="d0">25</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Taxonomic profiling:
+Kraken2]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.72783660888672,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1536" Y="589" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.25,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.75,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n26">
+			<data key="d0">26</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Kaiju
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="44.0439453125,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="493.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n27">
+			<data key="d0">27</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[MetaPhlAn
+heatmap]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="27.451927185058594,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="994.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n28">
+			<data key="d0">28</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Kraken2
+Krona]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="37.451934814453125,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1495.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n29">
+			<data key="d0">29</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[MetaPhlAn
+Krona]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="27.451927185058594,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="827.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n30">
+			<data key="d0">30</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Taxonomic profiling:
+Bracken]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="32.72783660888672,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1621" Y="814" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.25,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.75,1"/>
+				</data>
+			</port>
+		</node>
+		<node id="n31">
+			<data key="d0">31</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Bracken
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="37.93993377685547,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1550.5" Y="938" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n32">
+			<data key="d0">32</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Filtered
 Bracken
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n33">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1814.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="25.792043685913086" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="91.76017761230469" x="22.619911193847656" xml:space="preserve" y="27.603978157043457">AMR profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n34">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="1771.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="160.12832641601562" x="29.935836791992188" xml:space="preserve" y="23.207956314086914">Antibiotic resistance:
-GROOT<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n35">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="1647.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="66.09613037109375" x="35.451934814453125" xml:space="preserve" y="16.707956314086914">Kraken2
-profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n36">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="2021.0" y="590.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="160.12832641601562" x="29.935836791992188" xml:space="preserve" y="23.207956314086914">Antibiotic resistance:
-AMR++<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n37">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="2062.5" y="715.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="25.792043685913086" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="91.76017761230469" x="22.619911193847656" xml:space="preserve" y="27.603978157043457">AMR profile<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n38">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.process">
-          <y:Geometry height="94.0" width="220.0" x="270.0" y="816.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="113.53622436523438" x="53.23188781738281" xml:space="preserve" y="23.207956314086914">Calculate
-feature counts<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <node id="n39">
-      <data key="d6">
-        <y:GenericNode configuration="com.yworks.flowchart.document">
-          <y:Geometry height="81.0" width="137.0" x="311.5" y="941.0"/>
-          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
-          <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="47.58408737182617" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="116.33622741699219" x="10.331886291503906" xml:space="preserve" y="16.707956314086914">Feature counts
-table<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-        </y:GenericNode>
-      </data>
-    </node>
-    <edge id="e0" source="n1" target="n0">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-42.33333333333333" sy="29.5" tx="0.0" ty="-47.0">
-            <y:Point x="1269.6666666666667" y="74.5"/>
-            <y:Point x="1062.0" y="74.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e1" source="n6" target="n3">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e2" source="n1" target="n5">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="29.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e3" source="n5" target="n8">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e4" source="n0" target="n2">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-55.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1007.0" y="199.5"/>
-            <y:Point x="881.0" y="199.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e5" source="n3" target="n7">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e6" source="n1" target="n4">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="42.33333333333333" sy="29.5" tx="0.0" ty="-47.0">
-            <y:Point x="1354.3333333333333" y="74.5"/>
-            <y:Point x="1562.0" y="74.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e7" source="n4" target="n9">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e8" source="n7" target="n10">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-60.888888888888914" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1070.111111111111" y="526.5"/>
-            <y:Point x="130.0" y="526.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e9" source="n7" target="n11">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-45.666666666666686" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1085.3333333333333" y="542.5"/>
-            <y:Point x="380.0" y="542.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e10" source="n7" target="n12">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-30.444444444444457" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1100.5555555555557" y="558.5"/>
-            <y:Point x="630.0" y="558.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e11" source="n7" target="n13">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-15.222222222222229" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1115.7777777777778" y="574.5"/>
-            <y:Point x="881.0" y="574.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e12" source="n13" target="n14">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-73.33333333333334" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="807.6666666666666" y="699.5"/>
-            <y:Point x="714.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e13" source="n15" target="n16">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1131.0" y="699.5"/>
-            <y:Point x="1215.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e14" source="n7" target="n15">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e15" source="n7" target="n17">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="15.222222222222221" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1146.2222222222222" y="574.5"/>
-            <y:Point x="1381.0" y="574.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e16" source="n17" target="n18">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1381.0" y="699.5"/>
-            <y:Point x="1382.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e17" source="n2" target="n19">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e18" source="n11" target="n20">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e19" source="n10" target="n24">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e20" source="n21" target="n22">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e21" source="n19" target="n23">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e22" source="n24" target="n21">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e23" source="n7" target="n25">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="30.444444444444443" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1161.4444444444443" y="558.5"/>
-            <y:Point x="1631.0" y="558.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e24" source="n0" target="n6">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="55.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1117.0" y="199.5"/>
-            <y:Point x="1131.0" y="199.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e25" source="n12" target="n26">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="630.0" y="699.5"/>
-            <y:Point x="547.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e26" source="n13" target="n27">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e27" source="n13" target="n29">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="73.33333333333334" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="954.3333333333334" y="699.5"/>
-            <y:Point x="1048.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e28" source="n25" target="n28">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-55.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1576.0" y="699.5"/>
-            <y:Point x="1549.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e29" source="n35" target="n30">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e30" source="n30" target="n31">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="-55.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1661.0" y="925.5"/>
-            <y:Point x="1604.0" y="925.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e31" source="n30" target="n32">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="55.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e32" source="n25" target="n35">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="55.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1686.0" y="699.5"/>
-            <y:Point x="1716.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e33" source="n7" target="n34">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="45.66666666666667" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1176.6666666666667" y="542.5"/>
-            <y:Point x="1881.0" y="542.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e34" source="n34" target="n33">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5">
-            <y:Point x="1881.0" y="699.5"/>
-            <y:Point x="1883.0" y="699.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e35" source="n36" target="n37">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e36" source="n7" target="n36">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="60.888888888888886" sy="40.5" tx="0.0" ty="-47.0">
-            <y:Point x="1191.888888888889" y="526.5"/>
-            <y:Point x="2131.0" y="526.5"/>
-          </y:Path>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e37" source="n38" target="n39">
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="47.0" tx="0.0" ty="-40.5"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="e38" source="n20" target="n38">
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="40.5" tx="0.0" ty="-47.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-  </graph>
-  <data key="d7">
-    <y:Resources/>
-  </data>
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="37.93993377685547,7.811934471130371"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1717.5" Y="938" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n33">
+			<data key="d0">35</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Kraken2
+profile]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="37.451934814453125,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="1662.5" Y="713" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0.875"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n34">
+			<data key="d0">38</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Calculate
+feature counts]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="55.23188781738281,25.207956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="285" Y="814" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n35">
+			<data key="d0">39</data>
+			<data key="d4">
+				<x:List>
+					<y:Label>
+						<y:Label.Text><![CDATA[Feature counts
+table]]></y:Label.Text>
+						<y:Label.LayoutParameter>
+							<y:RatioAnchoredLabelModelParameter LayoutOffset="12.331886291503906,18.707956314086914"/>
+						</y:Label.LayoutParameter>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" autoFlip="false" textFill="#FF000000" textSize="16">
+								<yjs:DefaultLabelStyle.font>
+									<yjs:Font fontSize="16"/>
+								</yjs:DefaultLabelStyle.font>
+							</yjs:DefaultLabelStyle>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="326.5" Y="938" Width="137" Height="81"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="document">
+					<demostyle:FlowchartNodeStyle.stroke>
+						<yjs:Stroke fill="#FF000000" miterLimit="1.45"/>
+					</demostyle:FlowchartNodeStyle.stroke>
+					<demostyle:FlowchartNodeStyle.fill>
+						<yjs:LinearGradient spreadMethod="PAD" startPoint="0,0" endPoint="1,1">
+							<yjs:GradientStop color="{y:GraphMLReference 1}" offset="0"/>
+							<yjs:GradientStop color="{y:GraphMLReference 2}" offset="1"/>
+						</yjs:LinearGradient>
+					</demostyle:FlowchartNodeStyle.fill>
+				</demostyle:FlowchartNodeStyle>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+		</node>
+		<node id="n36">
+			<data key="d0">40</data>
+			<data key="d4">
+				<x:List>
+					<y:Label LayoutParameter="{y:GraphMLReference 3}">
+						<y:Label.Text><![CDATA[Remove host reads:
+Bowtie2]]></y:Label.Text>
+						<y:Label.Style>
+							<yjs:DefaultLabelStyle horizontalTextAlignment="CENTER" font="{y:GraphMLReference 5}" autoFlip="false" textFill="{y:GraphMLReference 4}" textSize="16"/>
+						</y:Label.Style>
+					</y:Label>
+				</x:List>
+			</data>
+			<data key="d5">
+				<y:RectD X="911" Y="324" Width="220" Height="94"/>
+			</data>
+			<data key="d7">
+				<demostyle:FlowchartNodeStyle type="process" stroke="{y:GraphMLReference 6}" fill="{y:GraphMLReference 7}"/>
+			</data>
+			<port name="p0">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p1">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+			<port name="p2">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,0"/>
+				</data>
+			</port>
+			<port name="p3">
+				<data key="d16">
+					<y:FreeNodePortLocationModelParameter Ratio="0.5,1"/>
+				</data>
+			</port>
+		</node>
+		<edge id="e0" source="n1" target="n0" sourceport="p0" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="929.9166666666666,74"/>
+					<y:Bend Location="722.25,74"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle stroke="{y:GraphMLReference 44}" targetArrow="{y:GraphMLReference 45}" sourceArrow="{y:GraphMLReference 10}"/>
+			</data>
+		</edge>
+		<edge id="e1" source="n6" target="n3" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 9}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 9}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e2" source="n1" target="n5" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 11}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 11}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e3" source="n5" target="n8" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 12}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 12}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e4" source="n0" target="n2" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="667.25,198"/>
+					<y:Bend Location="521,198"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 13}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 13}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e5" source="n3" target="n7" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="771,433"/>
+					<y:Bend Location="861.75,433"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 14}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 14}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e6" source="n1" target="n4" sourceport="p2" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1014.5833333333334,74"/>
+					<y:Bend Location="1222.25,74"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 15}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 15}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e7" source="n4" target="n9" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 16}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 16}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e8" source="n7" target="n10" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="837.2857142857143,544"/>
+					<y:Bend Location="145,544"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 17}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 17}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e9" source="n7" target="n11" sourceport="p2" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="856.8571428571429,559"/>
+					<y:Bend Location="395,559"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 18}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 18}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e10" source="n7" target="n12" sourceport="p3" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="876.4285714285714,574"/>
+					<y:Bend Location="645,574"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 19}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 19}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e11" source="n7" target="n13" sourceport="p4" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 20}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 20}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e12" source="n13" target="n14" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="822.6666666666666,698"/>
+					<y:Bend Location="729,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 21}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 21}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e13" source="n15" target="n16" sourceport="p0" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1146,698"/>
+					<y:Bend Location="1230,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 22}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 22}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e14" source="n7" target="n15" sourceport="p5" targetport="p1">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="915.5714285714286,574"/>
+					<y:Bend Location="1146,574"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 23}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 23}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e15" source="n7" target="n17" sourceport="p6" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="935.1428571428571,559"/>
+					<y:Bend Location="1396,559"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 24}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 24}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e16" source="n17" target="n18" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1396,698"/>
+					<y:Bend Location="1397,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 25}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 25}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e17" source="n2" target="n19" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 26}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 26}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e18" source="n11" target="n20" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 27}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 27}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e19" source="n10" target="n24" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 28}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 28}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e20" source="n21" target="n22" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 29}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 29}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e21" source="n19" target="n23" sourceport="p1" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 30}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 30}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e22" source="n24" target="n21" sourceport="p1" targetport="p1">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 31}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 31}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e23" source="n7" target="n25" sourceport="p7" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="954.7142857142857,544"/>
+					<y:Bend Location="1646,544"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 32}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 32}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e24" source="n0" target="n6" sourceport="p2" targetport="p1">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="777.25,198"/>
+					<y:Bend Location="805.25,198"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 33}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 33}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e25" source="n12" target="n26" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="645,698"/>
+					<y:Bend Location="562,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 34}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 34}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e26" source="n13" target="n27" sourceport="p2" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="969.3333333333334,698"/>
+					<y:Bend Location="1063,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 35}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 35}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e27" source="n13" target="n29" sourceport="p3" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 36}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 36}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e28" source="n25" target="n28" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1591,698"/>
+					<y:Bend Location="1564,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 37}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 37}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e29" source="n33" target="n30" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 38}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 38}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e30" source="n30" target="n31" sourceport="p1" targetport="p0">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1676,923"/>
+					<y:Bend Location="1619,923"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 39}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 39}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e31" source="n30" target="n32" sourceport="p2" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 40}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 40}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e32" source="n25" target="n33" sourceport="p2" targetport="p1">
+			<data key="d10"><![CDATA[]]></data>
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1701,698"/>
+					<y:Bend Location="1731,698"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 41}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 41}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e33" source="n34" target="n35" sourceport="p0" targetport="p0">
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 42}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 42}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e34" source="n20" target="n34" sourceport="p1" targetport="p1">
+			<data key="d10"><![CDATA[]]></data>
+			<data key="d13">
+				<yjs:PolylineEdgeStyle sourceArrow="{y:GraphMLReference 10}">
+					<yjs:PolylineEdgeStyle.stroke>
+						<yjs:Stroke fill="{y:GraphMLReference 43}" miterLimit="1.45"/>
+					</yjs:PolylineEdgeStyle.stroke>
+					<yjs:PolylineEdgeStyle.targetArrow>
+						<yjs:Arrow stroke="#FF000000" fill="{y:GraphMLReference 43}"/>
+					</yjs:PolylineEdgeStyle.targetArrow>
+				</yjs:PolylineEdgeStyle>
+			</data>
+		</edge>
+		<edge id="e35" source="n6" target="n36" sourceport="p2" targetport="p2">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="839.5,309"/>
+					<y:Bend Location="1021,309"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="46"/>
+			</data>
+		</edge>
+		<edge id="e36" source="n36" target="n7" sourceport="p3" targetport="p10">
+			<data key="d12">
+				<x:List>
+					<y:Bend Location="1021,433"/>
+					<y:Bend Location="930.25,433"/>
+				</x:List>
+			</data>
+			<data key="d13">
+				<y:GraphMLReference ResourceKey="46"/>
+			</data>
+		</edge>
+	</graph>
 </graphml>

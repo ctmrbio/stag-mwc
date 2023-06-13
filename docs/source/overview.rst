@@ -11,7 +11,7 @@ starting further downstream analyses.
 
 The following image shows a simplified graph of the workflow of |full_name|:
 
-.. image:: img/stag_flowchart_v6.png
+.. image:: img/stag_flowchart_v7.png
     :alt: StaG mwc
     :align: left
 
