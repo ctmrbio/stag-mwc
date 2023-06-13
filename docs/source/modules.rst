@@ -1,12 +1,12 @@
 .. _BBCountUnique: https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/calcuniqueness-guide/
 .. _FastP:  https://github.com/OpenGene/fastp
+.. _Bowtie2: https://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 .. _BBMap: https://sourceforge.net/projects/bbmap/
 .. _FastQC: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 .. _Kaiju: http://kaiju.binf.ku.dk/
 .. _Kraken2: https://ccb.jhu.edu/software/kraken2/
 .. _KrakenUniq: https://github.com/fbreitwieser/krakenuniq
 .. _Bracken: https://ccb.jhu.edu/software/bracken/
-.. _groot: https://groot-documentation.readthedocs.io
 .. _MetaPhlAn: https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4
 .. _StrainpPlAn: https://github.com/biobakery/MetaPhlAn/wiki/StrainPhlAn-4
 .. _featureCounts: https://subread.sourceforge.net/featureCounts.html
@@ -15,7 +15,6 @@
 .. _SAF format: https://subread.sourceforge.net/featureCounts.html
 .. _MEGAHIT: https://github.com/voutcn/megahit
 .. _MultiQC: https://multiqc.info/
-.. _amrplusplus: https://megares.meglab.org/amrplusplus/latest/html/what_AMR++_produces.html
 .. _megares: https://megares.meglab.org/
 
 Modules
@@ -23,8 +22,8 @@ Modules
 |full_name| is a workflow framework that connects several other tools. The
 basic assumption is that all analyses start with a quality control of the
 sequencing reads (using `FastP`_), followed by host sequence removal (using
-`Kraken2`_). This section of the documentation aims to describe useful details
-about the separate tools that are used in |full_name|.
+`Kraken2`_ or `Bowtie2`_). This section of the documentation aims to describe
+useful details about the separate tools that are used in |full_name|.
 
 The following subsections describe the function of each module included in
 |full_name|.  Each tool produces output in a separate subfolder inside the
@@ -54,22 +53,9 @@ reads are output into ``fastp``. Output filenames are::
 
 remove_host
 --------------
-:Tool: `Kraken2`_
-:Output folder: ``host_removal``
-
-The ``remove_host`` module uses `Kraken2`_ to classify reads against a database
-of host sequences to remove reads matching to non-desired host genomes. The
-output are two sets of pairs of paired-end FASTQ files, and optionally one
-Kraken2 classification file and one Kraken2 summary report.  In addition, two
-PDF files with 1) a basic histogram plot of the proportion of host reads
-detected in each sample, and 2) a barplot of the same. A TSV table with the raw
-proportion data is also provided::
-
-    <sample>_{1,2}.fq.gz
-    <sample>.host_{1,2}.fq.gz
-    host_barplot.pdf
-    host_histogram.pdf
-    host_proportions.txt
+The ``remove_host`` module can use either `Kraken2`_ or `Bowtie2`_ to classify
+reads against a database of host sequences to remove reads matching to
+non-desired host genomes.
 
 .. note::
 
@@ -77,12 +63,36 @@ proportion data is also provided::
     with symlinks to the fastp output files.
 
 
+:Tool: `Kraken2`_
+:Output folder: ``host_removal``
+
+The output from Kraken2 are two sets of pairs of paired-end FASTQ files, and
+optionally one Kraken2 classification file and one Kraken2 summary report.  In
+addition, two PDF files with 1) a basic histogram plot of the proportion of
+host reads detected in each sample, and 2) a barplot of the same. A TSV table
+with the raw proportion data is also provided::
+
+    <sample>_{1,2}.fq.gz
+    <sample>.host_{1,2}.fq.gz
+    host_barplot.pdf
+    host_histogram.pdf
+    host_proportions.txt
+
+
+:Tool: `Bowtie2`_
+:Output folder: ``host_removal``
+
+The output from Bowtie2 is a set of paired-end FASTQ files::
+
+    <sample>_{1,2}.fq.gz
+
+
+
 preprocessing_summary
 ---------------------
 This module summarize the number of reads passing through each preprocessing
-step and produces a summary table and a basic line plot showing the proportions
-of reads after each step. For more detailed information about read QC please
-refer to the MulitQC report.
+step and produces a summary table showing the number of reads after each step.
+For more detailed information about read QC please refer to the MulitQC report.
 
 
 multiqc
@@ -268,67 +278,6 @@ evaluate the variable at runtime (which means it can utilize node-local
 temporary disk if executing on a compute cluster).
 
 
-Antibiotic resistance
-*********************
-
-Groot
--------
-:Tool: `groot`_
-:Output folder: ``groot``
-
-Run `groot`_ to align reads to an antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Outputs one subfolder per sample,
-containing two files and one subfolder::
-
-    <sample>/<sample>.groot_aligned.bam
-    <sample>/<sample>.groot_report.txt
-    <sample>/<sample>/groot-graphs
-
-The ``<sample>.groot.bam`` file contains mapping results against all resistance
-gene graphs, and the ``<sample>.groot_report.txt`` file contains a list of all
-observed antibiotic resistance genes in the sample. The subfolder contains all
-mapped graphs of all detected antibiotic resistance genes.
-
-.. note::
-
-   GROOT used to be able to output coverage plots via the ``--plotCov``
-   argument but it was removed in version 1.0 due to a conda packaging issue.
-   The feature may reintroduced in future versions of GROOT but is not
-   available in StaG now.
-
-The read lengths used with `groot`_ should preferably conform to the settings
-used during `groot`_ database construction.
-
-AMRPlusPlus_v2
--------
-:Tool: `amrplusplus`_
-:Output folder: ``amrplusplus``
-
-`amrplusplus`_ will align reads to `megares`_ antibiotic resistance gene database to
-produce antibiotic resistance gene profiles. Output is structured as::
-
-        ├ AlignToAMR
-        │   └ <sample>.amr.alignment.sam
-        ├ RunResistome
-        │   ├ <sample>.class.tsv
-        │   ├ <sample>.gene.tsv
-        │   ├ <sample>.group.tsv
-        │   └ <sample>.mech.tsv
-        ├ ResistomeResults
-        │   └ AMR_analytic_matrix.csv
-        ├ RunRarefaction
-        │   ├ <sample>.class.tsv
-        │   ├ <sample>.gene.tsv
-        │   ├ <sample>.group.tsv
-        │   └ <sample>.mech.tsv
-
-``AMR_analytic_matrix.csv`` contains aggregated results of gene counts for all samples 
-aligned against `megares`_, based on the threshold set in ``config.yaml``. Pasting a gene name 
-or accession number into the database will provide detailed information and links to 
-published papers.
-
-`amrplusplus`_ can be executed with either ``--use-singularity`` or ``--use-conda`` settings.
-
 Mappers
 *******
 |full_name| allows the use of regular read mapping tools to map the quality
@@ -346,6 +295,11 @@ number 2 is more flexible and fairly fast for typical annotation scenarios, but
 might not work when the number of unique features is much lower than the number
 of reference sequences. Read more about these alternatives in :ref:`Summarizing
 read counts` below.
+
+.. note::
+   The mapper modules are great for mapping reads to databases with e.g.
+   antibiotic resistance genes (like `megares`_) or other functionally
+   annotated genes of interest.
 
 BBMap
 -----
@@ -513,14 +467,4 @@ featureCounts ``extra`` configuration setting, e.g.::
 Assembly
 ********
 
-MEGAHIT
--------
-:Tool: `MEGAHIT`_
-:Output folder: ``assembly/megahit``
-
-Run MEGAHIT to assembly each sample. Outputs one subfolder per sample, containing
-contigs and several log and intermediate files::
-
-    assembly/megahit/<sample>/<sample>.contigs.fa
-
-Assembly is the primary step required before binning the assembled contigs.
+StaG does not offer an assembly workflow at this time.

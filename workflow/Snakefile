@@ -21,7 +21,7 @@ from scripts.common import UserMessages, SampleSheet
 
 user_messages = UserMessages()
 
-stag_version = "0.6.1"
+stag_version = "0.7.0"
 singularity_branch_tag = "-master"  # Replace with "-master" before publishing new version
 
 configfile: "config/config.yaml"
@@ -95,12 +95,6 @@ include: "rules/taxonomic_profiling/strainphlan.smk"
 include: "rules/functional_profiling/humann.smk"
 
 #############################
-# Antibiotic resistance
-#############################
-include: "rules/antibiotic_resistance/groot.smk"
-include: "rules/antibiotic_resistance/amrplusplus.smk"
-
-#############################
 # Mappers
 #############################
 include: "rules/mappers/bbmap.smk"
@@ -109,7 +103,6 @@ include: "rules/mappers/bowtie2.smk"
 #############################
 # Assembly
 #############################
-include: "rules/assembly/metawrap.smk"
 
 #############################
 # MultiQC

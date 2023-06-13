@@ -10,7 +10,7 @@ From: mambaorg/micromamba:0.17.0
 
 %labels
 	AUTHOR boulund
-	VERSION 2.2
+	VERSION 7.0
 
 %post
 	micromamba install --yes --quiet --name base --file stag-mwc.yaml
