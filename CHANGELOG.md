@@ -17,6 +17,8 @@ situations.
 ### Added
 
 ### Fixed
+- Slurm profile: Fixed the incorrect rule names used for allocations for host
+  removal steps.
 
 ### Changed
   

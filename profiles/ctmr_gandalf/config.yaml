@@ -48,9 +48,9 @@ default-resources:
   - time="01:00:00"
   - mem_mb=10240
 set-threads:
-  - fastp=20
-  - kraken2_remove_host=20
-  - bowtie2_remove_host=20
+  - fastp=16
+  - kraken2_host_removal=20
+  - bowtie2_host_removal=20
   - bbcountunique=4
   - sketch=8
   - kaiju=32
@@ -70,10 +70,10 @@ set-threads:
 set-resources:
   - fastp:mem_mb=20240
   - fastp:time="02:00:00"
-  - kraken2_remove_host:mem_mb=10240
-  - kraken2_remove_host:time="02:00:00"
-  - bowtie2_remove_host:mem_mb=10240
-  - bowtie2_remove_host:time="06:00:00"
+  - kraken2_host_removal:mem_mb=10240
+  - kraken2_host_removal:time="03:00:00"
+  - bowtie2_host_removal:mem_mb=10240
+  - bowtie2_host_removal:time="08:00:00"
   - kaiju:mem_mb=10240
   - kaiju:time="10:00:00"
   - kraken2:mem_mb=10240
