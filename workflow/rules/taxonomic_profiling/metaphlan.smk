@@ -11,6 +11,8 @@ localrules:
     plot_metaphlan_heatmap,
     create_metaphlan_krona_plots,
     separate_metaphlan_outputs,
+    combine_metaphlan_count_tables,
+    separate_metaphlan_count_outputs,
 
 mpa_config = config["metaphlan"]
 if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["humann"]:
@@ -26,6 +28,8 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
         krona=("all_samples","combined_samples"))
     mpa_outputs = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}.tsv",
         taxlvl=("species", "genus", "family", "order"))
+    mpa_outputs_count = expand(f"{OUTDIR}/metaphlan/levels/{{taxlvl}}_count.tsv",
+        taxlvl=("species", "genus", "family", "order"))
 
     if mpa_config["heatmap"]["create_plot"]:
         all_outputs.append(heatmap)
@@ -37,6 +41,9 @@ if config["taxonomic_profile"]["metaphlan"] or config["functional_profile"]["hum
     if mpa_config["run_krona"]:
         all_outputs.append(krona_plots)
         citations.add(publications["Krona"])
+
+    if "-t rel_ab_w_read_stats" in mpa_config["extra"]:
+        all_outputs.append(mpa_outputs_count)
 
 
 rule metaphlan:
@@ -227,18 +234,67 @@ rule separate_metaphlan_outputs:
     input:
         mpa_combined=f"{OUTDIR}/metaphlan/all_samples.metaphlan.txt",
     output:
+        sgb=f"{OUTDIR}/metaphlan/levels/sgb.tsv",
         species=f"{OUTDIR}/metaphlan/levels/species.tsv",
         genus=f"{OUTDIR}/metaphlan/levels/genus.tsv",
         family=f"{OUTDIR}/metaphlan/levels/family.tsv",
         order=f"{OUTDIR}/metaphlan/levels/order.tsv",
     shell:
         """
-        set +o pipefail
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | head -n1 | tee {output.species} {output.genus} {output.family} {output.order} > /dev/null
 
-        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
+        set +o pipefail
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | head -n1 | tee {output.sgb} {output.species} {output.genus} {output.family} {output.order} > /dev/null
+
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep t__ | sed 's/^.*t__/t__/g'  >> {output.sgb}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep s__ | sed 's/^.*t__.*//g' | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
         sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
         sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
         sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
         """
 
+
+rule combine_metaphlan_count_tables:
+    """Combine metaphlan outputs into a large table."""
+    input:
+        expand(f"{OUTDIR}/metaphlan/{{sample}}.metaphlan.txt", sample=SAMPLES)
+    output:
+        txt=report(f"{OUTDIR}/metaphlan/all_samples.count.metaphlan.txt",
+                   category="Taxonomic profiling",
+                   caption="../../report/metaphlan_count_table.rst"),
+    log:
+        f"{LOGDIR}/metaphlan/combine_metaphlan_count_tables.log",
+    shadow:
+        "shallow"
+    conda:
+        "../../envs/metaphlan.yaml"
+    container:
+        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
+    threads: 1
+    shell:
+        """
+        workflow/scripts/merge_metaphlan_count_tables.py {input} > {output.txt} 2> {log}
+        sed --in-place 's/\.metaphlan//g' {output.txt} 
+        """
+
+rule separate_metaphlan_count_outputs:
+    """Separate the metaphlan abundance table into species, genus, family and order levels"""
+    input:
+        mpa_combined=f"{OUTDIR}/metaphlan/all_samples.count.metaphlan.txt",
+    output:
+        sgb=f"{OUTDIR}/metaphlan/levels/sgb_count.tsv",
+        species=f"{OUTDIR}/metaphlan/levels/species_count.tsv",
+        genus=f"{OUTDIR}/metaphlan/levels/genus_count.tsv",
+        family=f"{OUTDIR}/metaphlan/levels/family_count.tsv",
+        order=f"{OUTDIR}/metaphlan/levels/order_count.tsv",
+    shell:
+        """
+
+        set +o pipefail
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | head -n1 | tee {output.sgb} {output.species} {output.genus} {output.family} {output.order} > /dev/null
+
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep t__ | sed 's/^.*t__/t__/g'  >> {output.sgb}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep s__ | sed 's/^.*t__.*//g' | grep s__ | sed 's/^.*s__/s__/g' >> {output.species}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep g__ | sed 's/^.*s__.*//g' | grep g__ | sed 's/^.*g__/g__/g' >> {output.genus}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep f__ | sed 's/^.*g__.*//g' | grep f__ | sed 's/^.*f__/f__/g' >> {output.family}
+        sed '/#.*/d' {input.mpa_combined} | cut -f 1- | grep o__ | sed 's/^.*f__.*//g' | grep o__ | sed 's/^.*o__/o__/g' >> {output.order}
+        """
