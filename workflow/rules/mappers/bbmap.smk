@@ -112,9 +112,12 @@ for bbmap_config in config["bbmap"]:
                     db_name=db_name,
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+            report(expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
                     db_name=db_name,
                     column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
+                    ),
+                    caption="../../report/bbmap_counts.rst",
+                    category="Read mapping",
             )
         log:
             str(bbmap_logdir/"counts.log")
