@@ -20,6 +20,7 @@ singularity-args: "-B /ceph"
 cluster:
   mkdir -p slurm_logs/{rule} &&
   sbatch
+    --account={resources.account}
     --partition={resources.partition}
     --nodes=1
     --cpus-per-task={threads}
