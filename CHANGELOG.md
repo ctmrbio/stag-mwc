@@ -15,6 +15,9 @@ situations.
 
 ## [0.7.1] Unreleased
 ### Added
+- Slurm profile for PDC Dardel. Uses Snakemake's grouping feature to group
+  multiple HUMAnN jobs together on high memory nodes to better optimize core
+  billing for high-memory jobs such as HUMAnN.
 
 ### Fixed
 - Slurm profile: Fixed the incorrect rule names used for allocations for host
