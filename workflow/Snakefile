@@ -22,7 +22,6 @@ from scripts.common import UserMessages, SampleSheet
 user_messages = UserMessages()
 
 stag_version = "0.7.1"
-singularity_branch_tag = "-develop"  # Replace with "-master" before publishing new version
 
 configfile: "config/config.yaml"
 report: "report/workflow.rst"
@@ -31,7 +30,6 @@ citations = {publications["StaG"], publications["Snakemake"]}
 INPUTDIR = Path(config["inputdir"])
 OUTDIR = Path(config["outdir"])
 LOGDIR = Path(config["logdir"])
-DBDIR = Path(config["dbdir"])
 all_outputs = []
 
 if config["samplesheet"]:
@@ -99,10 +97,6 @@ include: "rules/functional_profiling/humann.smk"
 #############################
 include: "rules/mappers/bbmap.smk"
 include: "rules/mappers/bowtie2.smk"
-
-#############################
-# Assembly
-#############################
 
 #############################
 # MultiQC

@@ -29,7 +29,7 @@ rule preprocessing_summary:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     threads: 1
     params:
         fastp_arg=lambda w: f"--fastp {LOGDIR}/fastp/*.fastp.json" if config["qc_reads"] else "",

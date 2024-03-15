@@ -48,7 +48,7 @@ rule humann:
     conda:
         "../../envs/humann.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["humann"]
     threads: 20
     params:
         outdir=f"{OUTDIR}/humann/",
@@ -96,7 +96,7 @@ rule normalize_humann_tables:
     conda:
         "../../envs/humann.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["humann"]
     threads: 1
     params:
         method=h_config["norm_method"],
@@ -143,7 +143,7 @@ rule humann_join_tables:
     conda:
         "../../envs/humann.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["humann"]
     threads: 
         1
     params:
@@ -174,3 +174,4 @@ rule humann_join_tables:
             >> {log.stdout} \
             2>> {log.stderr}
         """
+

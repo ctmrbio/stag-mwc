@@ -4,5 +4,5 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - metaphlan =4.0.6
+    - metaphlan =4.1.0
     - krona =2.8.1

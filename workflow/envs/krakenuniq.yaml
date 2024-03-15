@@ -4,4 +4,4 @@ channels:
     - bioconda
     - defaults
 dependencies:
-    - krakenuniq =1.0.3
+    - krakenuniq =1.0.4

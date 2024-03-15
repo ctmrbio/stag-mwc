@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Compare all samples against all samples using MinHash sketches
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
 localrules:
     compare_sketches,
@@ -10,7 +9,7 @@ localrules:
 if config["naive"]["sketch_compare"]:
     # Add final output files from this module to 'all_outputs' from the
     # main Snakefile scope.
-    sample_similarity_plot = str(OUTDIR/"sketch_compare/sample_similarity.pdf")
+    sample_similarity_plot = OUTDIR/"sketch_compare/sample_similarity.pdf"
     all_outputs.append(sample_similarity_plot)
 
     citations.add(publications["BBMap"])
@@ -24,13 +23,13 @@ rule sketch:
     output:
         sketch=OUTDIR/"sketch_compare/{sample}.sketch.gz",
     log:
-        str(LOGDIR/"sketch_compare/{sample}.sketch.log")
+        LOGDIR/"sketch_compare/{sample}.sketch.log",
     shadow: 
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["bbmap"]
     threads: 4
     shell:
         """
@@ -45,18 +44,17 @@ rule sketch:
 rule compare_sketches:
     """Compare all samples using BBMap's comparesketch.sh"""
     input:
-        samples=expand(str(OUTDIR/"sketch_compare/{sample}.sketch.gz"), 
-                        sample=SAMPLES)
+        samples=expand(OUTDIR/"sketch_compare/{sample}.sketch.gz", sample=SAMPLES),
     output:
         alltoall=OUTDIR/"sketch_compare/alltoall.txt",
     log:
-        str(LOGDIR/"sketch_compare/comparesketch.log")
+        LOGDIR/"sketch_compare/comparesketch.log",
     shadow: 
         "shallow"
     conda: 
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["bbmap"]
     shell:
         """
         comparesketch.sh \
@@ -76,14 +74,14 @@ rule plot_sample_similarity:
         heatmap=OUTDIR/"sketch_compare/sample_similarity.pdf",
         clustered=report(OUTDIR/"sketch_compare/sample_similarity.clustered.pdf", 
                          category="Sketch comparison", 
-                         caption="../../report/sketch_compare.rst")
+                         caption="../../report/sketch_compare.rst"),
     log:
-        stdout=str(LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log"),
-        stderr=str(LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log"),
+        stdout=LOGDIR/"sketch_compare/sample_similarity_plot.stdout.log",
+        stderr=LOGDIR/"sketch_compare/sample_similarity_plot.stderr.log",
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/plot_sketch_comparison_heatmap.py \

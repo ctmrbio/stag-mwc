@@ -45,7 +45,7 @@ rule consensus_markers:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["metaphlan"]
     threads: 8
     params:
         output_dir=f"{OUTDIR}/strainphlan/consensus_markers/{{sample}}"
@@ -73,7 +73,7 @@ rule print_clades:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["metaphlan"]
     threads: 8
     params:
         out_dir=f"{OUTDIR}/strainphlan",
@@ -107,7 +107,7 @@ rule extract_markers:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["metaphlan"]
     threads: 8
     params:
         clade=spa_config["clade_of_interest"],
@@ -139,7 +139,7 @@ rule strainphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:biobakery"+singularity_branch_tag
+        config["containers"]["metaphlan"]
     threads: 8
     params:
         clade=spa_config["clade_of_interest"],
@@ -149,7 +149,7 @@ rule strainphlan:
         extra=spa_config["extra"],  # This is extremely useful if you want to include a reference genome
     shell:
         """
-        echo "please compare your clade_of_interest to list of available clades in available_clades.txt" > {log.stderr}
+        echo "Please compare your clade_of_interest to list of available clades in available_clades.txt" > {log.stderr}
 
         strainphlan \
              -s {input.consensus_markers} \

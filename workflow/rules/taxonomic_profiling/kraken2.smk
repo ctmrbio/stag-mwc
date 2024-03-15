@@ -1,7 +1,6 @@
 # vim: syntax=python expandtab
 # Taxonomic classification of metagenomic reads using Kraken2 with abundance
 # estimation using Bracken
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
@@ -27,19 +26,18 @@ if config["taxonomic_profile"]["kraken2"]:
     if not (kraken2_config["db"] and Path(kraken2_config["db"]).exists()):
         err_message = "No Kraken2 database folder at: '{}'!\n".format(kraken2_config["db"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
-        err_message += "Run 'snakemake download_minikraken2' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
         err_message += "If you do not want to run kraken2 for taxonomic profiling, set 'kraken2: False' in config.yaml"
         raise WorkflowError(err_message)
 
     # Add Kraken2 output files to 'all_outputs' from the main Snakefile scope.
     # SAMPLES is also from the main Snakefile scope.
-    krakens = expand(str(OUTDIR/"kraken2/{sample}.kraken"), sample=SAMPLES)
-    kreports = expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES)
-    kreports_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES)
-    joined_kreport_mpa_style = str(OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt")
-    combined_kreport = str(OUTDIR/"kraken2/all_samples.kraken2.txt")
-    kraken_krona = str(OUTDIR/"kraken2/all_samples.kraken2.krona.html")
-    kraken_area_plot = str(OUTDIR/"kraken2/area_plot.kraken2.pdf")
+    krakens = expand(OUTDIR/"kraken2/{sample}.kraken", sample=SAMPLES)
+    kreports = expand(OUTDIR/"kraken2/{sample}.kreport", sample=SAMPLES)
+    kreports_mpa_style = expand(OUTDIR/"kraken2/{sample}.mpa_style.txt", sample=SAMPLES)
+    joined_kreport_mpa_style = OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt"
+    combined_kreport = OUTDIR/"kraken2/all_samples.kraken2.txt"
+    kraken_krona = OUTDIR/"kraken2/all_samples.kraken2.krona.html"
+    kraken_area_plot = OUTDIR/"kraken2/area_plot.kraken2.pdf"
 
     if kraken2_config["keep_kraken"]:
         all_outputs.extend(krakens)
@@ -64,14 +62,14 @@ rule kraken2:
         kraken=OUTDIR/"kraken2/{sample}.kraken" if kraken2_config["keep_kraken"] else temp(OUTDIR/"kraken2/{sample}.kraken"),
         kreport=OUTDIR/"kraken2/{sample}.kreport" if kraken2_config["keep_kreport"] else temp(OUTDIR/"kraken2/{sample}.kreport"),
     log:
-        str(LOGDIR/"kraken2/{sample}.kraken2.log")
+        LOGDIR/"kraken2/{sample}.kraken2.log"
     shadow: 
         "shallow"
     threads: 8
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["kraken2"]
     params:
         db=kraken2_config["db"],
         confidence=kraken2_config["confidence"],
@@ -96,16 +94,16 @@ rule kraken2:
 
 rule kraken_mpa_style:
     input:
-        kreport=OUTDIR/"kraken2/{sample}.kreport"
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
     output:
         txt=OUTDIR/"kraken2/{sample}.mpa_style.txt",
     log:
-        str(LOGDIR/"kraken2/{sample}.mpa_style.log")
+        LOGDIR/"kraken2/{sample}.mpa_style.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/kreport2mpa.py \
@@ -113,24 +111,25 @@ rule kraken_mpa_style:
             --output {output.txt} \
             --display-header \
             2>&1 > {log}
+
         sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.txt}
         """
 
 
 rule join_kraken2_mpa:
     input:
-        txt=expand(str(OUTDIR/"kraken2/{sample}.mpa_style.txt"), sample=SAMPLES),
+        txt=expand(OUTDIR/"kraken2/{sample}.mpa_style.txt", sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt",
                category="Taxonomic profiling",
                caption="../../report/kraken2_table_mpa.rst"),
     log:
-        str(LOGDIR/"kraken2/join_kraken2_mpa_tables.log")
+        LOGDIR/"kraken2/join_kraken2_mpa_tables.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -147,17 +146,17 @@ rule join_kraken2_mpa:
 
 rule kraken2_area_plot:
     input:
-        OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt"
+        OUTDIR/"kraken2/all_samples.kraken2.mpa_style.txt",
     output:
         report(OUTDIR/"kraken2/area_plot.kraken2.pdf",
             category="Taxonomic profiling",
             caption="../../report/area_plot.rst")
     log:
-        str(LOGDIR/"kraken2/area_plot.kraken2.log")
+        LOGDIR/"kraken2/area_plot.kraken2.log",
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/area_plot.py \
@@ -170,19 +169,19 @@ rule kraken2_area_plot:
 
 rule combine_kreports:
     input:
-        kreports=expand(str(OUTDIR/"kraken2/{sample}.kreport"), sample=SAMPLES),
+        kreports=expand(OUTDIR/"kraken2/{sample}.kreport", sample=SAMPLES),
     output:
         report(OUTDIR/"kraken2/all_samples.kraken2.txt",
                category="Taxonomic profiling",
                caption="../../report/kraken2_table.rst"),
     log:
-        str(LOGDIR/"kraken2/combined_kreport.log")
+        LOGDIR/"kraken2/combined_kreport.log"
     shadow:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/combine_kreports.py \
@@ -199,14 +198,14 @@ rule kreport2krona:
     output:
         OUTDIR/"kraken2/{sample}.krona"
     log:
-        str(LOGDIR/"kraken2/{sample}.kreport2krona.log")
+        LOGDIR/"kraken2/{sample}.kreport2krona.log",
     shadow: 
         "shallow"
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/kreport2krona.py \
@@ -218,7 +217,7 @@ rule kreport2krona:
 
 rule create_kraken2_krona_plot:
     input:
-        expand(str(OUTDIR/"kraken2/{sample}.krona"), sample=SAMPLES),
+        expand(OUTDIR/"kraken2/{sample}.krona", sample=SAMPLES),
     output:
         krona_html=report(OUTDIR/"kraken2/all_samples.kraken2.krona.html",
                           category="Taxonomic profiling",
@@ -228,7 +227,7 @@ rule create_kraken2_krona_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["krona"]
     shell:
         """
 		ktImportText \
@@ -241,13 +240,12 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
     if not Path(kraken2_config["bracken"]["kmer_distrib"]).exists():
         err_message = "No Bracken kmer_distrib database file at: '{}'!\n".format(kraken2_config["bracken"]["kmer_distrib"])
         err_message += "Specify the path in the kraken2 section of config.yaml.\n"
-        err_message += "Run 'snakemake download_minikraken2' to download a copy of the required files into '{dbdir}'\n".format(dbdir=DBDIR/"kraken2") 
         err_message += "If you do not want to run Bracken for abundance profiling, set 'kmer_distrib: ""' in the bracken section of config.yaml"
         raise WorkflowError(err_message)
     if kraken2_config["filter_bracken"]["include"] or kraken2_config["filter_bracken"]["exclude"]:
-        filtered_brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-        all_table = expand(str(OUTDIR/"kraken2/all_samples.{level}.bracken.txt"), level=kraken2_config["bracken"]["levels"].split())
-        all_table_filtered = expand(str(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.txt"), level=kraken2_config["bracken"]["levels"].split())
+        filtered_brackens = expand(OUTDIR/"kraken2/{sample}.{level}.filtered.bracken", sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+        all_table = expand(OUTDIR/"kraken2/all_samples.{level}.bracken.txt", level=kraken2_config["bracken"]["levels"].split())
+        all_table_filtered = expand(OUTDIR/"kraken2/all_samples.{level}.filtered.bracken.txt", level=kraken2_config["bracken"]["levels"].split())
 
         all_outputs.extend(filtered_brackens)
         all_outputs.append(all_table)
@@ -255,11 +253,11 @@ if config["taxonomic_profile"]["kraken2"] and kraken2_config["bracken"]["kmer_di
 
     citations.add(publications["Bracken"])
 
-    brackens = expand(str(OUTDIR/"kraken2/{sample}.{level}.bracken"), sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
-    brackens_mpa_style = expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES)
-    bracken_area_plot = str(OUTDIR/"kraken2/area_plot.bracken.pdf")
-    bracken_krona = str(OUTDIR/"kraken2/all_samples.bracken.krona.html")
-    all_table_mpa = str(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt")
+    brackens = expand(OUTDIR/"kraken2/{sample}.{level}.bracken", sample=SAMPLES, level=kraken2_config["bracken"]["levels"].split())
+    brackens_mpa_style = expand(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt", sample=SAMPLES)
+    bracken_area_plot = OUTDIR/"kraken2/area_plot.bracken.pdf"
+    bracken_krona = OUTDIR/"kraken2/all_samples.bracken.krona.html"
+    all_table_mpa = OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt"
 
     all_outputs.extend(brackens)
     all_outputs.extend(brackens_mpa_style)
@@ -272,19 +270,19 @@ rule bracken_kreport:
     """Run Bracken summarization for Species level to get total sample
     bracken.kreport (required for mpa-conversion later)."""
     input:
-        kreport=OUTDIR/"kraken2/{sample}.kreport"
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
     output:
         bracken=OUTDIR/"kraken2/{sample}.bracken",
         bracken_kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
     log:
-        str(LOGDIR/"kraken2/{sample}.bracken.log")
+        LOGDIR/"kraken2/{sample}.bracken.log",
     threads: 2
     shadow:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["bracken"]
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -304,18 +302,18 @@ rule bracken_kreport:
 rule bracken_all_levels:
     """Run Bracken summarization for all levels."""
     input:
-        kreport=OUTDIR/"kraken2/{sample}.kreport"
+        kreport=OUTDIR/"kraken2/{sample}.kreport",
     output:
         bracken=OUTDIR/"kraken2/{sample}.{level,[DPOCFGS]}.bracken",
     log:
-        str(LOGDIR/"kraken2/{sample}.{level}.bracken.log")
+        LOGDIR/"kraken2/{sample}.{level}.bracken.log",
     shadow:         # shadow required because est_abundance.py always creates the
         "shallow"   # sample-level output file with fixed filename: {sample}_bracken.kreport 
     threads: 2
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["bracken"]
     params:
         kmer_distrib=kraken2_config["bracken"]["kmer_distrib"],
         thresh=kraken2_config["bracken"]["thresh"],
@@ -333,16 +331,16 @@ rule bracken_all_levels:
 
 rule bracken_mpa_style:
     input:
-        kreport=OUTDIR/"kraken2/{sample}_bracken.kreport"
+        kreport=OUTDIR/"kraken2/{sample}_bracken.kreport",
     output:
         txt=OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt",
     log:
-        str(LOGDIR/"kraken2/{sample}.bracken.mpa_style.log")
+        LOGDIR/"kraken2/{sample}.bracken.mpa_style.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/kreport2mpa.py \
@@ -350,24 +348,25 @@ rule bracken_mpa_style:
             --output {output.txt} \
             --display-header \
             2>&1 > {log}
+
         sed --in-place 's|{input.kreport}|taxon_name\treads|g' {output.txt}
         """
 
 
 rule join_bracken_mpa:
     input:
-        txt=expand(str(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt"), sample=SAMPLES),
+        txt=expand(OUTDIR/"kraken2/{sample}.bracken.mpa_style.txt", sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.bracken.mpa_style.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table_mpa.rst"),
     log:
-        str(LOGDIR/"kraken2/join_bracken_mpa_tables.log")
+        LOGDIR/"kraken2/join_bracken_mpa_tables.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -390,11 +389,11 @@ rule bracken_area_plot:
             category="Taxonomic profiling",
             caption="../../report/area_plot.rst")
     log:
-        str(LOGDIR/"kraken2/area_plot.bracken.log")
+        LOGDIR/"kraken2/area_plot.bracken.log",
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/area_plot.py \
@@ -407,18 +406,18 @@ rule bracken_area_plot:
 
 rule join_bracken:
     input:
-        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.bracken"), sample=SAMPLES),
+        bracken=expand(OUTDIR/"kraken2/{sample}.{{level}}.bracken", sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.{level,[DPOCFGS]}.bracken.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table.rst"),
     log:
-        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+        LOGDIR/"kraken2/join_bracken_tables.{level}.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         value_column="fraction_total_reads",
         feature_column="name",
@@ -439,14 +438,14 @@ rule bracken2krona:
     output:
         bracken_krona=OUTDIR/"kraken2/{sample}.bracken.krona",
     log:
-        str(LOGDIR/"kraken2/{sample}.bracken2krona.log")
+        LOGDIR/"kraken2/{sample}.bracken2krona.log",
     threads: 1
     shadow:
         "shallow"
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/kreport2krona.py \
@@ -458,7 +457,7 @@ rule bracken2krona:
 
 rule create_bracken_krona_plot:
     input:
-        expand(str(OUTDIR/"kraken2/{sample}.bracken.krona"), sample=SAMPLES),
+        expand(OUTDIR/"kraken2/{sample}.bracken.krona", sample=SAMPLES),
     output:
         krona_html=report(OUTDIR/"kraken2/all_samples.bracken.krona.html",
                           category="Taxonomic profiling",
@@ -468,7 +467,7 @@ rule create_bracken_krona_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["krona"]
     shell:
         """
 		ktImportText \
@@ -483,12 +482,12 @@ rule filter_bracken:
     output:
         filtered=OUTDIR/"kraken2/{sample}.{level,[DPOCFGS]}.filtered.bracken",  
     log:
-        str(LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log")
+        LOGDIR/"kraken2/{sample}.{level}.filter_bracken.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         filter_bracken="workflow/scripts/KrakenTools/filter_bracken.out.py",
         include=kraken2_config["filter_bracken"]["include"],
@@ -506,18 +505,18 @@ rule filter_bracken:
 
 rule join_bracken_filtered:
     input:
-        bracken=expand(str(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken"), sample=SAMPLES),
+        bracken=expand(OUTDIR/"kraken2/{sample}.{{level}}.filtered.bracken", sample=SAMPLES),
     output:
         table=report(OUTDIR/"kraken2/all_samples.{level,[DPCOFGS]}.filtered.bracken.txt",
                category="Taxonomic profiling",
                caption="../../report/bracken_table_filtered.rst"),
     log:
-        str(LOGDIR/"kraken2/join_bracken_tables.{level}.log")
+        LOGDIR/"kraken2/join_bracken_tables.{level}.log",
     threads: 1
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         value_column="fraction_total_reads",
         feature_column="name",
@@ -530,3 +529,4 @@ rule join_bracken_filtered:
             {input.bracken} \
             2>&1 > {log}
         """
+

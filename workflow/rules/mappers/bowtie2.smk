@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Generic rules for alignment of reads to a reference database using Bowtie2
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
@@ -17,17 +16,17 @@ for bt2_config in config["bowtie2"]:
 
         # Add final output files from this module to 'all_outputs' from the main
         # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-        bowtie2_alignments = expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.bam"),
+        bowtie2_alignments = expand(OUTDIR/"bowtie2/{db_name}/{sample}.bam",
                 sample=SAMPLES,
                 db_name=bt2_db_name)
-        bowtie2_stats = expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.{stats}.txt"),
+        bowtie2_stats = expand(OUTDIR/"bowtie2/{db_name}/{sample}.{stats}.txt",
                 sample=SAMPLES,
                 stats=["covstats", "rpkm"],
                 db_name=bt2_db_name)
-        counts_table = expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
+        counts_table = expand(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv",
                 db_name=bt2_db_name,
                 column=map(str.strip, bt2_config["counts_table"]["columns"].split(",")))
-        featureCounts = expand(str(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}"),
+        featureCounts = expand(OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts{output_type}",
                 db_name=bt2_db_name,
                 sample=SAMPLES,
                 output_type=["", ".summary", ".table.txt"])
@@ -61,7 +60,7 @@ for bt2_config in config["bowtie2"]:
         output:
             OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name) if bt2_config["keep_bam"] else temp(OUTDIR/"bowtie2/{db_name}/{{sample}}.bam".format(db_name=bt2_db_name)),
         log:
-            str(LOGDIR/"bowtie2/{db_name}/{{sample}}.log".format(db_name=bt2_db_name))
+            LOGDIR/"bowtie2/{db_name}/{{sample}}.log".format(db_name=bt2_db_name)
         message:
             "Mapping {{wildcards.sample}} to {db_name} using Bowtie2".format(db_name=bt2_db_name)
         params:
@@ -71,7 +70,7 @@ for bt2_config in config["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/metaphlan:4.0.3--pyhca03a8a_0"
+            config["containers"]["bowtie2"]
         wrapper:
             "0.23.1/bio/bowtie2/align"
 
@@ -85,7 +84,7 @@ for bt2_config in config["bowtie2"]:
             covstats=OUTDIR/"bowtie2/{db_name}/{{sample}}.covstats.txt".format(db_name=bt2_db_name),
             rpkm=OUTDIR/"bowtie2/{db_name}/{{sample}}.rpkm.txt".format(db_name=bt2_db_name)
         log:
-            str(LOGDIR/"bowtie2/{db_name}/{{sample}}.pileup.log".format(db_name=bt2_db_name))
+            LOGDIR/"bowtie2/{db_name}/{{sample}}.pileup.log".format(db_name=bt2_db_name)
         message:
             "Summarizing bowtie2 mapping statistics against {db_name}.".format(db_name=bt2_db_name)
         shadow:
@@ -93,7 +92,7 @@ for bt2_config in config["bowtie2"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["bbmap"]
         shell:
             """
             pileup.sh \
@@ -112,16 +111,16 @@ for bt2_config in config["bowtie2"]:
         """Create count table for Bowtie2 mappings."""
         name: f"bowtie2_count_table_{bt2_db_name}"
         input:
-            rpkms=expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.rpkm.txt"),
+            rpkms=expand(OUTDIR/"bowtie2/{db_name}/{sample}.rpkm.txt",
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv"),
+            expand(OUTDIR/"bowtie2/{db_name}/counts.{column}.tsv",
                     db_name=bt2_db_name,
                     column=map(str.strip, bt2_config["counts_table"]["columns"].split(","))
             )
         log:
-            str(LOGDIR/"bowtie2/{db_name}/counts.log".format(db_name=bt2_db_name))
+            LOGDIR/"bowtie2/{db_name}/counts.log".format(db_name=bt2_db_name)
         message:
             "Creating count table for mappings to {db_name}".format(db_name=bt2_db_name)
         shadow:
@@ -129,7 +128,7 @@ for bt2_config in config["bowtie2"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["stag"]
         threads: 1
         params:
             annotations=bt2_config["counts_table"]["annotations"],
@@ -151,7 +150,7 @@ for bt2_config in config["bowtie2"]:
         """Summarize featureCounts for Bowtie2 mappings."""
         name: f"bowtie2_feature_counts_{bt2_db_name}"
         input:
-            bams=expand(str(OUTDIR/"bowtie2/{db_name}/{sample}.bam"),
+            bams=expand(OUTDIR/"bowtie2/{db_name}/{sample}.bam",
                     db_name=bt2_db_name,
                     sample=SAMPLES)
         output:
@@ -159,7 +158,7 @@ for bt2_config in config["bowtie2"]:
             counts_table=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.table.txt".format(db_name=bt2_db_name),
             summary=OUTDIR/"bowtie2/{db_name}/all_samples.featureCounts.summary".format(db_name=bt2_db_name),
         log:
-            str(LOGDIR/"bowtie2/{db_name}/all_samples.featureCounts.log".format(db_name=bt2_db_name))
+            LOGDIR/"bowtie2/{db_name}/all_samples.featureCounts.log".format(db_name=bt2_db_name)
         message:
             "Summarizing feature counts for {db_name} mappings.".format(db_name=bt2_db_name)
         shadow:
@@ -167,7 +166,7 @@ for bt2_config in config["bowtie2"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["stag"]
         threads: 4
         params:
             annotations=fc_config["annotations"],
@@ -187,7 +186,7 @@ for bt2_config in config["bowtie2"]:
                 {input.bams} \
                 > {log} \
                 2>> {log} \
-            && \
+
             cut \
                 -f1,7- \
                 {output.counts}  \
@@ -195,3 +194,4 @@ for bt2_config in config["bowtie2"]:
                 | sed 's|\t\w\+/bowtie2/{params.dbname}/|\t|g' \
                 > {output.counts_table}
             """
+

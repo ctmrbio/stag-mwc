@@ -33,7 +33,7 @@ if config["qc_reads"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["fastp"]
         threads: 4
         params:
             extra=fastp_config["extra"],

@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Assess sequencing depth of sample using BBCountUnique from the BBMap suite.
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 
 if config["naive"]["assess_depth"]:
     # Add final output files from this module to 'all_outputs' from
@@ -18,19 +17,16 @@ if config["naive"]["assess_depth"]:
             INPUT_read1,
         output:
             txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
-            pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
-                       caption="../../report/bbcountunique.rst",
-                       category="Sequencing depth")
         log:
-            stdout=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stdout.log"),
-            stderr=str(LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log"),
+            stdout=LOGDIR/"bbcountunique/{sample}.bbcountunique.stdout.log",
+            stderr=LOGDIR/"bbcountunique/{sample}.bbcountunique.stderr.log",
         shadow: 
             "shallow"
         threads: 2
         conda:
             "../../envs/stag-mwc.yaml",
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["bbmap"]
         params:
             interval=config["bbcountunique"]["interval"]
         shell:
@@ -41,9 +37,30 @@ if config["naive"]["assess_depth"]:
               interval={params.interval} \
               > {log.stdout} \
               2> {log.stderr}
+            """
 
+    rule plot_bbcountunique:
+        """Assess sequencing depth using BBCountUnique."""
+        input:
+            txt=OUTDIR/"bbcountunique/{sample}.bbcountunique.txt",
+        output:
+            pdf=report(OUTDIR/"bbcountunique/{sample}.bbcountunique.pdf",
+                       caption="../../report/bbcountunique.rst",
+                       category="Sequencing depth")
+        log:
+            stdout=LOGDIR/"bbcountunique/{sample}.plot_bbcountunique.stdout.log",
+            stderr=LOGDIR/"bbcountunique/{sample}.plot_bbcountunique.stderr.log",
+        shadow: 
+            "shallow"
+        threads: 1
+        conda:
+            "../../envs/stag-mwc.yaml",
+        container:
+            config["containers"]["stag"]
+        shell:
+            """
             workflow/scripts/plot_bbcountunique.py \
-              {output.txt} \
+              {input.txt} \
               {output.pdf} \
               >> {log.stdout} \
               2>> {log.stderr}

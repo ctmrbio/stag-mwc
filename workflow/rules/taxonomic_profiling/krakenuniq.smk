@@ -54,7 +54,7 @@ rule krakenuniq_merge_reads:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["bbmap"]
     shell:
         """
         fuse.sh \
@@ -80,7 +80,7 @@ rule krakenuniq:
     conda:
         "../../envs/krakenuniq.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:krakenuniq"+singularity_branch_tag
+        config["containers"]["krakenuniq"]
     params:
         db=krakenuniq_config["db"],
         preload_size=krakenuniq_config["preload_size"],
@@ -114,7 +114,7 @@ rule krakenuniq_combine_reports:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/join_tables.py \
@@ -139,7 +139,7 @@ rule krakenuniq_mpa_style:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/KrakenTools/kreport2mpa.py \
@@ -165,7 +165,7 @@ rule krakenuniq_join_mpa:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     params:
         value_column="reads",
         feature_column="taxon_name",
@@ -195,7 +195,7 @@ rule krakenuniq_kreport2krona:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         awk -v OFS='\\t' '{{
@@ -220,7 +220,7 @@ rule krakenuniq_krona_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["krona"]
     shell:
         """
 		ktImportText \

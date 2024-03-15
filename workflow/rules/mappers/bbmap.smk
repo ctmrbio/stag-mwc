@@ -1,6 +1,5 @@
 # vim: syntax=python expandtab
 # Rules for generic read mapping using BBMap
-# TODO: Remove superfluous str conversions when Snakemake is pathlib compatible.
 from pathlib import Path
 
 from snakemake.exceptions import WorkflowError
@@ -20,14 +19,14 @@ for bbmap_config in config["bbmap"]:
 
         # Add final output files from this module to 'all_outputs' from the main
         # Snakefile scope. SAMPLES is also from the main Snakefile scope.
-        bbmap_alignments = expand(str(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}"),
+        bbmap_alignments = expand(OUTDIR/"bbmap/{db_name}/{sample}.{output_type}",
                 db_name=db_name,
                 sample=SAMPLES,
                 output_type=("bam", "covstats.txt", "rpkm.txt"))
-        counts_table = expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+        counts_table = expand(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv",
                 db_name=db_name,
                 column=map(str.strip, bbmap_config["counts_table"]["columns"].split(",")))
-        featureCounts = expand(str(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}"),
+        featureCounts = expand(OUTDIR/"bbmap/{db_name}/all_samples.featureCounts{output_type}",
                 db_name=db_name,
                 sample=SAMPLES,
                 output_type=["", ".summary", ".table.txt"])
@@ -64,8 +63,8 @@ for bbmap_config in config["bbmap"]:
             bamscript=temp(bbmap_output_folder/"{sample}.bamscript.sh"),
             bamfile=bbmap_output_folder/"{sample}.bam" if bbmap_config["keep_bam"] else temp(bbmap_output_folder/"{sample}.bam"),
         log:
-            stdout=str(bbmap_logdir/"{sample}.bbmap.stdout.log"),
-            stderr=str(bbmap_logdir/"{sample}.bbmap.statsfile.txt"),
+            stdout=bbmap_logdir/"{sample}.bbmap.stdout.log",
+            stderr=bbmap_logdir/"{sample}.bbmap.statsfile.txt",
         message:
             "Mapping {{wildcards.sample}} to {db_name} using BBMap".format(db_name=db_name)
         shadow:
@@ -73,7 +72,7 @@ for bbmap_config in config["bbmap"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["bbmap"]
         threads: 8
         params:
             db_path=bbmap_config["db_path"],
@@ -108,16 +107,16 @@ for bbmap_config in config["bbmap"]:
         f"""Summarize read counts for {db_name}"""
         name: f"bbmap_counts_{db_name}"
         input:
-            rpkms=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.rpkm.txt"),
+            rpkms=expand(OUTDIR/"bbmap/{db_name}/{sample}.rpkm.txt",
                     db_name=db_name,
                     sample=SAMPLES)
         output:
-            expand(str(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv"),
+            expand(OUTDIR/"bbmap/{db_name}/counts.{column}.tsv",
                     db_name=db_name,
                     column=map(str.strip, bbmap_config["counts_table"]["columns"].split(","))
             )
         log:
-            str(bbmap_logdir/"counts.log")
+            bbmap_logdir/"counts.log"
         message:
             "Summarizing read counts for {db_name}".format(db_name=db_name)
         shadow:
@@ -125,7 +124,7 @@ for bbmap_config in config["bbmap"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["stag"]
         threads: 1
         params:
             annotations=bbmap_config["counts_table"]["annotations"],
@@ -147,7 +146,7 @@ for bbmap_config in config["bbmap"]:
         f"""Summarize feature counts for {db_name}"""
         name: f"bbmap_feature_counts_{db_name}"
         input:
-            bams=expand(str(OUTDIR/"bbmap/{db_name}/{sample}.bam"),
+            bams=expand(OUTDIR/"bbmap/{db_name}/{sample}.bam",
                     db_name=db_name,
                     sample=SAMPLES)
         output:
@@ -155,7 +154,7 @@ for bbmap_config in config["bbmap"]:
             counts_table=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.table.txt".format(db_name=db_name),
             summary=OUTDIR/"bbmap/{db_name}/all_samples.featureCounts.summary".format(db_name=db_name),
         log:
-            str(bbmap_logdir/"all_samples.featureCounts.log")
+            bbmap_logdir/"all_samples.featureCounts.log"
         message:
             "Summarizing feature counts for {db_name}".format(db_name=db_name)
         shadow:
@@ -163,7 +162,7 @@ for bbmap_config in config["bbmap"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["stag"]
         threads: 4
         params:
             annotations=fc_config["annotations"],
@@ -183,6 +182,7 @@ for bbmap_config in config["bbmap"]:
                 {input.bams} \
                 > {log} \
                 2>> {log}
+
             cut \
                 -f1,7- \
                 {output.counts}  \
