@@ -1,0 +1,101 @@
+# Snakemake profile for StaG for use on PDC Dardel
+# Fredrik Boulund 2024
+
+#######################################
+# General Snakemake settings
+#######################################
+configfile: config/config.yaml
+keep-going: False
+rerun-incomplete: True
+printshellcmds: True
+scheduler: greedy
+conda-frontend: conda
+use-conda: True
+conda-prefix: /cfs/klemming/projects/supr/naiss2023-6-372/sing/smk_conda_envs
+#use-singularity: True
+#singularity-prefix: /cfs/klemming/projects/supr/naiss2023-6-372/sing
+#singularity-args: "-B /cfs/klemming/projects/supr/naiss2023-6-372/"
+groups: humann=group0
+group-components: group0=4
+
+#######################################
+# Cluster settings
+#######################################
+cluster:
+  mkdir -p slurm_logs/{rule} &&
+  sbatch
+    --account={resources.account}
+    --partition={resources.partition}
+    --nodes=1
+    --ntasks-per-node=1
+    --cpus-per-task={threads}
+    --mem={resources.mem_mb}
+    --time={resources.time}
+    --job-name={rule}-{wildcards}
+    --output=slurm_logs/{rule}/{rule}-{wildcards}-%j.out
+    --parsable
+cluster-cancel: scancel
+cluster-cancel-nargs: 50
+cluster-status: status-sacct.sh
+restart-times: 0
+max-jobs-per-second: 10
+max-status-checks-per-second: 1
+latency-wait: 60
+jobs: 500
+
+#######################################
+# Resource settings
+#######################################
+local-cores: 2
+default-resources:
+  - threads=2
+  - account=naiss2023-5-552
+  - partition=shared
+  - time="01:00:00"
+  - mem_mb="1G"
+set-threads:
+  - fastp=10
+  - kraken2_host_removal=20
+  - bowtie2_host_removal=10
+  - bt2_sort_bam_files=4
+  - bbcountunique=4
+  - sketch=8
+  - kaiju=32
+  - kraken2=16
+  - krakenuniq=24
+  - metaphlan=12
+  - strainphlan=8
+  - bracken=2
+  - humann=30
+  - bbmap=16
+  - bowtie2=16
+  - assembly=20
+  - consolidate_bins=20
+  - blobology=20
+set-resources:
+  - fastp:mem_mb=4G
+  - fastp:time=02:00:00
+  - kraken2_host_removal:mem_mb=8G
+  - kraken2_host_removal:time=02:00:00
+  - bowtie2_host_removal:mem_mb=8G
+  - bowtie2_host_removal:time=06:00:00
+  - bt2_sort_bam_files:mem_mb=30G
+  - bt2_sort_bam_files:time=01:00:00
+  - kaiju:mem_mb=8G
+  - kaiju:time=10:00:00
+  - kraken2:mem_mb=160G
+  - kraken2:time=04:00:00
+  - krakenuniq:mem_mb=100G
+  - krakenuniq:time=06:00:00
+  - metaphlan:mem_mb=30G
+  - metaphlan:time=04:00:00
+  - strainphlan:mem_mb=10G
+  - strainphlan:time=02:00:00
+  - humann:partition=memory
+  - humann:mem_mb=850G
+  - humann:time=23:00:00
+  - humann:tmpdir=/cfs/klemming/scratch/b/boulund/
+  - bbmap:mem_mb=16G
+  - bbmap:time=04:00:00
+  - bowtie2:mem_mb=16G
+  - bowtie2:time=04:00:00
