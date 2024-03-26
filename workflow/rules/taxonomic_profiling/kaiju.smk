@@ -18,7 +18,6 @@ if config["taxonomic_profile"]["kaiju"]:
                 Path(kaiju_config["names"]).exists()]):
         err_message = "No Kaiju database files at: '{}', '{}', '{}'!\n".format(kaiju_config["db"], kaiju_config["nodes"], kaiju_config["names"])
         err_message += "Specify relevant paths in the kaiju section of config.yaml.\n"
-        err_message += "Run 'snakemake download_kaiju_database' to download a copy into '{dbdir}'\n".format(dbdir=DBDIR/"kaiju") 
         err_message += "If you do not want to run Kaiju for taxonomic profiling, set 'kaiju: False' in config.yaml"
         raise WorkflowError(err_message)
 
@@ -56,7 +55,7 @@ rule kaiju:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["kaiju"]
     params:
         db=kaiju_config["db"],
         nodes=kaiju_config["nodes"],
@@ -86,7 +85,7 @@ rule kaiju2krona:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["kaiju"]
     shell:
         """
         kaiju2krona \
@@ -109,7 +108,7 @@ rule create_kaiju_krona_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["krona"]
     shell:
         """
         ktImportText \
@@ -132,7 +131,7 @@ rule kaiju_report:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["kaiju"]
     shell:
         """
         kaiju2table \
@@ -163,7 +162,7 @@ rule join_kaiju_reports:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/join_tables.py \
@@ -187,7 +186,7 @@ rule kaiju_area_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/area_plot.py \

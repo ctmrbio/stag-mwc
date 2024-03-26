@@ -56,7 +56,7 @@ if config["host_removal"]["kraken2"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["kraken2"]
         threads: 8
         params:
             db=rh_kraken2["db_path"],
@@ -109,7 +109,7 @@ if config["host_removal"]["kraken2"]:
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["stag"]
         threads: 1
         shell:
             """
@@ -155,7 +155,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/bowtie2:2.5.1--py38he00c5e5_2"
+            config["containers"]["bowtie2"]
         params:
             db_path=rh_bowtie2["db_path"],
             extra=rh_bowtie2["extra"],
@@ -183,7 +183,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
+            config["containers"]["samtools"]
         shell:
             """
             samtools view \
@@ -207,7 +207,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
+            config["containers"]["samtools"]
         shell:
             """
             samtools view \
@@ -233,7 +233,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
+            config["containers"]["samtools"]
         shell: 
             """
             samtools sort \
@@ -259,7 +259,7 @@ if config["host_removal"]["bowtie2"]:
         conda:
             "../../envs/metaphlan.yaml"
         container:
-            "docker://quay.io/biocontainers/samtools:1.17--hd87286a_1"
+            config["containers"]["samtools"]
         shell: 
             """
             samtools fastq \

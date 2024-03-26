@@ -9,17 +9,17 @@ if config["multiqc_report"]:
         input:
             all_outputs
         output:
-            report=report(f"{OUTDIR}/multiqc/multiqc_report.html",
+            report=report(OUTDIR/"multiqc/multiqc_report.html",
                 category="Sequencing data quality",
                 caption="../../report/multiqc.rst"),
         log:
-           f"{LOGDIR}/multiqc/multiqc.log"
+           LOGDIR/"multiqc/multiqc.log"
         shadow:
             "shallow"
         conda:
             "../../envs/stag-mwc.yaml"
         container:
-            "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+            config["containers"]["multiqc"]
         threads: 1
         params:
             extra=mqc_config["extra"],
@@ -32,4 +32,5 @@ if config["multiqc_report"]:
             """
 
     # Appended after the rule definition to avoid circular dependency
-    all_outputs.append(f"{OUTDIR}/multiqc/multiqc_report.html")
+    all_outputs.append(OUTDIR/"multiqc/multiqc_report.html")
+

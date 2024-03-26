@@ -17,7 +17,6 @@ input_fn_pattern: "{sample}_{readpair}.fq.gz"
 samplesheet: ""           # Three-column samplesheet with sample_id,fastq_1,fastq_2 columns. Used instead of inputdir
 outdir: "output_dir"
 logdir: "output_dir/logs"
-dbdir: "databases"        # Databases will be downloaded to this dir
 report: "StaG_report-"    # Filename prefix for report file ("-{datetime}.html" automatically appended)
 email: ""                 # Email to send status message after completed/failed run.
 
@@ -27,6 +26,25 @@ email: ""                 # Email to send status message after completed/failed 
 #########################
 s3_endpoint_url: "https://s3.ki.se"  # Use https://s3.amazonaws.com for Amazon S3
 keep_local: False                    # Keep local copies of remote input files, default False.
+
+
+#########################
+# Container images
+#########################
+containers:
+    bbmap: "docker://quay.io/biocontainers/bbmap:39.06--h92535d8_0"
+    bowtie2: "docker://quay.io/biocontainers/bowtie2:2.5.1--py38he00c5e5_2"
+    bracken: "docker://quay.io/biocontainers/bracken:2.9--py39h1f90b4d_0"
+    fastp: "docker://quay.io/biocontainers/fastp:0.23.4--hadf994f_2"
+    humann: "docker://quay.io/biocontainers/humann:3.8--pyh7cba7a3_0"
+    kaiju: "docker://quai.io/biocontainers/kaiju:1.10.1--h43eeafb_0"
+    kraken2: "docker://quay.io/biocontainers/kraken2:2.1.3--pl5321hdcf5f25_0"
+    krakenuniq: "docker://quay.io/biocontainers/krakenuniq:1.0.4--pl5321h6dccd9a_1"
+    krona: "docker://quay.io/biocontainers/krona:2.8.1--pl5321hdfd78af_1"
+    metaphlan: "docker://quay.io/biocontainers/metaphlan:4.1.0--pyhca03a8a_0"
+    multiqc: "docker://quay.io/biocontainers/multiqc:1.21--pyhdfd78af_0"
+    samtools: "docker://quay.io/biocontainers/samtools:1.19.2--h50ea8bc_1"
+    stag: "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc-develop"
 
 
 #########################
@@ -52,8 +70,6 @@ functional_profile:
 mappers:
     bbmap: False
     bowtie2: False
-assembly: False
-binning: False
 
 
 #########################
@@ -190,8 +206,3 @@ bowtie2:
           attribute_type: ""   # Attribute type to summarize counts for, default is "gene_id" (any attribute in the GTF file's attribute field can be used)
           extra: ""            # Extra featureCount command line parameters
 
-
-#########################
-# Assembly
-#########################
-# Assembly workflow was removed in StaG v0.7.0

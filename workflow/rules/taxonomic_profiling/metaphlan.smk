@@ -56,7 +56,7 @@ rule metaphlan:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
+        config["containers"]["metaphlan"]
     threads: 8
     params:
         bt2_db_dir=mpa_config["bt2_db_dir"],
@@ -118,7 +118,7 @@ rule combine_metaphlan_tables:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "docker://quay.io/biocontainers/metaphlan:4.0.6--pyhca03a8a_0"
+        config["containers"]["metaphlan"]
     threads: 1
     shell:
         """
@@ -139,7 +139,7 @@ rule metaphlan_area_plot:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     shell:
         """
         workflow/scripts/area_plot.py \
@@ -165,7 +165,7 @@ rule plot_metaphlan_heatmap:
     conda:
         "../../envs/stag-mwc.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["stag"]
     threads: 1
     params:
         outfile_prefix=lambda w: f"{OUTDIR}/metaphlan/all_samples",
@@ -206,7 +206,7 @@ rule create_metaphlan_krona_plots:
     conda:
         "../../envs/metaphlan.yaml"
     container:
-        "oras://ghcr.io/ctmrbio/stag-mwc:stag-mwc"+singularity_branch_tag
+        config["containers"]["krona"]
     threads: 1
     shell:
         """

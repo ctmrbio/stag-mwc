@@ -24,11 +24,15 @@ situations.
   removal steps.
 
 ### Changed
+- Moved container specifications into config file. Now using more detailed
+  container specifications for most rules. This also enables easier use of
+  local copies of containers (e.g. in HPC environments without external network
+  access).
   
 ### Deprecated
 
 ### Removed
-- Removed mentions of assembly workflow from docs.
+- Removed mentions of assembly workflow from docs and config.
 
 
 ## [0.7.0] 2023-06-13
