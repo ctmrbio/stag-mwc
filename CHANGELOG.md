@@ -33,6 +33,7 @@ situations.
 
 ### Removed
 - Removed mentions of assembly workflow from docs and config.
+- Removed outdated amrplusplus scripts left behind in the scripts subdirectory.
 
 
 ## [0.7.0] 2023-06-13
