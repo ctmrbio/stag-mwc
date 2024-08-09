@@ -79,8 +79,7 @@ if config["host_removal"]["kraken2"]:
                 {params.extra} \
                 {input.read1} {input.read2} \
                 2> {log.stderr}
-            pigz \
-                --processes {threads} \
+            gzip \
                 --verbose \
                 --force \
                 {params.fq_to_compress} \

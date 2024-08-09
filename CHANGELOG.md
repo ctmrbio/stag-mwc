@@ -28,6 +28,8 @@ situations.
   container specifications for most rules. This also enables easier use of
   local copies of containers (e.g. in HPC environments without external network
   access).
+- Changed compression of kraken2 host removal artifacts to use gzip instead of
+  pigz due to the latter not being present in the kraken2 biocontainer.
   
 ### Deprecated
 
