@@ -30,6 +30,7 @@ situations.
   access).
 - Changed compression of kraken2 host removal artifacts to use gzip instead of
   pigz due to the latter not being present in the kraken2 biocontainer.
+- HUMANnN3: Updated to version 3.9, compatible with MetaPhlAn4 vJun23 database.
   
 ### Deprecated
 

@@ -36,7 +36,7 @@ containers:
     bowtie2: "docker://quay.io/biocontainers/bowtie2:2.5.1--py38he00c5e5_2"
     bracken: "docker://quay.io/biocontainers/bracken:2.9--py39h1f90b4d_0"
     fastp: "docker://quay.io/biocontainers/fastp:0.23.4--hadf994f_2"
-    humann: "docker://quay.io/biocontainers/humann:3.8--pyh7cba7a3_0"
+    humann: "docker://quay.io/biocontainers/humann:3.9--py312hdfd78af_0"
     kaiju: "docker://quai.io/biocontainers/kaiju:1.10.1--h43eeafb_0"
     kraken2: "docker://quay.io/biocontainers/kraken2:2.1.3--pl5321hdcf5f25_0"
     krakenuniq: "docker://quay.io/biocontainers/krakenuniq:1.0.4--pl5321h6dccd9a_1"
